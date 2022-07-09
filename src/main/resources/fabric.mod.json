@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "sigma-utils",
+  "version": "${version}",
+  "name": "Sigma Utils",
+  "description": "",
+  "authors": [
+    "Connor Slade"
+  ],
+  "contact": {
+    "website": "https://connorcode.com"
+  },
+  "license": "MIT",
+  "icon": "assets/sigma-utils/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.connorcode.sigmautils.SigmaUtilsClient"
+    ]
+  },
+  "mixins": [
+    "sigma-utils.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.8",
+    "fabric": "*",
+    "minecraft": "1.19"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "sigma-utils",
+        "name": "Sigma Utils",
+        "description": "Little utilities for minecraft",
+        "icon": "assets/sigma-utils/icon.png",
+        "badges": [ "client" ]
+      }
+    }
+  }
+}
