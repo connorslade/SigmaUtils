@@ -10,7 +10,8 @@ public class Config {
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.sigma-utils.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "key.category.sigma-utils"));
     public static boolean chatSignatures;
     public static boolean betterSplashes;
-    public static boolean randomBackground;
+    public static boolean randomBackground = true;
+    public static boolean noFog;
 
     public static void initKeybindings() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

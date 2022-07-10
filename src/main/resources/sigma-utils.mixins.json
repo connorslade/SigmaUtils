@@ -6,6 +6,8 @@
   "mixins": [
   ],
   "client": [
+    "ScreenMixin",
+    "TextureManagerAccesser"
   ],
   "injectors": {
     "defaultRequire": 1
