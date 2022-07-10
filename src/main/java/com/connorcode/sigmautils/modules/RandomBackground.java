@@ -17,7 +17,6 @@ public class RandomBackground extends Module {
 
     protected RandomBackground() {
         super("Random Background", "Uses random textures for the background tessellation", Category.Interface);
-
     }
 
     @Override
