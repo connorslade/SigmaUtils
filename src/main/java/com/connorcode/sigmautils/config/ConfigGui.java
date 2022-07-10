@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigGui extends Screen {
-    final int PADDING = 2;
+    public static final int PADDING = 2;
 
     public ConfigGui() {
         super(Text.of("Sigma Utils - Config"));

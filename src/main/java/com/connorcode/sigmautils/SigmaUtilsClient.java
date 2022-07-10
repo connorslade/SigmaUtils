@@ -14,6 +14,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
     public static Module[] modules = new Module[]{
             new BetterSplashes(),
             new CameraClip(),
+            new CameraDistance(),
             new FullBright(),
             new NoBreakParticles(),
             new NoFog(),

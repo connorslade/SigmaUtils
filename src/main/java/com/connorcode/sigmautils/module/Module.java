@@ -26,10 +26,9 @@ public abstract class Module {
         sa.invokeAddDrawableChild(
                 new ButtonWidget(x, y, 150, 20, Text.of(String.format("%s█§r %s", enabled ? "§a" : "§c", name)),
                         button -> {
-                            boolean newState = !enabled;
-                            if (newState) enable(client);
+                            enabled ^= true;
+                            if (enabled) enable(client);
                             else disable(client);
-                            enabled = newState;
                             sa.invokeClearAndInit();
                         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                         sa.getTextRenderer()

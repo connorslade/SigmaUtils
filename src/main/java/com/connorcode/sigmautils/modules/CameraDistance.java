@@ -1,8 +1,6 @@
 package com.connorcode.sigmautils.modules;
 
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
-import com.connorcode.sigmautils.mixin.RenderTickCounterAccessor;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -14,33 +12,22 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.PADDING;
 
-public class TickSpeed extends Module {
-    long mspt;
+public class CameraDistance extends Module {
+    public static double distance;
 
-    public TickSpeed() {
-        super("tick_speed", "Tick Speed", "Sets the clients tick speed in MSPT", Category.Misc);
+    public CameraDistance() {
+        super("camera_distance", "CameraDistance", "Sets how far away the 3rd person camera is", Category.Misc);
     }
 
     Text getSliderTitle() {
-        return Text.of(String.format("Tick Speed: %d [%d%%]", mspt, Math.round((100 - mspt) / .5)));
-    }
-
-    void setTickSpeed() {
-        ((RenderTickCounterAccessor) ((MinecraftClientAccessor) MinecraftClient.getInstance()).getRenderTickCounter()).tickTime(
-                mspt);
-    }
-
-    void setTickSpeedFromPercent(double percent) {
-        mspt = (long) (50d * (percent * 2d));
-        mspt = mspt < 1 ? 1 : mspt;
-        setTickSpeed();
+        return Text.of(String.format("Camera Distance: %.1f", distance));
     }
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addMiniToggleButton(screen, this, x, y);
         sa.invokeAddDrawableChild(
-                new SliderWidget(x + 20 + PADDING, y, 130 - PADDING, 20, getSliderTitle(), mspt / 100d) {
+                new SliderWidget(x + 20 + PADDING, y, 130 - PADDING, 20, getSliderTitle(), distance / 50) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(getSliderTitle());
@@ -48,28 +35,19 @@ public class TickSpeed extends Module {
 
                     @Override
                     protected void applyValue() {
-                        setTickSpeedFromPercent(this.value);
+                        distance = this.value * 50;
                     }
                 });
     }
 
     public void loadConfig(NbtCompound config) {
         enabled = Util.loadEnabled(config);
-        mspt = config.contains("mspt") ? config.getLong("mspt") : 50;
+        distance = config.contains("distance") ? config.getDouble("distance") : 4;
     }
 
     public NbtCompound saveConfig() {
         NbtCompound nbt = Util.saveEnabled(enabled);
-        nbt.putLong("mspt", mspt);
+        nbt.putDouble("distance", distance);
         return nbt;
-    }
-
-    public void enable(MinecraftClient client) {
-        setTickSpeed();
-    }
-
-    public void disable(MinecraftClient client) {
-        mspt = 50;
-        setTickSpeed();
     }
 }

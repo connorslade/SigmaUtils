@@ -3,3 +3,8 @@
 - Hold Use
 - Neather Portal Inventory Open
 - Distance entity transparency
+- Autoreconnect
+- Block Highlight
+- Zoom
+- No Fall
+- Sign clickthrough
