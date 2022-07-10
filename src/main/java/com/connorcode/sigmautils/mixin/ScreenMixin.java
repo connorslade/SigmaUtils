@@ -21,8 +21,8 @@ public class ScreenMixin {
     int assetIndex = -1;
 
     @Redirect(method = "renderBackgroundTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
-    private void setShaderTexture(int texture, Identifier id) {
-        if (Config.randomBackground) {
+    private void setShaderTexture(int texture, Identifier id) throws Exception {
+        if (Config.getEnabled("random_background")) {
             int currentScreenHash = Objects.requireNonNull(MinecraftClient.getInstance().currentScreen)
                     .hashCode();
 

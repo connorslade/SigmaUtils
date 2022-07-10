@@ -1,7 +1,9 @@
 package com.connorcode.sigmautils.modules;
 
+import com.connorcode.sigmautils.Category;
+import com.connorcode.sigmautils.Module;
 import com.connorcode.sigmautils.SigmaUtilsClient;
-import com.connorcode.sigmautils.config.Config;
+import net.minecraft.nbt.NbtCompound;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,17 +17,18 @@ public class RandomBackground extends Module {
             .lines()
             .toList();
 
-    protected RandomBackground() {
-        super("Random Background", "Uses random textures for the background tessellation", Category.Interface);
+    public RandomBackground() {
+        super("random_background", "Random Background", "Uses random textures for the background tessellation",
+                Category.Interface);
     }
 
-    @Override
-    public boolean getConfig() {
-        return Config.randomBackground;
+    public void loadConfig(NbtCompound config) {
+        enabled = config.getBoolean("enabled");
     }
 
-    @Override
-    public void setConfig(boolean config) {
-        Config.randomBackground = config;
+    public NbtCompound saveConfig() {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putBoolean("enabled", enabled);
+        return nbt;
     }
 }

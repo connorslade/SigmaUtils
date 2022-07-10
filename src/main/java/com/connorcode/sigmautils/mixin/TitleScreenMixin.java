@@ -16,7 +16,8 @@ public class TitleScreenMixin {
     void init(CallbackInfo ci) {
         ScreenAccessor screen = ((ScreenAccessor) this);
         screen.invokeAddDrawableChild(
-                new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20, Text.of("Σ"),
+                new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20,
+                        Text.of("Σ"),
                         button -> MinecraftClient.getInstance()
                                 .setScreen(new ConfigGui())));
     }

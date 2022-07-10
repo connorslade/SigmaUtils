@@ -16,13 +16,16 @@ import java.util.List;
 
 @Mixin(SplashTextResourceSupplier.class)
 public class SplashTextResourceSupplierMixin {
-    @Shadow @Final private List<String> splashTexts;
-
-    @Shadow @Final private static Random RANDOM;
+    @Shadow
+    @Final
+    private static Random RANDOM;
+    @Shadow
+    @Final
+    private List<String> splashTexts;
 
     @Inject(method = "get", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;", shift = At.Shift.BEFORE), cancellable = true)
-    void get(CallbackInfoReturnable<String> cir) {
-        if (!Config.betterSplashes) return;
+    void get(CallbackInfoReturnable<String> cir) throws Exception {
+        if (!Config.getEnabled("better_splashes")) return;
 
         ArrayList<String> totalSplashes = new ArrayList<>();
         totalSplashes.addAll(splashTexts);

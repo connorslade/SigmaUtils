@@ -1,14 +1,15 @@
 package com.connorcode.sigmautils.config;
 
-import com.connorcode.sigmautils.modules.Category;
-import com.connorcode.sigmautils.modules.Module;
-import com.connorcode.sigmautils.modules.ModuleManager;
+import com.connorcode.sigmautils.Category;
+import com.connorcode.sigmautils.Module;
+import com.connorcode.sigmautils.SigmaUtilsClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class ConfigGui extends Screen {
         // Draw Module toggles
         for (int x = 0; x < Category.values().length; x++) {
             Category category = Category.values()[x];
-            List<Module> categoryModules = Arrays.stream(ModuleManager.modules)
+            List<Module> categoryModules = Arrays.stream(SigmaUtilsClient.modules)
                     .filter(m -> m.category == category)
                     .toList();
 
@@ -34,11 +35,16 @@ public class ConfigGui extends Screen {
                 int renderX = PADDING + x * (150 + PADDING);
                 int renderY = textRenderer.fontHeight + PADDING * 2 + y * (20 + PADDING);
                 addDrawableChild(new ButtonWidget(renderX, renderY, 150, 20,
-                        Text.of(String.format("%s█§r %s", module.getConfig() ? "§a" : "§c", module.name)), button -> {
-                    boolean newState = !module.getConfig();
+                        Text.of(String.format("%s█§r %s", module.enabled ? "§a" : "§c", module.name)), button -> {
+                    boolean newState = !module.enabled;
                     if (newState) module.enable(client);
                     else module.disable(client);
-                    module.setConfig(newState);
+                    module.enabled = newState;
+                    try {
+                        Config.save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     clearAndInit();
                 }));
             }

@@ -1,7 +1,9 @@
 package com.connorcode.sigmautils.modules;
 
+import com.connorcode.sigmautils.Category;
+import com.connorcode.sigmautils.Module;
 import com.connorcode.sigmautils.SigmaUtilsClient;
-import com.connorcode.sigmautils.config.Config;
+import net.minecraft.nbt.NbtCompound;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,17 +16,17 @@ public class BetterSplashes extends Module {
                     .getResourceAsStream("splashes.txt")))).lines()
             .toList();
 
-    protected BetterSplashes() {
-        super("Better Splashes", "Adds alot of custom splashes :)", Category.Interface);
+    public BetterSplashes() {
+        super("better_splashes", "Better Splashes", "Adds alot of custom splashes :)", Category.Interface);
     }
 
-    @Override
-    public boolean getConfig() {
-        return Config.betterSplashes;
+    public void loadConfig(NbtCompound config) {
+        enabled = config.getBoolean("enabled");
     }
 
-    @Override
-    public void setConfig(boolean config) {
-        Config.betterSplashes = config;
+    public NbtCompound saveConfig() {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putBoolean("enabled", enabled);
+        return nbt;
     }
 }

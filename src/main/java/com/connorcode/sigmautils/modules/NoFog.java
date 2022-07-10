@@ -1,26 +1,21 @@
 package com.connorcode.sigmautils.modules;
 
-import com.connorcode.sigmautils.config.Config;
-import net.minecraft.client.MinecraftClient;
+import com.connorcode.sigmautils.Category;
+import com.connorcode.sigmautils.Module;
+import net.minecraft.nbt.NbtCompound;
 
-public class NoFog extends Module{
-    protected NoFog() {
-        super("No Fog", "Removes fog rendering", Category.World);
+public class NoFog extends Module {
+    public NoFog() {
+        super("no_fog", "No Fog", "Removes fog rendering", Category.World);
     }
 
-    @Override
-    public boolean getConfig() {
-        return Config.noFog;
+    public void loadConfig(NbtCompound config) {
+        enabled = config.getBoolean("enabled");
     }
 
-    @Override
-    public void setConfig(boolean config) {
-        Config.noFog = config;
+    public NbtCompound saveConfig() {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putBoolean("enabled", enabled);
+        return nbt;
     }
-
-    @Override
-    public void enable(MinecraftClient client) {}
-
-    @Override
-    public void disable(MinecraftClient client) {}
 }
