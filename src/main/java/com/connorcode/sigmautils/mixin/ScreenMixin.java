@@ -17,8 +17,8 @@ import static net.minecraft.client.gui.DrawableHelper.OPTIONS_BACKGROUND_TEXTURE
 
 @Mixin(Screen.class)
 public class ScreenMixin {
-    int screenHash;
-    int assetIndex;
+    int screenHash = -1;
+    int assetIndex = -1;
 
     @Redirect(method = "renderBackgroundTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
     private void setShaderTexture(int texture, Identifier id) {
@@ -26,7 +26,7 @@ public class ScreenMixin {
             int currentScreenHash = Objects.requireNonNull(MinecraftClient.getInstance().currentScreen)
                     .hashCode();
 
-            if (screenHash != currentScreenHash) {
+            if (screenHash != currentScreenHash || assetIndex < 0) {
                 screenHash = currentScreenHash;
                 assetIndex = new Random().nextInt(RandomBackground.validBackgrounds.size());
             }
