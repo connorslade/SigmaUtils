@@ -46,7 +46,8 @@ public class ConfigGui extends Screen {
                         e.printStackTrace();
                     }
                     clearAndInit();
-                }));
+                }, ((button, matrices, mouseX, mouseY) -> renderOrderedTooltip(matrices,
+                        textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
             }
         }
 
@@ -54,15 +55,14 @@ public class ConfigGui extends Screen {
         int githubLen = textRenderer.getWidth("Github");
         addDrawableChild(
                 new ButtonWidget(width - githubLen - PADDING * 5, height - 20 - PADDING, githubLen + PADDING * 4, 20,
-                        Text.of("Github"),
-                        button -> {
-                            try {
-                                Util.getOperatingSystem()
-                                        .open(new URI("https://github.com/basicprogrammer10"));
-                            } catch (URISyntaxException e) {
-                                e.printStackTrace();
-                            }
-                        }));
+                        Text.of("Github"), button -> {
+                    try {
+                        Util.getOperatingSystem()
+                                .open(new URI("https://github.com/basicprogrammer10"));
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }));
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
