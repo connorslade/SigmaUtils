@@ -14,7 +14,8 @@
     "ScreenMixin",
     "SimpleOptionAccessor",
     "SplashTextResourceSupplierMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

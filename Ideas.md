@@ -3,6 +3,4 @@
 - Hold Attack
 - Hold Use
 - Neather Portal Inventory Open
-- Print Death Cords
-- Render Invis entities
 - Distance entity transparency
