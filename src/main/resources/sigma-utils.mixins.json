@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "BackgroundRendererMixin",
     "ScreenAccessor",
     "ScreenMixin",
     "SplashTextResourceSupplierMixin",

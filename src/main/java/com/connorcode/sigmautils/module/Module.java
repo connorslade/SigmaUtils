@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils;
+package com.connorcode.sigmautils.module;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;

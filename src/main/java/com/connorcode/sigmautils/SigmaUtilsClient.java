@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.BetterSplashes;
 import com.connorcode.sigmautils.modules.ChatSignatures;
 import com.connorcode.sigmautils.modules.NoFog;

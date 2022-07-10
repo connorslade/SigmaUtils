@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.config;
 
-import com.connorcode.sigmautils.Category;
-import com.connorcode.sigmautils.Module;
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
