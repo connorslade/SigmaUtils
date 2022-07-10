@@ -7,6 +7,7 @@
   ],
   "client": [
     "BackgroundRendererMixin",
+    "CameraMixin",
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
     "EntityMixin",
