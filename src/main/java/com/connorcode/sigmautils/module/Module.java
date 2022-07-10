@@ -1,14 +1,11 @@
 package com.connorcode.sigmautils.module;
 
-import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-
-import java.io.IOException;
 
 public abstract class Module {
     public final String id;
@@ -33,11 +30,6 @@ public abstract class Module {
                             if (newState) enable(client);
                             else disable(client);
                             enabled = newState;
-                            try {
-                                Config.save();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
                             sa.invokeClearAndInit();
                         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                         sa.getTextRenderer()

@@ -10,10 +10,12 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ConfigGui extends Screen {
     final int PADDING = 2;
@@ -58,5 +60,15 @@ public class ConfigGui extends Screen {
             drawCenteredText(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + PADDING + x * (150 + PADDING), PADDING, 0);
         super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    public void close() {
+        Objects.requireNonNull(client)
+                .setScreen(null);
+        try {
+            Config.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

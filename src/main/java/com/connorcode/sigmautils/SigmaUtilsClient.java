@@ -19,7 +19,8 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new NoParticles(),
             new PrintDeathCords(),
             new RandomBackground(),
-            new ShowInvisibleEntities()
+            new ShowInvisibleEntities(),
+            new TickSpeed()
     };
 
     @Override

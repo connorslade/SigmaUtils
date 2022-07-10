@@ -1,5 +1,4 @@
 - Fastclick
-- Tick rate changer
 - Hold Attack
 - Hold Use
 - Neather Portal Inventory Open
