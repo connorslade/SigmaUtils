@@ -13,11 +13,12 @@ import java.io.IOException;
 public class SigmaUtilsClient implements ClientModInitializer {
     public static Module[] modules = new Module[]{
             new BetterSplashes(),
-            new RandomBackground(),
-            new NoFog(),
+            new FullBright(),
             new NoBreakParticles(),
-            new NoParticles()
-    };
+            new NoFog(),
+            new NoParticles(),
+            new RandomBackground(),
+        };
 
     @Override
     public void onInitializeClient() {
