@@ -11,6 +11,7 @@
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
     "EntityMixin",
+    "GameRendererMixin",
     "MinecraftClientAccessor",
     "ParticleManagerMixin",
     "RenderTickCounterAccessor",
