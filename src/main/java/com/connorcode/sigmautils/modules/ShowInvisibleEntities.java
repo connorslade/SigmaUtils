@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.module.Category;
 
 public class ShowInvisibleEntities extends BasicModule {
     public ShowInvisibleEntities() {
-        super("show_invisible_entities", "Show Invisible Entities", "Render all invisible entities", Category.Rendering);
+        super("show_invisible_entities", "Show Invisible Entities", "Render all invisible entities",
+                Category.Rendering);
     }
 }

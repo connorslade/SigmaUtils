@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -19,6 +20,12 @@ public interface ScreenAccessor {
 
     @Accessor
     int getHeight();
+
+    @Accessor
+    TextRenderer getTextRenderer();
+
+    @Invoker
+    void invokeClearAndInit();
 
     @Invoker
     <T extends Element & Drawable & Selectable> T invokeAddDrawableChild(T drawableElement);

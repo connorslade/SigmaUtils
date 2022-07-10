@@ -3,13 +3,13 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -34,20 +34,7 @@ public class ConfigGui extends Screen {
                 Module module = categoryModules.get(y);
                 int renderX = PADDING + x * (150 + PADDING);
                 int renderY = textRenderer.fontHeight + PADDING * 2 + y * (20 + PADDING);
-                addDrawableChild(new ButtonWidget(renderX, renderY, 150, 20,
-                        Text.of(String.format("%s█§r %s", module.enabled ? "§a" : "§c", module.name)), button -> {
-                    boolean newState = !module.enabled;
-                    if (newState) module.enable(client);
-                    else module.disable(client);
-                    module.enabled = newState;
-                    try {
-                        Config.save();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    clearAndInit();
-                }, ((button, matrices, mouseX, mouseY) -> renderOrderedTooltip(matrices,
-                        textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
+                module.drawConfigInterface(MinecraftClient.getInstance(), this, renderX, renderY);
             }
         }
 

@@ -9,13 +9,13 @@
     "BackgroundRendererMixin",
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
+    "EntityMixin",
     "ParticleManagerMixin",
     "ScreenAccessor",
     "ScreenMixin",
     "SimpleOptionAccessor",
     "SplashTextResourceSupplierMixin",
-    "TitleScreenMixin",
-    "EntityMixin"
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
