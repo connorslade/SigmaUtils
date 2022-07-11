@@ -5,6 +5,5 @@
 - Distance entity transparency
 - Autoreconnect
 - Block Highlight
-- Zoom
 - No Fall
 - Sign clickthrough
