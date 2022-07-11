@@ -9,24 +9,48 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.util.Pair;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Config {
-    public static final File configFile = new File(MinecraftClient.getInstance().runDirectory,
-            "config/SigmaUtils/config.nbt");
+    public static final File configFile =
+            new File(MinecraftClient.getInstance().runDirectory, "config/SigmaUtils/config.nbt");
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(
-            new KeyBinding("key.sigma-utils.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U,
-                    "key.category.sigma-utils"));
+            new KeyBinding("Open Gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "Sigma Utils"));
 
     public static void initKeybindings() {
+        List<Pair<String, KeyBinding>> moduleKeybindings = new ArrayList<>();
+        for (Module i : SigmaUtilsClient.modules) {
+            moduleKeybindings.add(new Pair<>(i.id, KeyBindingHelper.registerKeyBinding(
+                    new KeyBinding(String.format("Toggle %s", i.name), InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
+                            "Sigma Utils"))));
+        }
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (configKeybinding.wasPressed()) client.setScreen(new ConfigGui());
+            for (Pair<String, KeyBinding> i : moduleKeybindings) {
+                if (!i.getRight()
+                        .wasPressed()) continue;
+
+                Optional<Module> find = Arrays.stream(SigmaUtilsClient.modules)
+                        .filter(m -> Objects.equals(m.id, i.getLeft()))
+                        .findFirst();
+                if (find.isEmpty()) continue;
+                Module module = find.get();
+
+                module.enabled ^= true;
+                if (module.enabled) module.enable(MinecraftClient.getInstance());
+                else module.disable(MinecraftClient.getInstance());
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 

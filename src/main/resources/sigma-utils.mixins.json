@@ -13,6 +13,7 @@
     "DeathScreenMixin",
     "EntityMixin",
     "EntityRenderDispatcherMixin",
+    "EntityRendererMixin",
     "GameRendererMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientAccessor",
