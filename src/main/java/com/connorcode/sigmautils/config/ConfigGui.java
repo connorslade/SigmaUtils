@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.modules.Padding;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -18,13 +19,22 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigGui extends Screen {
-    public static final int PADDING = 2;
-
     public ConfigGui() {
         super(Text.of("Sigma Utils - Config"));
     }
 
+    public static int getPadding() {
+        try {
+            if (!Config.getEnabled("padding")) return 2;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Padding.PADDING;
+    }
+
     protected void init() {
+        int padding = getPadding();
+
         // Draw Module toggles
         for (int x = 0; x < Category.values().length; x++) {
             Category category = Category.values()[x];
@@ -34,8 +44,8 @@ public class ConfigGui extends Screen {
 
             for (int y = 0; y < categoryModules.size(); y++) {
                 Module module = categoryModules.get(y);
-                int renderX = PADDING + x * (150 + PADDING);
-                int renderY = textRenderer.fontHeight + PADDING * 2 + y * (20 + PADDING);
+                int renderX = padding + x * (150 + padding);
+                int renderY = textRenderer.fontHeight + padding * 2 + y * (20 + padding);
                 module.drawConfigInterface(MinecraftClient.getInstance(), this, renderX, renderY);
             }
         }
@@ -43,7 +53,7 @@ public class ConfigGui extends Screen {
         // GitHub Link
         int githubLen = textRenderer.getWidth("Github");
         addDrawableChild(
-                new ButtonWidget(width - githubLen - PADDING * 5, height - 20 - PADDING, githubLen + PADDING * 4, 20,
+                new ButtonWidget(width - githubLen - padding * 5, height - 20 - padding, githubLen + padding * 4, 20,
                         Text.of("Github"), button -> {
                     try {
                         Util.getOperatingSystem()
@@ -55,10 +65,11 @@ public class ConfigGui extends Screen {
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        int padding = getPadding();
         this.renderBackground(matrices);
         for (int x = 0; x < Category.values().length; x++)
             drawCenteredText(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
-                    75 + PADDING + x * (150 + PADDING), PADDING, 0);
+                    75 + padding + x * (150 + padding), padding, 0);
         super.render(matrices, mouseX, mouseY, delta);
     }
 

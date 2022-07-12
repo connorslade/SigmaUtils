@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
-import static com.connorcode.sigmautils.config.ConfigGui.PADDING;
+import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class CameraDistance extends Module {
     public static double distance;
@@ -24,10 +24,11 @@ public class CameraDistance extends Module {
     }
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
+        int padding = getPadding();
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addMiniToggleButton(screen, this, x, y);
         sa.invokeAddDrawableChild(
-                new SliderWidget(x + 20 + PADDING, y, 130 - PADDING, 20, getSliderTitle(), distance / 50) {
+                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), distance / 50) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(getSliderTitle());
