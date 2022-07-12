@@ -13,6 +13,7 @@ import java.io.IOException;
 public class SigmaUtilsClient implements ClientModInitializer {
     public static Module[] modules = new Module[]{
             new BetterSplashes(),
+            new BlockDistance(),
             new CameraClip(),
             new CameraDistance(),
             new Deadmau5Ears(),

@@ -15,6 +15,7 @@
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "GameRendererMixin",
+    "InGameHudMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientAccessor",
     "ParticleManagerMixin",
