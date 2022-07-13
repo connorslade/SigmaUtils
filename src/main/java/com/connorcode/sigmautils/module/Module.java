@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.module;
 
+import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,7 +24,7 @@ public abstract class Module {
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
-        sa.invokeAddDrawableChild(
+        Util.addDrawable(screen,
                 new ButtonWidget(x, y, 150, 20, Text.of(String.format("%s█§r %s", enabled ? "§a" : "§c", name)),
                         button -> {
                             enabled ^= true;

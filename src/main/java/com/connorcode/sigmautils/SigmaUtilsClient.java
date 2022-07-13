@@ -3,9 +3,11 @@ package com.connorcode.sigmautils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.*;
+import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 
 import java.io.IOException;
 
@@ -33,11 +35,15 @@ public class SigmaUtilsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        LogUtils.getLogger()
+                .info("Starting Sigma Utils");
         Config.initKeybindings();
-        try {
-            Config.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ClientLifecycleEvents.CLIENT_STARTED.register((client -> {
+            try {
+                Config.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 }

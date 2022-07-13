@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.modules;
 
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -25,9 +24,8 @@ public class CameraDistance extends Module {
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
-        ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addMiniToggleButton(screen, this, x, y);
-        sa.invokeAddDrawableChild(
+        Util.addDrawable(screen,
                 new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), distance / 50) {
                     @Override
                     protected void updateMessage() {

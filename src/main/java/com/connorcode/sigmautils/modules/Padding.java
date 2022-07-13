@@ -27,7 +27,7 @@ public class Padding extends Module {
         int padding = getPadding();
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addMiniToggleButton(screen, this, x, y);
-        sa.invokeAddDrawableChild(
+        Util.addDrawable(screen,
                 new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), padding / 10f) {
                     @Override
                     protected void updateMessage() {
