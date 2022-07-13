@@ -19,6 +19,7 @@
     "LivingEntityRendererMixin",
     "MinecraftClientAccessor",
     "ParticleManagerMixin",
+    "PerspectiveMixin",
     "RenderTickCounterAccessor",
     "ScreenAccessor",
     "ScreenMixin",

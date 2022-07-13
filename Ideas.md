@@ -7,3 +7,6 @@
 - Block Highlight
 - No Fall
 - Sign clickthrough
+- Chord hud + Biome + Nether cords
+- Effects hud
+- Nearby players and thair distance

@@ -29,9 +29,8 @@ public class Raycast {
         EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, cameraPos, vec3d3, box,
                 (entityX) -> !entityX.isSpectator() && entityX.collides(), maxDistance);
 
-        if (entityHitResult == null) {
+        if (entityHitResult == null)
             return target;
-        }
 
         Entity entity2 = entityHitResult.getEntity();
         Vec3d vec3d4 = entityHitResult.getPos();
