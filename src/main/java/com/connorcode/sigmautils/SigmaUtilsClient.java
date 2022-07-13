@@ -18,6 +18,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new BlockDistance(),
             new CameraClip(),
             new CameraDistance(),
+            new CoordinatesHud(),
             new Deadmau5Ears(),
             new DisableFrontPerspective(),
             new DisableShadows(),
