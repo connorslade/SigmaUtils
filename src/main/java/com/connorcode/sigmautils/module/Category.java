@@ -4,5 +4,6 @@ public enum Category {
     Interface,
     Rendering,
     Misc,
+    Hud,
     Meta
 }

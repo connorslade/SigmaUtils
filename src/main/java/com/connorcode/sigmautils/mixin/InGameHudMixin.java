@@ -2,10 +2,9 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
-import com.connorcode.sigmautils.modules.CoordinatesHud;
+import com.connorcode.sigmautils.modules.Hud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
@@ -19,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
@@ -37,11 +37,7 @@ public class InGameHudMixin {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) throws Exception {
-        if (Config.getEnabled("block_distance")) blockDistance(matrices);
-        if (Config.getEnabled("coordinates_hud")) coordinatesHud(matrices);
-    }
-
-    void blockDistance(MatrixStack matrices) {
+        if (!Config.getEnabled("block_distance")) return;
         Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity)
                 .getRotationVec(client.getTickDelta());
         double fov = client.options.getFov()
@@ -75,26 +71,19 @@ public class InGameHudMixin {
                 scaledHeight / 2f + client.textRenderer.fontHeight, 0);
     }
 
-    void coordinatesHud(MatrixStack matrices) {
+    @Inject(method = "render", at = @At("TAIL"))
+    void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) throws Exception {
+        if (client.options.hudHidden || !Config.getEnabled("hud")) return;
+
         int padding = getPadding();
-        ClientPlayerEntity player = Objects.requireNonNull(client.player);
-        String text = String.format("§f%d, %d, %d", (int) Math.round(player.getX()), (int) Math.round(player.getY()),
-                (int) Math.round(player.getZ()));
-        int size = client.textRenderer.getWidth(text);
+        Pair<List<String>, Pair<Integer, Integer>> hud = Hud.getHud(scaledHeight, scaledWidth);
 
-        Pair<Integer, Integer> pos = switch (CoordinatesHud.location) {
-            case 3:
-                yield new Pair<>(padding, scaledHeight - client.textRenderer.fontHeight - padding);
-            case 2:
-                yield new Pair<>(scaledWidth - size - padding, scaledHeight - client.textRenderer.fontHeight - padding);
-            case 1:
-                yield new Pair<>(scaledWidth - size - padding, padding);
-            case 0:
-                yield new Pair<>(padding, padding);
-            default:
-                throw new IllegalStateException("Unexpected value: " + CoordinatesHud.location);
-        };
-
-        client.textRenderer.draw(matrices, Text.of(text), pos.getLeft(), pos.getRight(), 0);
+        int y = hud.getRight()
+                .getRight();
+        for (String i : hud.getLeft()) {
+            client.textRenderer.drawWithShadow(matrices, i, hud.getRight()
+                    .getLeft(), y, 0);
+            y += client.textRenderer.fontHeight + padding;
+        }
     }
 }

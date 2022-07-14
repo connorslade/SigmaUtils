@@ -43,6 +43,9 @@ public abstract class Module {
         return new NbtCompound();
     }
 
+    public void init() {
+    }
+
     public void enable(MinecraftClient client) {
     }
 

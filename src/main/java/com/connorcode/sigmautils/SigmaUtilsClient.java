@@ -24,6 +24,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new DisableShadows(),
             new FlippedEntities(),
             new FullBright(),
+            new Hud(),
             new NoBreakParticles(),
             new NoFog(),
             new NoParticles(),
@@ -32,6 +33,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new RandomBackground(),
             new ShowInvisibleEntities(),
             new TickSpeed(),
+            new WatermarkHud(),
             new Zoom()
     };
 
@@ -40,6 +42,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
         LogUtils.getLogger()
                 .info("Starting Sigma Utils");
         Config.initKeybindings();
+        for (Module i : modules) i.init();
         ClientLifecycleEvents.CLIENT_STARTED.register((client -> {
             try {
                 Config.load();
