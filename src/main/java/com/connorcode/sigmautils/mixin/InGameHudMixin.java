@@ -4,8 +4,10 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
 import com.connorcode.sigmautils.modules.Hud;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.hit.HitResult;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -85,5 +88,24 @@ public class InGameHudMixin {
                     .getLeft(), y, 0);
             y += client.textRenderer.fontHeight + padding;
         }
+    }
+
+    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
+    int onGetWidth(TextRenderer instance, String text) throws Exception {
+        if (Config.getEnabled("no_scoreboard_value")) return 0;
+        return instance.getWidth(text);
+    }
+
+
+    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;FFI)I"))
+    int onDraw(TextRenderer instance, MatrixStack matrices, String text, float x, float y, int color) throws Exception {
+        if (Config.getEnabled("no_scoreboard_value")) return 0;
+        return instance.draw(matrices, text, x, y, color);
+    }
+
+    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Integer;toString(I)Ljava/lang/String;"))
+    String onToString(int buf) throws Exception {
+        if (Config.getEnabled("no_scoreboard_value")) return "";
+        return Integer.toString(buf);
     }
 }

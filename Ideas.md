@@ -12,3 +12,5 @@
 - Nearby players and thair distance
 - Tab toggle
 - No chat fade
+- Sound on death
+- Sound on chat message

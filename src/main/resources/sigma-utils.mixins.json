@@ -8,6 +8,7 @@
   "client": [
     "BackgroundRendererMixin",
     "CameraMixin",
+    "ChatHudMixin",
     "ClientPlayerEntityMixin",
     "Deadmau5FeatureRendererMixin",
     "DeathScreenMixin",
