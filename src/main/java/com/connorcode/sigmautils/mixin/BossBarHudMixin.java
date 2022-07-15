@@ -21,7 +21,7 @@ public class BossBarHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
     int onDrawWithShadow(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) throws Exception {
-        if (Config.getEnabled("no_boss_bar_value")) y = 9 * (y / 19) + 4;
+        if (Config.getEnabled("no_boss_bar_value")) y = 9 * (y / 19) + 2;
         return instance.drawWithShadow(matrices, text, x, y, color);
     }
 }

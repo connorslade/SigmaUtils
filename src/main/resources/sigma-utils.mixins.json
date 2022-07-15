@@ -20,6 +20,7 @@
     "InGameHudMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientAccessor",
+    "MinecraftClientMixin",
     "ParticleManagerMixin",
     "PerspectiveMixin",
     "RenderTickCounterAccessor",

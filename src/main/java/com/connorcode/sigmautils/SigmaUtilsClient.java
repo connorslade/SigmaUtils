@@ -30,6 +30,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new DisableShadows(),
             new FlippedEntities(),
             new FullBright(),
+            new GlowingPlayers(),
             new Hud(),
             new NoBossBarValue(),
             new NoBreakParticles(),
