@@ -2,10 +2,7 @@ package com.connorcode.sigmautils;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
-import com.connorcode.sigmautils.modules._interface.BetterSplashes;
-import com.connorcode.sigmautils.modules._interface.NoChatFade;
-import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
-import com.connorcode.sigmautils.modules._interface.RandomBackground;
+import com.connorcode.sigmautils.modules._interface.*;
 import com.connorcode.sigmautils.modules.hud.CoordinatesHud;
 import com.connorcode.sigmautils.modules.hud.Hud;
 import com.connorcode.sigmautils.modules.hud.WatermarkHud;
@@ -34,6 +31,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new FlippedEntities(),
             new FullBright(),
             new Hud(),
+            new NoBossBarValue(),
             new NoBreakParticles(),
             new NoChatFade(),
             new NoFog(),
