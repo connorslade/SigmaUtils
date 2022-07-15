@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.modules;
+package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.BasicModule;

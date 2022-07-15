@@ -1,7 +1,6 @@
-package com.connorcode.sigmautils.modules;
+package com.connorcode.sigmautils.modules.rendering;
 
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -12,23 +11,22 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
-public class Padding extends Module {
-    public static int PADDING;
+public class Zoom extends Module {
+    public static float zoom;
 
-    public Padding() {
-        super("padding", "Padding", "Sets the padding of Sigma Utils gui elements", Category.Meta);
+    public Zoom() {
+        super("zoom", "Zoom", "Zoom (Fov multiplier)", Category.Rendering);
     }
 
     Text getSliderTitle() {
-        return Text.of(String.format("Padding: %d", PADDING));
+        return Text.of(String.format("Zoom: %.1fx", 10 - (zoom * 10)));
     }
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
-        ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addMiniToggleButton(screen, this, x, y);
         Util.addDrawable(screen,
-                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), padding / 10f) {
+                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), 1 - zoom) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(getSliderTitle());
@@ -36,20 +34,19 @@ public class Padding extends Module {
 
                     @Override
                     protected void applyValue() {
-                        PADDING = (int) (this.value * 10);
-                        sa.invokeClearAndInit();
+                        zoom = 1f - (float) this.value;
                     }
                 });
     }
 
     public void loadConfig(NbtCompound config) {
         enabled = Util.loadEnabled(config);
-        PADDING = config.contains("padding") ? config.getInt("padding") : 2;
+        zoom = config.contains("zoom") ? config.getFloat("zoom") : .1f;
     }
 
     public NbtCompound saveConfig() {
         NbtCompound nbt = Util.saveEnabled(enabled);
-        nbt.putInt("padding", PADDING);
+        nbt.putFloat("zoom", zoom);
         return nbt;
     }
 }

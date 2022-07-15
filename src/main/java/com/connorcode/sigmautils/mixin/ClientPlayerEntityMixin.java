@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.modules.PrintDeathCords;
+import com.connorcode.sigmautils.modules.misc.PrintDeathCords;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;

@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.modules.BetterSplashes;
+import com.connorcode.sigmautils.modules._interface.BetterSplashes;
 import net.minecraft.client.resource.SplashTextResourceSupplier;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Final;

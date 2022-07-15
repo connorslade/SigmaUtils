@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.modules;
+package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;

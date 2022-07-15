@@ -9,7 +9,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
-    @Shadow protected abstract boolean isChatFocused();
+    @Shadow
+    protected abstract boolean isChatFocused();
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;isChatFocused()Z"))
     boolean isChatFocused(ChatHud instance) throws Exception {

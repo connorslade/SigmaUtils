@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.modules;
+package com.connorcode.sigmautils.modules.rendering;
 
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.SimpleOptionAccessor;

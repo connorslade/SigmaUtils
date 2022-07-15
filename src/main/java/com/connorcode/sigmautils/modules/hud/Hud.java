@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.modules;
+package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Util;

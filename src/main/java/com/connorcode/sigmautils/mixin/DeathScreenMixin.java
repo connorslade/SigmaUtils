@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.modules.PrintDeathCords;
+import com.connorcode.sigmautils.modules.misc.PrintDeathCords;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.entity.Entity;

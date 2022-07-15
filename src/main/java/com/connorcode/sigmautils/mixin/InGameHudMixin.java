@@ -2,12 +2,11 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
-import com.connorcode.sigmautils.modules.Hud;
+import com.connorcode.sigmautils.modules.hud.Hud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.hit.HitResult;

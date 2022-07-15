@@ -3,7 +3,7 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import com.connorcode.sigmautils.modules.Padding;
+import com.connorcode.sigmautils.modules.meta.Padding;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
