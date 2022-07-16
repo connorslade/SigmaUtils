@@ -23,6 +23,7 @@ public class Hud extends Module {
             "watermark_hud",
             "fps_hud",
             "coordinates_hud",
+            "effect_hud",
             "biome_hud",
             "server_hud"
     };
@@ -47,7 +48,7 @@ public class Hud extends Module {
                     return module.isEmpty() ? SigmaUtilsClient.modules[0] : module.get();
                 })
                 .filter(m -> m.enabled)
-                .forEach(m -> lines.add(((HudModule) m).line()));
+                .forEach(m -> lines.addAll(((HudModule) m).lines()));
         return lines;
     }
 

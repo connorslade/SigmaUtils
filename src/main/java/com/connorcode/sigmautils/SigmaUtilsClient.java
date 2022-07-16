@@ -29,6 +29,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new Deadmau5Ears(),
             new DisableFrontPerspective(),
             new DisableShadows(),
+            new EffectHud(),
             new FlippedEntities(),
             new FpsHud(),
             new FullBright(),

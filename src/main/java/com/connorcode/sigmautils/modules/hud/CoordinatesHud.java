@@ -16,7 +16,7 @@ public class CoordinatesHud extends HudModule {
     @Override
     public String line() {
         ClientPlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().player);
-        return String.format("§r§fPos: %d, %d, %d", (int) Math.round(player.getX()), (int) Math.round(player.getY()),
+        return String.format("§r§ePos: §f%d, %d, %d", (int) Math.round(player.getX()), (int) Math.round(player.getY()),
                 (int) Math.round(player.getZ()));
     }
 }

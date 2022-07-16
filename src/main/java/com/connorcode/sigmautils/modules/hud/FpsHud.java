@@ -11,6 +11,7 @@ public class FpsHud extends HudModule {
     }
 
     public String line() {
-        return String.format("§r§fFps: %d", ((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+        return String.format("§r§dFps: §f%d",
+                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
     }
 }

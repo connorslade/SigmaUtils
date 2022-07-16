@@ -16,7 +16,7 @@ public class BiomeHud extends HudModule {
     }
 
     public String line() {
-        return String.format("§r§fBiome: %s", getBiomeName());
+        return String.format("§r§cBiome: §f%s", getBiomeName());
     }
 
     String getBiomeName() {
