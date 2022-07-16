@@ -11,6 +11,3 @@
 - Effects hud
 - Nearby players and thair distance
 - Tab toggle
-- Sound on death
-- Sound on chat message
-- Glowing players / entites

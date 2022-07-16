@@ -26,7 +26,7 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
     @Shadow
     @Final
     private MinecraftClient client;
@@ -36,6 +36,9 @@ public class InGameHudMixin {
 
     @Shadow
     private int scaledHeight;
+
+    @Shadow
+    public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) throws Exception {
@@ -82,9 +85,12 @@ public class InGameHudMixin {
 
         int y = hud.getRight()
                 .getRight();
+        int maxText = 0;
+        for (String i : hud.getLeft()) maxText = Math.max(maxText, getTextRenderer().getWidth(i));
         for (String i : hud.getLeft()) {
-            client.textRenderer.drawWithShadow(matrices, i, hud.getRight()
-                    .getLeft(), y, 0);
+            client.textRenderer.drawWithShadow(matrices, i, Hud.location == 0 || Hud.location == 3 ? hud.getRight()
+                    .getLeft() : hud.getRight()
+                    .getLeft() + (maxText - getTextRenderer().getWidth(i)), y, 0);
             y += client.textRenderer.fontHeight + padding;
         }
     }

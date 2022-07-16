@@ -3,9 +3,7 @@ package com.connorcode.sigmautils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.*;
-import com.connorcode.sigmautils.modules.hud.CoordinatesHud;
-import com.connorcode.sigmautils.modules.hud.Hud;
-import com.connorcode.sigmautils.modules.hud.WatermarkHud;
+import com.connorcode.sigmautils.modules.hud.*;
 import com.connorcode.sigmautils.modules.meta.Padding;
 import com.connorcode.sigmautils.modules.misc.*;
 import com.connorcode.sigmautils.modules.rendering.*;
@@ -21,14 +19,17 @@ import java.io.IOException;
 public class SigmaUtilsClient implements ClientModInitializer {
     public static Module[] modules = new Module[]{
             new BetterSplashes(),
+            new BiomeHud(),
             new BlockDistance(),
             new CameraClip(),
             new CameraDistance(),
+            new ChatMessageDing(),
             new CoordinatesHud(),
             new Deadmau5Ears(),
             new DisableFrontPerspective(),
             new DisableShadows(),
             new FlippedEntities(),
+            new FpsHud(),
             new FullBright(),
             new GlowingPlayers(),
             new Hud(),

@@ -1,26 +1,30 @@
 package com.connorcode.sigmautils.modules.hud;
 
-import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class Hud extends Module {
     public static int location;
+    static String[] hudModules = new String[]{
+            "watermark_hud",
+            "fps_hud",
+            "coordinates_hud",
+            "biome_hud"
+    };
     char[] arrows = new char[]{
             '⬉',
             '⬈',
@@ -32,15 +36,17 @@ public class Hud extends Module {
         super("hud", "Hud", "The basic text hud that can be places in the corners of the window", Category.Hud);
     }
 
-    public static List<String> makeHudText() throws Exception {
-        ClientPlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().player);
+    public static List<String> makeHudText() {
         List<String> lines = new ArrayList<>();
-
-        if (Config.getEnabled("watermark_hud")) lines.add("§r§l§aSigma Utils");
-        if (Config.getEnabled("coordinates_hud")) lines.add(
-                String.format("§r§fPos: %d, %d, %d", (int) Math.round(player.getX()), (int) Math.round(player.getY()),
-                        (int) Math.round(player.getZ())));
-
+        Arrays.stream(hudModules)
+                .map(n -> {
+                    Optional<Module> module = Arrays.stream(SigmaUtilsClient.modules)
+                            .filter(m -> Objects.equals(m.id, n))
+                            .findFirst();
+                    return module.isEmpty() ? SigmaUtilsClient.modules[0] : module.get();
+                })
+                .filter(m -> m.enabled)
+                .forEach(m -> lines.add(((HudModule) m).line()));
         return lines;
     }
 

@@ -9,4 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface MinecraftClientAccessor {
     @Accessor
     RenderTickCounter getRenderTickCounter();
+
+    @Accessor
+    int getCurrentFps();
 }
