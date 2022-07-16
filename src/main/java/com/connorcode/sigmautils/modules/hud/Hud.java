@@ -23,7 +23,8 @@ public class Hud extends Module {
             "watermark_hud",
             "fps_hud",
             "coordinates_hud",
-            "biome_hud"
+            "biome_hud",
+            "server_hud"
     };
     char[] arrows = new char[]{
             '⬉',

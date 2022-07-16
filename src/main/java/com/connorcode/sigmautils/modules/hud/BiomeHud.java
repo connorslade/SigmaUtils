@@ -3,8 +3,6 @@ package com.connorcode.sigmautils.modules.hud;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -33,6 +31,7 @@ public class BiomeHud extends HudModule {
         Optional<RegistryKey<Biome>> biomeKey = biome.getKey();
         if (biomeKey.isEmpty()) return "??";
 
-        return String.valueOf(biomeKey.get().getValue());
+        return String.valueOf(biomeKey.get()
+                .getValue());
     }
 }
