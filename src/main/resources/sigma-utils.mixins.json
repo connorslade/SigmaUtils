@@ -4,7 +4,8 @@
   "package": "com.connorcode.sigmautils.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientConnectionMixin"
+    "ClientConnectionMixin",
+    "YggdrasilUserApiServiceMixin"
   ],
   "client": [
     "BackgroundRendererMixin",
@@ -29,6 +30,7 @@
     "ScreenMixin",
     "SimpleOptionAccessor",
     "SplashTextResourceSupplierMixin",
+    "TelemetrySenderMixin",
     "TitleScreenMixin"
   ],
   "injectors": {

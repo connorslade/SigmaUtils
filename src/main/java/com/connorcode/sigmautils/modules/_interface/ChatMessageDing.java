@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.module.Category;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.sound.SoundEvents;
 
 public class ChatMessageDing extends BasicModule {
@@ -19,7 +20,7 @@ public class ChatMessageDing extends BasicModule {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (enabled && packet instanceof ChatMessageS2CPacket) MinecraftClient.getInstance()
+            if (enabled && packet instanceof ChatMessageS2CPacket || packet instanceof GameMessageS2CPacket) MinecraftClient.getInstance()
                     .getSoundManager()
                     .play(PositionedSoundInstance.master(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f));
             return false;
