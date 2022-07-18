@@ -1,12 +1,14 @@
 package com.connorcode.sigmautils.module;
 
-import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
+import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.misc.Components;
+import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+
+import java.util.Objects;
 
 public abstract class Module {
     public final String id;
@@ -23,17 +25,7 @@ public abstract class Module {
     }
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
-        ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addDrawable(screen,
-                new ButtonWidget(x, y, 150, 20, Text.of(String.format("%s█§r %s", enabled ? "§a" : "§c", name)),
-                        button -> {
-                            enabled ^= true;
-                            if (enabled) enable(client);
-                            else disable(client);
-                            sa.invokeClearAndInit();
-                        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                        sa.getTextRenderer()
-                                .wrapLines(Text.of(description), 200), mouseX, mouseY))));
+        Components.addToggleButton(screen, this, x, y, 150, false);
     }
 
     public void loadConfig(NbtCompound config) {
@@ -47,8 +39,20 @@ public abstract class Module {
     }
 
     public void enable(MinecraftClient client) {
+        try {
+            if (Config.getEnabled("toggle_notifications")) Objects.requireNonNull(client.player)
+                    .sendMessage(Text.of(String.format("§aEnabled §d%s", name)), !ToggleNotifications.display);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void disable(MinecraftClient client) {
+        try {
+            if (Config.getEnabled("toggle_notifications")) Objects.requireNonNull(client.player)
+                    .sendMessage(Text.of(String.format("§cDisabled §d%s", name)), !ToggleNotifications.display);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

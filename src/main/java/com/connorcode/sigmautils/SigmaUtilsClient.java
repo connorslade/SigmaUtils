@@ -1,11 +1,13 @@
 package com.connorcode.sigmautils;
 
-import com.connorcode.sigmautils.commands.*;
+import com.connorcode.sigmautils.commands.About;
+import com.connorcode.sigmautils.commands.Command;
+import com.connorcode.sigmautils.commands.Toggle;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.*;
 import com.connorcode.sigmautils.modules.hud.*;
-import com.connorcode.sigmautils.modules.meta.Padding;
+import com.connorcode.sigmautils.modules.meta.*;
 import com.connorcode.sigmautils.modules.misc.*;
 import com.connorcode.sigmautils.modules.rendering.*;
 import com.mojang.logging.LogUtils;
@@ -57,6 +59,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new ServerHud(),
             new ShowInvisibleEntities(),
             new TickSpeed(),
+            new ToggleNotifications(),
             new WatermarkHud(),
             new Zoom()
     };

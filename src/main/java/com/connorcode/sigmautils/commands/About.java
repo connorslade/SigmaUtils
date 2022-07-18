@@ -15,7 +15,8 @@ public class About implements Command {
                 .then(ClientCommandManager.literal("about")
                         .executes(context -> {
                             Objects.requireNonNull(MinecraftClient.getInstance().player)
-                                    .sendMessage(Text.of(String.format("[*] Sigma Utils v%s", SigmaUtilsClient.version)),
+                                    .sendMessage(
+                                            Text.of(String.format("[*] Sigma Utils v%s", SigmaUtilsClient.version)),
                                             false);
                             return 0;
                         })));

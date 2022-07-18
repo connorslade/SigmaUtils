@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
@@ -87,14 +88,7 @@ public class Hud extends Module {
         ScreenAccessor sa = (ScreenAccessor) screen;
         int padding = getPadding();
 
-        Util.addDrawable(screen, new ButtonWidget(x, y, 130 - padding, 20,
-                Text.of(String.format("%s█§r %s", enabled ? "§a" : "§c", name)), button -> {
-            enabled ^= true;
-            if (enabled) enable(client);
-            else disable(client);
-            sa.invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
-                .wrapLines(Text.of(description), 200), mouseX, mouseY))));
+        Components.addToggleButton(screen, this, x, y, 130 - padding, false);
         Util.addDrawable(screen,
                 new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(arrows[location])), button -> {
                     location = (location + 1) % 4;

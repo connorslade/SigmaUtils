@@ -1,11 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.modules._interface.ChatPosition;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.util.math.MatrixStack;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

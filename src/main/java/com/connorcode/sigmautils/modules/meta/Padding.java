@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.meta;
 
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
@@ -26,7 +27,7 @@ public class Padding extends Module {
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
         ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addMiniToggleButton(screen, this, x, y);
+        Components.addToggleButton(screen, this, x, y, 20, true);
         Util.addDrawable(screen,
                 new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), padding / 10f) {
                     @Override

@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -24,7 +25,7 @@ public class ChatPosition extends Module {
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
-        Util.addMiniToggleButton(screen, this, x, y);
+        Components.addToggleButton(screen, this, x, y, 20, true);
         Util.addDrawable(screen,
                 new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), yPosition / 10f) {
                     @Override

@@ -3,15 +3,12 @@
   "minVersion": "0.8",
   "package": "com.connorcode.sigmautils.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "ClientConnectionMixin",
-    "YggdrasilUserApiServiceMixin"
-  ],
   "client": [
     "BackgroundRendererMixin",
     "BossBarHudMixin",
     "CameraMixin",
     "ChatHudMixin",
+    "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
     "Deadmau5FeatureRendererMixin",
     "DeathScreenMixin",

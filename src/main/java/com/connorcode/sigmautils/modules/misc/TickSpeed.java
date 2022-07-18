@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
 import com.connorcode.sigmautils.mixin.RenderTickCounterAccessor;
@@ -37,7 +38,7 @@ public class TickSpeed extends Module {
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
-        Util.addMiniToggleButton(screen, this, x, y);
+        Components.addToggleButton(screen, this, x, y, 20, true);
         Util.addDrawable(screen,
                 new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), mspt / 100d) {
                     @Override
