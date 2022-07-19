@@ -20,7 +20,7 @@ public class ChatMessageDing extends BasicModule {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (enabled && packet instanceof ChatMessageS2CPacket || packet instanceof GameMessageS2CPacket)
+            if (enabled && (packet instanceof ChatMessageS2CPacket || packet instanceof GameMessageS2CPacket))
                 MinecraftClient.getInstance()
                         .getSoundManager()
                         .play(PositionedSoundInstance.master(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f));

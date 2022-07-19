@@ -4,6 +4,7 @@
   "package": "com.connorcode.sigmautils.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ArmorFeatureRendererMixin",
     "BackgroundRendererMixin",
     "BossBarHudMixin",
     "CameraMixin",
@@ -28,7 +29,8 @@
     "SimpleOptionAccessor",
     "SplashTextResourceSupplierMixin",
     "TelemetrySenderMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
