@@ -9,6 +9,7 @@
     "BossBarHudMixin",
     "CameraMixin",
     "ChatHudMixin",
+    "ChatScreenMixin",
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
     "Deadmau5FeatureRendererMixin",

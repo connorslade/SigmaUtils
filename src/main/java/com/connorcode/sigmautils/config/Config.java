@@ -58,7 +58,7 @@ public class Config {
         Optional<Module> find = Arrays.stream(SigmaUtilsClient.modules)
                 .filter(m -> Objects.equals(m.id, id))
                 .findFirst();
-        if (find.isEmpty()) throw new Exception("Invalid Module Id");
+        if (find.isEmpty()) throw new Exception(String.format("Invalid Module Id `%s`", id));
         return find.get().enabled;
     }
 

@@ -2,6 +2,7 @@ package com.connorcode.sigmautils;
 
 import com.connorcode.sigmautils.commands.About;
 import com.connorcode.sigmautils.commands.Command;
+import com.connorcode.sigmautils.commands.Fotd;
 import com.connorcode.sigmautils.commands.Toggle;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
@@ -25,6 +26,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
     public static final String version = "0.1";
     public static Command[] commands = new Command[]{
             new About(),
+            new Fotd(),
             new Toggle()
     };
     public static Module[] modules = new Module[]{
@@ -34,11 +36,13 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new CameraClip(),
             new CameraDistance(),
             new ChatMessageDing(),
+            new NoChatNormalization(),
             new ChatPosition(),
             new CoordinatesHud(),
             new Deadmau5Ears(),
             new DisableFrontPerspective(),
             new DisableShadows(),
+            new EggChat(),
             new EffectHud(),
             new FlippedEntities(),
             new FpsHud(),
