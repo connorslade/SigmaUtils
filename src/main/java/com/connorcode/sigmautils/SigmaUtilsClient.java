@@ -8,7 +8,8 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.*;
 import com.connorcode.sigmautils.modules.hud.*;
-import com.connorcode.sigmautils.modules.meta.*;
+import com.connorcode.sigmautils.modules.meta.Padding;
+import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
 import com.connorcode.sigmautils.modules.misc.*;
 import com.connorcode.sigmautils.modules.rendering.*;
 import com.mojang.logging.LogUtils;
@@ -36,7 +37,6 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new CameraClip(),
             new CameraDistance(),
             new ChatMessageDing(),
-            new NoChatNormalization(),
             new ChatPosition(),
             new CoordinatesHud(),
             new Deadmau5Ears(),
@@ -45,6 +45,8 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new EggChat(),
             new EffectHud(),
             new FlippedEntities(),
+            new ForceGameTime(),
+            new ForceWeather(),
             new FpsHud(),
             new FullBright(),
             new GlowingPlayers(),
@@ -54,12 +56,15 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new NoBossBarValue(),
             new NoBreakParticles(),
             new NoChatFade(),
+            new NoChatNormalization(),
+            new NoDarkSky(),
             new NoFog(),
             new NoGlobalSounds(),
             new NoHurtTilt(),
             new NoParticles(),
             new NoScoreboardValue(),
             new NoTelemetry(),
+            new NoWorldBorder(),
             new Padding(),
             new PrintDeathCords(),
             new RandomBackground(),

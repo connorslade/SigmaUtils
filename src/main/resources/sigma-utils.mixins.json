@@ -12,6 +12,7 @@
     "ChatScreenMixin",
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
+    "ClientWorldPropertiesMixin",
     "Deadmau5FeatureRendererMixin",
     "DeathScreenMixin",
     "EntityMixin",
@@ -31,6 +32,7 @@
     "SplashTextResourceSupplierMixin",
     "TelemetrySenderMixin",
     "TitleScreenMixin",
+    "WorldMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

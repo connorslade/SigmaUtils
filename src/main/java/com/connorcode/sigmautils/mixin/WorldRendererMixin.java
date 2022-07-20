@@ -1,17 +1,20 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.HeightLimitView;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
@@ -35,5 +38,16 @@ public class WorldRendererMixin {
         if (sound == null) return;
         Objects.requireNonNull(world)
                 .playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
+    }
+
+    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
+    double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) throws Exception {
+        if (Config.getEnabled("no_dark_sky")) return Double.MIN_VALUE;
+        return instance.getSkyDarknessHeight(world);
+    }
+
+    @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
+    void onRenderWorldBorder(Camera camera, CallbackInfo ci) throws Exception {
+        if (Config.getEnabled("no_world_border")) ci.cancel();
     }
 }
