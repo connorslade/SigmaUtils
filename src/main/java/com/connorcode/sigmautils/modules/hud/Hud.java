@@ -28,7 +28,9 @@ public class Hud extends Module {
             "coordinates_hud",
             "effect_hud",
             "biome_hud",
-            "server_hud"
+            "server_hud",
+            "time_played_hud",
+            "time_hud"
     };
     char[] arrows = new char[]{
             '⬉',

@@ -10,3 +10,7 @@
 - Chord hud + Biome + Nether cords
 - Nearby players and thair distance
 - Tab toggle
+- Disable screenshot message
+- Time Client open hud module
+- Current time hud module
+- unlock all resapies

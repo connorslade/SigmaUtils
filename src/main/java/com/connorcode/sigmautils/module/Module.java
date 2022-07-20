@@ -8,8 +8,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
-import java.util.Objects;
-
 public abstract class Module {
     public final String id;
     public final String name;
@@ -39,8 +37,9 @@ public abstract class Module {
     }
 
     public void enable(MinecraftClient client) {
+        if (client.player == null) return;
         try {
-            if (Config.getEnabled("toggle_notifications")) Objects.requireNonNull(client.player)
+            if (Config.getEnabled("toggle_notifications")) client.player
                     .sendMessage(Text.of(String.format("§aEnabled §d%s", name)), !ToggleNotifications.display);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,8 +47,9 @@ public abstract class Module {
     }
 
     public void disable(MinecraftClient client) {
+        if (client.player == null) return;
         try {
-            if (Config.getEnabled("toggle_notifications")) Objects.requireNonNull(client.player)
+            if (Config.getEnabled("toggle_notifications")) client.player
                     .sendMessage(Text.of(String.format("§cDisabled §d%s", name)), !ToggleNotifications.display);
         } catch (Exception e) {
             e.printStackTrace();

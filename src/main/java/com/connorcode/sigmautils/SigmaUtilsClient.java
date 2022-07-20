@@ -8,6 +8,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.*;
 import com.connorcode.sigmautils.modules.hud.*;
+import com.connorcode.sigmautils.modules.meta.OpenFolder;
 import com.connorcode.sigmautils.modules.meta.Padding;
 import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
 import com.connorcode.sigmautils.modules.misc.*;
@@ -52,6 +53,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new GlowingPlayers(),
             new HotbarPosition(),
             new Hud(),
+            new LocalTimeHud(),
             new NoArmor(),
             new NoBossBarValue(),
             new NoBreakParticles(),
@@ -65,13 +67,16 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new NoScoreboardValue(),
             new NoTelemetry(),
             new NoWorldBorder(),
+            new OpenFolder(),
             new Padding(),
             new PingHud(),
             new PrintDeathCords(),
             new RandomBackground(),
             new ServerHud(),
             new ShowInvisibleEntities(),
+            new SignClickThrough(),
             new TickSpeed(),
+            new TimePlayedHud(),
             new ToggleNotifications(),
             new TpsHud(),
             new WatermarkHud(),
