@@ -23,6 +23,8 @@ public class Hud extends Module {
     static String[] hudModules = new String[]{
             "watermark_hud",
             "fps_hud",
+            "tps_hud",
+            "ping_hud",
             "coordinates_hud",
             "effect_hud",
             "biome_hud",

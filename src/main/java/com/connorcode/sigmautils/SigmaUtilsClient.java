@@ -66,12 +66,14 @@ public class SigmaUtilsClient implements ClientModInitializer {
             new NoTelemetry(),
             new NoWorldBorder(),
             new Padding(),
+            new PingHud(),
             new PrintDeathCords(),
             new RandomBackground(),
             new ServerHud(),
             new ShowInvisibleEntities(),
             new TickSpeed(),
             new ToggleNotifications(),
+            new TpsHud(),
             new WatermarkHud(),
             new Zoom()
     };
