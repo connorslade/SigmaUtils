@@ -36,7 +36,7 @@ public class Config {
                 if (!i.getRight()
                         .wasPressed()) continue;
 
-                Optional<Module> find = Arrays.stream(SigmaUtilsClient.modules)
+                Optional<Module> find = SigmaUtilsClient.modules.stream()
                         .filter(m -> Objects.equals(m.id, i.getLeft()))
                         .findFirst();
                 if (find.isEmpty()) continue;
@@ -54,11 +54,11 @@ public class Config {
         });
     }
 
-    public static boolean getEnabled(String id) throws Exception {
-        Optional<Module> find = Arrays.stream(SigmaUtilsClient.modules)
+    public static boolean getEnabled(String id) {
+        Optional<Module> find = SigmaUtilsClient.modules.stream()
                 .filter(m -> Objects.equals(m.id, id))
                 .findFirst();
-        if (find.isEmpty()) throw new Exception(String.format("Invalid Module Id `%s`", id));
+        if (find.isEmpty()) return false;
         return find.get().enabled;
     }
 

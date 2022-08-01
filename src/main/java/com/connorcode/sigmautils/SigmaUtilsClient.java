@@ -1,99 +1,55 @@
 package com.connorcode.sigmautils;
 
-import com.connorcode.sigmautils.commands.About;
 import com.connorcode.sigmautils.commands.Command;
-import com.connorcode.sigmautils.commands.Fotd;
-import com.connorcode.sigmautils.commands.Toggle;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
-import com.connorcode.sigmautils.modules._interface.*;
-import com.connorcode.sigmautils.modules.hud.*;
-import com.connorcode.sigmautils.modules.meta.OpenFolder;
-import com.connorcode.sigmautils.modules.meta.Padding;
-import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
-import com.connorcode.sigmautils.modules.misc.*;
-import com.connorcode.sigmautils.modules.rendering.*;
+import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.minecraft.util.JsonHelper;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtilsClient implements ClientModInitializer {
     public static final String version = "0.1";
-    public static Command[] commands = new Command[]{
-            new About(),
-            new Fotd(),
-            new Toggle()
-    };
-    public static Module[] modules = new Module[]{
-            new BetterSplashes(),
-            new BiomeHud(),
-            new BlockDistance(),
-            new CameraClip(),
-            new CameraDistance(),
-            new ChatMessageDing(),
-            new ChatPosition(),
-            new CoordinatesHud(),
-            new Deadmau5Ears(),
-            new DisableFrontPerspective(),
-            new DisableShadows(),
-            new EggChat(),
-            new EffectHud(),
-            new FlippedEntities(),
-            new ForceGameTime(),
-            new ForceWeather(),
-            new FpsHud(),
-            new FullBright(),
-            new GlowingPlayers(),
-            new HotbarPosition(),
-            new Hud(),
-            new LocalTimeHud(),
-            new NoArmor(),
-            new NoBossBarValue(),
-            new NoBreakParticles(),
-            new NoChatFade(),
-            new NoChatNormalization(),
-            new NoDarkSky(),
-            new NoFog(),
-            new NoGlobalSounds(),
-            new NoHurtTilt(),
-            new NoParticles(),
-            new NoScoreboardValue(),
-            new NoTelemetry(),
-            new NoWorldBorder(),
-            new OpenFolder(),
-            new Padding(),
-            new PingHud(),
-            new PrintDeathCords(),
-            new RandomBackground(),
-            new ServerHud(),
-            new ShowInvisibleEntities(),
-            new SignClickThrough(),
-            new TickSpeed(),
-            new TimePlayedHud(),
-            new ToggleNotifications(),
-            new TpsHud(),
-            new WatermarkHud(),
-            new Zoom()
-    };
+    public static List<Module> modules = new ArrayList<>();
+    public static List<Command> commands = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
         LogUtils.getLogger()
                 .info("Starting Sigma Utils");
-        Config.initKeybindings();
+
+        // Load modules
+        JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules.json"));
+        String modulePackageName = moduleJsonObject.get("package")
+                .getAsString();
+        moduleJsonObject.get("modules")
+                .getAsJsonArray()
+                .forEach(json -> modules.add((Module) Util.loadNewClass(modulePackageName + "." + json.getAsString())));
+
+        JsonObject commandJsonObject = JsonHelper.deserialize(Util.loadResourceString("commands.json"));
+        String commandPackageName = commandJsonObject.get("package")
+                .getAsString();
+        commandJsonObject.get("commands")
+                .getAsJsonArray()
+                .forEach(json -> commands.add(
+                        (Command) Util.loadNewClass(commandPackageName + "." + json.getAsString())));
 
         // Init modules
+        Config.initKeybindings();
         for (Module i : modules) i.init();
 
         // Init Commands
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> Arrays.stream(commands)
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> commands
                 .forEach(c -> c.register(dispatcher))));
 
         // Load config

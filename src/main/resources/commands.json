@@ -1,0 +1,8 @@
+{
+  "package": "com.connorcode.sigmautils.commands",
+  "commands": [
+    "About",
+    "Fotd",
+    "Toggle"
+  ]
+}

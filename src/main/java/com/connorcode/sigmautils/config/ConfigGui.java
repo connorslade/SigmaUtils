@@ -38,7 +38,7 @@ public class ConfigGui extends Screen {
         // Draw Module toggles
         for (int x = 0; x < Category.values().length; x++) {
             Category category = Category.values()[x];
-            List<Module> categoryModules = Arrays.stream(SigmaUtilsClient.modules)
+            List<Module> categoryModules = SigmaUtilsClient.modules.stream()
                     .filter(m -> m.category == category)
                     .toList();
 

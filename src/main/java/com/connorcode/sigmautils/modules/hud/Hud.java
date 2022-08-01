@@ -47,10 +47,10 @@ public class Hud extends Module {
         List<String> lines = new ArrayList<>();
         Arrays.stream(hudModules)
                 .map(n -> {
-                    Optional<Module> module = Arrays.stream(SigmaUtilsClient.modules)
+                    Optional<Module> module = SigmaUtilsClient.modules.stream()
                             .filter(m -> Objects.equals(m.id, n))
                             .findFirst();
-                    return module.isEmpty() ? SigmaUtilsClient.modules[0] : module.get();
+                    return module.isEmpty() ? SigmaUtilsClient.modules.get(0) : module.get();
                 })
                 .filter(m -> m.enabled)
                 .forEach(m -> lines.addAll(((HudModule) m).lines()));
