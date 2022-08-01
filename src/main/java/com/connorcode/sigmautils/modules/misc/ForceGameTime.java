@@ -1,16 +1,20 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.misc.Components;
+import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.mojang.brigadier.arguments.LongArgumentType.getLong;
 
 public class ForceGameTime extends BasicModule {
     public static long forceTime;
@@ -27,7 +31,8 @@ public class ForceGameTime extends BasicModule {
         int padding = getPadding();
         Components.addToggleButton(screen, this, x, y, 20, true);
         Util.addDrawable(screen,
-                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), forceTime / 24000f) {
+                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
+                        MathHelper.clamp(forceTime / 24000f, 0, 1)) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(getSliderTitle());
@@ -38,6 +43,15 @@ public class ForceGameTime extends BasicModule {
                         forceTime = (long) (this.value * 24000);
                     }
                 });
+    }
+
+    public void init() {
+        ClientCommandRegistrationCallback.EVENT.register(
+                ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "time",
+                        Datatypes.Long, context -> {
+                            forceTime = getLong(context, "setting");
+                            return 0;
+                        })));
     }
 
     public void loadConfig(NbtCompound config) {
