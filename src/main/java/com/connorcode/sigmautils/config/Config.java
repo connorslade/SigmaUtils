@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.config;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -64,7 +65,8 @@ public class Config {
 
     public static void load() throws IOException {
         if (!configFile.exists()) return;
-        NbtCompound nbt = NbtIo.read(configFile);
+        NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile))
+                .getCompound("modules");
         if (nbt == null) return;
         for (Module i : SigmaUtilsClient.modules) {
             i.loadConfig(nbt.getCompound(i.id));
@@ -75,9 +77,14 @@ public class Config {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void save() throws IOException {
         NbtCompound nbt = new NbtCompound();
-        for (Module i : SigmaUtilsClient.modules) nbt.put(i.id, i.saveConfig());
+
+        // Add modules
+        NbtCompound modules = new NbtCompound();
+        for (Module i : SigmaUtilsClient.modules) modules.put(i.id, i.saveConfig());
         configFile.getParentFile()
                 .mkdirs();
+        nbt.put("modules", modules);
+
         NbtIo.write(nbt, configFile);
     }
 }

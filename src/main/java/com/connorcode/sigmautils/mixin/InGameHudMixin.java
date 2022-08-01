@@ -41,7 +41,7 @@ public abstract class InGameHudMixin {
     public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
-    void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) throws Exception {
+    void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         if (!Config.getEnabled("block_distance")) return;
         Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity)
                 .getRotationVec(client.getTickDelta());
@@ -77,7 +77,7 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) throws Exception {
+    void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (client.options.hudHidden || !Config.getEnabled("hud")) return;
 
         int padding = getPadding();
@@ -96,30 +96,26 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
-    int onGetWidth(TextRenderer instance, String text) throws Exception {
+    int onGetWidth(TextRenderer instance, String text) {
         if (Config.getEnabled("no_scoreboard_value")) return 0;
         return instance.getWidth(text);
     }
 
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;FFI)I"))
-    int onDraw(TextRenderer instance, MatrixStack matrices, String text, float x, float y, int color) throws Exception {
+    int onDraw(TextRenderer instance, MatrixStack matrices, String text, float x, float y, int color) {
         if (Config.getEnabled("no_scoreboard_value")) return 0;
         return instance.draw(matrices, text, x, y, color);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Integer;toString(I)Ljava/lang/String;"))
-    String onToString(int buf) throws Exception {
+    String onToString(int buf) {
         if (Config.getEnabled("no_scoreboard_value")) return "";
         return Integer.toString(buf);
     }
 
     int getHotbarPos() {
-        try {
-            return Config.getEnabled("hotbar_position") ? HotbarPosition.yPosition : 0;
-        } catch (Exception e) {
-            return 0;
-        }
+        return Config.getEnabled("hotbar_position") ? HotbarPosition.yPosition : 0;
     }
 
     // Modified from https://github.com/yurisuika/Raise
@@ -174,7 +170,7 @@ public abstract class InGameHudMixin {
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 1)
-    private double modifyChat(double value) throws Exception {
+    private double modifyChat(double value) {
         if (Config.getEnabled("chat_position")) return value - ChatPosition.yPosition * client.textRenderer.fontHeight;
         return value;
     }
