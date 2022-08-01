@@ -57,7 +57,7 @@ public class ConfigGui extends Screen {
                         Text.of("Github"), button -> {
                     try {
                         Util.getOperatingSystem()
-                                .open(new URI("https://github.com/basicprogrammer10"));
+                                .open(new URI("https://github.com/Basicprogrammer10/SigmaUtils"));
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
