@@ -3,6 +3,7 @@
   "commands": [
     "About",
     "Fotd",
-    "Toggle"
+    "Toggle",
+    "Save"
   ]
 }

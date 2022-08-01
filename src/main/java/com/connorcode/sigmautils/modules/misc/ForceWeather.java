@@ -1,10 +1,12 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.misc.Components;
+import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -12,6 +14,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.mojang.brigadier.arguments.LongArgumentType.getLong;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static net.minecraft.command.CommandSource.suggestMatching;
 
 public class ForceWeather extends BasicModule {
     // 0 => Clear
@@ -39,6 +44,33 @@ public class ForceWeather extends BasicModule {
                     weather = (weather + 1) % 3;
                     sa.invokeClearAndInit();
                 }));
+    }
+
+    public void init() {
+        ClientCommandRegistrationCallback.EVENT.register(
+                ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "weather", Datatypes.String,
+                        (c, b) -> suggestMatching(new String[]{
+                                "clear",
+                                "rain",
+                                "thunder"
+                        }, b), context -> {
+                            String str = getString(context, "setting");
+                            int newWeather = switch (str) {
+                                case "clear" -> 0;
+                                case "rain" -> 1;
+                                case "thunder" -> 2;
+                                default -> -1;
+                            };
+
+                            if (newWeather < 0) {
+                                context.getSource()
+                                        .sendError(Text.of("Invalid weather type"));
+                                return 0;
+                            }
+
+                            weather = newWeather;
+                            return 0;
+                        })));
     }
 
     public void loadConfig(NbtCompound config) {

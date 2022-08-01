@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.gui.Drawable;
@@ -66,6 +67,10 @@ public class Util {
     }
 
     public static void moduleConfigCommand(CommandDispatcher<FabricClientCommandSource> commandSource, Module module, String configName, Datatypes datatype, ModuleSettingSetter set) {
+        moduleConfigCommand(commandSource, module, configName, datatype, null, set);
+    }
+
+    public static void moduleConfigCommand(CommandDispatcher<FabricClientCommandSource> commandSource, Module module, String configName, Datatypes datatype, SuggestionProvider<FabricClientCommandSource> suggestion, ModuleSettingSetter set) {
         ArgumentType<?> argumentType = switch (datatype) {
             case Bool -> bool();
             case Double -> doubleArg();
@@ -80,6 +85,7 @@ public class Util {
                         .then(ClientCommandManager.literal(module.id)
                                 .then(ClientCommandManager.literal(configName)
                                         .then(ClientCommandManager.argument("setting", argumentType)
+                                                .suggests(suggestion)
                                                 .executes(set::set))))));
     }
 }

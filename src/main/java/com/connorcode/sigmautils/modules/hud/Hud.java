@@ -2,11 +2,13 @@ package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.misc.Components;
+import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -17,6 +19,9 @@ import net.minecraft.util.Pair;
 import java.util.*;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static net.minecraft.command.CommandSource.suggestMatching;
 
 public class Hud extends Module {
     public static int location;
@@ -98,6 +103,22 @@ public class Hud extends Module {
                     location = (location + 1) % 4;
                     sa.invokeClearAndInit();
                 }));
+    }
+
+    public void init() {
+        ClientCommandRegistrationCallback.EVENT.register(
+                ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "location",
+                        Datatypes.Integer, context -> {
+                            int newLocation = getInteger(context, "setting");
+                            if (newLocation < 0 || newLocation > 3) {
+                                context.getSource()
+                                        .sendError(Text.of("Invalid location id"));
+                                return 0;
+                            }
+
+                            location = newLocation;
+                            return 0;
+                        })));
     }
 
     public void loadConfig(NbtCompound config) {
