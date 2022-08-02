@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.commands;
 
+import com.connorcode.sigmautils.misc.AsyncRunner;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -12,25 +13,60 @@ import net.minecraft.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class Run implements Command {
-    public static int execute(CommandContext<FabricClientCommandSource> context) {
+    static int execute(CommandContext<FabricClientCommandSource> context, boolean idCooldown) {
+        ClientPlayerEntity player = Objects.requireNonNull(context.getSource()
+                .getClient().player);
         String formatString = getString(context, "formatString");
         List<Token> tokens = tokenize(formatString, context.getSource());
+        int cooldown = idCooldown ? getInteger(context, "cooldown") : 0;
         if (tokens == null) return 0;
+        System.out.println(tokens);
 
-        while (true) {
-            Pair<String, Boolean> command = Token.stringify(tokens);
-            String text = command.getLeft();
-            ClientPlayerEntity player = Objects.requireNonNull(context.getSource()
-                    .getClient().player);
-            if (text.startsWith("/")) player.sendCommand(text.substring(1), null);
-            else player.sendChatMessage(text, null);
-            if (command.getRight()) break;
-        }
+        AsyncRunner.start(new AsyncRunner.Task() {
+            boolean running = true;
+
+            @Override
+            public String getName() {
+                return String.format("Run `%s`", formatString);
+            }
+
+            @Override
+            public boolean running() {
+                return running;
+            }
+
+            @Override
+            public void start(UUID uuid) {
+                while (running) {
+                    Pair<String, Boolean> command = Token.stringify(tokens);
+                    String text = command.getLeft();
+                    System.out.println(text);
+
+                    if (text.startsWith("/")) player.sendCommand(text.substring(1), null);
+                    else player.sendChatMessage(text, null);
+                    if (command.getRight()) break;
+
+                    try {
+                        Thread.sleep(cooldown);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void stop() {
+                running = false;
+            }
+        });
 
         return 0;
     }
@@ -77,7 +113,9 @@ public class Run implements Command {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("run")
                         .then(ClientCommandManager.argument("formatString", string())
-                                .executes(Run::execute))));
+                                .executes(ctx -> execute(ctx, false))
+                                .then(ClientCommandManager.argument("cooldown", integer())
+                                        .executes(ctx -> execute(ctx, true))))));
     }
 
     static class Token {
@@ -129,7 +167,7 @@ public class Run implements Command {
                     case PlayerName -> {
                         assert client.player != null;
                         if (client.isInSingleplayer()) formatterData = List.of(client.player.getName()
-                                .getString());
+                                .getString(), "Go", "Go", "Mango");
                         else formatterData = client.player.networkHandler.getPlayerList()
                                 .stream()
                                 .map(p -> Objects.requireNonNull(p.getDisplayName())
@@ -148,6 +186,7 @@ public class Run implements Command {
                     }
                     default -> throw new RuntimeException();
                 }
+                System.out.println(formatterData);
             }
 
             String out = formatterData.get(formatterIndex);
