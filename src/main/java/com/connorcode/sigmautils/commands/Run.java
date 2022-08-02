@@ -167,7 +167,7 @@ public class Run implements Command {
                     case PlayerName -> {
                         assert client.player != null;
                         if (client.isInSingleplayer()) formatterData = List.of(client.player.getName()
-                                .getString(), "Go", "Go", "Mango");
+                                .getString());
                         else formatterData = client.player.networkHandler.getPlayerList()
                                 .stream()
                                 .map(p -> Objects.requireNonNull(p.getDisplayName())
