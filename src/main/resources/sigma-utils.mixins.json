@@ -21,6 +21,8 @@
     "GameRendererMixin",
     "InGameHudMixin",
     "LivingEntityRendererMixin",
+    "MapRendererAccessor",
+    "MapTextureAccessor",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "ParticleManagerMixin",

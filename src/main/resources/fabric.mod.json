@@ -8,7 +8,8 @@
     "Connor Slade"
   ],
   "contact": {
-    "website": "https://connorcode.com"
+    "website": "https://connorcode.com",
+    "sources": "https://github.com/Basicprogrammer10/SigmaUtils"
   },
   "license": "MIT",
   "icon": "assets/sigma-utils/icon.png",
@@ -21,6 +22,7 @@
   "mixins": [
     "sigma-utils.mixins.json"
   ],
+  "accessWidener": "sigma_utils.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.8",
     "fabric": "*",
