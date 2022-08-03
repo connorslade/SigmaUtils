@@ -1,9 +1,11 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -37,13 +39,19 @@ public class MinecraftClientMixin {
     @Nullable
     public ClientWorld world;
 
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    void onSetScreen(Screen screen, CallbackInfo ci) {
+        if (ScreenOpenCallback.EVENT.invoker()
+                .handle(screen)) ci.cancel();
+    }
+
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
-    void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) throws Exception {
+    void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (Config.getEnabled("glowing_players") && entity instanceof PlayerEntity) cir.setReturnValue(true);
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
-    void onGetStackInHand(CallbackInfo ci) throws Exception {
+    void onGetStackInHand(CallbackInfo ci) {
         if (!Config.getEnabled("sign_click_through") || crosshairTarget == null || Objects.requireNonNull(player)
                 .isSneaking()) return;
 

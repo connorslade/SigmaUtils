@@ -28,6 +28,7 @@
     "RenderTickCounterAccessor",
     "ScreenAccessor",
     "ScreenMixin",
+    "SignEditScreenAccessor",
     "SimpleOptionAccessor",
     "SplashTextResourceSupplierMixin",
     "TelemetrySenderMixin",

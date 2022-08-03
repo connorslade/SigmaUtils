@@ -24,6 +24,7 @@
     "meta.OpenFolder",
     "meta.Padding",
     "meta.ToggleNotifications",
+    "misc.AutoSign",
     "misc.BlockDistance",
     "misc.CameraClip",
     "misc.CameraDistance",

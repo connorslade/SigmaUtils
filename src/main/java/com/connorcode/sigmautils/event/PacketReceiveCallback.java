@@ -7,8 +7,9 @@ import net.minecraft.network.Packet;
 public interface PacketReceiveCallback {
     Event<PacketReceiveCallback> EVENT =
             EventFactory.createArrayBacked(PacketReceiveCallback.class, packetReceiveCallbacks -> packet -> {
-                for (PacketReceiveCallback i : packetReceiveCallbacks) if (i.handle(packet)) return true;
-                return false;
+                boolean cancel = false;
+                for (PacketReceiveCallback i : packetReceiveCallbacks) cancel |= i.handle(packet);
+                return cancel;
             });
 
     boolean handle(Packet<?> packet);
