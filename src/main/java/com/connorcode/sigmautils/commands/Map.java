@@ -64,18 +64,7 @@ public class Map implements Command {
         MapState mapState = rawMap.get()
                 .getRight();
 
-        int scale = (int) Math.pow(2, mapState.scale) - 1;
-        int centerX = mapState.centerX + 64 * scale;
-        int centerZ = mapState.centerZ + 64 * scale;
-
         MutableText out = Text.empty()
-                // Center
-                .append(Text.literal("Σ] Center: ")
-                        .formatted(Formatting.BOLD))
-                .append(Text.literal(String.format("%d, %d", centerX, centerZ))
-                        .formatted(Formatting.RESET)
-                        .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                String.format("/tp @s %d ~ %d", centerX, centerZ)))))
                 // Id
                 .append(Text.literal("\nΣ] Id: ")
                         .formatted(Formatting.BOLD))
@@ -85,7 +74,7 @@ public class Map implements Command {
                 // Scale
                 .append(Text.literal("\nΣ] Scale: ")
                         .formatted(Formatting.BOLD))
-                .append(Text.literal(String.format("1:%d", scale + 1))
+                .append(Text.literal(String.format("1:%d", (int) Math.pow(2, mapState.scale)))
                         .formatted(Formatting.RESET))
 
                 // Locked
