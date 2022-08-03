@@ -170,8 +170,8 @@ public class Run implements Command {
                                 .getString());
                         else formatterData = client.player.networkHandler.getPlayerList()
                                 .stream()
-                                .map(p -> Objects.requireNonNull(p.getDisplayName())
-                                        .getString())
+                                .map(p -> p.getProfile()
+                                        .getName())
                                 .toList();
                     }
                     case PlayerUUID -> {
