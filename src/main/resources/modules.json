@@ -5,6 +5,7 @@
     "_interface.ChatMessageDing",
     "_interface.ChatPosition",
     "_interface.HotbarPosition",
+    "_interface.Minceraft",
     "_interface.NoBossBarValue",
     "_interface.NoChatFade",
     "_interface.NoScoreboardValue",

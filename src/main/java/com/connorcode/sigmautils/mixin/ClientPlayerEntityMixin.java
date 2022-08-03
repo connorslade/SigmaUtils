@@ -18,7 +18,7 @@ import java.util.Objects;
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
     @Inject(method = "requestRespawn", at = @At("TAIL"))
-    public void onRequestRespawn(CallbackInfo ci) throws Exception {
+    public void onRequestRespawn(CallbackInfo ci) {
         if (!Config.getEnabled("print_death_cords") || PrintDeathCords.lastDeath == null) return;
 
         long[] lastDeath = Arrays.stream(PrintDeathCords.lastDeath)
