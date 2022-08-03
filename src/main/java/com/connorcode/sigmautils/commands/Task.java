@@ -5,6 +5,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
@@ -22,23 +24,24 @@ public class Task implements Command {
                 .map(e -> new Pair<>(e.getKey(), e.getValue()
                         .getLeft()))
                 .toList();
-        StringBuilder message = new StringBuilder();
+        MutableText message = Text.empty();
 
         if (tasks.isEmpty()) message.append("No tasks are running");
         for (Pair<UUID, AsyncRunner.Task> i : tasks) {
-            message.append("• ")
-                    .append(i.getRight()
-                            .getName())
-                    .append(" - ")
-                    .append(i.getLeft()
-                            .toString(), 0, 5)
-                    .append("\n");
+            message = message.append(Text.literal(String.format("• %s - ", i.getRight()
+                            .getName())))
+                    .append(Text.literal(i.getLeft()
+                                    .toString()
+                                    .substring(0, 5))
+                            .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,
+                                    i.getLeft()
+                                            .toString()))))
+                    .append(Text.literal("\n"));
         }
 
         context.getSource()
                 .getPlayer()
-                .sendMessage(Text.of(message.toString()
-                        .trim()));
+                .sendMessage(message);
         return 0;
     }
 
