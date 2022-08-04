@@ -24,7 +24,7 @@ public class SplashTextResourceSupplierMixin {
     private List<String> splashTexts;
 
     @Inject(method = "get", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;", shift = At.Shift.BEFORE), cancellable = true)
-    void get(CallbackInfoReturnable<String> cir) throws Exception {
+    void get(CallbackInfoReturnable<String> cir) {
         if (!Config.getEnabled("better_splashes")) return;
 
         ArrayList<String> totalSplashes = new ArrayList<>();
