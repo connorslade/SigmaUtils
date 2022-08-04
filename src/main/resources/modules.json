@@ -3,6 +3,7 @@
   "modules": [
     "chat.EggChat",
     "chat.NoChatNormalization",
+    "chat.NoChatSignatures",
     "_interface.BetterSplashes",
     "_interface.ChatMessageDing",
     "_interface.ChatPosition",

@@ -28,6 +28,7 @@
     "MinecraftClientMixin",
     "ParticleManagerMixin",
     "PerspectiveMixin",
+    "ProfileKeysMixin",
     "RenderTickCounterAccessor",
     "ScreenAccessor",
     "ScreenMixin",
