@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Perspective.class)
 public class PerspectiveMixin {
     @Inject(method = "next", at = @At("RETURN"), cancellable = true)
-    void onNext(CallbackInfoReturnable<Perspective> cir) throws Exception {
+    void onNext(CallbackInfoReturnable<Perspective> cir) {
         if (!Config.getEnabled("disable_front_perspective")) return;
         cir.setReturnValue(Perspective.values()[cir.getReturnValue()
                 .ordinal() % 2]);

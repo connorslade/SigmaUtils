@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityMixin {
     @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
-    void isInvisible(CallbackInfoReturnable<Boolean> cir) throws Exception {
+    void isInvisible(CallbackInfoReturnable<Boolean> cir) {
         if (!Config.getEnabled("show_invisible_entities")) return;
         cir.setReturnValue(false);
     }
 
     @Inject(method = "isInvisibleTo", at = @At("HEAD"), cancellable = true)
-    void isInvisibleTo(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) throws Exception {
+    void isInvisibleTo(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
         if (!Config.getEnabled("show_invisible_entities")) return;
         cir.setReturnValue(false);
     }

@@ -26,7 +26,7 @@ public class WorldRendererMixin {
     private ClientWorld world;
 
     @Inject(method = "processGlobalEvent", at = @At("HEAD"))
-    void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) throws Exception {
+    void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
         if (!Config.getEnabled("no_global_sounds")) return;
         SoundEvent sound = switch (eventId) {
             case 1023 -> SoundEvents.ENTITY_WITHER_SPAWN;
@@ -41,13 +41,13 @@ public class WorldRendererMixin {
     }
 
     @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
-    double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) throws Exception {
+    double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) {
         if (Config.getEnabled("no_dark_sky")) return Double.MIN_VALUE;
         return instance.getSkyDarknessHeight(world);
     }
 
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
-    void onRenderWorldBorder(Camera camera, CallbackInfo ci) throws Exception {
+    void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
         if (Config.getEnabled("no_world_border")) ci.cancel();
     }
 }

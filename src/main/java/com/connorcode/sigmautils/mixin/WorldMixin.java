@@ -14,12 +14,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Environment(EnvType.CLIENT)
 public class WorldMixin {
     @Inject(method = "getRainGradient", at = @At("HEAD"), cancellable = true)
-    void onIsRaining(CallbackInfoReturnable<Float> cir) throws Exception {
+    void onIsRaining(CallbackInfoReturnable<Float> cir) {
         if (Config.getEnabled("force_weather")) cir.setReturnValue(ForceWeather.weather > 0 ? 1f : 0f);
     }
 
     @Inject(method = "getThunderGradient", at = @At("HEAD"), cancellable = true)
-    void onIsThundering(CallbackInfoReturnable<Float> cir) throws Exception {
+    void onIsThundering(CallbackInfoReturnable<Float> cir) {
         if (Config.getEnabled("force_weather")) cir.setReturnValue(ForceWeather.weather == 2 ? 1f : 0f);
     }
 }

@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
     @Inject(method = "getFov(Lnet/minecraft/client/render/Camera;FZ)D", at = @At("RETURN"), cancellable = true)
-    public void getZoomLevel(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) throws Exception {
+    public void getZoomLevel(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
         if (!Config.getEnabled("zoom")) return;
         cir.setReturnValue(cir.getReturnValueD() * Zoom.zoom);
     }
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
-    void onBobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) throws Exception {
+    void onBobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (Config.getEnabled("no_hurt_tilt")) ci.cancel();
     }
 }

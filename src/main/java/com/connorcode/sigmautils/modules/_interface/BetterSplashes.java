@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BetterSplashes extends BasicModule {
-    public static List<String> betterSplashes = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
+    public static final List<String> betterSplashes = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtilsClient.class.getClassLoader()
                     .getResourceAsStream("splashes.txt")))).lines()
             .toList();

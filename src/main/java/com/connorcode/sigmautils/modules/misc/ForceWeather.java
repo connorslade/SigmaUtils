@@ -14,7 +14,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static com.mojang.brigadier.arguments.LongArgumentType.getLong;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static net.minecraft.command.CommandSource.suggestMatching;
 

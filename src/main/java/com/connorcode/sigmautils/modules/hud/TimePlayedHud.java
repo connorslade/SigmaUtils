@@ -5,7 +5,7 @@ import com.connorcode.sigmautils.module.HudModule;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 public class TimePlayedHud extends HudModule {
-    public static long openTimestamp = System.currentTimeMillis();
+    public static final long openTimestamp = System.currentTimeMillis();
 
     public TimePlayedHud() {
         super("time_played_hud", "Time Played Hud", "Shows how long your client has been open for this session",

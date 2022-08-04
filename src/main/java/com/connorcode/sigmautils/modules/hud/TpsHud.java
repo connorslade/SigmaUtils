@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TpsHud extends HudModule {
     public static long lastTickTime = 0;
-    public static List<Float> tickRateHistory = new ArrayList<>();
+    public static final List<Float> tickRateHistory = new ArrayList<>();
 
     public TpsHud() {
         super("tps_hud", "Tps Hud", "Shows the servers TPS", Category.Hud);

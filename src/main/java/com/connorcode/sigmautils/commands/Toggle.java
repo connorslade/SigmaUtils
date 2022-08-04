@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.commands;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
-import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,8 +10,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 

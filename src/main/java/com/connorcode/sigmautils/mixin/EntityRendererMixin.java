@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
     @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Ljava/lang/String;equals(Ljava/lang/Object;)Z"))
-    private boolean isDeadmau5(String stringA, Object stringB) throws Exception {
+    private boolean isDeadmau5(String stringA, Object stringB) {
         if (Config.getEnabled("deadmau5_ears")) return true;
         return stringA.equals(stringB);
     }

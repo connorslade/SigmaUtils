@@ -24,7 +24,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class AutoSign extends BasicModule {
-    public static String[] lines = new String[4];
+    public static final String[] lines = new String[4];
 
     public AutoSign() {
         super("auto_sign", "Auto Sign", "Automatically writes text on signs you place. (/set auto_sign text \"Hi\")",

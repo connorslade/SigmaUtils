@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RandomBackground extends BasicModule {
-    public static List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
+    public static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtilsClient.class.getClassLoader()
                     .getResourceAsStream("background_blocks.txt"))))
             .lines()

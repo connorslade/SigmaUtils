@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.config;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

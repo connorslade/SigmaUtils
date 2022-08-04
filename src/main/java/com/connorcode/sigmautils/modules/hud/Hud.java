@@ -20,12 +20,10 @@ import java.util.*;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
-import static com.mojang.brigadier.arguments.StringArgumentType.getString;
-import static net.minecraft.command.CommandSource.suggestMatching;
 
 public class Hud extends Module {
     public static int location;
-    static String[] hudModules = new String[]{
+    static final String[] hudModules = new String[]{
             "watermark_hud",
             "fps_hud",
             "tps_hud",
@@ -37,7 +35,7 @@ public class Hud extends Module {
             "time_played_hud",
             "time_hud"
     };
-    char[] arrows = new char[]{
+    final char[] arrows = new char[]{
             '⬉',
             '⬈',
             '⬊',

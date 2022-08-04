@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class AsyncRunner {
-    public static HashMap<UUID, Pair<Task, Thread>> tasks = new HashMap<>();
+    public static final HashMap<UUID, Pair<Task, Thread>> tasks = new HashMap<>();
 
     public static void start(Task task) {
         UUID uuid = UUID.randomUUID();

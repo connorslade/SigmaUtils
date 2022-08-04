@@ -43,7 +43,7 @@ public class Fotd implements Command {
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestProperty("accept", "text/plain");
                     InputStream responseStream = connection.getInputStream();
-                    Scanner scanner = new Scanner(responseStream, StandardCharsets.UTF_8.name());
+                    Scanner scanner = new Scanner(responseStream, StandardCharsets.UTF_8);
                     context.getSource()
                             .getPlayer()
                             .sendMessage(Text.of(String.format("FOTD: %s", scanner.nextLine())));

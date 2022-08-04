@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientWorld.Properties.class)
 public class ClientWorldPropertiesMixin {
     @Inject(method = "getTimeOfDay", at = @At("RETURN"), cancellable = true)
-    void onGetTimeOfDay(CallbackInfoReturnable<Long> cir) throws Exception {
+    void onGetTimeOfDay(CallbackInfoReturnable<Long> cir) {
         if (Config.getEnabled("force_game_time")) cir.setReturnValue(ForceGameTime.forceTime);
     }
 }

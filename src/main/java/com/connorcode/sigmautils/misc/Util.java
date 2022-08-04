@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.misc;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
-import com.connorcode.sigmautils.commands.Command;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
