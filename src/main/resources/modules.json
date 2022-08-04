@@ -37,6 +37,7 @@
     "misc.FakeVanilla",
     "misc.ForceGameTime",
     "misc.ForceWeather",
+    "misc.NoForceResourcePack",
     "misc.NoGlobalSounds",
     "misc.NoTelemetry",
     "misc.PrintDeathCords",
