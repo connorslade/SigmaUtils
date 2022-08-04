@@ -33,6 +33,7 @@
     "misc.CameraClip",
     "misc.CameraDistance",
     "misc.DisableFrontPerspective",
+    "misc.FakeVanilla",
     "misc.ForceGameTime",
     "misc.ForceWeather",
     "misc.NoGlobalSounds",
