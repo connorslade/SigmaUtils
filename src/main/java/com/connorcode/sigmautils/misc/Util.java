@@ -33,7 +33,8 @@ public class Util {
                     .loadClass(classPath)
                     .getDeclaredConstructor()
                     .newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException |
+                 NoSuchMethodException e) {
             e.printStackTrace();
         }
 

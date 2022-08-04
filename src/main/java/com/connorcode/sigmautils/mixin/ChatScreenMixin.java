@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules._interface.ChatPosition;
-import com.connorcode.sigmautils.modules.misc.EggChat;
+import com.connorcode.sigmautils.modules.chat.EggChat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.screen.ChatScreen;

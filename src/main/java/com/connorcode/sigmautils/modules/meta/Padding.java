@@ -43,7 +43,7 @@ public class Padding extends Module {
                     @Override
                     protected void applyValue() {
                         PADDING = (int) (this.value * 10);
-                        sa.invokeClearAndInit();
+                        if (enabled) sa.invokeClearAndInit();
                     }
                 });
     }
