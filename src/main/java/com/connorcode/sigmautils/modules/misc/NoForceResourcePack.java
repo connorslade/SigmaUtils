@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.module.Category;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -29,14 +30,21 @@ public class NoForceResourcePack extends BasicModule {
                     .append(Text.literal("[DOWNLOAD]")
                             .formatted(Formatting.BOLD, Formatting.LIGHT_PURPLE)
                             .styled(style -> style.withClickEvent(
-                                    new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                                            String.format("/util resourcepack \"%s\" \"%s\"", resourcePacket.getURL(),
-                                                    resourcePacket.getSHA1())))))
+                                            new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                                    String.format("/util resourcepack server install \"%s\" \"%s\"",
+                                                            resourcePacket.getURL()
+                                                                    .replaceAll("\"", "\\\""),
+                                                            resourcePacket.getSHA1()
+                                                                    .replaceAll("\"", "\\\""))))
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                            Text.of("Click to install resource pack.")))))
                     .append(" ")
                     .append(Text.literal("[OPEN LINK]")
                             .formatted(Formatting.BOLD, Formatting.BLUE)
                             .styled(style -> style.withClickEvent(new ClickEvent(
-                                    ClickEvent.Action.OPEN_URL, resourcePacket.getURL()))));
+                                            ClickEvent.Action.OPEN_URL, resourcePacket.getURL()))
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                            Text.of("Click to download resource pack.")))));
 
             Objects.requireNonNull(MinecraftClient.getInstance().player)
                     .sendMessage(text);
