@@ -14,6 +14,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 public class Zoom extends Module {
@@ -48,8 +49,8 @@ public class Zoom extends Module {
     public void init() {
         ClientCommandRegistrationCallback.EVENT.register(
                 ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "zoom",
-                        Datatypes.Integer, context -> {
-                            zoom = getInteger(context, "setting");
+                        Datatypes.Float, context -> {
+                            zoom = getFloat(context, "setting");
                             return 0;
                         })));
     }
