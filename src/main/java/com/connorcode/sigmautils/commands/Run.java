@@ -10,10 +10,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -175,6 +172,21 @@ public class Run implements Command {
                         sender.sendError(Text.of(String.format("Invalid formatter `%s`", segment)));
                         return null;
                     }
+
+                    List<Modifier> modifiers = new ArrayList<>();
+                    for (String i : Arrays.stream(segment.toString()
+                                    .split(":"))
+                            .skip(1)
+                            .toList()) {
+                        Modifier modifier = Modifier.fromString(i);
+                        if (modifier == null) {
+                            sender.sendError(Text.of(String.format("Invalid modifier `%s`", i)));
+                            return null;
+                        }
+                        modifiers.add(modifier);
+                    }
+
+                    token.modifiers = modifiers;
                     out.add(token);
                     isInFormat = false;
                     segment = new StringBuilder();
@@ -224,6 +236,7 @@ public class Run implements Command {
         public final String data;
         public final TokenType type;
         public List<String> formatterData;
+        public List<Modifier> modifiers;
         public int formatterIndex = 0;
         private boolean init = false;
 
@@ -233,10 +246,11 @@ public class Run implements Command {
         }
 
         public static Token fromString(String str) {
+            str = str.split(":")[0];
             if (str.startsWith("{") && str.endsWith("}"))
                 return new Token(str.substring(1, str.length() - 1), TokenType.List);
 
-            TokenType type = switch (str) {
+            TokenType type = switch (str.toUpperCase()) {
                 case "PLAYER_NAME" -> TokenType.PlayerName;
                 case "PLAYER_UUID" -> TokenType.PlayerUUID;
                 default -> null;
@@ -316,7 +330,7 @@ public class Run implements Command {
                 }
             }
 
-            String out = formatterData.get(formatterIndex);
+            String out = Modifier.modify(formatterData.get(formatterIndex), modifiers);
             if (inc) formatterIndex++;
             boolean loop = formatterIndex >= formatterData.size();
             formatterIndex %= formatterData.size();
@@ -325,6 +339,57 @@ public class Run implements Command {
 
         enum TokenType {
             String, PlayerName, PlayerUUID, List
+        }
+    }
+
+    record Modifier(Run.Modifier.Modifiers type) {
+        public static Random rand = new Random();
+
+        public static Modifier fromString(String string) {
+            if (string.startsWith(":")) string = string.substring(1);
+
+            Modifiers type = switch (string.toUpperCase()) {
+                case "TITLE_CASE" -> Modifiers.TitleCase;
+                case "LOWER_CASE" -> Modifiers.LowerCase;
+                case "UPPER_CASE" -> Modifiers.UpperCase;
+                case "RANDOM_CASE" -> Modifiers.RandomCase;
+                default -> null;
+            };
+
+            if (type == null) return null;
+            return new Modifier(type);
+        }
+
+        public static String modify(String string, List<Modifier> modifiers) {
+            for (Modifier i : modifiers) {
+                string = switch (i.type) {
+                    case TitleCase -> {
+                        StringBuilder working = new StringBuilder();
+                        char[] chars = string.toCharArray();
+                        for (int j = 0; j < chars.length; j++) {
+                            if (j > 0 && chars[j - 1] == ' ') working.append(Character.toUpperCase(chars[j]));
+                            else working.append(chars[j]);
+                        }
+                        yield working.toString();
+                    }
+                    case LowerCase -> string.toLowerCase();
+                    case UpperCase -> string.toUpperCase();
+                    case RandomCase -> {
+                        StringBuilder working = new StringBuilder();
+                        for (char j : string.toCharArray()) {
+                            if (rand.nextBoolean()) working.append(Character.toUpperCase(j));
+                            else working.append(Character.toLowerCase(j));
+                        }
+                        yield working.toString();
+                    }
+                };
+            }
+
+            return string;
+        }
+
+        enum Modifiers {
+            TitleCase, LowerCase, UpperCase, RandomCase
         }
     }
 }
