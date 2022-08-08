@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
@@ -115,7 +116,6 @@ public class Run implements Command {
         List<Token> tokens = tokenize(formatString, context.getSource());
         int cooldown = isCooldown ? getInteger(context, "cooldown") : 0;
         if (tokens == null) return 0;
-        System.out.println(tokens);
 
         AsyncRunner.start(new AsyncRunner.Task() {
             boolean running = true;
@@ -135,8 +135,8 @@ public class Run implements Command {
                 while (running) {
                     Pair<String, Boolean> command = Token.stringify(tokens);
                     String text = command.getLeft();
-                    System.out.println(text);
 
+                    if (text == null) break;
                     if (text.startsWith("/")) player.sendCommand(text.substring(1), null);
                     else player.sendChatMessage(text, null);
                     if (command.getRight()) break;
@@ -250,9 +250,10 @@ public class Run implements Command {
             if (str.startsWith("{") && str.endsWith("}"))
                 return new Token(str.substring(1, str.length() - 1), TokenType.List);
 
-            TokenType type = switch (str.toUpperCase()) {
-                case "PLAYER_NAME" -> TokenType.PlayerName;
-                case "PLAYER_UUID" -> TokenType.PlayerUUID;
+            TokenType type = switch (str.toUpperCase()
+                    .replaceAll("_", "")) {
+                case "PLAYERNAME" -> TokenType.PlayerName;
+                case "PLAYERUUID" -> TokenType.PlayerUUID;
                 default -> null;
             };
 
@@ -270,7 +271,9 @@ public class Run implements Command {
                     continue;
                 }
 
-                Pair<String, Boolean> next = i.next(incNext);
+                Pair<String, Boolean> next = new Pair<>(null, false);
+                while (!next.getRight() && next.getLeft() == null) next = i.next(incNext);
+                if (next.getLeft() == null) return new Pair<>(null, true);
                 incNext = next.getRight();
                 out.append(next.getLeft());
             }
@@ -348,11 +351,13 @@ public class Run implements Command {
         public static Modifier fromString(String string) {
             if (string.startsWith(":")) string = string.substring(1);
 
-            Modifiers type = switch (string.toUpperCase()) {
-                case "TITLE_CASE" -> Modifiers.TitleCase;
-                case "LOWER_CASE" -> Modifiers.LowerCase;
-                case "UPPER_CASE" -> Modifiers.UpperCase;
-                case "RANDOM_CASE" -> Modifiers.RandomCase;
+            Modifiers type = switch (string.toUpperCase()
+                    .replaceAll("_", "")) {
+                case "TITLECASE" -> Modifiers.TitleCase;
+                case "LOWERCASE" -> Modifiers.LowerCase;
+                case "UPPERCASE" -> Modifiers.UpperCase;
+                case "RANDOMCASE" -> Modifiers.RandomCase;
+                case "ISONLINE" -> Modifiers.isOnline;
                 default -> null;
             };
 
@@ -362,6 +367,7 @@ public class Run implements Command {
 
         public static String modify(String string, List<Modifier> modifiers) {
             for (Modifier i : modifiers) {
+                if (string == null) return null;
                 string = switch (i.type) {
                     case TitleCase -> {
                         StringBuilder working = new StringBuilder();
@@ -382,6 +388,23 @@ public class Run implements Command {
                         }
                         yield working.toString();
                     }
+                    case isOnline -> {
+                        Collection<PlayerListEntry> playerListEntries = Objects.requireNonNull(
+                                MinecraftClient.getInstance().player).networkHandler.getPlayerList();
+                        String finalString = string;
+                        String finalUUIDString = string.replaceAll("-", "");
+                        boolean nameMatch = playerListEntries.stream()
+                                .anyMatch(p -> Objects.equals(p.getProfile()
+                                        .getName()
+                                        .toUpperCase(), finalString.toUpperCase()));
+                        boolean uuidMatch = playerListEntries.stream()
+                                .anyMatch(p -> Objects.equals(p.getProfile()
+                                        .getId()
+                                        .toString()
+                                        .replaceAll("-", ""), finalUUIDString));
+
+                        yield (nameMatch || uuidMatch) ? string : null;
+                    }
                 };
             }
 
@@ -389,7 +412,11 @@ public class Run implements Command {
         }
 
         enum Modifiers {
-            TitleCase, LowerCase, UpperCase, RandomCase
+            // Cases
+            TitleCase, LowerCase, UpperCase, RandomCase,
+
+            // Players
+            isOnline
         }
     }
 }

@@ -41,7 +41,6 @@ public class AutoSign extends BasicModule {
             if (i >= len) lines[i] = "";
             else lines[i] = getString(ctx, String.format("line%d", i + 1));
         }
-        System.out.println(Arrays.toString(lines));
         return 0;
     }
 
