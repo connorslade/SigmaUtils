@@ -233,6 +233,9 @@ public class Run implements Command {
         }
 
         public static Token fromString(String str) {
+            if (str.startsWith("{") && str.endsWith("}"))
+                return new Token(str.substring(1, str.length() - 1), TokenType.List);
+
             TokenType type = switch (str) {
                 case "PLAYER_NAME" -> TokenType.PlayerName;
                 case "PLAYER_UUID" -> TokenType.PlayerUUID;
@@ -286,9 +289,31 @@ public class Run implements Command {
                                         .toString())
                                 .toList();
                     }
-                    default -> throw new RuntimeException();
+                    case List -> {
+                        char[] chars = data.toCharArray();
+                        List<String> out = new ArrayList<>();
+                        StringBuilder builder = new StringBuilder();
+
+                        for (int i = 0; i < chars.length; i++) {
+                            char chr = chars[i];
+                            if (chars[i] == '\\' && i + 1 != chars.length && chars[i + 1] == ',') {
+                                builder.append(',');
+                                i++;
+                                continue;
+                            }
+
+                            if (chr == ',') {
+                                out.add(builder.toString());
+                                builder = new StringBuilder();
+                                continue;
+                            }
+                            builder.append(chr);
+                        }
+
+                        if (!builder.isEmpty()) out.add(builder.toString());
+                        formatterData = out;
+                    }
                 }
-                System.out.println(formatterData);
             }
 
             String out = formatterData.get(formatterIndex);
@@ -299,7 +324,7 @@ public class Run implements Command {
         }
 
         enum TokenType {
-            String, PlayerName, PlayerUUID
+            String, PlayerName, PlayerUUID, List
         }
     }
 }
