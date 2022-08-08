@@ -9,6 +9,7 @@
     "Task",
     "Chat",
     "Map",
-    "ResourcePack"
+    "ResourcePack",
+    "Note"
   ]
 }

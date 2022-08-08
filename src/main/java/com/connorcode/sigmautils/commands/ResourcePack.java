@@ -14,6 +14,13 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class ResourcePack implements Command {
+    static int serverPackUninstall(CommandContext<FabricClientCommandSource> context) {
+        Objects.requireNonNull(MinecraftClient.getInstance()
+                        .getResourcePackProvider())
+                .clear();
+        return 0;
+    }
+
     int serverPackInstall(CommandContext<FabricClientCommandSource> context, boolean isHash) {
         String urlRaw = getString(context, "url");
         String hash = isHash ? getString(context, "hash") : "";
@@ -27,13 +34,6 @@ public class ResourcePack implements Command {
         Objects.requireNonNull(MinecraftClient.getInstance()
                         .getResourcePackProvider())
                 .download(url, hash, true);
-        return 0;
-    }
-
-    static int serverPackUninstall(CommandContext<FabricClientCommandSource> context) {
-        Objects.requireNonNull(MinecraftClient.getInstance()
-                        .getResourcePackProvider())
-                .clear();
         return 0;
     }
 

@@ -41,7 +41,7 @@ public class FakeVanilla extends BasicModule {
     @Override
     public void loadConfig(NbtCompound config) {
         super.loadConfig(config);
-        brand = config.getString("brand");
+        brand = config.contains("brand") ? config.getString("brand") : "vanilla";
     }
 
     @Override

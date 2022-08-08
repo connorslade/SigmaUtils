@@ -6,8 +6,10 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 
 import java.util.List;
@@ -27,16 +29,32 @@ public class Task implements Command {
         MutableText message = Text.empty();
 
         if (tasks.isEmpty()) message.append("No tasks are running");
-        for (Pair<UUID, AsyncRunner.Task> i : tasks) {
+        for (int index = 0; index < tasks.size(); index++) {
+            Pair<UUID, AsyncRunner.Task> i = tasks.get(index);
             message = message.append(Text.literal(String.format("• %s - ", i.getRight()
                             .getName())))
                     .append(Text.literal(i.getLeft()
                                     .toString()
                                     .substring(0, 5))
+                            .formatted(Formatting.UNDERLINE)
                             .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,
-                                    i.getLeft()
-                                            .toString()))))
-                    .append(Text.literal("\n"));
+                                            i.getLeft()
+                                                    .toString()))
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                            Text.of("Click to copy task UUID")))))
+                    .append(Text.literal(" [-]")
+                            .formatted(Formatting.GOLD)
+                            .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                            String.format("/util task stop %s", i.getLeft())))
+                                    .withHoverEvent(new HoverEvent(
+                                            HoverEvent.Action.SHOW_TEXT, Text.of("Tries to stop the task")))))
+                    .append(Text.literal(" [X]")
+                            .formatted(Formatting.RED)
+                            .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                            String.format("/util task kill %s", i.getLeft())))
+                                    .withHoverEvent(new HoverEvent(
+                                            HoverEvent.Action.SHOW_TEXT, Text.of("Force kills the task")))))
+                    .append(index + 1 >= tasks.size() ? Text.empty() : Text.literal("\n"));
         }
 
         context.getSource()

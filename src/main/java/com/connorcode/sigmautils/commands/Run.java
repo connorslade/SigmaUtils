@@ -21,12 +21,102 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class Run implements Command {
-    static int execute(CommandContext<FabricClientCommandSource> context, boolean idCooldown) {
+    static int executeRepeat(CommandContext<FabricClientCommandSource> context, boolean isRepeats) {
+        String command = getString(context, "command");
+        int delay = getInteger(context, "delay");
+        int count = isRepeats ? getInteger(context, "repeats") : -1;
+        ClientPlayerEntity player = context.getSource()
+                .getPlayer();
+
+        AsyncRunner.start(new AsyncRunner.Task() {
+            boolean running = true;
+            UUID id;
+
+            @Override
+            public String getName() {
+                return String.format("Run repeat `%s` (%d)", command, delay);
+            }
+
+            @Override
+            public boolean running() {
+                return running;
+            }
+
+            @Override
+            public void start(UUID uuid) {
+                id = uuid;
+
+                for (int i = 0; true; i++) {
+                    if (!running || (count != -1 && i >= count)) break;
+
+                    String thisCommand = command.replaceAll("%INDEX%", String.valueOf(i));
+                    if (command.startsWith("/")) player.sendCommand(thisCommand.substring(1), null);
+                    else player.sendChatMessage(thisCommand, null);
+
+                    try {
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void stop() {
+                running = false;
+            }
+        });
+
+        return 0;
+    }
+
+    static int executeDelay(CommandContext<FabricClientCommandSource> context) {
+        String command = getString(context, "command");
+        int delay = getInteger(context, "delay");
+        ClientPlayerEntity player = context.getSource()
+                .getPlayer();
+
+        AsyncRunner.start(new AsyncRunner.Task() {
+            UUID id;
+
+            @Override
+            public String getName() {
+                return String.format("Run delay `%s` (%d)", command, delay);
+            }
+
+            @Override
+            public boolean running() {
+                return true;
+            }
+
+            @Override
+            public void start(UUID uuid) {
+                id = uuid;
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (command.startsWith("/")) player.sendCommand(command.substring(1), null);
+                else player.sendChatMessage(command, null);
+            }
+
+            @Override
+            public void stop() {
+                AsyncRunner.kill(id);
+            }
+        });
+
+        return 0;
+    }
+
+    static int executeFormat(CommandContext<FabricClientCommandSource> context, boolean isCooldown) {
         ClientPlayerEntity player = Objects.requireNonNull(context.getSource()
                 .getClient().player);
         String formatString = getString(context, "formatString");
         List<Token> tokens = tokenize(formatString, context.getSource());
-        int cooldown = idCooldown ? getInteger(context, "cooldown") : 0;
+        int cooldown = isCooldown ? getInteger(context, "cooldown") : 0;
         if (tokens == null) return 0;
         System.out.println(tokens);
 
@@ -35,7 +125,7 @@ public class Run implements Command {
 
             @Override
             public String getName() {
-                return String.format("Run `%s`", formatString);
+                return String.format("Run Formatted `%s`", formatString);
             }
 
             @Override
@@ -112,10 +202,22 @@ public class Run implements Command {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("run")
-                        .then(ClientCommandManager.argument("formatString", string())
-                                .executes(ctx -> execute(ctx, false))
-                                .then(ClientCommandManager.argument("cooldown", integer())
-                                        .executes(ctx -> execute(ctx, true))))));
+                        .then(ClientCommandManager.literal("formatted")
+                                .then(ClientCommandManager.argument("formatString", string())
+                                        .executes(ctx -> executeFormat(ctx, false))
+                                        .then(ClientCommandManager.argument("cooldown", integer())
+                                                .executes(ctx -> executeFormat(ctx, true)))))
+                        .then(ClientCommandManager.literal("delay")
+                                .then(ClientCommandManager.argument("command", string())
+                                        .then(ClientCommandManager.argument("delay", integer())
+                                                .executes(Run::executeDelay))))
+                        .then(ClientCommandManager.literal("repeat")
+                                .then(ClientCommandManager.argument("command", string())
+                                        .then(ClientCommandManager.argument("delay", integer())
+                                                .executes(ctx -> executeRepeat(ctx, false))
+                                                .then(ClientCommandManager.argument("repeats", integer())
+                                                        .executes(ctx -> executeRepeat(ctx, true))))))
+                ));
     }
 
     static class Token {

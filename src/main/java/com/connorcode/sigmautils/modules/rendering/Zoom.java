@@ -15,7 +15,6 @@ import net.minecraft.util.math.MathHelper;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 public class Zoom extends Module {
     public static float zoom;

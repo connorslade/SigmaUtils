@@ -22,7 +22,6 @@ import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 public class Hud extends Module {
-    public static int location;
     static final String[] hudModules = new String[]{
             "watermark_hud",
             "fps_hud",
@@ -35,6 +34,7 @@ public class Hud extends Module {
             "time_played_hud",
             "time_hud"
     };
+    public static int location;
     final char[] arrows = new char[]{
             '⬉',
             '⬈',
