@@ -50,8 +50,8 @@ public class SigmaUtilsClient implements ClientModInitializer {
         for (Module i : modules) i.init();
 
         // Init Commands
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> commands
-                .forEach(c -> c.register(dispatcher))));
+        ClientCommandRegistrationCallback.EVENT.register(
+                ((dispatcher, registryAccess) -> commands.forEach(c -> c.register(dispatcher))));
 
         // Load config
         ClientLifecycleEvents.CLIENT_STARTED.register((client -> {

@@ -10,20 +10,21 @@ import java.util.List;
 
 public class Formatter {
     private static final HashMap<String, List<Token>> cache = new HashMap<>();
+    private final HashMap<String, Object> args = new HashMap<>();
     private final List<Token> tokens;
-    private List<String> posArgs;
-    private HashMap<String, String> args;
+    private List<Object> posArgs = new ArrayList<>();
 
-    Formatter(String formatString) {
+    public Formatter(String formatString) {
         this.tokens = new Formatter(formatString, true).tokens;
     }
 
-    Formatter(String formatString, Object... args) {
+    public Formatter(String formatString, Object... args) {
         this.tokens = new Formatter(formatString, true).tokens;
-        posArgs = Arrays.stream(args).map(Object::toString).toList();
+        this.posArgs = Arrays.stream(args)
+                .toList();
     }
 
-    Formatter(String formatString, boolean cache) {
+    public Formatter(String formatString, boolean cache) {
         if (Formatter.cache.containsKey(formatString)) {
             this.tokens = Formatter.cache.get(formatString);
             return;
@@ -34,17 +35,17 @@ public class Formatter {
             Formatter.cache.put(formatString, tokens);
     }
 
-    Formatter arg(String name, String value) {
+    public Formatter arg(String name, Object value) {
         args.put(name, value);
         return this;
     }
 
-    Formatter arg(String value) {
+    public Formatter arg(Object value) {
         posArgs.add(value);
         return this;
     }
 
-    String format() {
+    public String format() {
         StringBuilder out = new StringBuilder();
 
         for (Token i : tokens) {
@@ -57,19 +58,16 @@ public class Formatter {
                 }
                 case Format -> {
                     if (!args.containsKey(i.data))
-                        throw new RuntimeException(new Formatter("The key `{}` is not defined!").arg(i.data).format());
+                        throw new RuntimeException(new Formatter("The key `{}` is not defined!").arg(i.data)
+                                .format());
                     out.append(args.remove(i.data));
                 }
             }
         }
 
-        if (!posArgs.isEmpty() || !args.isEmpty()) {
+        if (!posArgs.isEmpty() || !args.isEmpty())
             LogUtils.getLogger()
-                    .warn(new Formatter("Formatter arguments not all used! [{}] {}").arg(String.join(", ", posArgs))
-                            .arg(args.toString())
-                            .format());
-        }
-
+                    .warn("Formatter arguments not all used!");
         return out.toString();
     }
 
@@ -112,7 +110,9 @@ public class Formatter {
                     }
 
                     if (formatterOpen) {
+                        formatterOpen = false;
                         String build = builder.toString();
+                        builder = new StringBuilder();
                         tokens.add(new Token(build.isEmpty() ? TokenType.PosFormat : TokenType.Format, build));
                         continue;
                     }
@@ -133,9 +133,12 @@ public class Formatter {
 
         private static Pair<Integer, Integer> countChars(char chr, int index, char[] data) {
             int count = 0;
-            while (data[index++] == chr)
+            index--;
+
+            while (++index < data.length && data[index] == chr)
                 count++;
-            return new Pair<>(count, index);
+
+            return new Pair<>(count, index - 1);
         }
 
         enum TokenType {

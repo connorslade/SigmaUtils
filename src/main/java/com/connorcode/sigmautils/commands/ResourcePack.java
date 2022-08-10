@@ -30,7 +30,8 @@ public class ResourcePack implements Command {
             url = new URL(urlRaw);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            context.getSource().sendError(Text.of(String.format("Invalid url! (%s)", e.getMessage())));
+            context.getSource()
+                    .sendError(Text.of(String.format("Invalid url! (%s)", e.getMessage())));
             return 0;
         }
 

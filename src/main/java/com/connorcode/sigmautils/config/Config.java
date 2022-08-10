@@ -14,7 +14,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +67,10 @@ public class Config {
 
     public static <T extends Module> boolean getEnabled(Class<T> moduleClass) {
         try {
-            return getEnabled(moduleClass.getConstructor().newInstance().id);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return getEnabled(moduleClass.getConstructor()
+                    .newInstance().id);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             e.printStackTrace();
             throw new RuntimeException(String.format("Invalid module class `%s`", moduleClass.getName()));
         }
