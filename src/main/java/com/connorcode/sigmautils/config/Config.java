@@ -14,6 +14,8 @@ import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -61,8 +63,16 @@ public class Config {
         Optional<Module> find = SigmaUtilsClient.modules.stream()
                 .filter(m -> Objects.equals(m.id, id))
                 .findFirst();
-        if (find.isEmpty()) return false;
-        return find.get().enabled;
+        return find.isPresent() && find.get().enabled;
+    }
+
+    public static <T extends Module> boolean getEnabled(Class<T> moduleClass) {
+        try {
+            return getEnabled(moduleClass.getConstructor().newInstance().id);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new RuntimeException(String.format("Invalid module class `%s`", moduleClass.getName()));
+        }
     }
 
     public static void load() throws IOException {

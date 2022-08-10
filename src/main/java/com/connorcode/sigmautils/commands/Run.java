@@ -45,11 +45,12 @@ public class Run implements Command {
                 id = uuid;
 
                 for (int i = 0; true; i++) {
-                    if (!running || (count != -1 && i >= count)) break;
+                    if (!running) break;
 
                     String thisCommand = command.replaceAll("%INDEX%", String.valueOf(i));
                     if (command.startsWith("/")) player.sendCommand(thisCommand.substring(1), null);
                     else player.sendChatMessage(thisCommand, null);
+                    if (count != -1 && i >= count) break;
 
                     try {
                         Thread.sleep(delay);

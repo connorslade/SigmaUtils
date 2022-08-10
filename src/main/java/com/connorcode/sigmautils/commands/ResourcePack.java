@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +29,9 @@ public class ResourcePack implements Command {
         try {
             url = new URL(urlRaw);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            context.getSource().sendError(Text.of(String.format("Invalid url! (%s)", e.getMessage())));
+            return 0;
         }
 
         Objects.requireNonNull(MinecraftClient.getInstance()

@@ -9,7 +9,7 @@ fn main() {
 
     'img: for i in fs::read_dir("./block").unwrap().map(|x| x.unwrap()) {
         let name = i.file_name().to_str().unwrap().to_owned();
-        if !name.ends_with(".png") || name.contains("destroy") {
+        if !name.ends_with(".png") || name.contains("destroy") || name.contains("debug") {
             continue;
         }
 

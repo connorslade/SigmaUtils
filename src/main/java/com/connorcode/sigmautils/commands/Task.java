@@ -41,7 +41,7 @@ public class Task implements Command {
                                             i.getLeft()
                                                     .toString()))
                                     .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                            Text.of("Click to copy task UUID")))))
+                                            Text.of(i.getLeft() + "\nClick to copy UUID")))))
                     .append(Text.literal(" [-]")
                             .formatted(Formatting.GOLD)
                             .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,

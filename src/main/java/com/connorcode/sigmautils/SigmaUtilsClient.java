@@ -19,14 +19,14 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtilsClient implements ClientModInitializer {
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "0.1*";
     public static final List<Module> modules = new ArrayList<>();
     public static final List<Command> commands = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
         LogUtils.getLogger()
-                .info("Starting Sigma Utils");
+                .info("Starting Sigma Utils v" + VERSION);
 
         // Load modules
         JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules.json"));
