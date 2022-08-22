@@ -4,6 +4,8 @@
     "chat.EggChat",
     "chat.NoChatNormalization",
     "chat.NoChatSignatures",
+    "chat.NoMessageHiding",
+    "chat.PrivateMessageNotifier",
     "_interface.BetterSplashes",
     "_interface.ChatMessageDing",
     "_interface.ChatPosition",
