@@ -3,9 +3,9 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.event.PacketSendCallback;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.class_7648;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketCallbacks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +20,7 @@ public class ClientConnectionMixin {
     }
 
     @Inject(method = "sendImmediately", at = @At("HEAD"), cancellable = true)
-    void onPacketSend(Packet<?> packet, class_7648 arg, CallbackInfo ci) {
+    void onPacketSend(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
         if (PacketSendCallback.EVENT.invoker()
                 .handle(packet)) ci.cancel();
     }

@@ -23,7 +23,7 @@ public class ProfileKeysMixin {
         if (Config.getEnabled("no_chat_signatures")) cir.setReturnValue(Optional.empty());
     }
 
-    @Inject(method = "getPublicKeyData", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getPublicKey", at = @At("HEAD"), cancellable = true)
     private void onGetPublicKeyData(CallbackInfoReturnable<Optional<PlayerPublicKey.PublicKeyData>> cir) {
         if (Config.getEnabled("no_chat_signatures")) cir.setReturnValue(Optional.empty());
     }
