@@ -31,6 +31,7 @@
     "hud.LocalTimeHud",
     "meta.OpenFolder",
     "meta.Padding",
+    "meta.Scale",
     "meta.ToggleNotifications",
     "misc.AutoSign",
     "misc.BlockDistance",

@@ -17,6 +17,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
+
 public class ConfigGui extends Screen {
     public ConfigGui() {
         super(Text.of("Sigma Utils - Config"));
@@ -67,11 +69,16 @@ public class ConfigGui extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         int padding = getPadding();
+        float scale = getScale();
+
         this.renderBackground(matrices);
+        matrices.scale(scale, scale, scale);
+
         for (int x = 0; x < Category.values().length; x++)
             drawCenteredText(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
-        super.render(matrices, mouseX, mouseY, delta);
+
+        super.render(matrices, (int) ((float) mouseX / scale), (int) ((float) mouseY / scale), delta);
     }
 
     public void close() {

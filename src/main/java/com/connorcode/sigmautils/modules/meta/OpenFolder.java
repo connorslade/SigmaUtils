@@ -1,11 +1,11 @@
 package com.connorcode.sigmautils.modules.meta;
 
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
@@ -16,7 +16,7 @@ public class OpenFolder extends Module {
 
     public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
-        com.connorcode.sigmautils.misc.Util.addDrawable(screen, new ButtonWidget(x, y, 150, 20,
+        com.connorcode.sigmautils.misc.Util.addDrawable(screen, new Components.ScalableButton(x, y, 150, 20,
                 Text.of(name), button -> enable(MinecraftClient.getInstance()),
                 ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
                         .wrapLines(Text.of(description), 200), mouseX, mouseY))));
