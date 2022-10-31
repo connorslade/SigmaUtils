@@ -33,6 +33,7 @@
     "meta.Padding",
     "meta.Scale",
     "meta.ToggleNotifications",
+    "misc.ForceFly",
     "misc.AutoSign",
     "misc.BlockDistance",
     "misc.CameraClip",
