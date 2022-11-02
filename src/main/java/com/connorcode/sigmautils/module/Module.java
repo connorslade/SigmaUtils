@@ -36,6 +36,9 @@ public abstract class Module {
     public void init() {
     }
 
+    public void tick() {
+    }
+
     public void enable(MinecraftClient client) {
         if (client.player == null) return;
         try {

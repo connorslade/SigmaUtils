@@ -1,7 +1,9 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
+import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
@@ -38,6 +40,12 @@ public class MinecraftClientMixin {
     @Shadow
     @Nullable
     public ClientWorld world;
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;beginRenderTick(J)I", shift = At.Shift.AFTER))
+    void onTick(boolean tick, CallbackInfo ci) {
+        assert tick;
+        SigmaUtilsClient.modules.forEach(Module::tick);
+    }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     void onSetScreen(Screen screen, CallbackInfo ci) {

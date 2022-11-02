@@ -1,14 +1,22 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules.misc.ForceFly;
 import com.connorcode.sigmautils.modules.misc.PrintDeathCords;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.ParseResults;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.network.message.*;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +28,33 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Mixin(ClientPlayerEntity.class)
-public class ClientPlayerEntityMixin {
+public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
+    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
+        super(world, profile, publicKey);
+    }
+
+    @Redirect(method = "sendAbilitiesUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAbilities()Lnet/minecraft/entity/player/PlayerAbilities;"))
+    PlayerAbilities onSendAbilitiesUpdate(ClientPlayerEntity instance) {
+        PlayerAbilities abilities = new PlayerAbilities();
+        abilities.flying = !Config.getEnabled(ForceFly.class) && instance.getAbilities().flying;
+        return abilities;
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;allowFlying:Z", ordinal = 0, opcode = Opcodes.GETFIELD))
+    boolean allowFlyingAllowed(PlayerAbilities instance) {
+        return Config.getEnabled(ForceFly.class) || instance.allowFlying;
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;allowFlying:Z", ordinal = 1, opcode = Opcodes.GETFIELD))
+    boolean allowFlying(PlayerAbilities instance) {
+        return Config.getEnabled(ForceFly.class) || instance.allowFlying;
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSwimming()Z", ordinal = 2))
+    boolean allowFlyingWhenSwim(ClientPlayerEntity instance) {
+        return !Config.getEnabled(ForceFly.class) && instance.isSwimming();
+    }
+
     @Inject(method = "requestRespawn", at = @At("TAIL"))
     public void onRequestRespawn(CallbackInfo ci) {
         if (!Config.getEnabled("print_death_cords") || PrintDeathCords.lastDeath == null) return;
