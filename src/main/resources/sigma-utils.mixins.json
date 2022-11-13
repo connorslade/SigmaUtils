@@ -4,6 +4,7 @@
   "package": "com.connorcode.sigmautils.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "AllowedAddressResolverMixin",
     "ArmorFeatureRendererMixin",
     "BackgroundRendererMixin",
     "BossBarHudMixin",
