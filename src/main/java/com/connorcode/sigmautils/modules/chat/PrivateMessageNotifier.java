@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.modules.chat;
 
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
-import com.connorcode.sigmautils.misc.Formatter;
 import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
 import net.minecraft.client.MinecraftClient;
@@ -28,8 +27,8 @@ public class PrivateMessageNotifier extends BasicModule {
 
             if (player == null) return false;
             Objects.requireNonNull(MinecraftClient.getInstance().player)
-                    .sendMessage(Text.of(new Formatter("Σ] `{}` just sent a message.", player.getGameProfile()
-                            .getName()).format()));
+                    .sendMessage(Text.of(String.format("Σ] `%s` just sent a message.", player.getGameProfile()
+                            .getName())));
             return false;
         });
     }
