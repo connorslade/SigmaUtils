@@ -4,6 +4,7 @@
     "_interface.BetterSplashes",
     "_interface.ChatMessageDing",
     "_interface.ChatPosition",
+    "_interface.ConfirmDisconnect",
     "_interface.HotbarPosition",
     "_interface.Minceraft",
     "_interface.NoBossBarValue",

@@ -23,6 +23,7 @@
     "EntityMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
+    "GameMenuScreenMixin",
     "GameRendererMixin",
     "InGameHudMixin",
     "InventoryScreenMixin",
