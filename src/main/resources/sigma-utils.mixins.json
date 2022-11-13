@@ -13,6 +13,7 @@
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
+    "ClientWorldMixin",
     "ClientWorldPropertiesMixin",
     "CustomPayloadC2SPacketAccessor",
     "Deadmau5FeatureRendererMixin",
