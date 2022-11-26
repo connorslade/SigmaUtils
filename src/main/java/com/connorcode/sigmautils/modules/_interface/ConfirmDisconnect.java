@@ -25,7 +25,7 @@ public class ConfirmDisconnect extends BasicModule {
         @Override
         protected void init() {
             this.addDrawableChild(
-                    new ButtonWidget(this.width / 2 - 122, this.height / 2 - 10, 120, 20, Text.of("Disconnect"),
+                    new ButtonWidget(this.width / 2 - 122, this.height / 4 - 10, 120, 20, Text.of("Disconnect"),
                             (button -> {
                                 assert this.client != null;
                                 assert this.client.world != null;
@@ -44,7 +44,7 @@ public class ConfirmDisconnect extends BasicModule {
                             })));
 
             this.addDrawableChild(
-                    new ButtonWidget(this.width / 2 + 2, this.height / 2 - 10, 120, 20, Text.of("Back"), (button -> {
+                    new ButtonWidget(this.width / 2 + 2, this.height / 4 - 10, 120, 20, Text.of("Back"), (button -> {
                         assert client != null;
                         client.setScreen(null);
                     })));
@@ -56,7 +56,7 @@ public class ConfirmDisconnect extends BasicModule {
             fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
             Text text = Text.of("Do you want to disconnect?");
             client.textRenderer.draw(matrices, text, this.width / 2f - textRenderer.getWidth(text) / 2f,
-                    this.height / 2f - 20 - textRenderer.fontHeight / 2f, 16777215);
+                    this.height / 4f - 20 - textRenderer.fontHeight / 2f, 16777215);
             super.render(matrices, mouseX, mouseY, delta);
         }
     }
