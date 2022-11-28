@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.config;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.modules.meta.ToggleSound;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -47,6 +48,7 @@ public class Config {
                 Module module = find.get();
 
                 module.enabled ^= true;
+                ToggleSound.play(module.enabled);
                 if (module.enabled) module.enable(MinecraftClient.getInstance());
                 else module.disable(MinecraftClient.getInstance());
                 try {

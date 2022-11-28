@@ -35,6 +35,7 @@
     "meta.Padding",
     "meta.Scale",
     "meta.ToggleNotifications",
+    "meta.ToggleSound",
     "misc.AllowBlockedServers",
     "misc.AutoSign",
     "misc.BlockDistance",

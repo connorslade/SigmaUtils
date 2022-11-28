@@ -54,7 +54,7 @@ public class Scale extends Module {
     public void init() {
         ClientCommandRegistrationCallback.EVENT.register(
                 ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "time",
-                        Datatypes.Integer, context -> {
+                        Datatypes.Float, context -> {
                             scale = getFloat(context, "setting");
                             return 0;
                         })));
