@@ -4,31 +4,37 @@ import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.modules._interface.InventoryMove;
+import com.connorcode.sigmautils.modules.misc.NoPause;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public HitResult crosshairTarget;
@@ -40,6 +46,16 @@ public class MinecraftClientMixin {
     @Shadow
     @Nullable
     public ClientWorld world;
+
+    @Shadow @Nullable public Screen currentScreen;
+
+    @Shadow @Nullable private Overlay overlay;
+
+    @Shadow public abstract boolean isIntegratedServerRunning();
+
+    @Shadow @Nullable private IntegratedServer server;
+
+    @Shadow private volatile boolean paused;
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;beginRenderTick(J)I", shift = At.Shift.AFTER))
     void onTick(boolean tick, CallbackInfo ci) {
@@ -89,5 +105,21 @@ public class MinecraftClientMixin {
                                     .getOpposite()),
                             false);
         }
+    }
+
+    // For inventory_move
+    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
+    boolean passScreenEvents(Screen instance) {
+        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
+        return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
+    }
+
+    // For no_pause
+    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
+    boolean isPaused(MinecraftClient instance) {
+        if (!Config.getEnabled(NoPause.class)) return this.paused;
+        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(
+                        this.server)
+                .isRemote();
     }
 }
