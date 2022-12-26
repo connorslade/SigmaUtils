@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ConfigGui;
 import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.modules._interface.EscapeExit;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,8 +20,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
@@ -63,5 +66,12 @@ public class TitleScreenMixin extends Screen {
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/TitleScreen;isMinceraft:Z", opcode = Opcodes.GETFIELD))
     boolean isMinecraft(TitleScreen instance) {
         return Config.getEnabled("minceraft");
+    }
+
+    // For escape_exit
+    @Inject(method = "shouldCloseOnEsc", at = @At("HEAD"))
+    void shouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {
+        if (Config.getEnabled(EscapeExit.class)) Objects.requireNonNull(this.client)
+                .scheduleStop();
     }
 }
