@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.config;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.ToggleSound;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -16,16 +17,14 @@ import org.lwjgl.glfw.GLFW;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Config {
     public static final File configFile =
             new File(MinecraftClient.getInstance().runDirectory, "config/SigmaUtils/config.nbt");
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("Open Gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "Sigma Utils"));
+    public static HashMap<Class<?>, List<Setting>> moduleSettings = new HashMap<>();
 
     public static void initKeybindings() {
         List<Pair<String, KeyBinding>> moduleKeybindings = new ArrayList<>();
@@ -68,9 +67,13 @@ public class Config {
     }
 
     public static <T extends Module> boolean getEnabled(Class<T> moduleClass) {
+        return getEnabled(getModule(moduleClass).id);
+    }
+
+    public static <T extends Module> Module getModule(Class<T> moduleClass) {
         try {
-            return getEnabled(moduleClass.getConstructor()
-                    .newInstance().id);
+            return moduleClass.getConstructor()
+                    .newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
             e.printStackTrace();

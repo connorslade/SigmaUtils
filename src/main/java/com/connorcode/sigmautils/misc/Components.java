@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.misc;
 
+import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -12,9 +13,14 @@ import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
         ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addDrawable(screen, new ScalableButton(x, y, width, 20,
+        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20,
                 Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
                         mini ? "" : String.format(" %s", module.name))), button -> {
+            if (button.click == 1) {
+                MinecraftClient.getInstance()
+                        .setScreen(new ModuleConfigGui(module));
+                return;
+            }
             module.enabled ^= true;
             MinecraftClient client = MinecraftClient.getInstance();
             if (module.enabled) module.enable(client);
@@ -24,9 +30,19 @@ public class Components {
                 .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
     }
 
-    public static class ScalableButton extends ButtonWidget {
-        public ScalableButton(int x, int y, int width, int height, Text message, PressAction onPress, TooltipSupplier tooltipSupplier) {
-            super(x, y, width, height, message, onPress, tooltipSupplier);
+    // A button that detects let and right clicks (and is scalable)
+    public static class MultiClickButton extends ButtonWidget {
+        private final PressAction onPress;
+        public int click = 0;
+
+        public MultiClickButton(int x, int y, int width, int height, Text message, PressAction onPress, TooltipSupplier tooltipSupplier) {
+            super(x, y, width, height, message, null, tooltipSupplier);
+            this.onPress = onPress;
+        }
+
+        @Override
+        public void onPress() {
+            this.onPress.onPress(this);
         }
 
         @Override
@@ -39,6 +55,16 @@ public class Components {
         protected boolean clicked(double mouseX, double mouseY) {
             float scale = getScale();
             return super.clicked(mouseX / scale, mouseY / scale);
+        }
+
+        @Override
+        protected boolean isValidClickButton(int button) {
+            click = button;
+            return button == 0 || button == 1;
+        }
+
+        public interface PressAction {
+            void onPress(MultiClickButton button);
         }
     }
 }

@@ -47,15 +47,21 @@ public abstract class MinecraftClientMixin {
     @Nullable
     public ClientWorld world;
 
-    @Shadow @Nullable public Screen currentScreen;
+    @Shadow
+    @Nullable
+    public Screen currentScreen;
 
-    @Shadow @Nullable private Overlay overlay;
+    @Shadow
+    @Nullable
+    private Overlay overlay;
+    @Shadow
+    @Nullable
+    private IntegratedServer server;
+    @Shadow
+    private volatile boolean paused;
 
-    @Shadow public abstract boolean isIntegratedServerRunning();
-
-    @Shadow @Nullable private IntegratedServer server;
-
-    @Shadow private volatile boolean paused;
+    @Shadow
+    public abstract boolean isIntegratedServerRunning();
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;beginRenderTick(J)I", shift = At.Shift.AFTER))
     void onTick(boolean tick, CallbackInfo ci) {
@@ -110,7 +116,7 @@ public abstract class MinecraftClientMixin {
     // For inventory_move
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
     boolean passScreenEvents(Screen instance) {
-        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
+//        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
         return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
     }
 
@@ -118,7 +124,8 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
     boolean isPaused(MinecraftClient instance) {
         if (!Config.getEnabled(NoPause.class)) return this.paused;
-        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(
+        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() ||
+                this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(
                         this.server)
                 .isRemote();
     }
