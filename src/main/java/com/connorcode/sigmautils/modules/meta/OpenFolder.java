@@ -14,7 +14,7 @@ public class OpenFolder extends Module {
         super("open_folder", "Open Folder", "Opens the folder of this minecraft instance.", Category.Meta);
     }
 
-    public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
+    public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         com.connorcode.sigmautils.misc.Util.addDrawable(screen, new Components.MultiClickButton(x, y, 150, 20,
                 Text.of(name), button -> enable(MinecraftClient.getInstance()),

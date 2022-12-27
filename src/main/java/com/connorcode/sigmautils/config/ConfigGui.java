@@ -30,7 +30,7 @@ public class ConfigGui extends Screen {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Padding.PADDING;
+        return Padding.padding.intValue();
     }
 
     protected void init() {
@@ -47,7 +47,7 @@ public class ConfigGui extends Screen {
                 Module module = categoryModules.get(y);
                 int renderX = padding + x * (150 + padding);
                 int renderY = textRenderer.fontHeight + padding * 2 + y * (20 + padding);
-                module.drawConfigInterface(MinecraftClient.getInstance(), this, renderX, renderY);
+                module.drawInterface(MinecraftClient.getInstance(), this, renderX, renderY);
             }
         }
 

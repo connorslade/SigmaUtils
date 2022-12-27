@@ -115,7 +115,7 @@ public abstract class InGameHudMixin {
     }
 
     int getHotbarPos() {
-        return Config.getEnabled("hotbar_position") ? HotbarPosition.yPosition : 0;
+        return Config.getEnabled(HotbarPosition.class) ? HotbarPosition.yPosition.intValue() : 0;
     }
 
     // Modified from https://github.com/yurisuika/Raise

@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.module;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
 import net.minecraft.client.MinecraftClient;
@@ -22,8 +23,12 @@ public abstract class Module {
         this.category = category;
     }
 
-    public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
+    public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         Components.addToggleButton(screen, this, x, y, 150, false);
+    }
+
+    public void openConfigScreen(MinecraftClient client, Screen screen) {
+        client.setScreen(new ModuleConfigGui(this, screen));
     }
 
     public void loadConfig(NbtCompound config) {

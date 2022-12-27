@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.misc;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.config.ModuleConfigGui;
+import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -23,8 +23,7 @@ public class Components {
                         mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
                 if (!Config.moduleSettings.containsKey(module.getClass())) return;
-                MinecraftClient.getInstance()
-                        .setScreen(new ModuleConfigGui(module));
+                module.openConfigScreen(MinecraftClient.getInstance(), screen);
                 return;
             }
             module.enabled ^= true;
@@ -34,6 +33,11 @@ public class Components {
             sa.invokeClearAndInit();
         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
                 .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
+    }
+
+    public static void sliderConfig(MinecraftClient client, Screen screen, int x, int y, Module module, NumberSetting setting) {
+        Components.addToggleButton(screen, module, x, y, 20, true);
+        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x, y, 130, 20);
     }
 
     // A button that detects let and right clicks (and is scalable)
@@ -86,7 +90,7 @@ public class Components {
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
-            if (!this.hovered || this.active) return;
+            if (!this.hovered) return;
             Text tooltip = this.getTooltip();
             if (tooltip == null) return;
 

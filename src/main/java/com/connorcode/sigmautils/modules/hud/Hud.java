@@ -91,7 +91,7 @@ public class Hud extends Module {
         return new Pair<>(text, pos);
     }
 
-    public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
+    public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         int padding = getPadding();
 

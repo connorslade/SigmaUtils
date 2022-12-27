@@ -33,7 +33,7 @@ public class ForceWeather extends BasicModule {
                 "Forces the weather of the client rendering. (C)lear, (R)ain, (T)hunder", Category.Misc);
     }
 
-    public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
+    public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         int padding = getPadding();
 

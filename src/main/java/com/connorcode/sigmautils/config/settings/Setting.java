@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.config.settings;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,11 @@ public interface Setting {
     @Nullable
     Text getDescription();
 
-    void initRender(Screen screen, int x, int y);
+    void serialize(NbtCompound nbt);
+
+    void deserialize(NbtCompound nbt);
+
+    void initRender(Screen screen, int x, int y, int width, int height);
 
     void render(RenderData data, int x, int y);
 

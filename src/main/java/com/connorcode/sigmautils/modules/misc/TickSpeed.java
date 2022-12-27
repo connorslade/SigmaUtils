@@ -1,32 +1,30 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
 import com.connorcode.sigmautils.mixin.RenderTickCounterAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static com.mojang.brigadier.arguments.LongArgumentType.getLong;
 
 public class TickSpeed extends Module {
-    long mspt;
+    public static NumberSetting mspt = new NumberSetting(TickSpeed.class, "MSPT", 1, 100).description("Sets the MSPT (milliseconds per tick) of the client side game loop")
+            .value(50)
+            .build();
 
     public TickSpeed() {
         super("tick_speed", "Tick Speed", "Sets the clients tick speed in MSPT", Category.Misc);
     }
 
     Text getSliderTitle() {
-        return Text.of(String.format("Tick Speed: %d [%d%%]", mspt, Math.round((100 - mspt) / .5)));
+        return Text.of(String.format("Tick Speed: %d [%d%%]", mspt.intValue(), Math.round((100 - mspt.value()) / .5)));
     }
 
     void setTickSpeed(long mspt) {
@@ -35,51 +33,35 @@ public class TickSpeed extends Module {
     }
 
     void setTickSpeedFromPercent(double percent) {
-        mspt = (long) (50d * (percent * 2d));
-        mspt = mspt < 1 ? 1 : mspt;
-        if (enabled) setTickSpeed(mspt);
+        mspt.value(50d * (percent * 2d));
+        mspt.value(Math.max(mspt.intValue(), 1));
+        if (enabled) setTickSpeed(mspt.intValue());
     }
 
-    public void drawConfigInterface(MinecraftClient client, Screen screen, int x, int y) {
-        int padding = getPadding();
+    public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         Components.addToggleButton(screen, this, x, y, 20, true);
-        Util.addDrawable(screen,
-                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
-                        MathHelper.clamp(mspt / 100d, 0, 1)) {
-                    @Override
-                    protected void updateMessage() {
-                        this.setMessage(getSliderTitle());
-                    }
+        int padding = getPadding();
 
-                    @Override
-                    protected void applyValue() {
-                        setTickSpeedFromPercent(this.value);
-                    }
-                });
-    }
+        Util.addDrawable(screen, new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), MathHelper.clamp(mspt.value() / 100d, 0, 1)) {
+            @Override
+            protected Text getTooltip() {
+                return mspt.getDescription();
+            }
 
-    public void init() {
-        ClientCommandRegistrationCallback.EVENT.register(
-                ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "mspt",
-                        Datatypes.Long, context -> {
-                            mspt = getLong(context, "setting");
-                            return 0;
-                        })));
-    }
+            @Override
+            protected void updateMessage() {
+                this.setMessage(getSliderTitle());
+            }
 
-    public void loadConfig(NbtCompound config) {
-        enabled = Util.loadEnabled(config);
-        mspt = config.contains("mspt") ? config.getLong("mspt") : 50;
-    }
-
-    public NbtCompound saveConfig() {
-        NbtCompound nbt = Util.saveEnabled(enabled);
-        nbt.putLong("mspt", mspt);
-        return nbt;
+            @Override
+            protected void applyValue() {
+                setTickSpeedFromPercent(this.value);
+            }
+        });
     }
 
     public void enable(MinecraftClient client) {
-        setTickSpeed(mspt);
+        setTickSpeed(mspt.intValue());
     }
 
     public void disable(MinecraftClient client) {
