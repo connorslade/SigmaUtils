@@ -2,8 +2,8 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.mixin.SignEditScreenAccessor;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -23,7 +23,7 @@ import java.util.Objects;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
-public class AutoSign extends BasicModule {
+public class AutoSign extends Module {
     public static final String[] lines = new String[]{
             "",
             "",

@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket;
 import net.minecraft.text.ClickEvent;
@@ -13,7 +13,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.Objects;
 
-public class NoForceResourcePack extends BasicModule {
+public class NoForceResourcePack extends Module {
     public NoForceResourcePack() {
         super("no_force_resourcepack", "No Force ResourcePack",
                 "Stops servers from requiring you to have an resource pack installed.", Category.Misc);

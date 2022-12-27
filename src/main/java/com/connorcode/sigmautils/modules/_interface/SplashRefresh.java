@@ -2,12 +2,12 @@ package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
-public class SplashRefresh extends BasicModule {
+public class SplashRefresh extends Module {
     public static NumberSetting refreshTime = new NumberSetting(SplashRefresh.class, "Refresh Time", 0, 10).precision(2)
             .description("The time in seconds between each refresh of the splash screen.")
             .value(4)

@@ -3,8 +3,8 @@ package com.connorcode.sigmautils.modules.meta;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
-public class ToggleNotifications extends BasicModule {
+public class ToggleNotifications extends Module {
     // True => Chat
     // False => Action Bar
     public static boolean display;

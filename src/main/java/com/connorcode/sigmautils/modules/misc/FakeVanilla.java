@@ -4,8 +4,8 @@ import com.connorcode.sigmautils.event.PacketSendCallback;
 import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.CustomPayloadC2SPacketAccessor;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.nbt.NbtCompound;
@@ -14,7 +14,7 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 
-public class FakeVanilla extends BasicModule {
+public class FakeVanilla extends Module {
     String brand = "vanilla";
 
     public FakeVanilla() {

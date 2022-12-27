@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 
-public class PrintDeathCords extends BasicModule {
+public class PrintDeathCords extends Module {
     public static double[] lastDeath = null;
 
     public PrintDeathCords() {

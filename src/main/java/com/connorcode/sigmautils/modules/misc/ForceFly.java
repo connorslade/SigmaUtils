@@ -2,8 +2,8 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.misc.Datatypes;
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 
-public class ForceFly extends BasicModule {
+public class ForceFly extends Module {
     static int flyTickCutoff = 60;
 
     static int flyTicks = 0;

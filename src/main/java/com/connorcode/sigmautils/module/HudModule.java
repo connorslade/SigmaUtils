@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.module;
 
 import java.util.List;
 
-public abstract class HudModule extends BasicModule {
+public abstract class HudModule extends Module {
     protected HudModule(String id, String name, String description, Category category) {
         super(id, name, description, category);
     }

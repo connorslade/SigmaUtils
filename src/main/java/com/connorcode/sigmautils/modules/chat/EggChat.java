@@ -1,12 +1,12 @@
 package com.connorcode.sigmautils.modules.chat;
 
-import com.connorcode.sigmautils.module.BasicModule;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.Module;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class EggChat extends BasicModule {
+public class EggChat extends Module {
     public EggChat() {
         super("egg_chat", "Egg Chat", "Modifies your outgoing chat messages to use maximum egg puns", Category.Chat);
     }
