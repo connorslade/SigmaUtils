@@ -8,7 +8,6 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
@@ -32,8 +31,13 @@ public class Padding extends Module {
         ScreenAccessor sa = (ScreenAccessor) screen;
         Components.addToggleButton(screen, this, x, y, 20, true);
         Util.addDrawable(screen,
-                new SliderWidget(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
+                new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
                         MathHelper.clamp(padding / 10f, 0, 1)) {
+                    @Override
+                    protected Text getTooltip() {
+                        return Padding.padding.getDescription();
+                    }
+
                     @Override
                     protected void updateMessage() {
                         this.setMessage(getSliderTitle());

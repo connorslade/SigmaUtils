@@ -16,6 +16,6 @@ public class CameraDistance extends Module {
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
-        Components.sliderConfig(client, screen, x, y, this, distance);
+        Components.sliderConfig(screen, x, y, this, distance);
     }
 }

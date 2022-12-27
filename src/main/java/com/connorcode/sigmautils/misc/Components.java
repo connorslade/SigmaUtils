@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.misc;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
@@ -13,14 +14,13 @@ import net.minecraft.text.Text;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 
 public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
         ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20,
-                Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
-                        mini ? "" : String.format(" %s", module.name))), button -> {
+        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20, Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c", mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
                 if (!Config.moduleSettings.containsKey(module.getClass())) return;
                 module.openConfigScreen(MinecraftClient.getInstance(), screen);
@@ -35,9 +35,20 @@ public class Components {
                 .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
     }
 
-    public static void sliderConfig(MinecraftClient client, Screen screen, int x, int y, Module module, NumberSetting setting) {
+    public static void sliderConfig(Screen screen, int x, int y, Module module, NumberSetting setting) {
+        int padding = getPadding();
         Components.addToggleButton(screen, module, x, y, 20, true);
-        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x, y, 130, 20);
+        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x + 20 + padding, y, 130 - padding, 20);
+    }
+
+    public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting, char[] values) {
+        ScreenAccessor sa = (ScreenAccessor) screen;
+
+        Util.addDrawable(screen, new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(values[setting.index()])), button -> {
+            setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
+            sa.invokeClearAndInit();
+        }, (((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
+                .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
     }
 
     // A button that detects let and right clicks (and is scalable)
@@ -96,8 +107,7 @@ public class Components {
 
             MinecraftClient client = MinecraftClient.getInstance();
             Objects.requireNonNull(client.currentScreen)
-                    .renderOrderedTooltip(matrices, client.textRenderer.wrapLines(tooltip, 200), mouseX,
-                            mouseY);
+                    .renderOrderedTooltip(matrices, client.textRenderer.wrapLines(tooltip, 200), mouseX, mouseY);
         }
     }
 }

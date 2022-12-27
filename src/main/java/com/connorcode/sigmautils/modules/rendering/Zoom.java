@@ -8,6 +8,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
+import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+
 public class Zoom extends Module {
     public static NumberSetting zoom = new NumberSetting(Zoom.class, "Zoom", 0, 10).description("FOV Multiplier")
             .value(5)
@@ -19,7 +21,8 @@ public class Zoom extends Module {
 
     @Override
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
+        int padding = getPadding();
         Components.addToggleButton(screen, this, x, y, 20, true);
-        zoom.initRender(screen, () -> Text.of(String.format("%s: %.1fx", this.name, zoom.value())), x, y, 130, 20);
+        zoom.initRender(screen, () -> Text.of(String.format("%s: %.1fx", this.name, zoom.value())), x + 20 + padding, y, 130 - padding, 20);
     }
 }

@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 
 public class NumberSetting implements Setting {
@@ -143,13 +142,11 @@ public class NumberSetting implements Setting {
 
     @Override
     public void initRender(Screen screen, int x, int y, int width, int height) {
-        initRender(screen, () -> Text.of(String.format("%s: %." + NumberSetting.this.precision + "f", NumberSetting.this.name, NumberSetting.this.value)), x, y, width, height);
+        initRender(screen, () -> Text.of(String.format("%s: %." + this.precision + "f", this.name, this.value)), x, y, width, height);
     }
 
     public void initRender(Screen screen, SliderText slider, int x, int y, int width, int height) {
-        int padding = getPadding();
-
-        Util.addDrawable(screen, new Components.TooltipSlider(x + 20 + padding, y, width - padding, height, slider.getText(), MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
+        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, height, slider.getText(), MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
             @Override
             protected Text getTooltip() {
                 return Text.of(NumberSetting.this.description);

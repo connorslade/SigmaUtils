@@ -1,25 +1,19 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.misc.Datatypes;
-import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
 import java.util.*;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 public class Hud extends Module {
     static final String[] hudModules = new String[]{
@@ -34,13 +28,9 @@ public class Hud extends Module {
             "time_played_hud",
             "time_hud"
     };
-    public static int location;
-    final char[] arrows = new char[]{
-            '⬉',
-            '⬈',
-            '⬊',
-            '⬋'
-    };
+    public static EnumSetting<Location> location = new EnumSetting<>(Hud.class, "Location", Location.class).value(Location.BottomLeft)
+            .description("The location of the HUD stack")
+            .build();
 
     public Hud() {
         super("hud", "Hud", "The basic text hud that can be places in the corners of the window", Category.Hud);
@@ -74,7 +64,7 @@ public class Hud extends Module {
         int size = 0;
         for (String i : text) size = Math.max(size, client.textRenderer.getWidth(i));
 
-        Pair<Integer, Integer> pos = switch (Hud.location) {
+        Pair<Integer, Integer> pos = switch (Hud.location.index()) {
             case 3:
                 yield new Pair<>(padding, scaledHeight - (client.textRenderer.fontHeight + padding) * text.size());
             case 2:
@@ -96,37 +86,18 @@ public class Hud extends Module {
         int padding = getPadding();
 
         Components.addToggleButton(screen, this, x, y, 130 - padding, false);
-        Util.addDrawable(screen,
-                new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(arrows[location])), button -> {
-                    location = (location + 1) % 4;
-                    sa.invokeClearAndInit();
-                }));
+        Components.enumConfig(screen, x, y, location, new char[]{
+                '⬉',
+                '⬈',
+                '⬊',
+                '⬋'
+        });
     }
 
-    public void init() {
-        ClientCommandRegistrationCallback.EVENT.register(
-                ((dispatcher, registryAccess) -> Util.moduleConfigCommand(dispatcher, this, "location",
-                        Datatypes.Integer, context -> {
-                            int newLocation = getInteger(context, "setting");
-                            if (newLocation < 0 || newLocation > 3) {
-                                context.getSource()
-                                        .sendError(Text.of("Invalid location id"));
-                                return 0;
-                            }
-
-                            location = newLocation;
-                            return 0;
-                        })));
-    }
-
-    public void loadConfig(NbtCompound config) {
-        enabled = Util.loadEnabled(config);
-        location = config.contains("location") ? config.getInt("location") : 0;
-    }
-
-    public NbtCompound saveConfig() {
-        NbtCompound nbt = Util.saveEnabled(enabled);
-        nbt.putInt("location", location);
-        return nbt;
+    public enum Location {
+        TopLeft,
+        TopRight,
+        BottomRight,
+        BottomLeft,
     }
 }

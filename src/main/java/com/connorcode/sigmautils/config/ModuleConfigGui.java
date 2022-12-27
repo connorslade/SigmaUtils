@@ -43,7 +43,7 @@ public class ModuleConfigGui extends Screen {
 
         // Add an 'enabled' setting
         Util.addDrawable(this,
-                new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 130 - padding, 20, Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
+                new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 150 - padding, 20, Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
                     module.enabled ^= true;
                     assert this.client != null;
                     if (module.enabled) module.enable(this.client);
@@ -55,12 +55,12 @@ public class ModuleConfigGui extends Screen {
         for (int x = 0; x < settingsList.size(); x++) {
             for (int y = 0; y < settingsList.get(x)
                     .size(); y++) {
-                int xPos = x * (150 + padding);
+                int xPos = 20 + padding + x * (150 + padding);
                 int yPos = textRenderer.fontHeight * 2 + padding * 4 + (y + 1) * (20 + padding);
 
                 settingsList.get(x)
                         .get(y)
-                        .initRender(this, xPos, yPos, 130, 20);
+                        .initRender(this, xPos, yPos, 150 - padding, 20);
             }
         }
     }

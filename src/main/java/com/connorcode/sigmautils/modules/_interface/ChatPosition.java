@@ -18,6 +18,6 @@ public class ChatPosition extends BasicModule {
 
     @Override
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
-        Components.sliderConfig(client, screen, x, y, this, yPosition);
+        Components.sliderConfig(screen, x, y, this, yPosition);
     }
 }

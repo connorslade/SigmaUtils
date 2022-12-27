@@ -19,6 +19,6 @@ public class SplashRefresh extends BasicModule {
 
     @Override
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
-        Components.sliderConfig(client, screen, x, y, this, refreshTime);
+        Components.sliderConfig(screen, x, y, this, refreshTime);
     }
 }
