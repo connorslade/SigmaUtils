@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class BetterSplashes extends Module {
+    public static BoolSetting boolSetting = new BoolSetting(BetterSplashes.class, "TestSetting").description("This is a test setting").build();
+
     public static final List<String> betterSplashes = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtilsClient.class.getClassLoader()
                     .getResourceAsStream("splashes.txt")))).lines()

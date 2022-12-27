@@ -16,21 +16,16 @@ import java.util.ArrayList;
 
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 
-public class NumberSetting implements Setting {
-    private final Class<? extends Module> module;
-    private final String name;
+public class NumberSetting extends Setting<NumberSetting> {
     private final double min;
     private final double max;
     private boolean enforceBounds;
     private double value;
-    private String id;
-    private String category = "General";
-    private String description;
     // Number of decimal places to display
     private int precision = 2;
 
     public <T extends Module> NumberSetting(Class<T> module, String name, double min, double max) {
-        this.module = module;
+        super(module, name);
         this.name = name;
         this.min = min;
         this.max = max;
@@ -70,23 +65,8 @@ public class NumberSetting implements Setting {
         return this;
     }
 
-    public NumberSetting category(String category) {
-        this.category = category;
-        return this;
-    }
-
     public NumberSetting value(double value) {
         this.value = value;
-        return this;
-    }
-
-    public NumberSetting description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public NumberSetting id(String id) {
-        this.id = id;
         return this;
     }
 
@@ -110,15 +90,6 @@ public class NumberSetting implements Setting {
 
     public int intValue() {
         return (int) value;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getCategory() {
-        return this.category;
     }
 
     @Nullable

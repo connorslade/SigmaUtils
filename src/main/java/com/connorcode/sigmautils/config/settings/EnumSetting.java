@@ -19,19 +19,12 @@ import java.util.Arrays;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
-public class EnumSetting<K extends Enum<?>> implements Setting {
+public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     private final K[] values;
-    private final Class<? extends Module> module;
-    private final String name;
     private int index;
-    private String id;
-    private String category = "General";
-    private String description;
 
     public <T extends Module> EnumSetting(Class<T> module, String name, Class<K> enumClass) {
-        this.id = Util.toSnakeCase(name);
-        this.module = module;
-        this.name = name;
+        super(module, name);
         try {
             this.values = (K[]) enumClass.getMethod("values")
                     .invoke(null);
@@ -44,23 +37,8 @@ public class EnumSetting<K extends Enum<?>> implements Setting {
         this.index = Arrays.stream(values)
                 .filter(v -> v == value)
                 .findFirst()
-                .get()
+                .orElseThrow()
                 .ordinal();
-        return this;
-    }
-
-    public EnumSetting<K> id(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public EnumSetting<K> category(String category) {
-        this.category = category;
-        return this;
-    }
-
-    public EnumSetting<K> description(String description) {
-        this.description = description;
         return this;
     }
 
@@ -113,21 +91,6 @@ public class EnumSetting<K extends Enum<?>> implements Setting {
 
     public K[] values() {
         return this.values;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getCategory() {
-        return this.category;
-    }
-
-    @Override
-    public @Nullable Text getDescription() {
-        return this.description == null ? null : Text.of(this.description);
     }
 
     @Override
