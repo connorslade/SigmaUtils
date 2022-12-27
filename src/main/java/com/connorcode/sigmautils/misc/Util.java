@@ -56,6 +56,11 @@ public class Util {
         return nbt;
     }
 
+    public static String toSnakeCase(String s) {
+        return s.toLowerCase()
+                .replace(' ', '_');
+    }
+
     public static void addDrawable(Screen screen, Drawable drawable) {
         ScreenAccessor sa = ((ScreenAccessor) screen);
         sa.getDrawables()

@@ -24,7 +24,7 @@ public class Config {
             new File(MinecraftClient.getInstance().runDirectory, "config/SigmaUtils/config.nbt");
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("Open Gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "Sigma Utils"));
-    public static HashMap<Class<?>, List<Setting>> moduleSettings = new HashMap<>();
+    public static HashMap<Class<Module>, List<Setting>> moduleSettings = new HashMap<>();
 
     public static void initKeybindings() {
         List<Pair<String, KeyBinding>> moduleKeybindings = new ArrayList<>();

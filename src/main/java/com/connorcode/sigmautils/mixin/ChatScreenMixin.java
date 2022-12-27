@@ -47,7 +47,7 @@ public class ChatScreenMixin {
 
     int mouseYModifier() {
         if (Config.getEnabled("chat_position"))
-            return ChatPosition.yPosition * MinecraftClient.getInstance().textRenderer.fontHeight;
+            return ChatPosition.yPosition.intValue() * MinecraftClient.getInstance().textRenderer.fontHeight;
         return 0;
     }
 }

@@ -51,8 +51,6 @@ public class ConfigGui extends Screen {
             }
         }
 
-        // Draw category buttons
-
         // GitHub Link
         int githubLen = textRenderer.getWidth("Github");
         addDrawableChild(

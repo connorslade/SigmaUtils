@@ -1,12 +1,17 @@
 package com.connorcode.sigmautils.misc;
 
+import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.SliderWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+
+import java.util.Objects;
 
 import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 
@@ -17,6 +22,7 @@ public class Components {
                 Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
                         mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
+                if (!Config.moduleSettings.containsKey(module.getClass())) return;
                 MinecraftClient.getInstance()
                         .setScreen(new ModuleConfigGui(module));
                 return;
@@ -65,6 +71,29 @@ public class Components {
 
         public interface PressAction {
             void onPress(MultiClickButton button);
+        }
+    }
+
+    public static abstract class TooltipSlider extends SliderWidget {
+        public TooltipSlider(int x, int y, int width, int height, Text text, double value) {
+            super(x, y, width, height, text, value);
+        }
+
+        protected Text getTooltip() {
+            return null;
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.render(matrices, mouseX, mouseY, delta);
+            if (!this.hovered || this.active) return;
+            Text tooltip = this.getTooltip();
+            if (tooltip == null) return;
+
+            MinecraftClient client = MinecraftClient.getInstance();
+            Objects.requireNonNull(client.currentScreen)
+                    .renderOrderedTooltip(matrices, client.textRenderer.wrapLines(tooltip, 200), mouseX,
+                            mouseY);
         }
     }
 }

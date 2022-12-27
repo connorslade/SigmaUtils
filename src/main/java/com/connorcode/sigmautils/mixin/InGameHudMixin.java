@@ -171,7 +171,8 @@ public abstract class InGameHudMixin {
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 1)
     private double modifyChat(double value) {
-        if (Config.getEnabled("chat_position")) return value - ChatPosition.yPosition * client.textRenderer.fontHeight;
+        if (Config.getEnabled("chat_position"))
+            return value - ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight;
         return value;
     }
     // End
