@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -71,26 +72,26 @@ public class Util {
                 .add(drawable);
     }
 
-    public static void moduleConfigCommand(CommandDispatcher<FabricClientCommandSource> commandSource, Module module, String configName, Datatypes datatype, ModuleSettingSetter set) {
-        moduleConfigCommand(commandSource, module, configName, datatype, null, set);
-    }
-
-    public static void moduleConfigCommand(CommandDispatcher<FabricClientCommandSource> commandSource, Module module, String configName, Datatypes datatype, SuggestionProvider<FabricClientCommandSource> suggestion, ModuleSettingSetter set) {
-        ArgumentType<?> argumentType = switch (datatype) {
-            case Bool -> bool();
-            case Double -> doubleArg();
-            case Float -> floatArg();
-            case Integer -> integer();
-            case Long -> longArg();
-            case String -> string();
+    public static String bestTime(long ms) {
+        Pair<String, Integer>[] units = new Pair[]{
+                new Pair<>("second", 60),
+                new Pair<>("minute", 60),
+                new Pair<>("hour", 24),
+                new Pair<>("day", 30),
+                new Pair<>("month", 12),
+                new Pair<>("year", 0)
         };
 
-        commandSource.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("set")
-                        .then(ClientCommandManager.literal(module.id)
-                                .then(ClientCommandManager.literal(configName)
-                                        .then(ClientCommandManager.argument("setting", argumentType)
-                                                .suggests(suggestion)
-                                                .executes(set::set))))));
+        float seconds = ms / 1000f;
+        for (Pair<String, Integer> unit : units) {
+            if (unit.getRight() == 0 || seconds < unit.getRight()) {
+                int intSeconds = Math.round(seconds);
+                return String.format("%s %s%s", intSeconds, unit.getLeft(), intSeconds > 1 ? "s" : "");
+            }
+
+            seconds /= unit.getRight();
+        }
+
+        return String.format("%s years", Math.round(seconds));
     }
 }
