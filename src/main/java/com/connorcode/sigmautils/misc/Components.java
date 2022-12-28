@@ -8,6 +8,7 @@ import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -108,6 +109,24 @@ public class Components {
             MinecraftClient client = MinecraftClient.getInstance();
             Objects.requireNonNull(client.currentScreen)
                     .renderOrderedTooltip(matrices, client.textRenderer.wrapLines(tooltip, 200), mouseX, mouseY);
+        }
+    }
+
+    public static class EventCheckbox extends CheckboxWidget {
+        PressAction onPress;
+        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress) {
+            super(x, y, width, height, message, checked);
+            this.onPress = onPress;
+        }
+
+        @Override
+        public void onPress() {
+            super.onPress();
+            this.onPress.onPress(this);
+        }
+
+        public interface PressAction {
+            void onPress(EventCheckbox button);
         }
     }
 }

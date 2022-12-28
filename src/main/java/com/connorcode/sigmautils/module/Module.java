@@ -54,20 +54,12 @@ public abstract class Module {
     }
 
     public void enable(MinecraftClient client) {
-        if (client.player == null) return;
-        try {
-            if (Config.getEnabled("toggle_notifications")) client.player.sendMessage(Text.of(String.format("§aEnabled §d%s", name)), !ToggleNotifications.display);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (client.player == null || !Config.getEnabled(ToggleNotifications.class)) return;
+        ToggleNotifications.moduleEnable(client, this);
     }
 
     public void disable(MinecraftClient client) {
-        if (client.player == null) return;
-        try {
-            if (Config.getEnabled("toggle_notifications")) client.player.sendMessage(Text.of(String.format("§cDisabled §d%s", name)), !ToggleNotifications.display);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (client.player == null || !Config.getEnabled(ToggleNotifications.class)) return;
+        ToggleNotifications.moduleDisable(client, this);
     }
 }

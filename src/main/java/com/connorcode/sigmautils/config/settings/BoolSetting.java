@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.config.settings;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
@@ -19,6 +20,7 @@ import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 
 public class BoolSetting extends Setting<BoolSetting> {
     boolean value;
+    DisplayType displayType = DisplayType.BUTTON;
 
     public BoolSetting(Class<? extends Module> module, String name) {
         super(module, name);
@@ -55,6 +57,11 @@ public class BoolSetting extends Setting<BoolSetting> {
         return this;
     }
 
+    public BoolSetting displayType(DisplayType displayType) {
+        this.displayType = displayType;
+        return this;
+    }
+
     public boolean value() {
         return this.value;
     }
@@ -72,17 +79,26 @@ public class BoolSetting extends Setting<BoolSetting> {
 
     @Override
     public void initRender(Screen screen, int x, int y, int width, int height) {
-        Util.addDrawable(screen, new ButtonWidget(x, y, width, height, Text.of(String.format("%s: %s", this.name, BoolSetting.this.value ? "On" : "Off")), (button) -> {
-            BoolSetting.this.value ^= true;
-            ((ScreenAccessor) screen).invokeClearAndInit();
-        }, (((button, matrices, mouseX, mouseY) -> {
-            if (this.description == null) return;
-            screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
-        }))));
+        switch (this.displayType) {
+            case BUTTON -> Util.addDrawable(screen, new ButtonWidget(x, y, width, height, Text.of(String.format("%s: %s", this.name, BoolSetting.this.value ? "On" : "Off")), (button) -> {
+                BoolSetting.this.value ^= true;
+                ((ScreenAccessor) screen).invokeClearAndInit();
+            }, (((button, matrices, mouseX, mouseY) -> {
+                if (this.description == null) return;
+                screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
+            }))));
+            case CHECKBOX -> Util.addDrawable(screen, new Components.EventCheckbox(x, y, width, height, Text.of(this.name), BoolSetting.this.value, (button ->
+                    BoolSetting.this.value = button.isChecked())));
+        }
     }
 
     @Override
     public void render(RenderData data, int x, int y) {
 
+    }
+
+    public enum DisplayType {
+        BUTTON,
+        CHECKBOX
     }
 }
