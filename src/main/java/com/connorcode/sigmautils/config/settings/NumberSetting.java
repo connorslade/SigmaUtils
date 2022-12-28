@@ -112,12 +112,12 @@ public class NumberSetting extends Setting<NumberSetting> {
     }
 
     @Override
-    public void initRender(Screen screen, int x, int y, int width, int height) {
-        initRender(screen, () -> Text.of(String.format("%s: %." + this.precision + "f", this.name, this.value)), x, y, width, height);
+    public int initRender(Screen screen, int x, int y, int width) {
+        return initRender(screen, () -> Text.of(String.format("%s: %." + this.precision + "f", this.name, this.value)), x, y, width);
     }
 
-    public void initRender(Screen screen, SliderText slider, int x, int y, int width, int height) {
-        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, height, slider.getText(), MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
+    public int initRender(Screen screen, SliderText slider, int x, int y, int width) {
+        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(), MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
             @Override
             protected Text getTooltip() {
                 return Text.of(NumberSetting.this.description);
@@ -133,6 +133,8 @@ public class NumberSetting extends Setting<NumberSetting> {
                 NumberSetting.this.value = this.value * (max - min) + min;
             }
         });
+
+        return 20;
     }
 
     @Override

@@ -53,7 +53,7 @@ public abstract class Setting<T extends Setting<T>> {
 
     public abstract void deserialize(NbtCompound nbt);
 
-    public abstract void initRender(Screen screen, int x, int y, int width, int height);
+    public abstract int initRender(Screen screen, int x, int y, int width);
 
     public abstract void render(RenderData data, int x, int y);
 

@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.module;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
+import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
@@ -9,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Module {
@@ -47,6 +49,10 @@ public abstract class Module {
     }
 
     public void init() {
+        DummySetting dummy = new DummySetting(this.getClass(), "Enable", 20);
+        Config.moduleSettings.putIfAbsent((Class<Module>) this.getClass(), new ArrayList<>());
+        Config.moduleSettings.get(this.getClass())
+                .add(0, dummy);
     }
 
     public void tick() {

@@ -19,6 +19,7 @@ public class PrivateMessageNotifier extends Module {
 
     @Override
     public void init() {
+        super.init();
         PacketReceiveCallback.EVENT.register(packet -> {
             if (!(packet instanceof MessageHeaderS2CPacket header && enabled)) return false;
             PlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().world)

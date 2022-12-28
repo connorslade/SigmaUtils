@@ -78,18 +78,20 @@ public class BoolSetting extends Setting<BoolSetting> {
     }
 
     @Override
-    public void initRender(Screen screen, int x, int y, int width, int height) {
+    public int initRender(Screen screen, int x, int y, int width) {
         switch (this.displayType) {
-            case BUTTON -> Util.addDrawable(screen, new ButtonWidget(x, y, width, height, Text.of(String.format("%s: %s", this.name, BoolSetting.this.value ? "On" : "Off")), (button) -> {
+            case BUTTON -> Util.addDrawable(screen, new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, BoolSetting.this.value ? "On" : "Off")), (button) -> {
                 BoolSetting.this.value ^= true;
                 ((ScreenAccessor) screen).invokeClearAndInit();
             }, (((button, matrices, mouseX, mouseY) -> {
                 if (this.description == null) return;
                 screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
             }))));
-            case CHECKBOX -> Util.addDrawable(screen, new Components.EventCheckbox(x, y, width, height, Text.of(this.name), BoolSetting.this.value, (button ->
+            case CHECKBOX -> Util.addDrawable(screen, new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value, (button ->
                     BoolSetting.this.value = button.isChecked())));
         }
+
+        return 20;
     }
 
     @Override

@@ -23,7 +23,8 @@ public class Components {
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addDrawable(screen, new MultiClickButton(x, y, width, 20, Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c", mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
-                if (!Config.moduleSettings.containsKey(module.getClass())) return;
+                if (Config.moduleSettings.get(module.getClass())
+                        .size() <= 1) return;
                 module.openConfigScreen(MinecraftClient.getInstance(), screen);
                 return;
             }
@@ -39,7 +40,7 @@ public class Components {
     public static void sliderConfig(Screen screen, int x, int y, Module module, NumberSetting setting) {
         int padding = getPadding();
         Components.addToggleButton(screen, module, x, y, 20, true);
-        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x + 20 + padding, y, 130 - padding, 20);
+        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x + 20 + padding, y, 130 - padding);
     }
 
     public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting, char[] values) {

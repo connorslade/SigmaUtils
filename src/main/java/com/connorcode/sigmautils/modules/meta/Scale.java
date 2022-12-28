@@ -28,6 +28,6 @@ public class Scale extends Module {
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
         Components.addToggleButton(screen, this, x, y, 20, true);
-        scale.initRender(screen, () -> Text.of(String.format("Scale: %.1f", scale.value() * 100f)), x + 20 + padding, y, 130 - padding, 20);
+        scale.initRender(screen, () -> Text.of(String.format("Scale: %.1f", scale.value() * 100f)), x + 20 + padding, y, 130 - padding);
     }
 }

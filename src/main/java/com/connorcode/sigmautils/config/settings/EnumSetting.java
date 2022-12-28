@@ -110,14 +110,16 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     }
 
     @Override
-    public void initRender(Screen screen, int x, int y, int width, int height) {
-        Util.addDrawable(screen, new ButtonWidget(x, y, width, height, Text.of(String.format("%s: %s", this.name, this.values[this.index])), (button) -> {
+    public int initRender(Screen screen, int x, int y, int width) {
+        Util.addDrawable(screen, new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.values[this.index])), (button) -> {
             this.index = (this.index + (Screen.hasShiftDown() ? this.values.length - 1 : 1)) % this.values.length;
             ((ScreenAccessor) screen).invokeClearAndInit();
         }, (((button, matrices, mouseX, mouseY) -> {
             if (this.description == null) return;
             screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
         }))));
+
+        return 20;
     }
 
     @Override

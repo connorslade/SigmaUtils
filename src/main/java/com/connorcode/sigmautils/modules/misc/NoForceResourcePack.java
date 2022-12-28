@@ -21,6 +21,7 @@ public class NoForceResourcePack extends Module {
 
     @Override
     public void init() {
+        super.init();
         PacketReceiveCallback.EVENT.register(packet -> {
             if (!(packet instanceof ResourcePackSendS2CPacket resourcePacket) || !enabled) return false;
             MutableText text = Text.empty()
