@@ -8,7 +8,6 @@ import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 
 import java.util.List;
 

@@ -21,7 +21,7 @@ public class ModuleConfigGui extends Screen {
     private final Module module;
     private final Screen parent;
     // Maps <Category, List<Setting>>
-    private final HashMap<String, List<Setting>> settings = new HashMap<>();
+    private final HashMap<String, List<Setting<?>>> settings = new HashMap<>();
 
     public ModuleConfigGui(Module module, Screen parent) {
         super(Text.of("Sigma Utils - Module Config"));
@@ -33,8 +33,8 @@ public class ModuleConfigGui extends Screen {
     protected void init() {
         int padding = getPadding();
         this.settings.clear();
-        List<Setting> settings = Config.moduleSettings.getOrDefault(module.getClass(), List.of());
-        for (Setting setting : settings) {
+        List<Setting<?>> settings = Config.moduleSettings.getOrDefault(module.getClass(), List.of());
+        for (Setting<?> setting : settings) {
             String category = setting.getCategory();
             this.settings.putIfAbsent(category, new ArrayList<>());
             this.settings.get(category)
@@ -51,7 +51,7 @@ public class ModuleConfigGui extends Screen {
                     this.clearAndInit();
                 }, (((button, matrices, mouseX, mouseY) -> this.renderOrderedTooltip(matrices, textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY)))));
 
-        List<List<Setting>> settingsList = new ArrayList<>(this.settings.values());
+        List<List<Setting<?>>> settingsList = new ArrayList<>(this.settings.values());
         for (int x = 0; x < settingsList.size(); x++) {
             for (int y = 0; y < settingsList.get(x)
                     .size(); y++) {
@@ -83,14 +83,13 @@ public class ModuleConfigGui extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
 
         int x = 0;
-        for (Map.Entry<String, List<Setting>> entry : settings.entrySet()) {
+        for (Map.Entry<String, List<Setting<?>>> entry : settings.entrySet()) {
             x += 100;
-            String category = entry.getKey();
-            if (category != null) drawCenteredText(matrices, textRenderer, Text.of(category), x * 100, padding, 0xFFFFFF);
+            if (entry.getKey() != null) drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getKey())), x, padding * 2 + textRenderer.fontHeight, 0);
 
-            List<Setting> categorySettings = entry.getValue();
+            List<Setting<?>> categorySettings = entry.getValue();
             for (int i = 0; i < categorySettings.size(); i++) {
-                Setting setting = categorySettings.get(i);
+                Setting<?> setting = categorySettings.get(i);
                 int renderX = padding + i * (150 + padding);
                 int renderY = textRenderer.fontHeight + padding * 2 + i * (20 + padding);
                 setting.render(renderData, renderX, renderY);

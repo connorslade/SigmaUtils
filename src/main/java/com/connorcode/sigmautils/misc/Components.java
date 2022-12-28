@@ -114,6 +114,7 @@ public class Components {
 
     public static class EventCheckbox extends CheckboxWidget {
         PressAction onPress;
+
         public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress) {
             super(x, y, width, height, message, checked);
             this.onPress = onPress;
