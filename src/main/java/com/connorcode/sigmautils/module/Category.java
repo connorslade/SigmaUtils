@@ -3,7 +3,12 @@ package com.connorcode.sigmautils.module;
 import java.util.Objects;
 
 public enum Category {
-    Interface("interface"), Rendering("rendering"), Misc("misc"), Hud("hud"), Chat("chat"), Meta("meta");
+    Interface("interface"),
+    Rendering("rendering"),
+    Misc("misc"),
+    Hud("hud"),
+    Chat("chat"),
+    Meta("meta");
 
     public final String id;
 

@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
+import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
@@ -15,6 +16,8 @@ public class TpsHud extends HudModule {
 
     public TpsHud() {
         super("tps_hud", "Tps Hud", "Shows the servers TPS", Category.Hud);
+        this.defaultTextColor = TextStyle.Color.Gold;
+        this.defaultOrder = 2;
     }
 
     @Override
@@ -43,6 +46,6 @@ public class TpsHud extends HudModule {
         float avg = 0;
         for (float i : tickRateHistory) avg += i;
 
-        return String.format("§r§6TPS: §f%.1f", avg / tickRateHistory.size());
+        return String.format("§r%sTPS: §f%.1f", this.getTextColor(), avg / tickRateHistory.size());
     }
 }

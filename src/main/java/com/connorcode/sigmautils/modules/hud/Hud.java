@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.modules.hud;
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
@@ -46,6 +45,7 @@ public class Hud extends Module {
                     return module.isEmpty() ? SigmaUtilsClient.modules.get(0) : module.get();
                 })
                 .filter(m -> m.enabled)
+                .sorted(Comparator.comparingInt(m -> (int) ((HudModule) m).order.value()))
                 .forEach(m -> lines.addAll(((HudModule) m).lines()));
         return lines;
     }
@@ -82,7 +82,6 @@ public class Hud extends Module {
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
-        ScreenAccessor sa = (ScreenAccessor) screen;
         int padding = getPadding();
 
         Components.addToggleButton(screen, this, x, y, 130 - padding, false);

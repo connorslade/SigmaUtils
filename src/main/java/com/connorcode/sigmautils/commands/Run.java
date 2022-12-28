@@ -342,7 +342,10 @@ public class Run implements Command {
         }
 
         enum TokenType {
-            String, PlayerName, PlayerUUID, List
+            String,
+            PlayerName,
+            PlayerUUID,
+            List
         }
     }
 
@@ -414,7 +417,10 @@ public class Run implements Command {
 
         enum Modifiers {
             // Cases
-            TitleCase, LowerCase, UpperCase, RandomCase,
+            TitleCase,
+            LowerCase,
+            UpperCase,
+            RandomCase,
 
             // Players
             isOnline
