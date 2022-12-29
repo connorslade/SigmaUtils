@@ -1,8 +1,10 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.config.settings.SelectorSetting;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.nbt.NbtCompound;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
