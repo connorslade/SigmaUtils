@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
@@ -19,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
+import static net.minecraft.sound.SoundEvents.*;
+
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
     @Shadow
@@ -27,15 +30,15 @@ public class WorldRendererMixin {
 
     @Inject(method = "processGlobalEvent", at = @At("HEAD"))
     void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
-        if (!Config.getEnabled("no_global_sounds")) return;
+        if (!Config.getEnabled(NoGlobalSounds.class)) return;
         SoundEvent sound = switch (eventId) {
-            case 1023 -> SoundEvents.ENTITY_WITHER_SPAWN;
-            case 1038 -> SoundEvents.BLOCK_END_PORTAL_SPAWN;
-            case 1028 -> SoundEvents.ENTITY_ENDER_DRAGON_DEATH;
+            case 1023 -> ENTITY_WITHER_SPAWN;
+            case 1038 -> BLOCK_END_PORTAL_SPAWN;
+            case 1028 -> ENTITY_ENDER_DRAGON_DEATH;
             default -> null;
         };
 
-        if (sound == null) return;
+        if (sound == null || NoGlobalSounds.disabled(eventId)) return;
         Objects.requireNonNull(world)
                 .playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }

@@ -22,7 +22,7 @@ public class ProgressScreenMixin extends Screen {
     // For see_through_loading
     @Inject(method = "shouldCloseOnEsc", at = @At("HEAD"), cancellable = true)
     void ohShouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(Config.getEnabled(SeeThruLoading.class));
+        cir.setReturnValue(Config.getEnabled(SeeThruLoading.class) && SeeThruLoading.escToClose.value());
     }
 
     // For see_through_loading
@@ -33,7 +33,6 @@ public class ProgressScreenMixin extends Screen {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ProgressScreen;renderBackground(Lnet/minecraft/client/util/math/MatrixStack;)V", shift = At.Shift.BEFORE))
     void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (Config.getEnabled(SeeThruLoading.class))
-            this.fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
+        if (Config.getEnabled(SeeThruLoading.class)) this.fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
     }
 }

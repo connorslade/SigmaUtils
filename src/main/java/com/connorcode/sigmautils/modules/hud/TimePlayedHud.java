@@ -6,8 +6,11 @@ import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+
+import java.util.Objects;
 
 public class TimePlayedHud extends HudModule {
     private static final long openTimestamp = System.currentTimeMillis();
@@ -36,9 +39,11 @@ public class TimePlayedHud extends HudModule {
     }
 
     public String line() {
-        long time = System.currentTimeMillis() - switch (timeSince.value()) {
-            case GameStart -> openTimestamp;
-            case WorldLoad -> worldOpenTimestamp;
+        long time = switch (timeSince.value()) {
+            case GameStart -> System.currentTimeMillis() - openTimestamp;
+            case WorldLoad -> System.currentTimeMillis() - worldOpenTimestamp;
+            case WorldCreate -> Objects.requireNonNull(MinecraftClient.getInstance().world)
+                    .getTime() * 50;
         };
         String display = switch (timeFormat.value()) {
             case HMS -> DurationFormatUtils.formatDuration(time, "HH:mm:ss");
@@ -51,6 +56,7 @@ public class TimePlayedHud extends HudModule {
     public enum TimeSince {
         GameStart,
         WorldLoad,
+        WorldCreate
     }
 
     public enum TimeFormat {

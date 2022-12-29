@@ -6,16 +6,17 @@ import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.InventoryMove;
 import com.connorcode.sigmautils.modules.misc.NoPause;
+import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -23,6 +24,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -50,7 +52,9 @@ public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public Screen currentScreen;
-
+    @Shadow
+    @Final
+    public GameOptions options;
     @Shadow
     @Nullable
     private Overlay overlay;
@@ -77,7 +81,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled("glowing_players") && entity instanceof PlayerEntity) cir.setReturnValue(true);
+        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.renderGlowing(entity) && !(GlowingPlayers.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
@@ -86,15 +90,12 @@ public abstract class MinecraftClientMixin {
                 .isSneaking()) return;
 
         // Handle Item frames
-        if (crosshairTarget.getType() == HitResult.Type.ENTITY &&
-                ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
+        if (crosshairTarget.getType() == HitResult.Type.ENTITY && ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
             BlockPos behindBlockPos = itemFrameEntity.getDecorationBlockPos()
                     .offset(itemFrameEntity.getHorizontalFacing()
                             .getOpposite());
 
-            crosshairTarget =
-                    new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos,
-                            false);
+            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos, false);
         }
 
         // Handle Wall Signs
@@ -104,12 +105,8 @@ public abstract class MinecraftClientMixin {
                     .getBlockState(blockPos);
             if (!(blockState.getBlock() instanceof WallSignBlock)) return;
 
-            crosshairTarget =
-                    new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(),
-                            blockPos.offset(blockState.get(
-                                            WallSignBlock.FACING)
-                                    .getOpposite()),
-                            false);
+            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(), blockPos.offset(blockState.get(WallSignBlock.FACING)
+                    .getOpposite()), false);
         }
     }
 
@@ -124,9 +121,8 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
     boolean isPaused(MinecraftClient instance) {
         if (!Config.getEnabled(NoPause.class)) return this.paused;
-        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() ||
-                this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(
-                        this.server)
-                .isRemote();
+        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) &&
+                !Objects.requireNonNull(this.server)
+                        .isRemote();
     }
 }
