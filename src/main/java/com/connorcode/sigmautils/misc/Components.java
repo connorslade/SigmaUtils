@@ -13,6 +13,7 @@ import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
@@ -20,6 +21,7 @@ import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 
 public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
+//        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addDrawable(screen, new MultiClickButton(x, y, width, 20, Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c", mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
@@ -115,10 +117,12 @@ public class Components {
 
     public static class EventCheckbox extends CheckboxWidget {
         PressAction onPress;
+        TooltipSupplier tooltipSupplier;
 
-        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress) {
+        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress, TooltipSupplier tooltipSupplier) {
             super(x, y, width, height, message, checked);
             this.onPress = onPress;
+            this.tooltipSupplier = tooltipSupplier;
         }
 
         @Override
@@ -127,8 +131,24 @@ public class Components {
             this.onPress.onPress(this);
         }
 
+        @Override
+        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+            super.renderTooltip(matrices, mouseX, mouseY);
+            tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.renderButton(matrices, mouseX, mouseY, delta);
+            if (this.isHovered()) this.renderTooltip(matrices, mouseX, mouseY);
+        }
+
         public interface PressAction {
             void onPress(EventCheckbox button);
+        }
+
+        public interface TooltipSupplier {
+            void onTooltip(EventCheckbox button, MatrixStack matrices, int mouseX, int mouseY);
         }
     }
 }

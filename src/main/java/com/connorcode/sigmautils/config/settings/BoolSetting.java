@@ -87,8 +87,11 @@ public class BoolSetting extends Setting<BoolSetting> {
                 if (this.description == null) return;
                 screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
             }))));
-            case CHECKBOX -> Util.addDrawable(screen, new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value, (button ->
-                    BoolSetting.this.value = button.isChecked())));
+            case CHECKBOX -> Util.addDrawable(screen, new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value, (button -> BoolSetting.this.value = button.isChecked()),
+                    ((button, matrices, mouseX, mouseY) -> {
+                        if (this.description == null) return;
+                        screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
+                    })));
         }
 
         return 20;
