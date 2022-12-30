@@ -2,12 +2,6 @@ package com.connorcode.sigmautils.misc;
 
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
-import com.connorcode.sigmautils.module.Module;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
@@ -18,13 +12,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
-import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
-import static com.mojang.brigadier.arguments.FloatArgumentType.floatArg;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
-import static com.mojang.brigadier.arguments.LongArgumentType.longArg;
-import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class Util {
     public static Object loadNewClass(String classPath) {

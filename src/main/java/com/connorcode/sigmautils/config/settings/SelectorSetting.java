@@ -16,12 +16,14 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
+// TODO: Use a ? implementing a option interface to make this more clean
+// Also add a search bar because large lists are hard to navigate
+// Oh and also also scroll to the selected option
 public class SelectorSetting extends Setting<SelectorSetting> {
     String value;
     OptionGetter optionGetter;
@@ -139,7 +141,8 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         class SelectorWidget extends EntryListWidget<SelectorWidget.SelectorEntry> {
             public SelectorWidget(MinecraftClient client, OptionGetter optionGetter, int width, int height, int top, int bottom, int itemHeight) {
                 super(client, width, height, top, bottom, itemHeight);
-                optionGetter.getOptions().stream()
+                optionGetter.getOptions()
+                        .stream()
                         .map(SelectorEntry::new)
                         .forEach(this::addEntry);
                 if (SelectorSetting.this.value != null) super.setSelected(new SelectorEntry(SelectorSetting.this.value));
