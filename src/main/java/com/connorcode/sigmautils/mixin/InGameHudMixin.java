@@ -43,7 +43,8 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         if (!Config.getEnabled("block_distance")) return;
-        client.getProfiler().push("SigmaUtils::BlockDistance");
+        client.getProfiler()
+                .push("SigmaUtils::BlockDistance");
         Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity)
                 .getRotationVec(client.getTickDelta());
         double fov = client.options.getFov()
@@ -75,13 +76,15 @@ public abstract class InGameHudMixin {
         String text = String.format("§f[%d]", (int) distance);
         client.textRenderer.draw(matrices, Text.of(text), scaledWidth / 2f - client.textRenderer.getWidth(text) / 2f,
                 scaledHeight / 2f + client.textRenderer.fontHeight, 0);
-        client.getProfiler().pop();
+        client.getProfiler()
+                .pop();
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (client.options.hudHidden || !Config.getEnabled("hud")) return;
-        client.getProfiler().push("SigmaUtils::Hud");
+        client.getProfiler()
+                .push("SigmaUtils::Hud");
 
         int padding = getPadding();
         Pair<List<String>, Pair<Integer, Integer>> hud = Hud.getHud(scaledHeight, scaledWidth);
@@ -96,7 +99,8 @@ public abstract class InGameHudMixin {
                     .getLeft() + (maxText - getTextRenderer().getWidth(i)), y, 0);
             y += client.textRenderer.fontHeight + padding;
         }
-        client.getProfiler().pop();
+        client.getProfiler()
+                .pop();
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))

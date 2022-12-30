@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.InventoryMove;
 import com.connorcode.sigmautils.modules.misc.NoPause;
+import com.connorcode.sigmautils.modules.misc.WindowTitle;
 import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
@@ -124,5 +125,11 @@ public abstract class MinecraftClientMixin {
         return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) &&
                 !Objects.requireNonNull(this.server)
                         .isRemote();
+    }
+
+    // For window_title
+    @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
+    void onGetWindowTitle(CallbackInfoReturnable<String> cir) {
+        if (Config.getEnabled(WindowTitle.class)) cir.setReturnValue(WindowTitle.getTitle());
     }
 }

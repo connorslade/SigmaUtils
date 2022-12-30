@@ -13,7 +13,6 @@ import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;

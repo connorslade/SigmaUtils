@@ -51,6 +51,7 @@
     "misc.NoForceResourcePack",
     "misc.NoGlobalSounds",
     "misc.NoPause",
+    "misc.WindowTitle",
     "misc.NoTelemetry",
     "misc.PrintDeathCords",
     "misc.TickSpeed",
