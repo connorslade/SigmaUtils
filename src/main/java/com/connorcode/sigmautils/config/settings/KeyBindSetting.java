@@ -52,7 +52,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
         return false;
     }
 
-    Text getBind() {
+    public Text getBind() {
         if (key == null) return Text.of("Not bound");
         String bind = key.getLocalizedText().getString().toUpperCase(Locale.ROOT);
         if (this.shift) bind += " + Shift";
@@ -65,7 +65,6 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     @Override
     public void serialize(NbtCompound nbt) {
         if (this.key == null) return;
-        System.out.println("Serializing keybind for " + this.module.getName());
         NbtCompound keybind = new NbtCompound();
         keybind.putInt("key", this.key.getCode());
         if (this.strict) keybind.putBoolean("strict", true);
