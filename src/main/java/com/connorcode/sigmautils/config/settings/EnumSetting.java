@@ -13,7 +13,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -42,10 +41,6 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     }
 
     public EnumSetting<K> build() {
-        Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
-        Config.moduleSettings.get(this.module)
-                .add(this);
-
         String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("util")
@@ -77,7 +72,8 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
                                                         return 0;
                                                     }))))));
         }));
-        return this;
+
+        return super.build();
     }
 
     public int index() {

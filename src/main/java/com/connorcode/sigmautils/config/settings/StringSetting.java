@@ -11,7 +11,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
@@ -27,10 +26,6 @@ public class StringSetting extends Setting<StringSetting> {
     }
 
     public StringSetting build() {
-        Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
-        Config.moduleSettings.get(this.module)
-                .add(this);
-
         String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess) -> dispatcher.register(ClientCommandManager.literal("util")
@@ -51,7 +46,7 @@ public class StringSetting extends Setting<StringSetting> {
                                                                             moduleId, this.id, this.value)));
                                                             return 1;
                                                         })))))));
-        return this;
+        return super.build();
     }
 
     public StringSetting callback(Callback callback) {

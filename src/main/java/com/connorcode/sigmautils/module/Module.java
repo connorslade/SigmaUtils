@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.module;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.config.settings.DummySetting;
+import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
@@ -49,10 +50,9 @@ public abstract class Module {
     }
 
     public void init() {
-        DummySetting dummy = new DummySetting(this.getClass(), "Enable", 20);
         Config.moduleSettings.putIfAbsent((Class<Module>) this.getClass(), new ArrayList<>());
-        Config.moduleSettings.get(this.getClass())
-                .add(0, dummy);
+        Config.moduleSettings.get(this.getClass()).add(0, new DummySetting(this.getClass(), "Enable", 20));
+        Config.moduleSettings.get(this.getClass()).add(1, new KeyBindSetting(this.getClass(), "Keybind"));
     }
 
     public void tick() {

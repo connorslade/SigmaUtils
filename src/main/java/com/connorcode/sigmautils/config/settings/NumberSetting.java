@@ -12,8 +12,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 
 public class NumberSetting extends Setting<NumberSetting> {
@@ -34,9 +32,6 @@ public class NumberSetting extends Setting<NumberSetting> {
 
     public NumberSetting build() {
         if (this.min > this.max) throw new RuntimeException("Min cannot be greater than max");
-        Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
-        Config.moduleSettings.get(this.module)
-                .add(this);
 
         String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(
@@ -70,7 +65,7 @@ public class NumberSetting extends Setting<NumberSetting> {
                                                             return 1;
                                                         })))))));
 
-        return this;
+        return super.build();
     }
 
     public NumberSetting value(double value) {

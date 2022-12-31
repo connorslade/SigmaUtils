@@ -73,6 +73,9 @@ public class ModuleConfigGui extends Screen {
 
     @Override
     public void close() {
+        for (List<Setting<?>> settings : this.settings.values())
+            for (Setting<?> setting : settings)
+                setting.onClose();
         MinecraftClient.getInstance()
                 .setScreen(parent);
     }
@@ -101,5 +104,14 @@ public class ModuleConfigGui extends Screen {
 
         drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)), width / 2,
                 padding, 0);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        boolean cancel = false;
+        for (List<Setting<?>> settingList : settings.values())
+            for (Setting<?> setting : settingList)
+                cancel |= setting.onKeypress(keyCode, scanCode, modifiers);
+        return cancel || super.keyPressed(keyCode, scanCode, modifiers);
     }
 }

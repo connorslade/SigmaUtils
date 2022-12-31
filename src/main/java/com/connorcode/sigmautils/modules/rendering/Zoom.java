@@ -23,6 +23,7 @@ public class Zoom extends Module {
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         int padding = getPadding();
         Components.addToggleButton(screen, this, x, y, 20, true);
-        zoom.initRender(screen, () -> Text.of(String.format("%s: %.1fx", this.name, zoom.value())), x + 20 + padding, y, 130 - padding);
+        zoom.initRender(screen, () -> Text.of(String.format("%s: %.1fx", this.name, zoom.value())), x + 20 + padding, y,
+                130 - padding);
     }
 }

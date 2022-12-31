@@ -15,7 +15,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,10 +42,6 @@ public class SelectorSetting extends Setting<SelectorSetting> {
     }
 
     public SelectorSetting build() {
-        Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
-        Config.moduleSettings.get(this.module)
-                .add(this);
-
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             String moduleId = Config.getModule(this.module).id;
             dispatcher.register(ClientCommandManager.literal("util")
@@ -75,7 +70,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                                                     }))))));
         }));
 
-        return this;
+        return super.build();
     }
 
     @Override

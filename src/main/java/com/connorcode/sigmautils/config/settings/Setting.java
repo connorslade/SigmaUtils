@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
+import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
@@ -7,6 +8,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 public abstract class Setting<T extends Setting<T>> {
     protected final Class<? extends Module> module;
@@ -19,6 +22,13 @@ public abstract class Setting<T extends Setting<T>> {
         this.id = Util.toSnakeCase(name);
         this.module = module;
         this.name = name;
+    }
+
+    public T build() {
+        Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
+        Config.moduleSettings.get(this.module)
+                .add(this);
+        return (T) this;
     }
 
     public T id(String id) {
@@ -56,6 +66,14 @@ public abstract class Setting<T extends Setting<T>> {
     public abstract int initRender(Screen screen, int x, int y, int width);
 
     public abstract void render(RenderData data, int x, int y);
+
+    // bool -> cancel event
+    public boolean onKeypress(int key, int scanCode, int modifiers) {
+        return false;
+    }
+
+    public void onClose() {
+    }
 
     public record RenderData(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float delta) {
     }
