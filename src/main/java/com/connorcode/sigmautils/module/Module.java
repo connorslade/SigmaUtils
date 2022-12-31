@@ -51,8 +51,11 @@ public abstract class Module {
 
     public void init() {
         Config.moduleSettings.putIfAbsent((Class<Module>) this.getClass(), new ArrayList<>());
+        KeyBindSetting keyBind = new KeyBindSetting(this.getClass(), "Keybind").description(
+                "The keybind for toggling module. Right click to en/disable strict mode, which requires the modifier keys not present in the keybind to be depressed.");
         Config.moduleSettings.get(this.getClass()).add(0, new DummySetting(this.getClass(), "Enable", 20));
-        Config.moduleSettings.get(this.getClass()).add(1, new KeyBindSetting(this.getClass(), "Keybind"));
+        Config.moduleSettings.get(this.getClass()).add(1, keyBind);
+        Config.moduleKeybinds.add(keyBind);
     }
 
     public void tick() {

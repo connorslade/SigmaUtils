@@ -1,63 +1,77 @@
 package com.connorcode.sigmautils.config.settings;
 
+import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+
+import java.util.Arrays;
+import java.util.Locale;
+
+import static net.minecraft.client.util.InputUtil.*;
 
 public class KeyBindSetting extends Setting<KeyBindSetting> {
     InputUtil.Key key;
-    boolean shift, ctrl, alt;
-    boolean editing = false;
-    ButtonWidget buttonWidget = null;
+    boolean shift, ctrl, alt, strict;
+    boolean editing;
+    boolean pressed;
 
-    public <T extends Module>  KeyBindSetting(Class<T> module, String name) {
+    public <T extends Module> KeyBindSetting(Class<T> module, String name) {
         super(module, name);
     }
 
-    public KeyBindSetting value(InputUtil.Key key) {
-        this.key = key;
-        return this;
+    @Override
+    public KeyBindSetting build() {
+        Config.moduleKeybinds.add(this);
+        return super.build();
     }
 
-    public KeyBindSetting shift() {
-        this.shift = true;
-        return this;
+    private boolean nonStrict() {
+        if (this.shift && !Screen.hasShiftDown()) return false;
+        if (this.ctrl && !Screen.hasControlDown()) return false;
+        return !this.alt || Screen.hasAltDown();
     }
 
-    public KeyBindSetting ctrl() {
-        this.ctrl = true;
-        return this;
-    }
+    public boolean pressed() {
+        if (this.key == null || editing) return false;
+        boolean nowPressed =
+                InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), key.getCode()) &&
+                        (strict ? (shift == Screen.hasShiftDown() && ctrl == Screen.hasControlDown() &&
+                                alt == Screen.hasAltDown()) : nonStrict());
 
-    public KeyBindSetting alt() {
-        this.alt = true;
-        return this;
+        if (nowPressed && !pressed) {
+            pressed = true;
+            return true;
+        }
+        if (!nowPressed) pressed = false;
+        return false;
     }
 
     Text getBind() {
         if (key == null) return Text.of("Not bound");
-        MutableText bind = (MutableText) key.getLocalizedText();
-        if (shift) bind.append(Text.of(" + Shift"));
-        if (ctrl) bind.append(Text.of(" + Ctrl"));
-        if (alt) bind.append(Text.of(" + Alt"));
-        return bind;
+        String bind = key.getLocalizedText().getString().toUpperCase(Locale.ROOT);
+        if (this.shift) bind += " + Shift";
+        if (this.ctrl) bind += " + Ctrl";
+        if (this.alt) bind += " + Alt";
+        if (this.strict) bind += " (Strict)";
+        return Text.of(bind);
     }
 
     @Override
     public void serialize(NbtCompound nbt) {
-        if (key == null) return;
+        if (this.key == null) return;
+        System.out.println("Serializing keybind for " + this.module.getName());
         NbtCompound keybind = new NbtCompound();
-        keybind.putInt("key", key.getCode());
-        if (shift) keybind.putBoolean("shift", true);
-        if (ctrl) keybind.putBoolean("ctrl", true);
-        if (alt) keybind.putBoolean("alt", true);
+        keybind.putInt("key", this.key.getCode());
+        if (this.strict) keybind.putBoolean("strict", true);
+        if (this.shift) keybind.putBoolean("shift", true);
+        if (this.ctrl) keybind.putBoolean("ctrl", true);
+        if (this.alt) keybind.putBoolean("alt", true);
         nbt.put("keybind", keybind);
     }
 
@@ -65,20 +79,31 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     public void deserialize(NbtCompound nbt) {
         if (!nbt.contains("keybind")) return;
         NbtCompound keybind = nbt.getCompound("keybind");
-        key = InputUtil.fromKeyCode(keybind.getInt("key"), keybind.getBoolean("shift") ? 1 : 0);
-        shift = keybind.getBoolean("shift");
-        ctrl = keybind.getBoolean("ctrl");
-        alt = keybind.getBoolean("alt");
+        this.key = InputUtil.fromKeyCode(keybind.getInt("key"), 0);
+        this.strict = keybind.getBoolean("strict");
+        this.shift = keybind.getBoolean("shift");
+        this.ctrl = keybind.getBoolean("ctrl");
+        this.alt = keybind.getBoolean("alt");
     }
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        buttonWidget = new ButtonWidget(x, y, width, 20, this.getBind(), (button) -> {
-            button.setMessage(Text.of("..."));
-            editing = true;
+        Util.addDrawable(screen, new Components.MultiClickButton(x, y, width, 20, this.getBind(), (button) -> {
+            if (button.click == 1 && key != null) KeyBindSetting.this.strict ^= true;
+            else editing = true;
+        },
+                (((button, matrices, mouseX, mouseY) -> {
+                    if (this.description == null) return;
+                    screen.renderOrderedTooltip(matrices,
+                            MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            mouseY);
+                }))) {
+            @Override
+            public Text getMessage() {
+                if (KeyBindSetting.this.editing) return Text.of("...");
+                return KeyBindSetting.this.getBind();
+            }
         });
-
-        Util.addDrawable(screen, buttonWidget);
         return 20;
     }
 
@@ -88,25 +113,41 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     }
 
     @Override
-    // TODO: Fix this- some wacky caching issue??? (aka i need s;eep)
     public boolean onKeypress(int key, int scanCode, int modifiers) {
-        if (!editing) return false;
-        editing = false;
-        System.out.printf("Key: %d, ScanCode: %d, Modifiers: %d\n", key, scanCode, modifiers);
-        if (key == 340 || key == 341 || key == 342) return true;
+        // Define ignore keys (modifiers)
+        final int[] ignored = new int[]{
+                GLFW_KEY_LEFT_SHIFT,
+                GLFW_KEY_RIGHT_SHIFT,
+                GLFW_KEY_LEFT_CONTROL,
+                GLFW_KEY_RIGHT_CONTROL,
+                GLFW_KEY_LEFT_ALT,
+                GLFW_KEY_RIGHT_ALT,
+                GLFW_KEY_LEFT_SUPER,
+                GLFW_KEY_RIGHT_SUPER,
+                };
+
+        if (!this.editing) return false;
+        if (Arrays.stream(ignored).anyMatch(d -> d == key)) return true;
+        if (key == GLFW_KEY_ESCAPE) {
+            this.editing = false;
+            this.key = null;
+            this.shift = false;
+            this.ctrl = false;
+            this.alt = false;
+            return true;
+        }
+
+        // Get and set the key data
         this.key = InputUtil.fromKeyCode(key, scanCode);
-        System.out.println(this.key);
-        this.shift = (modifiers & 1) == 1;
-        this.ctrl = (modifiers >> 1 & 1) == 1;
-        this.alt = (modifiers >> 2 & 1) == 1;
-        System.out.printf("Shift: %b, Ctrl: %b, Alt: %b\n", shift, ctrl, alt);
-        buttonWidget.setMessage(this.getBind());
-        ((ScreenAccessor)MinecraftClient.getInstance().currentScreen).invokeClearAndInit();;
+        this.shift = Screen.hasShiftDown();
+        this.ctrl = Screen.hasControlDown();
+        this.alt = Screen.hasAltDown();
+        this.editing = false;
         return true;
     }
 
     @Override
     public void onClose() {
-        buttonWidget = null;
+        this.editing = false;
     }
 }

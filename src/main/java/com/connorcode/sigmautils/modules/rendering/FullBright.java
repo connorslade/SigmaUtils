@@ -26,12 +26,14 @@ public class FullBright extends Module {
     }
 
     public void enable(MinecraftClient client) {
+        super.enable(client);
         baseGamma = client.options.getGamma()
                 .getValue();
         ((SimpleOptionAccessor) (Object) client.options.getGamma()).setValue(15d);
     }
 
     public void disable(MinecraftClient client) {
+        super.disable(client);
         ((SimpleOptionAccessor) (Object) client.options.getGamma()).setValue(baseGamma);
     }
 }
