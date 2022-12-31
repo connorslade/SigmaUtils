@@ -69,6 +69,7 @@
     "rendering.NoParticles",
     "rendering.NoWorldBorder",
     "rendering.ShowInvisibleEntities",
-    "rendering.Zoom"
+    "rendering.Zoom",
+    "server.AutoVoidTrade"
   ]
 }

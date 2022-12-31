@@ -21,7 +21,7 @@ public class CoordinatesHud extends HudModule {
     private static final NumberSetting precision = new NumberSetting(CoordinatesHud.class, "Precision", 0, 5).description("The precision of the coordinates displayed")
             .precision(0)
             .build();
-    private static final BoolSetting nether = new BoolSetting(CoordinatesHud.class, "Nether").value(false)
+    private static final BoolSetting nether = new BoolSetting(CoordinatesHud.class, "Nether Coordinates").value(false)
             .description("When in the overworld or nether, display the coordinates of the other dimension")
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();

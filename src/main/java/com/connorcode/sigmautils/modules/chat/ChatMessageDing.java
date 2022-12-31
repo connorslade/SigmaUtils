@@ -20,6 +20,8 @@ public class ChatMessageDing extends Module {
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
 
+    // TODO: Self messages
+
     public ChatMessageDing() {
         super("chat_message_ding", "Chat Message Ding", "Plays a sound when you receive a chat message", Category.Chat);
     }
