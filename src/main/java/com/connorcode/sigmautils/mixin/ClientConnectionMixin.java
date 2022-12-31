@@ -15,13 +15,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientConnectionMixin {
     @Inject(method = "channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V", at = @At("HEAD"), cancellable = true)
     void onChannelRead(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo ci) {
-        if (PacketReceiveCallback.EVENT.invoker()
-                .handle(packet)) ci.cancel();
+        PacketReceiveCallback.PacketReceiveEvent event = new PacketReceiveCallback.PacketReceiveEvent(packet);
+        PacketReceiveCallback.EVENT.invoker().handle(event);
+        if (event.cancel) ci.cancel();
     }
 
     @Inject(method = "sendImmediately", at = @At("HEAD"), cancellable = true)
     void onPacketSend(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
-        if (PacketSendCallback.EVENT.invoker()
-                .handle(packet)) ci.cancel();
+        PacketSendCallback.PacketSendEvent event = new PacketSendCallback.PacketSendEvent(packet);
+        PacketSendCallback.EVENT.invoker().handle(event);
+        if (event.cancel) ci.cancel();
     }
 }

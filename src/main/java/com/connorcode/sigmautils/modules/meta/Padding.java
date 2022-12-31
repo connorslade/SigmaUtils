@@ -14,9 +14,10 @@ import net.minecraft.util.math.MathHelper;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class Padding extends Module {
-    public static NumberSetting padding = new NumberSetting(Padding.class, "Padding", 0, 20).description("Padding between gui elements")
-            .value(2)
-            .build();
+    public static NumberSetting padding =
+            new NumberSetting(Padding.class, "Padding", 0, 20).description("Padding between gui elements")
+                    .value(2)
+                    .build();
 
     public Padding() {
         super("padding", "Padding", "Sets the padding of Sigma Utils gui elements", Category.Meta);

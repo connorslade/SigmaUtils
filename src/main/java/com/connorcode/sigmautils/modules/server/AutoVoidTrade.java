@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.SelectMerchantTradeC2SPacket;
-import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
 import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -45,7 +44,8 @@ public class AutoVoidTrade extends Module {
     private static int waiting = 0;
 
     public AutoVoidTrade() {
-        super("auto_void_trade", "Auto Void Trade", "Automatically perform void trading", Category.Server);
+        super("auto_void_trade", "Auto Void Trade", "Automatically perform void trading [EXPERIMENTAL]",
+                Category.Server);
     }
 
     @Override
@@ -83,13 +83,16 @@ public class AutoVoidTrade extends Module {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (!enabled) return false;
+            if (!enabled) return;
             MinecraftClient client = MinecraftClient.getInstance();
-            if (packet instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket) {
+            if (packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket) {
                 if (setTradeOffersS2CPacket.getOffers().size() <= tradeIndex.value()) error("Invalid trade index");
                 TradeOffer tradeOffer = setTradeOffersS2CPacket.getOffers().get(tradeIndex.intValue());
 
-                if (tradeOffer.getUses() > tradeOffer.getMaxUses()) return error("Trade exhausted");
+                if (tradeOffer.getUses() > tradeOffer.getMaxUses()) {
+                    error("Trade exhausted");
+                    return;
+                }
                 Objects.requireNonNull(client.getNetworkHandler())
                         .sendPacket(new SelectMerchantTradeC2SPacket(tradeIndex.intValue()));
 
@@ -97,23 +100,21 @@ public class AutoVoidTrade extends Module {
                     System.out.println("Merchant screen open");
                     Slot slot = merchantScreen.getScreenHandler().getSlot(2);
 //                    if (slot.hasStack()) {
-                        System.out.println("Slot has stack");
-                        Objects.requireNonNull(client.interactionManager)
-                                .clickSlot(merchantScreen.getScreenHandler().syncId, slot.id, 0,
-                                SlotActionType.QUICK_MOVE, client.player);
-                        waiting = delay.intValue();
+                    System.out.println("Slot has stack");
+                    Objects.requireNonNull(client.interactionManager)
+                            .clickSlot(merchantScreen.getScreenHandler().syncId, slot.id, 0,
+                                    SlotActionType.QUICK_MOVE, client.player);
+                    waiting = delay.intValue();
 //                    }
                 }
             }
-            return false;
         });
     }
 
-    private boolean error(String message) {
+    private void error(String message) {
         Objects.requireNonNull(MinecraftClient.getInstance().player)
                 .sendMessage(Text.of("[SIGMAUTILS::AutoVoidTrade] " + message), false);
         waiting = delay.intValue();
-        return false;
     }
 }
 

@@ -8,8 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
 public class CameraDistance extends Module {
-    public static NumberSetting distance = new NumberSetting(CameraDistance.class, "Distance", 0, 10).description("Camera Distance in blocks")
-            .build();
+    public static NumberSetting distance =
+            new NumberSetting(CameraDistance.class, "Distance", 0, 10).description("Camera Distance in blocks")
+                    .build();
 
     public CameraDistance() {
         super("camera_distance", "CameraDistance", "Sets how far away the 3rd person camera is", Category.Misc);

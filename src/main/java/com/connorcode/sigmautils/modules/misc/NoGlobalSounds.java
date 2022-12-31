@@ -13,13 +13,15 @@ public class NoGlobalSounds extends Module {
             .description("Disables the global end portal opening sound")
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
-    public static BoolSetting disableDragonDeath = new BoolSetting(NoGlobalSounds.class, "Disable Dragon Death").value(true)
-            .description("Disables the global dragon death sound")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
-            .build();
+    public static BoolSetting disableDragonDeath =
+            new BoolSetting(NoGlobalSounds.class, "Disable Dragon Death").value(true)
+                    .description("Disables the global dragon death sound")
+                    .displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .build();
 
     public NoGlobalSounds() {
-        super("no_global_sounds", "No Global Sounds", "Disables playing all global sounds. (Wither Spawn, End Portal Open, Dragon Death)", Category.Misc);
+        super("no_global_sounds", "No Global Sounds",
+                "Disables playing all global sounds. (Wither Spawn, End Portal Open, Dragon Death)", Category.Misc);
     }
 
     public static boolean disabled(int eventId) {

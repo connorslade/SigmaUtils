@@ -21,7 +21,8 @@ public class AutoSign extends Module {
     public static StringSetting line4 = lineSetting(4).build();
 
     public AutoSign() {
-        super("auto_sign", "Auto Sign", "Automatically writes text on signs you place. (/set auto_sign text \"Hi\")", Category.Misc);
+        super("auto_sign", "Auto Sign", "Automatically writes text on signs you place. (/set auto_sign text \"Hi\")",
+                Category.Misc);
     }
 
     private static StringSetting lineSetting(int line) {
@@ -32,11 +33,12 @@ public class AutoSign extends Module {
     public void init() {
         super.init();
         ScreenOpenCallback.EVENT.register(screen -> {
-            if (!(screen instanceof SignEditScreen && enabled)) return false;
+            if (!(screen.get() instanceof SignEditScreen && enabled)) return;
             SignBlockEntity signBlock = ((SignEditScreenAccessor) screen).getSign();
             Objects.requireNonNull(MinecraftClient.getInstance().player).networkHandler.sendPacket(
-                    new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(), line4.value()));
-            return true;
+                    new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(),
+                            line4.value()));
+            screen.cancel();
         });
     }
 }

@@ -76,13 +76,15 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     void onSetScreen(Screen screen, CallbackInfo ci) {
-        if (ScreenOpenCallback.EVENT.invoker()
-                .handle(screen)) ci.cancel();
+        ScreenOpenCallback.ScreenOpenEvent event = new ScreenOpenCallback.ScreenOpenEvent(screen);
+        ScreenOpenCallback.EVENT.invoker().handle(event);
+        if (event.cancel) ci.cancel();
     }
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.renderGlowing(entity) && !(GlowingPlayers.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
+        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.renderGlowing(entity) &&
+                !(GlowingPlayers.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
@@ -91,12 +93,15 @@ public abstract class MinecraftClientMixin {
                 .isSneaking()) return;
 
         // Handle Item frames
-        if (crosshairTarget.getType() == HitResult.Type.ENTITY && ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
+        if (crosshairTarget.getType() == HitResult.Type.ENTITY &&
+                ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
             BlockPos behindBlockPos = itemFrameEntity.getDecorationBlockPos()
                     .offset(itemFrameEntity.getHorizontalFacing()
                             .getOpposite());
 
-            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos, false);
+            crosshairTarget =
+                    new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos,
+                            false);
         }
 
         // Handle Wall Signs
@@ -106,8 +111,9 @@ public abstract class MinecraftClientMixin {
                     .getBlockState(blockPos);
             if (!(blockState.getBlock() instanceof WallSignBlock)) return;
 
-            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(), blockPos.offset(blockState.get(WallSignBlock.FACING)
-                    .getOpposite()), false);
+            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(),
+                    blockPos.offset(blockState.get(WallSignBlock.FACING)
+                            .getOpposite()), false);
         }
     }
 
@@ -122,7 +128,8 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
     boolean isPaused(MinecraftClient instance) {
         if (!Config.getEnabled(NoPause.class)) return this.paused;
-        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) &&
+        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() ||
+                this.overlay != null && this.overlay.pausesGame()) &&
                 !Objects.requireNonNull(this.server)
                         .isRemote();
     }

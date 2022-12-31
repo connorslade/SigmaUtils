@@ -23,10 +23,9 @@ public class FakeVanilla extends Module {
         super.init();
 
         PacketSendCallback.EVENT.register(packet -> {
-            if (!(packet instanceof CustomPayloadC2SPacket) || !enabled) return false;
+            if (!(packet.get() instanceof CustomPayloadC2SPacket) || !enabled) return;
             CustomPayloadC2SPacketAccessor payloadPacket = (CustomPayloadC2SPacketAccessor) packet;
             payloadPacket.setData(new PacketByteBuf(Unpooled.buffer()).writeString(brand.value()));
-            return false;
         });
     }
 }

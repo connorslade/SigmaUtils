@@ -28,7 +28,8 @@ public class ToggleNotifications extends Module {
             case CHAT -> client.player.sendMessage(Text.of(String.format("§aEnabled §d%s", module.name)), false);
             case ACTION_BAR -> client.player.sendMessage(Text.of(String.format("§aEnabled §d%s", module.name)), true);
             case TOAST -> client.getToastManager()
-                    .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Module Enabled"), Text.of(module.name)));
+                    .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Module Enabled"),
+                            Text.of(module.name)));
         }
     }
 
@@ -38,7 +39,8 @@ public class ToggleNotifications extends Module {
             case CHAT -> client.player.sendMessage(Text.of(String.format("§cDisabled §d%s", module.name)), false);
             case ACTION_BAR -> client.player.sendMessage(Text.of(String.format("§cDisabled §d%s", module.name)), true);
             case TOAST -> client.getToastManager()
-                    .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Module Disabled"), Text.of(module.name)));
+                    .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Module Disabled"),
+                            Text.of(module.name)));
         }
     }
 

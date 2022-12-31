@@ -9,10 +9,12 @@ import net.minecraft.client.MinecraftClient;
 import static com.connorcode.sigmautils.SigmaUtilsClient.VERSION;
 
 public class WindowTitle extends Module {
-    private static final NumberSetting refreshPeriod = new NumberSetting(WindowTitle.class, "Refresh Period", 1, 20).value(20)
-            .description("The number of ticks between each refresh of the window title.")
-            .build();
-    private static final StringSetting titleFormatter = new StringSetting(WindowTitle.class, "Title Formatter").value("Sigma Utils v{version} | {server} | {player}")
+    private static final NumberSetting refreshPeriod =
+            new NumberSetting(WindowTitle.class, "Refresh Period", 1, 20).value(20)
+                    .description("The number of ticks between each refresh of the window title.")
+                    .build();
+    private static final StringSetting titleFormatter = new StringSetting(WindowTitle.class, "Title Formatter").value(
+                    "Sigma Utils v{version} | {server} | {player}")
             .build();
     private static long lastRefresh = 0;
     private static String lastTitle = "";
@@ -33,7 +35,8 @@ public class WindowTitle extends Module {
         // Then just add more formatters like {server} and {player.*}
         lastTitle = titleFormatter.value()
                 .replace("{version}", VERSION)
-                .replace("{server}", mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address)
+                .replace("{server}",
+                        mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address)
                 .replace("{player}", mc.player == null ? "Offline" : mc.player.getName()
                         .getString());
         return lastTitle;

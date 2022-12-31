@@ -12,7 +12,8 @@ import java.util.Objects;
 
 public class ForceFly extends Module {
     static NumberSetting flyTickCutoff = new NumberSetting(ForceFly.class, "flyTickCutoff", 0, 100).value(60)
-            .description("The amount of ticks to wait before dropping the player (to prevent getting kicked for flying)")
+            .description(
+                    "The amount of ticks to wait before dropping the player (to prevent getting kicked for flying)")
             .precision(0)
             .build();
 

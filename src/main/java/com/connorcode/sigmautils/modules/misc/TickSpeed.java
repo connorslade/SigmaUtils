@@ -15,7 +15,8 @@ import net.minecraft.util.math.MathHelper;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class TickSpeed extends Module {
-    public static NumberSetting mspt = new NumberSetting(TickSpeed.class, "MSPT", 1, 100).description("Sets the MSPT (milliseconds per tick) of the client side game loop")
+    public static NumberSetting mspt = new NumberSetting(TickSpeed.class, "MSPT", 1, 100).description(
+                    "Sets the MSPT (milliseconds per tick) of the client side game loop")
             .value(50)
             .build();
 
@@ -42,7 +43,8 @@ public class TickSpeed extends Module {
         Components.addToggleButton(screen, this, x, y, 20, true);
         int padding = getPadding();
 
-        Util.addDrawable(screen, new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(), MathHelper.clamp(mspt.value() / 100d, 0, 1)) {
+        Util.addDrawable(screen, new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
+                MathHelper.clamp(mspt.value() / 100d, 0, 1)) {
             @Override
             protected Text getTooltip() {
                 return mspt.getDescription();

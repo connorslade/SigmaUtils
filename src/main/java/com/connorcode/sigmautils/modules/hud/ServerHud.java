@@ -17,6 +17,7 @@ public class ServerHud extends HudModule {
         MinecraftClient client = MinecraftClient.getInstance();
         ServerInfo serverEntry = client.getCurrentServerEntry();
 
-        return String.format("§r%sServer: §f%s", this.getTextColor(), serverEntry == null ? "Integrated Server" : serverEntry.address);
+        return String.format("§r%sServer: §f%s", this.getTextColor(),
+                serverEntry == null ? "Integrated Server" : serverEntry.address);
     }
 }

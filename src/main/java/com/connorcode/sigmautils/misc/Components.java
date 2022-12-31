@@ -22,7 +22,9 @@ public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
 //        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
         ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20, Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c", mini ? "" : String.format(" %s", module.name))), button -> {
+        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20,
+                Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
+                        mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
                 if (Config.moduleSettings.get(module.getClass())
                         .size() <= 1) return;
@@ -41,17 +43,20 @@ public class Components {
     public static void sliderConfig(Screen screen, int x, int y, Module module, NumberSetting setting) {
         int padding = getPadding();
         Components.addToggleButton(screen, module, x, y, 20, true);
-        setting.initRender(screen, () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())), x + 20 + padding, y, 130 - padding);
+        setting.initRender(screen,
+                () -> Text.of(String.format("%s: %." + setting.getPrecision() + "f", module.name, setting.value())),
+                x + 20 + padding, y, 130 - padding);
     }
 
     public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting, char[] values) {
         ScreenAccessor sa = (ScreenAccessor) screen;
 
-        Util.addDrawable(screen, new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(values[setting.index()])), button -> {
-            setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
-            sa.invokeClearAndInit();
-        }, (((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
-                .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
+        Util.addDrawable(screen,
+                new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(values[setting.index()])), button -> {
+                    setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
+                    sa.invokeClearAndInit();
+                }, (((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
+                        .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
     }
 
     // A button that detects let and right clicks (and is scalable)

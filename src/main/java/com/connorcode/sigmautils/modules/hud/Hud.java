@@ -27,9 +27,10 @@ public class Hud extends Module {
             "time_played_hud",
             "time_hud"
     };
-    public static EnumSetting<Location> location = new EnumSetting<>(Hud.class, "Location", Location.class).value(Location.BottomLeft)
-            .description("The location of the HUD stack")
-            .build();
+    public static EnumSetting<Location> location =
+            new EnumSetting<>(Hud.class, "Location", Location.class).value(Location.BottomLeft)
+                    .description("The location of the HUD stack")
+                    .build();
 
     public Hud() {
         super("hud", "Hud", "The basic text hud that can be places in the corners of the window", Category.Hud);

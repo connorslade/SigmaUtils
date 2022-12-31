@@ -25,20 +25,18 @@ public class TpsHud extends HudModule {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (packet instanceof GameJoinS2CPacket) {
+            if (packet.get() instanceof GameJoinS2CPacket) {
                 tickRateHistory.clear();
                 lastTickTime = 0;
             }
 
-            if (packet instanceof WorldTimeUpdateS2CPacket) {
+            if (packet.get() instanceof WorldTimeUpdateS2CPacket) {
                 long now = System.currentTimeMillis();
                 if (lastTickTime != 0) tickRateHistory.add(20f / ((float) (now - lastTickTime) / 1000f));
                 lastTickTime = now;
 
                 while (tickRateHistory.size() > 20) tickRateHistory.remove(0);
             }
-
-            return false;
         });
     }
 

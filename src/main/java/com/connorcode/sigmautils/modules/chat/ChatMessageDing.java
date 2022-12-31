@@ -11,10 +11,11 @@ import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.sound.SoundEvents;
 
 public class ChatMessageDing extends Module {
-    private static final BoolSetting alertSystemMessages = new BoolSetting(ChatMessageDing.class, "System Messages").value(true)
-            .description("Play ding for system messages")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
-            .build();
+    private static final BoolSetting alertSystemMessages =
+            new BoolSetting(ChatMessageDing.class, "System Messages").value(true)
+                    .description("Play ding for system messages")
+                    .displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .build();
     private static final BoolSetting alertActionBar = new BoolSetting(ChatMessageDing.class, "Action Bar").value(false)
             .description("Play ding for action bar messages")
             .displayType(BoolSetting.DisplayType.CHECKBOX)
@@ -37,13 +38,12 @@ public class ChatMessageDing extends Module {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (!enabled) return false;
-            if (packet instanceof ChatMessageS2CPacket) playDing();
-            if (packet instanceof GameMessageS2CPacket gameMessageS2CPacket && alertSystemMessages.value()) {
-                if (gameMessageS2CPacket.overlay() && !alertActionBar.value()) return false;
+            if (!enabled) return;
+            if (packet.get() instanceof ChatMessageS2CPacket) playDing();
+            if (packet.get() instanceof GameMessageS2CPacket gameMessageS2CPacket && alertSystemMessages.value()) {
+                if (gameMessageS2CPacket.overlay() && !alertActionBar.value()) return;
                 playDing();
             }
-            return false;
         });
     }
 }

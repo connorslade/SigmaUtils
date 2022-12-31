@@ -23,7 +23,7 @@ public class NoForceResourcePack extends Module {
     public void init() {
         super.init();
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (!(packet instanceof ResourcePackSendS2CPacket resourcePacket) || !enabled) return false;
+            if (!(packet.get() instanceof ResourcePackSendS2CPacket resourcePacket) || !enabled) return;
             MutableText text = Text.empty()
                     .append(Text.literal(String.format("This server has a %s resource pack.\n",
                                     resourcePacket.isRequired() ? "required" : "optional"))
@@ -49,7 +49,7 @@ public class NoForceResourcePack extends Module {
 
             Objects.requireNonNull(MinecraftClient.getInstance().player)
                     .sendMessage(text);
-            return true;
+            packet.cancel();
         });
     }
 }

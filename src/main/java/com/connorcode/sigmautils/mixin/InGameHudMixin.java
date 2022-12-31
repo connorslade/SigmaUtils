@@ -94,9 +94,10 @@ public abstract class InGameHudMixin {
         int maxText = 0;
         for (String i : hud.getLeft()) maxText = Math.max(maxText, getTextRenderer().getWidth(i));
         for (String i : hud.getLeft()) {
-            client.textRenderer.drawWithShadow(matrices, i, Hud.location.index() == 0 || Hud.location.index() == 3 ? hud.getRight()
-                    .getLeft() : hud.getRight()
-                    .getLeft() + (maxText - getTextRenderer().getWidth(i)), y, 0);
+            client.textRenderer.drawWithShadow(matrices, i,
+                    Hud.location.index() == 0 || Hud.location.index() == 3 ? hud.getRight()
+                            .getLeft() : hud.getRight()
+                            .getLeft() + (maxText - getTextRenderer().getWidth(i)), y, 0);
             y += client.textRenderer.fontHeight + padding;
         }
         client.getProfiler()

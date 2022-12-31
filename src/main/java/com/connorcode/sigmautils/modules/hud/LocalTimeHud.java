@@ -15,6 +15,7 @@ public class LocalTimeHud extends HudModule {
     }
 
     public String line() {
-        return String.format("§r%sTime: §f%s", this.getTextColor(), (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
+        return String.format("§r%sTime: §f%s", this.getTextColor(),
+                (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
     }
 }

@@ -39,28 +39,36 @@ public class NumberSetting extends Setting<NumberSetting> {
                 .add(this);
 
         String moduleId = Config.getModule(this.module).id;
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("config")
-                        .then(ClientCommandManager.literal(moduleId)
-                                .then(ClientCommandManager.literal(this.id)
-                                        .executes(context -> {
-                                            context.getSource()
-                                                    .sendFeedback(Text.of(String.format("%s::%s: %." + this.precision + "f", moduleId, this.id, this.value)));
-                                            return 1;
-                                        })
-                                        .then(ClientCommandManager.argument("value", doubleArg())
+        ClientCommandRegistrationCallback.EVENT.register(
+                (dispatcher, dedicated) -> dispatcher.register(ClientCommandManager.literal("util")
+                        .then(ClientCommandManager.literal("config")
+                                .then(ClientCommandManager.literal(moduleId)
+                                        .then(ClientCommandManager.literal(this.id)
                                                 .executes(context -> {
-                                                    double value = context.getArgument("value", Double.class);
-                                                    if (enforceBounds && (value < this.min || value > this.max)) {
-                                                        context.getSource()
-                                                                .sendError(Text.of(String.format("Value must be between %s and %s", this.min, this.max)));
-                                                        return 0;
-                                                    }
-                                                    this.value = value;
                                                     context.getSource()
-                                                            .sendFeedback(Text.of(String.format("Set %s::%s to %." + this.precision + "f", moduleId, this.id, this.value)));
+                                                            .sendFeedback(Text.of(String.format(
+                                                                    "%s::%s: %." + this.precision + "f", moduleId,
+                                                                    this.id, this.value)));
                                                     return 1;
-                                                })))))));
+                                                })
+                                                .then(ClientCommandManager.argument("value", doubleArg())
+                                                        .executes(context -> {
+                                                            double value = context.getArgument("value", Double.class);
+                                                            if (enforceBounds &&
+                                                                    (value < this.min || value > this.max)) {
+                                                                context.getSource()
+                                                                        .sendError(Text.of(String.format(
+                                                                                "Value must be between %s and %s",
+                                                                                this.min, this.max)));
+                                                                return 0;
+                                                            }
+                                                            this.value = value;
+                                                            context.getSource()
+                                                                    .sendFeedback(Text.of(String.format(
+                                                                            "Set %s::%s to %." + this.precision + "f",
+                                                                            moduleId, this.id, this.value)));
+                                                            return 1;
+                                                        })))))));
 
         return this;
     }
@@ -113,11 +121,13 @@ public class NumberSetting extends Setting<NumberSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        return initRender(screen, () -> Text.of(String.format("%s: %." + this.precision + "f", this.name, this.value)), x, y, width);
+        return initRender(screen, () -> Text.of(String.format("%s: %." + this.precision + "f", this.name, this.value)),
+                x, y, width);
     }
 
     public int initRender(Screen screen, SliderText slider, int x, int y, int width) {
-        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(), MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
+        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(),
+                MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
             @Override
             protected Text getTooltip() {
                 return Text.of(NumberSetting.this.description);

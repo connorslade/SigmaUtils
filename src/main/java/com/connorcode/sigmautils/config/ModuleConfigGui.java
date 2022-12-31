@@ -44,13 +44,15 @@ public class ModuleConfigGui extends Screen {
 
         // Add an 'enabled' setting
         Util.addDrawable(this,
-                new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 150 - padding, 20, Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
+                new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 150 - padding, 20,
+                        Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
                     module.enabled ^= true;
                     assert this.client != null;
                     if (module.enabled) module.enable(this.client);
                     else module.disable(this.client);
                     this.clearAndInit();
-                }, (((button, matrices, mouseX, mouseY) -> this.renderOrderedTooltip(matrices, textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY)))));
+                }, (((button, matrices, mouseX, mouseY) -> this.renderOrderedTooltip(matrices,
+                        textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY)))));
 
         List<List<Setting<?>>> settingsList = new ArrayList<>(this.settings.values());
         for (int x = 0; x < settingsList.size(); x++) {
@@ -89,12 +91,15 @@ public class ModuleConfigGui extends Screen {
         int x = -75 + 20 + padding;
         for (Map.Entry<String, List<Setting<?>>> entry : settings.entrySet()) {
             x += 150 + padding;
-            if (entry.getKey() != null) drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getKey())), x, padding * 2 + textRenderer.fontHeight, 0);
+            if (entry.getKey() != null)
+                drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getKey())), x,
+                        padding * 2 + textRenderer.fontHeight, 0);
 
             for (Setting<?> setting : entry.getValue())
                 setting.render(renderData, x - 75, elementPositions.get(setting.getName()));
         }
 
-        drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)), width / 2, padding, 0);
+        drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)), width / 2,
+                padding, 0);
     }
 }

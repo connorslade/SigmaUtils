@@ -55,7 +55,9 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                                     .then(ClientCommandManager.literal(this.id)
                                             .executes(context -> {
                                                 context.getSource()
-                                                        .sendFeedback(Text.of(String.format("%s::%s: %s", moduleId, this.id, this.value)));
+                                                        .sendFeedback(
+                                                                Text.of(String.format("%s::%s: %s", moduleId, this.id,
+                                                                        this.value)));
                                                 return 1;
                                             })
                                             .then(ClientCommandManager.argument("value", greedyString())
@@ -67,7 +69,8 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                                                     .executes(context -> {
                                                         this.value = context.getArgument("value", String.class);
                                                         context.getSource()
-                                                                .sendFeedback(Text.of(String.format("Set %s::%s to %s", moduleId, this.id, this.value)));
+                                                                .sendFeedback(Text.of(String.format("Set %s::%s to %s",
+                                                                        moduleId, this.id, this.value)));
                                                         return 1;
                                                     }))))));
         }));
@@ -89,13 +92,16 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addDrawable(screen, new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.value)), (button -> {
-            MinecraftClient.getInstance()
-                    .setScreen(new SelectorScreen(screen));
-        }), ((button, matrices, mouseX, mouseY) -> {
-            if (this.description == null) return;
-            screen.renderOrderedTooltip(matrices, MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
-        })));
+        Util.addDrawable(screen,
+                new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.value)), (button -> {
+                    MinecraftClient.getInstance()
+                            .setScreen(new SelectorScreen(screen));
+                }), ((button, matrices, mouseX, mouseY) -> {
+                    if (this.description == null) return;
+                    screen.renderOrderedTooltip(matrices,
+                            MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            mouseY);
+                })));
 
         return 20;
     }
@@ -120,10 +126,13 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
         @Override
         protected void init() {
-            this.selectorWidget = new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32, this.height - 32, textRenderer.fontHeight + 8);
+            this.selectorWidget =
+                    new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32,
+                            this.height - 32, textRenderer.fontHeight + 8);
             this.addSelectableChild(selectorWidget);
-            Util.addDrawable(this, new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, Text.of("Done"), (button) -> Objects.requireNonNull(this.client)
-                    .setScreen(this.parent)));
+            Util.addDrawable(this, new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, Text.of("Done"),
+                    (button) -> Objects.requireNonNull(this.client)
+                            .setScreen(this.parent)));
         }
 
         @Override
@@ -145,7 +154,8 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                         .stream()
                         .map(SelectorEntry::new)
                         .forEach(this::addEntry);
-                if (SelectorSetting.this.value != null) super.setSelected(new SelectorEntry(SelectorSetting.this.value));
+                if (SelectorSetting.this.value != null)
+                    super.setSelected(new SelectorEntry(SelectorSetting.this.value));
             }
 
             @Override
@@ -174,7 +184,8 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
                 @Override
                 public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-                    SelectorWidget.this.client.textRenderer.drawWithShadow(matrices, this.value, width / 2f - client.textRenderer.getWidth(this.value) / 2f, y + 1, 16777215, true);
+                    SelectorWidget.this.client.textRenderer.drawWithShadow(matrices, this.value,
+                            width / 2f - client.textRenderer.getWidth(this.value) / 2f, y + 1, 16777215, true);
                 }
 
                 @Override

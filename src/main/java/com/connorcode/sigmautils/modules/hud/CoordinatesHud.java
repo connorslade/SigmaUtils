@@ -18,20 +18,24 @@ import static net.minecraft.world.World.NETHER;
 import static net.minecraft.world.World.OVERWORLD;
 
 public class CoordinatesHud extends HudModule {
-    private static final NumberSetting precision = new NumberSetting(CoordinatesHud.class, "Precision", 0, 5).description("The precision of the coordinates displayed")
-            .precision(0)
-            .build();
+    private static final NumberSetting precision =
+            new NumberSetting(CoordinatesHud.class, "Precision", 0, 5).description(
+                            "The precision of the coordinates displayed")
+                    .precision(0)
+                    .build();
     private static final BoolSetting nether = new BoolSetting(CoordinatesHud.class, "Nether Coordinates").value(false)
             .description("When in the overworld or nether, display the coordinates of the other dimension")
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
-    private static final EnumSetting<TextStyle.Color> netherStyle = new EnumSetting<>(CoordinatesHud.class, "Nether Color", TextStyle.Color.class).value(TextStyle.Color.Red)
-            .description("The color of the text")
-            .category("Style")
-            .build();
+    private static final EnumSetting<TextStyle.Color> netherStyle =
+            new EnumSetting<>(CoordinatesHud.class, "Nether Color", TextStyle.Color.class).value(TextStyle.Color.Red)
+                    .description("The color of the text")
+                    .category("Style")
+                    .build();
 
     public CoordinatesHud() {
-        super("coordinates_hud", "Coordinates Hud", "Adds a display on your screen showing your current location", Category.Hud);
+        super("coordinates_hud", "Coordinates Hud", "Adds a display on your screen showing your current location",
+                Category.Hud);
         this.defaultTextColor = TextStyle.Color.Yellow;
         this.defaultOrder = 4;
     }
@@ -52,6 +56,7 @@ public class CoordinatesHud extends HudModule {
         else if (registryKey == NETHER) otherPos = player.getPos()
                 .multiply(8, 1, 8);
         return String.format("§r%sPos: §f%s%s", this.getTextColor(), formatPos(player.getPos()),
-                nether.value() && otherPos != null ? String.format(" %s[%s]", netherStyle.value().code, formatPos(otherPos)) : "");
+                nether.value() && otherPos != null ? String.format(" %s[%s]", netherStyle.value().code,
+                        formatPos(otherPos)) : "");
     }
 }

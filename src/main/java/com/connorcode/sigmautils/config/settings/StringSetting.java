@@ -32,22 +32,25 @@ public class StringSetting extends Setting<StringSetting> {
                 .add(this);
 
         String moduleId = Config.getModule(this.module).id;
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("config")
-                        .then(ClientCommandManager.literal(moduleId)
-                                .then(ClientCommandManager.literal(this.id)
-                                        .executes(context -> {
-                                            context.getSource()
-                                                    .sendFeedback(Text.of(String.format("%s::%s: %s", moduleId, this.id, this.value)));
-                                            return 1;
-                                        })
-                                        .then(ClientCommandManager.argument("value", greedyString())
+        ClientCommandRegistrationCallback.EVENT.register(
+                (dispatcher, registryAccess) -> dispatcher.register(ClientCommandManager.literal("util")
+                        .then(ClientCommandManager.literal("config")
+                                .then(ClientCommandManager.literal(moduleId)
+                                        .then(ClientCommandManager.literal(this.id)
                                                 .executes(context -> {
-                                                    this.value = context.getArgument("value", String.class);
                                                     context.getSource()
-                                                            .sendFeedback(Text.of(String.format("%s::%s: %s", moduleId, this.id, this.value)));
+                                                            .sendFeedback(Text.of(String.format("%s::%s: %s", moduleId,
+                                                                    this.id, this.value)));
                                                     return 1;
-                                                })))))));
+                                                })
+                                                .then(ClientCommandManager.argument("value", greedyString())
+                                                        .executes(context -> {
+                                                            this.value = context.getArgument("value", String.class);
+                                                            context.getSource()
+                                                                    .sendFeedback(Text.of(String.format("%s::%s: %s",
+                                                                            moduleId, this.id, this.value)));
+                                                            return 1;
+                                                        })))))));
         return this;
     }
 
@@ -86,7 +89,8 @@ public class StringSetting extends Setting<StringSetting> {
         MinecraftClient client = MinecraftClient.getInstance();
         int padding = getPadding();
 
-        TextFieldWidget textField = new TextFieldWidget(client.textRenderer, x, y + (showName ? client.textRenderer.fontHeight + padding * 2 : 0), width, 20, Text.empty());
+        TextFieldWidget textField = new TextFieldWidget(client.textRenderer, x,
+                y + (showName ? client.textRenderer.fontHeight + padding * 2 : 0), width, 20, Text.empty());
         textField.setChangedListener(value -> {
             Optional<String> text = callback.callback(value);
             text.ifPresent(s -> StringSetting.this.value = s);
@@ -100,7 +104,8 @@ public class StringSetting extends Setting<StringSetting> {
     @Override
     public void render(RenderData data, int x, int y) {
         if (!showName) return;
-        MinecraftClient.getInstance().textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x, y + getPadding(), 0);
+        MinecraftClient.getInstance().textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x,
+                y + getPadding(), 0);
     }
 
     interface Callback {

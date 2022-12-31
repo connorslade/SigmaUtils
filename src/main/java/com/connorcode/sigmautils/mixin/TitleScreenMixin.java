@@ -54,7 +54,8 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "render", at = @At("HEAD"))
     void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         long now = System.currentTimeMillis();
-        if (!Config.getEnabled(SplashRefresh.class) || now - updateTime < SplashRefresh.refreshTime.intValue() * 1000L) return;
+        if (!Config.getEnabled(SplashRefresh.class) || now - updateTime < SplashRefresh.refreshTime.intValue() * 1000L)
+            return;
 
         updateTime = now;
         assert this.client != null;

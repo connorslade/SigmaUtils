@@ -21,16 +21,15 @@ public class PrivateMessageNotifier extends Module {
     public void init() {
         super.init();
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (!(packet instanceof MessageHeaderS2CPacket header && enabled)) return false;
+            if (!(packet.get() instanceof MessageHeaderS2CPacket header && enabled)) return;
             PlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().world)
                     .getPlayerByUuid(header.header()
                             .sender());
 
-            if (player == null) return false;
+            if (player == null) return;
             Objects.requireNonNull(MinecraftClient.getInstance().player)
                     .sendMessage(Text.of(String.format("Σ] `%s` just sent a message.", player.getGameProfile()
                             .getName())));
-            return false;
         });
     }
 }

@@ -6,11 +6,26 @@ import net.minecraft.network.Packet;
 
 public interface PacketSendCallback {
     Event<PacketSendCallback> EVENT =
-            EventFactory.createArrayBacked(PacketSendCallback.class, packetReceiveCallbacks -> packet -> {
-                boolean cancel = false;
-                for (PacketSendCallback i : packetReceiveCallbacks) cancel |= i.handle(packet);
-                return cancel;
+            EventFactory.createArrayBacked(PacketSendCallback.class, packetReceiveCallbacks -> event -> {
+                for (PacketSendCallback i : packetReceiveCallbacks) i.handle(event);
             });
 
-    boolean handle(Packet<?> packet);
+    void handle(PacketSendEvent event);
+
+    class PacketSendEvent {
+        public Packet<?> packet;
+        public boolean cancel = false;
+
+        public PacketSendEvent(Packet<?> packet) {
+            this.packet = packet;
+        }
+
+        public Packet<?> get() {
+            return packet;
+        }
+
+        public void cancel() {
+            cancel = true;
+        }
+    }
 }
