@@ -1,5 +1,7 @@
 package com.connorcode.sigmautils.modules.meta;
 
+import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
@@ -11,19 +13,30 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
-public class ToggleNotifications extends Module {
-    public static EnumSetting<Display> display = new EnumSetting<>(ToggleNotifications.class, "Display", Display.class)
-            .description("Where to display the notification.")
-            .value(Display.ACTION_BAR)
-            .build();
+public class Notifications extends Module {
+    private static final EnumSetting<Display> display =
+            new EnumSetting<>(Notifications.class, "Display", Display.class).description(
+                    "Where to display the notification.").value(Display.ACTION_BAR).build();
 
-    public ToggleNotifications() {
-        super("toggle_notifications", "Toggle Notifications", "Shows a message in the (C)hat, (A)ction bar or (T)oast",
-                Category.Meta);
+    private static final BoolSetting module =
+            new BoolSetting(Notifications.class, "Module").description("Show a notification when a module is toggled.")
+                    .displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .value(true)
+                    .build();
+
+    private static final BoolSetting startup =
+            new BoolSetting(Notifications.class, "Startup").description("Show a notification when Sigma Utils starts.")
+                    .displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .value(false)
+                    .build();
+
+    public Notifications() {
+        super("notifications", "Notifications",
+                "Shows a message in the (C)hat, (A)ction bar or (T)oast for various events.", Category.Meta);
     }
 
     public static void moduleEnable(MinecraftClient client, Module module) {
-        if (client.player == null) return;
+        if (client.player == null || !Notifications.module.value()) return;
         switch (display.value()) {
             case CHAT -> client.player.sendMessage(Text.of(String.format("§aEnabled §d%s", module.name)), false);
             case ACTION_BAR -> client.player.sendMessage(Text.of(String.format("§aEnabled §d%s", module.name)), true);
@@ -34,7 +47,7 @@ public class ToggleNotifications extends Module {
     }
 
     public static void moduleDisable(MinecraftClient client, Module module) {
-        if (client.player == null) return;
+        if (client.player == null || !Notifications.module.value()) return;
         switch (display.value()) {
             case CHAT -> client.player.sendMessage(Text.of(String.format("§cDisabled §d%s", module.name)), false);
             case ACTION_BAR -> client.player.sendMessage(Text.of(String.format("§cDisabled §d%s", module.name)), true);
@@ -42,6 +55,14 @@ public class ToggleNotifications extends Module {
                     .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Module Disabled"),
                             Text.of(module.name)));
         }
+    }
+
+    public static void onStartup() {
+        if (!Notifications.startup.value() || Notifications.display.value() != Display.TOAST) return;
+        MinecraftClient.getInstance()
+                .getToastManager()
+                .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Sigma Utils"),
+                        Text.of("Started V" + SigmaUtilsClient.VERSION)));
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {

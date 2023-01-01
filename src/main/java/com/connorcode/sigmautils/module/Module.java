@@ -6,7 +6,7 @@ import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.modules.meta.ToggleNotifications;
+import com.connorcode.sigmautils.modules.meta.Notifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
@@ -62,12 +62,12 @@ public abstract class Module {
     }
 
     public void enable(MinecraftClient client) {
-        if (client.player == null || !Config.getEnabled(ToggleNotifications.class)) return;
-        ToggleNotifications.moduleEnable(client, this);
+        if (client.player == null || !Config.getEnabled(Notifications.class)) return;
+        Notifications.moduleEnable(client, this);
     }
 
     public void disable(MinecraftClient client) {
-        if (client.player == null || !Config.getEnabled(ToggleNotifications.class)) return;
-        ToggleNotifications.moduleDisable(client, this);
+        if (client.player == null || !Config.getEnabled(Notifications.class)) return;
+        Notifications.moduleDisable(client, this);
     }
 }

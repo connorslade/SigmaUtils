@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.commands.Command;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.modules.meta.Notifications;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
@@ -60,6 +61,7 @@ public class SigmaUtilsClient implements ClientModInitializer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Notifications.onStartup();
         }));
     }
 }
