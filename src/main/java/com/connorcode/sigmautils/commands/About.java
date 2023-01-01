@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.commands;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -16,7 +16,7 @@ public class About implements Command {
                         .executes(context -> {
                             Objects.requireNonNull(MinecraftClient.getInstance().player)
                                     .sendMessage(
-                                            Text.of(String.format("Σ] Sigma Utils v%s", SigmaUtilsClient.VERSION)),
+                                            Text.of(String.format("Σ] Sigma Utils v%s", SigmaUtils.VERSION)),
                                             false);
                             return 0;
                         })));

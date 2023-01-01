@@ -6,7 +6,7 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 
-import static com.connorcode.sigmautils.SigmaUtilsClient.VERSION;
+import static com.connorcode.sigmautils.SigmaUtils.VERSION;
 
 public class WindowTitle extends Module {
     private static final NumberSetting refreshPeriod =

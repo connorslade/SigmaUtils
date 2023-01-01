@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Padding;
@@ -39,7 +39,7 @@ public class ConfigGui extends Screen {
         // Draw Module toggles
         for (int x = 0; x < Category.values().length; x++) {
             Category category = Category.values()[x];
-            List<Module> categoryModules = SigmaUtilsClient.modules.stream()
+            List<Module> categoryModules = SigmaUtils.modules.stream()
                     .filter(m -> m.category == category)
                     .toList();
 

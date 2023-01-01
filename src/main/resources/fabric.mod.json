@@ -16,7 +16,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.connorcode.sigmautils.SigmaUtilsClient"
+      "com.connorcode.sigmautils.SigmaUtils"
     ]
   },
   "mixins": [

@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
@@ -56,7 +56,7 @@ public abstract class Setting<T extends Setting<T>> {
     }
 
     public Module getModule() {
-        return SigmaUtilsClient.modules.stream()
+        return SigmaUtils.modules.stream()
                 .filter(module -> module.getClass() == this.module)
                 .findFirst()
                 .orElse(null);

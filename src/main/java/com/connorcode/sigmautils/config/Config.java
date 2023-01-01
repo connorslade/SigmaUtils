@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.module.Module;
@@ -48,7 +48,7 @@ public class Config {
     }
 
     public static boolean getEnabled(String id) {
-        Optional<Module> find = SigmaUtilsClient.modules.stream().filter(m -> Objects.equals(m.id, id)).findFirst();
+        Optional<Module> find = SigmaUtils.modules.stream().filter(m -> Objects.equals(m.id, id)).findFirst();
         return find.isPresent() && find.get().enabled;
     }
 
@@ -70,7 +70,7 @@ public class Config {
         if (!configFile.exists()) return;
         NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile)).getCompound("modules");
         if (nbt == null) return;
-        for (Module i : SigmaUtilsClient.modules) {
+        for (Module i : SigmaUtils.modules) {
             i.loadConfig(nbt.getCompound(i.id));
             if (i.enabled) i.enable(MinecraftClient.getInstance());
         }
@@ -82,7 +82,7 @@ public class Config {
 
         // Add modules
         NbtCompound modules = new NbtCompound();
-        for (Module i : SigmaUtilsClient.modules) modules.put(i.id, i.saveConfig());
+        for (Module i : SigmaUtils.modules) modules.put(i.id, i.saveConfig());
         configFile.getParentFile().mkdirs();
         nbt.put("modules", modules);
 

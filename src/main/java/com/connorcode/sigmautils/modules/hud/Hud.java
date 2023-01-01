@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules.hud;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
@@ -40,10 +40,10 @@ public class Hud extends Module {
         List<String> lines = new ArrayList<>();
         Arrays.stream(hudModules)
                 .map(n -> {
-                    Optional<Module> module = SigmaUtilsClient.modules.stream()
+                    Optional<Module> module = SigmaUtils.modules.stream()
                             .filter(m -> Objects.equals(m.id, n))
                             .findFirst();
-                    return module.isEmpty() ? SigmaUtilsClient.modules.get(0) : module.get();
+                    return module.isEmpty() ? SigmaUtils.modules.get(0) : module.get();
                 })
                 .filter(m -> m.enabled)
                 .sorted(Comparator.comparingInt(m -> (int) ((HudModule) m).order.value()))

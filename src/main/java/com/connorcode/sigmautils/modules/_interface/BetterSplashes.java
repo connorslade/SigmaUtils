@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class BetterSplashes extends Module {
     public static final List<String> betterSplashes =
-            new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtilsClient.class.getClassLoader()
+            new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
                     .getResourceAsStream("splashes.txt")))).lines()
                     .toList();
 

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class SigmaUtilsClient implements ClientModInitializer {
+public class SigmaUtils implements ClientModInitializer {
     public static final String VERSION = "0.1*";
     public static final List<Module> modules = new ArrayList<>();
     public static final List<Command> commands = new ArrayList<>();

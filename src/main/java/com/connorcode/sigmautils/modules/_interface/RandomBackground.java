@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class RandomBackground extends Module {
     public static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
-            SigmaUtilsClient.class.getClassLoader()
+            SigmaUtils.class.getClassLoader()
                     .getResourceAsStream("background_blocks.txt"))))
             .lines()
             .toList();

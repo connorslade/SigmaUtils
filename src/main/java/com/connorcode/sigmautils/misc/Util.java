@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.misc;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Util {
     public static Object loadNewClass(String classPath) {
         try {
-            return SigmaUtilsClient.class.getClassLoader()
+            return SigmaUtils.class.getClassLoader()
                     .loadClass(classPath)
                     .getDeclaredConstructor()
                     .newInstance();
@@ -29,7 +29,7 @@ public class Util {
     }
 
     public static String loadResourceString(String name) {
-        return new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtilsClient.class.getClassLoader()
+        return new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
                 .getResourceAsStream(name)))).lines()
                 .collect(Collectors.joining("\n"));
     }

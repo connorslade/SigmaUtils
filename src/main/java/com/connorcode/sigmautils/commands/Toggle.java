@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.commands;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -24,7 +24,7 @@ public class Toggle implements Command {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("toggle")
                         .then(ClientCommandManager.argument("module", string())
-                                .suggests(((context, builder) -> suggestMatching(SigmaUtilsClient.modules.stream()
+                                .suggests(((context, builder) -> suggestMatching(SigmaUtils.modules.stream()
                                         .map(m -> m.id)
                                         .toList(), builder)))
                                 .then(ClientCommandManager.argument("state", bool())
@@ -36,7 +36,7 @@ public class Toggle implements Command {
         boolean setState = getBool(context, "state");
         ClientPlayerEntity player = Objects.requireNonNull(context.getSource()
                 .getClient().player);
-        Optional<Module> module = SigmaUtilsClient.modules.stream()
+        Optional<Module> module = SigmaUtils.modules.stream()
                 .filter(m -> Objects.equals(m.id, moduleId))
                 .findFirst();
 

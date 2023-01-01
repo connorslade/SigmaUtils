@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules.meta;
 
-import com.connorcode.sigmautils.SigmaUtilsClient;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
@@ -62,7 +62,7 @@ public class Notifications extends Module {
         MinecraftClient.getInstance()
                 .getToastManager()
                 .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Sigma Utils"),
-                        Text.of("Started V" + SigmaUtilsClient.VERSION)));
+                        Text.of("Started V" + SigmaUtils.VERSION)));
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
