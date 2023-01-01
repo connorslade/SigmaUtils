@@ -24,6 +24,7 @@
     "EntityMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
+    "EntryListWidgetMixin",
     "GameMenuScreenMixin",
     "GameRendererMixin",
     "InGameHudMixin",

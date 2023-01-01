@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Objects;
 import java.util.Random;
 
+import static com.connorcode.sigmautils.modules._interface.RandomBackground.assetIndex;
 import static net.minecraft.client.gui.DrawableHelper.OPTIONS_BACKGROUND_TEXTURE;
 
 @Mixin(Screen.class)
 public class ScreenMixin {
     int screenHash = -1;
-    int assetIndex = -1;
 
     @Redirect(method = "renderBackgroundTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
     private void setShaderTexture(int texture, Identifier id) {

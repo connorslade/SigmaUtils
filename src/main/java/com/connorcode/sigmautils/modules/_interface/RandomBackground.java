@@ -3,6 +3,8 @@ package com.connorcode.sigmautils.modules._interface;
 import com.connorcode.sigmautils.SigmaUtilsClient;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.util.Identifier;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,9 +17,15 @@ public class RandomBackground extends Module {
                     .getResourceAsStream("background_blocks.txt"))))
             .lines()
             .toList();
+    public static int assetIndex = -1;
 
     public RandomBackground() {
         super("random_background", "Random Background", "Uses random textures for the background tessellation",
                 Category.Interface);
+    }
+
+    public static void setTexture() {
+        RenderSystem.setShaderTexture(0, Identifier.tryParse("textures/block/" +
+                RandomBackground.validBackgrounds.get(RandomBackground.assetIndex) + ".png"));
     }
 }
