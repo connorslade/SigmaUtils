@@ -1,15 +1,15 @@
 package com.connorcode.sigmautils.module;
 
-import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.misc.TextStyle;
+import com.connorcode.sigmautils.modules.hud.Hud;
 
 import java.util.List;
 
 public abstract class HudModule extends Module {
     public NumberSetting order;
+    public EnumSetting<Location> location;
     protected int defaultOrder;
     protected EnumSetting<TextStyle.Color> textColor;
     protected TextStyle.Color defaultTextColor = TextStyle.Color.Green;
@@ -33,16 +33,27 @@ public abstract class HudModule extends Module {
     @Override
     public void init() {
         super.init();
+        Hud.hudModules.add(this);
         textColor = new EnumSetting<>(this.getClass(), "Color", TextStyle.Color.class).value(defaultTextColor)
                 .description("The color of the text")
-                .category("Style")
+                .category("Hud")
                 .build();
-        order = new NumberSetting(this.getClass(), "Order", 0, 20).description("The order of the hud module")
+        order = new NumberSetting(this.getClass(), "Order", 0, 20).value(defaultOrder)
+                .description("The order of the hud module")
                 .precision(0)
-                .value(defaultOrder)
+                .category("Hud")
                 .build();
-        List<Setting<?>> moduleSettings = Config.moduleSettings.get(this.getClass());
-        moduleSettings.remove(order);
-        moduleSettings.add(2, order);
+        location = new EnumSetting<>(this.getClass(), "Location", Location.class).value(Location.Auto)
+                .description("The location of this hud element. Auto will inherit the location from the 'Hud' module")
+                .category("Hud")
+                .build();
+    }
+
+    public enum Location {
+        Auto,
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
     }
 }

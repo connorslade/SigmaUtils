@@ -1,19 +1,31 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.settings.EnumSetting;
+import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.event.UnknownPacketCallback;
+import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
+import com.connorcode.sigmautils.modules.hud.TimePlayedHud;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Pair;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BadlionTimers extends HudModule {
     private static final Identifier BADLION_TIMER = new Identifier("badlion", "timers");
+    private static final EnumSetting<TimePlayedHud.TimeFormat> timeFormat =
+            new EnumSetting<>(BadlionTimers.class, "Time Format", TimePlayedHud.TimeFormat.class).value(
+                            TimePlayedHud.TimeFormat.HMS)
+                    .description(
+                            "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
+                    .build();
     private static final List<Timer> timers = new ArrayList<>();
 
     public BadlionTimers() {
@@ -25,13 +37,14 @@ public class BadlionTimers extends HudModule {
     public void init() {
         super.init();
 
+        PacketReceiveCallback.EVENT.register(packet -> {
+            if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
+        });
+
         UnknownPacketCallback.EVENT.register(unknownPacket -> {
-            System.out.println("Got packet " + unknownPacket.getIdentifier());
             if (!enabled || !unknownPacket.getIdentifier().equals(BADLION_TIMER)) return;
-            System.out.println("Got badlion timer packet");
             Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
 
-            System.out.println("Got badlion timer packet " + packet.getLeft());
             switch (packet.getLeft()) {
                 case REMOVE_ALL_TIMERS, CHANGE_WORLD, REGISTER -> timers.clear();
                 case ADD_TIMER -> timers.add(new Timer(packet.getRight()));
@@ -54,6 +67,7 @@ public class BadlionTimers extends HudModule {
     public void tick() {
         super.tick();
 
+        // TODO: Get this ticking to sync with the server
 //        timers.stream().filter(timer -> timer.remainingTicks > 0).forEach(timer -> {
 //            timer.remainingTicks--;
 //            if (timer.remainingTicks <= 0 && timer.repeating) timer.remainingTicks = timer.ogTicks;
@@ -63,8 +77,15 @@ public class BadlionTimers extends HudModule {
     @Override
     public List<String> lines() {
         List<String> lines = new ArrayList<>();
-        for (Timer timer : timers)
-            lines.add(String.format("%s%s: §f%ds", getTextColor(), timer.name, timer.remainingTicks / 20));
+        for (Timer timer : timers) {
+            long time = timer.remainingTicks * 50;
+            String display = switch (timeFormat.value()) {
+                case HMS -> DurationFormatUtils.formatDuration(time, "HH:mm:ss");
+                case BestFit -> Util.bestTime(time);
+            };
+
+            lines.add(String.format("%s%s: §f%s", getTextColor(), timer.name, display));
+        }
 
         return lines;
     }

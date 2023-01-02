@@ -27,6 +27,7 @@
     "EntryListWidgetMixin",
     "GameMenuScreenMixin",
     "GameRendererMixin",
+    "InGameHudAccessor",
     "InGameHudMixin",
     "InventoryScreenMixin",
     "LivingEntityRendererMixin",

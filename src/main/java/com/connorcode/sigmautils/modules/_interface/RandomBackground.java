@@ -13,10 +13,7 @@ import java.util.Objects;
 
 public class RandomBackground extends Module {
     public static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
-            SigmaUtils.class.getClassLoader()
-                    .getResourceAsStream("background_blocks.txt"))))
-            .lines()
-            .toList();
+            SigmaUtils.class.getClassLoader().getResourceAsStream("background_blocks.txt")))).lines().toList();
     public static int assetIndex = -1;
 
     public RandomBackground() {
@@ -25,7 +22,8 @@ public class RandomBackground extends Module {
     }
 
     public static void setTexture() {
-        RenderSystem.setShaderTexture(0, Identifier.tryParse("textures/block/" +
-                RandomBackground.validBackgrounds.get(RandomBackground.assetIndex) + ".png"));
+        if (assetIndex == -1) assetIndex = (int) (Math.random() * validBackgrounds.size());
+        RenderSystem.setShaderTexture(0, Identifier.tryParse(
+                "textures/block/" + RandomBackground.validBackgrounds.get(RandomBackground.assetIndex) + ".png"));
     }
 }

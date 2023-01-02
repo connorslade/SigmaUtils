@@ -10,7 +10,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -20,10 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
 import java.util.Objects;
-
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
@@ -82,26 +78,8 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (client.options.hudHidden || !Config.getEnabled("hud")) return;
-        client.getProfiler()
-                .push("SigmaUtils::Hud");
-
-        int padding = getPadding();
-        Pair<List<String>, Pair<Integer, Integer>> hud = Hud.getHud(scaledHeight, scaledWidth);
-
-        int y = hud.getRight()
-                .getRight();
-        int maxText = 0;
-        for (String i : hud.getLeft()) maxText = Math.max(maxText, getTextRenderer().getWidth(i));
-        for (String i : hud.getLeft()) {
-            client.textRenderer.drawWithShadow(matrices, i,
-                    Hud.location.index() == 0 || Hud.location.index() == 3 ? hud.getRight()
-                            .getLeft() : hud.getRight()
-                            .getLeft() + (maxText - getTextRenderer().getWidth(i)), y, 0);
-            y += client.textRenderer.fontHeight + padding;
-        }
-        client.getProfiler()
-                .pop();
+        if (client.options.hudHidden || !Config.getEnabled(Hud.class)) return;
+        Hud.renderHud(matrices);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))

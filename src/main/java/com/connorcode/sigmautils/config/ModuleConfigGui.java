@@ -8,11 +8,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
@@ -21,7 +21,7 @@ public class ModuleConfigGui extends Screen {
     private final Module module;
     private final Screen parent;
     // Maps <Category, List<Setting>>
-    private final HashMap<String, List<Setting<?>>> settings = new HashMap<>();
+    private final List<Pair<String, List<Setting<?>>>> settings = new ArrayList<>();
     private final HashMap<String, Integer> elementPositions = new HashMap<>();
 
     public ModuleConfigGui(Module module, Screen parent) {
@@ -37,8 +37,14 @@ public class ModuleConfigGui extends Screen {
         List<Setting<?>> settings = Config.moduleSettings.getOrDefault(module.getClass(), List.of());
         for (Setting<?> setting : settings) {
             String category = setting.getCategory();
-            this.settings.putIfAbsent(category, new ArrayList<>());
-            this.settings.get(category)
+            // Maybe: Clean this up
+            if (this.settings.stream().noneMatch(pair -> pair.getLeft().equals(category)))
+                this.settings.add(new Pair<>(category, new ArrayList<>()));
+            this.settings.stream()
+                    .filter(pair -> pair.getLeft().equals(category))
+                    .findFirst()
+                    .orElseThrow()
+                    .getRight()
                     .add(setting);
         }
 
@@ -54,30 +60,24 @@ public class ModuleConfigGui extends Screen {
                 }, (((button, matrices, mouseX, mouseY) -> this.renderOrderedTooltip(matrices,
                         textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY)))));
 
-        List<List<Setting<?>>> settingsList = new ArrayList<>(this.settings.values());
+        List<List<Setting<?>>> settingsList = this.settings.stream().map(Pair::getRight).toList();
         for (int x = 0; x < settingsList.size(); x++) {
             int xPos = 20 + padding + x * (150 + padding);
             int yPos = textRenderer.fontHeight * 2 + padding * 4;
 
-            for (int y = 0; y < settingsList.get(x)
-                    .size(); y++) {
-                elementPositions.put(settingsList.get(x)
-                        .get(y)
-                        .getName(), yPos);
-                yPos += settingsList.get(x)
-                        .get(y)
-                        .initRender(this, xPos, yPos, 150 - padding) + padding;
+            for (int y = 0; y < settingsList.get(x).size(); y++) {
+                elementPositions.put(settingsList.get(x).get(y).getName(), yPos);
+                yPos += settingsList.get(x).get(y).initRender(this, xPos, yPos, 150 - padding) + padding;
             }
         }
     }
 
     @Override
     public void close() {
-        for (List<Setting<?>> settings : this.settings.values())
+        for (List<Setting<?>> settings : this.settings.stream().map(Pair::getRight).toList())
             for (Setting<?> setting : settings)
                 setting.onClose();
-        MinecraftClient.getInstance()
-                .setScreen(parent);
+        MinecraftClient.getInstance().setScreen(parent);
     }
 
     @Override
@@ -92,13 +92,13 @@ public class ModuleConfigGui extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
 
         int x = -75 + 20 + padding;
-        for (Map.Entry<String, List<Setting<?>>> entry : settings.entrySet()) {
+        for (Pair<String, List<Setting<?>>> entry : settings) {
             x += 150 + padding;
-            if (entry.getKey() != null)
-                drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getKey())), x,
+            if (entry.getLeft() != null)
+                drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())), x,
                         padding * 2 + textRenderer.fontHeight, 0);
 
-            for (Setting<?> setting : entry.getValue())
+            for (Setting<?> setting : entry.getRight())
                 setting.render(renderData, x - 75, elementPositions.get(setting.getName()));
         }
 
@@ -109,7 +109,7 @@ public class ModuleConfigGui extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         boolean cancel = false;
-        for (List<Setting<?>> settingList : settings.values())
+        for (List<Setting<?>> settingList : settings.stream().map(Pair::getRight).toList())
             for (Setting<?> setting : settingList)
                 cancel |= setting.onKeypress(keyCode, scanCode, modifiers);
         return cancel || super.keyPressed(keyCode, scanCode, modifiers);
