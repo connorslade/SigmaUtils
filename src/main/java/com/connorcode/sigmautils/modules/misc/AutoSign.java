@@ -34,7 +34,7 @@ public class AutoSign extends Module {
         super.init();
         ScreenOpenCallback.EVENT.register(screen -> {
             if (!(screen.get() instanceof SignEditScreen && enabled)) return;
-            SignBlockEntity signBlock = ((SignEditScreenAccessor) screen).getSign();
+            SignBlockEntity signBlock = ((SignEditScreenAccessor) screen.get()).getSign();
             Objects.requireNonNull(MinecraftClient.getInstance().player).networkHandler.sendPacket(
                     new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(),
                             line4.value()));

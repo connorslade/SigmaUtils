@@ -6,23 +6,21 @@ import com.connorcode.sigmautils.event.UnknownPacketCallback;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
-import com.connorcode.sigmautils.modules.hud.TimePlayedHud;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Pair;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BadlionTimers extends HudModule {
     private static final Identifier BADLION_TIMER = new Identifier("badlion", "timers");
-    private static final EnumSetting<TimePlayedHud.TimeFormat> timeFormat =
-            new EnumSetting<>(BadlionTimers.class, "Time Format", TimePlayedHud.TimeFormat.class).value(
-                            TimePlayedHud.TimeFormat.HMS)
+    private static final EnumSetting<Util.TimeFormat> timeFormat =
+            new EnumSetting<>(BadlionTimers.class, "Time Format", Util.TimeFormat.class).value(
+                            Util.TimeFormat.HMS)
                     .description(
                             "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
                     .build();
@@ -77,18 +75,10 @@ public class BadlionTimers extends HudModule {
 
     @Override
     public List<String> lines() {
-        List<String> lines = new ArrayList<>();
-        for (Timer timer : timers) {
-            long time = timer.remainingTicks * 50;
-            String display = switch (timeFormat.value()) {
-                case HMS -> DurationFormatUtils.formatDuration(time, "HH:mm:ss");
-                case BestFit -> Util.bestTime(time);
-            };
-
-            lines.add(String.format("%s%s: §f%s", getTextColor(), timer.name, display));
-        }
-
-        return lines;
+        return timers.stream()
+                .map(timer -> String.format("%s%s: §f%s", getTextColor(), timer.name,
+                        timeFormat.value().format(timer.remainingTicks * 50)))
+                .toList();
     }
 
     private Pair<Action, JsonObject> decodePacket(PacketByteBuf packetByteBuf) {
@@ -109,7 +99,7 @@ public class BadlionTimers extends HudModule {
         SYNC_TIMERS
     }
 
-    class Timer {
+    static class Timer {
         int id;
         String name;
         boolean repeating;
@@ -131,15 +121,3 @@ public class BadlionTimers extends HudModule {
         }
     }
 }
-
-// (badlion:timers) Packet data: [83, 89, 78, 67, 95, 84, 73, 77, 69, 82, 83, 124, 123, 34, 105, 100, 34, 58, 53, 44, 34, 116, 105, 109, 101, 34, 58, 49, 49, 53, 56, 49, 125]
-// ADD_TIMER|{"id":9,"name":"Game End","item":{"type":"BEDROCK"},"repeating":false,"time":36000,"millis":-1,"currentTime":36000}
-
-// Events:
-// - REMOVE_ALL_TIMERS -- remove all timers
-// - CHANGE_WORLD      -- remove all timers
-// - REGISTER          -- remove all timers
-// - ADD_TIMER         -- add a timer
-// - REMOVE_TIMER      -- remove a timer?
-// - UPDATE_TIMER      -- update a timer?
-// - UPDATE_TIMER_TIME -- idk

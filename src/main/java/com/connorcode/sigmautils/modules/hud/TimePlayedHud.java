@@ -8,7 +8,6 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.Objects;
 
@@ -18,8 +17,8 @@ public class TimePlayedHud extends HudModule {
             new EnumSetting<>(TimePlayedHud.class, "Time Since", TimeSince.class).value(TimeSince.GameStart)
                     .description("The time since when the time played should be calculated")
                     .build();
-    private static final EnumSetting<TimeFormat> timeFormat =
-            new EnumSetting<>(TimePlayedHud.class, "Time Format", TimeFormat.class).value(TimeFormat.HMS)
+    private static final EnumSetting<Util.TimeFormat> timeFormat =
+            new EnumSetting<>(TimePlayedHud.class, "Time Format", Util.TimeFormat.class).value(Util.TimeFormat.HMS)
                     .description(
                             "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
                     .build();
@@ -48,22 +47,13 @@ public class TimePlayedHud extends HudModule {
             case WorldCreate -> Objects.requireNonNull(MinecraftClient.getInstance().world)
                     .getTime() * 50;
         };
-        String display = switch (timeFormat.value()) {
-            case HMS -> DurationFormatUtils.formatDuration(time, "HH:mm:ss");
-            case BestFit -> Util.bestTime(time);
-        };
 
-        return String.format("§r%sPlayed: §f%s", this.getTextColor(), display);
+        return String.format("§r%sPlayed: §f%s", this.getTextColor(), timeFormat.value().format(time));
     }
 
     public enum TimeSince {
         GameStart,
         WorldLoad,
         WorldCreate
-    }
-
-    public enum TimeFormat {
-        HMS,
-        BestFit,
     }
 }

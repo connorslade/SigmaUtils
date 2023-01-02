@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Pair;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -80,5 +81,17 @@ public class Util {
         }
 
         return String.format("%s years", Math.round(seconds));
+    }
+
+    public enum TimeFormat {
+        HMS,
+        BestFit;
+
+        public String format(long ms) {
+            return switch (this) {
+                case HMS -> DurationFormatUtils.formatDuration(ms, "HH:mm:ss");
+                case BestFit -> Util.bestTime(ms);
+            };
+        }
     }
 }

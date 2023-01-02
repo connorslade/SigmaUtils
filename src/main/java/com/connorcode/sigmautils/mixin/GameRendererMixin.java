@@ -22,8 +22,7 @@ public class GameRendererMixin {
 
     @Inject(method = "getFov(Lnet/minecraft/client/render/Camera;FZ)D", at = @At("RETURN"), cancellable = true)
     public void getZoomLevel(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
-        if (!Config.getEnabled("zoom")) return;
-        cir.setReturnValue(cir.getReturnValueD() * Zoom.zoom.value());
+        cir.setReturnValue(Zoom.getFov(cir.getReturnValueD(), tickDelta));
     }
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
