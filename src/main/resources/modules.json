@@ -28,6 +28,7 @@
     "hud.FpsHud",
     "hud.Hud",
     "hud.LocalTimeHud",
+    "hud.ModuleHud",
     "hud.PingHud",
     "hud.ServerHud",
     "hud.TimePlayedHud",

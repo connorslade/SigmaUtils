@@ -53,7 +53,7 @@ public abstract class HudModule extends Module {
         Auto,
         TopLeft,
         TopRight,
-        BottomLeft,
-        BottomRight
+        BottomRight,
+        BottomLeft
     }
 }

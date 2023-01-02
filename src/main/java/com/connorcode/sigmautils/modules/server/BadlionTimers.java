@@ -27,9 +27,10 @@ public class BadlionTimers extends HudModule {
                             "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
                     .build();
     private static final List<Timer> timers = new ArrayList<>();
+    private static long lastTick = 0;
 
     public BadlionTimers() {
-        super("badlion_timers", "Badlion Timers", "Shows badlion timers", Category.Server);
+        super("badlion_timers", "Badlion Timers", "Shows badlion timers in the HUD", Category.Server);
         this.defaultOrder = 9;
     }
 
@@ -57,8 +58,6 @@ public class BadlionTimers extends HudModule {
                     return timer;
                 });
             }
-            System.out.println(timers);
-
             unknownPacket.cancel();
         });
     }
@@ -67,11 +66,13 @@ public class BadlionTimers extends HudModule {
     public void tick() {
         super.tick();
 
-        // TODO: Get this ticking to sync with the server
-//        timers.stream().filter(timer -> timer.remainingTicks > 0).forEach(timer -> {
-//            timer.remainingTicks--;
-//            if (timer.remainingTicks <= 0 && timer.repeating) timer.remainingTicks = timer.ogTicks;
-//        });
+        long now = System.currentTimeMillis();
+        if (lastTick + 50 > now) return;
+        lastTick = now;
+        timers.stream().filter(timer -> timer.remainingTicks > 0).forEach(timer -> {
+            timer.remainingTicks--;
+            if (timer.remainingTicks <= 0 && timer.repeating) timer.remainingTicks = timer.ogTicks;
+        });
     }
 
     @Override

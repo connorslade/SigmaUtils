@@ -30,7 +30,7 @@ public class CoordinatesHud extends HudModule {
     private static final EnumSetting<TextStyle.Color> netherStyle =
             new EnumSetting<>(CoordinatesHud.class, "Nether Color", TextStyle.Color.class).value(TextStyle.Color.Red)
                     .description("The color of the text")
-                    .category("Style")
+                    .category("Hud")
                     .build();
 
     public CoordinatesHud() {
