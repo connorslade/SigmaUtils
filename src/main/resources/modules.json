@@ -70,6 +70,7 @@
     "rendering.NoWorldBorder",
     "rendering.ShowInvisibleEntities",
     "rendering.Zoom",
-    "server.AutoVoidTrade"
+    "server.AutoVoidTrade",
+    "server.BadlionTimers"
   ]
 }

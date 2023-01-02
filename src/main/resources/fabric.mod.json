@@ -3,13 +3,14 @@
   "id": "sigma-utils",
   "version": "${version}",
   "name": "Sigma Utils",
-  "description": "",
+  "description": "A little utility mod for Minecraft",
   "authors": [
     "Connor Slade"
   ],
   "contact": {
-    "website": "https://connorcode.com",
-    "sources": "https://github.com/Basicprogrammer10/SigmaUtils"
+    "homepage": "https://github.com/Basicprogrammer10/SigmaUtils",
+    "sources": "https://github.com/Basicprogrammer10/SigmaUtils",
+    "issues": "https://github.com/Basicprogrammer10/SigmaUtils/issues"
   },
   "license": "MIT",
   "icon": "assets/sigma-utils/icon.png",
@@ -30,14 +31,9 @@
   },
   "custom": {
     "modmenu": {
-      "parent": {
-        "id": "sigma-utils",
-        "name": "Sigma Utils",
-        "description": "Little utilities for minecraft",
-        "icon": "assets/sigma-utils/icon.png",
-        "badges": [
-          "client"
-        ]
+      "links": {
+        "Github": "https://github.com/Basicprogrammer10/SigmaUtils",
+        "My Website": "https://connorcode.com"
       }
     }
   }

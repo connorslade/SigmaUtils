@@ -25,7 +25,8 @@ public class Hud extends Module {
             "biome_hud",
             "server_hud",
             "time_played_hud",
-            "time_hud"
+            "time_hud",
+            "badlion_timers"
     };
     public static EnumSetting<Location> location =
             new EnumSetting<>(Hud.class, "Location", Location.class).value(Location.BottomLeft)

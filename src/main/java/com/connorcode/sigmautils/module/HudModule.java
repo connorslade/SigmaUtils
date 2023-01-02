@@ -43,6 +43,6 @@ public abstract class HudModule extends Module {
                 .build();
         List<Setting<?>> moduleSettings = Config.moduleSettings.get(this.getClass());
         moduleSettings.remove(order);
-        moduleSettings.add(1, order);
+        moduleSettings.add(2, order);
     }
 }
