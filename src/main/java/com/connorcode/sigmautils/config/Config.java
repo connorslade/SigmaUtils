@@ -30,6 +30,7 @@ public class Config {
     public static void initKeybindings() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (configKeybinding.wasPressed()) client.setScreen(new ConfigGui());
+            if (client.currentScreen != null) return;
             for (Setting<KeyBindSetting> s : moduleKeybinds) {
                 if (!((KeyBindSetting) s).pressed()) continue;
 

@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
+import com.connorcode.sigmautils.modules.rendering.NoDarkSky;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
@@ -44,7 +45,7 @@ public class WorldRendererMixin {
 
     @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
     double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) {
-        if (Config.getEnabled("no_dark_sky")) return Double.MIN_VALUE;
+        if (Config.getEnabled(NoDarkSky.class) && this.world != null) return this.world.getBottomY() - 32;
         return instance.getSkyDarknessHeight(world);
     }
 

@@ -32,24 +32,30 @@ public class TpsHud extends HudModule {
 
         PacketReceiveCallback.EVENT.register(packet -> {
             if (packet.get() instanceof GameJoinS2CPacket) {
-                tickRateHistory.clear();
-                lastTickTime = 0;
+                synchronized (tickRateHistory) {
+                    tickRateHistory.clear();
+                    lastTickTime = 0;
+                }
                 return;
             }
 
             if (packet.get() instanceof WorldTimeUpdateS2CPacket) {
                 long now = System.currentTimeMillis();
-                if (lastTickTime != 0) tickRateHistory.add(20f / ((float) (now - lastTickTime) / 1000f));
-                lastTickTime = now;
+                synchronized (tickRateHistory) {
+                    if (lastTickTime != 0) tickRateHistory.add(20f / ((float) (now - lastTickTime) / 1000f));
+                    lastTickTime = now;
 
-                while (tickRateHistory.size() > samples.intValue()) tickRateHistory.remove(0);
+                    while (tickRateHistory.size() > samples.intValue()) tickRateHistory.remove(0);
+                }
             }
         });
     }
 
     public String line() {
-        float avg = tickRateHistory.stream().filter(Objects::nonNull).reduce(Float::sum).orElse(0f) /
-                tickRateHistory.size();
-        return String.format("§r%sTPS: §f%.1f", this.getTextColor(), avg);
+        synchronized (tickRateHistory) {
+            float avg = tickRateHistory.stream().filter(Objects::nonNull).reduce(Float::sum).orElse(0f) /
+                    tickRateHistory.size();
+            return String.format("§r%sTPS: §f%.1f", this.getTextColor(), avg);
+        }
     }
 }
