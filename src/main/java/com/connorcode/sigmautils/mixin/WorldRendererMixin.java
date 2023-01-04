@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import com.connorcode.sigmautils.modules.rendering.NoDarkSky;
+import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
@@ -51,6 +52,6 @@ public class WorldRendererMixin {
 
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
     void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
-        if (Config.getEnabled("no_world_border")) ci.cancel();
+        if (Config.getEnabled(NoWorldBorder.class)) ci.cancel();
     }
 }

@@ -16,8 +16,10 @@ import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class Config {
     public static final File configFile =
@@ -48,30 +50,15 @@ public class Config {
         });
     }
 
-    public static boolean getEnabled(String id) {
-        Optional<Module> find = SigmaUtils.modules.stream().filter(m -> Objects.equals(m.id, id)).findFirst();
-        return find.isPresent() && find.get().enabled;
-    }
-
     public static <T extends Module> boolean getEnabled(Class<T> moduleClass) {
-        return getEnabled(getModule(moduleClass).id);
-    }
-
-    public static <T extends Module> Module getModule(Class<T> moduleClass) {
-        try {
-            return moduleClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new RuntimeException(String.format("Invalid module class `%s`", moduleClass.getName()));
-        }
+        return SigmaUtils.modules.get(moduleClass).enabled;
     }
 
     public static void load() throws IOException {
         if (!configFile.exists()) return;
         NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile)).getCompound("modules");
         if (nbt == null) return;
-        for (Module i : SigmaUtils.modules) {
+        for (Module i : SigmaUtils.modules.values()) {
             i.loadConfig(nbt.getCompound(i.id));
             if (i.enabled) i.enable(MinecraftClient.getInstance());
         }
@@ -83,7 +70,7 @@ public class Config {
 
         // Add modules
         NbtCompound modules = new NbtCompound();
-        for (Module i : SigmaUtils.modules) modules.put(i.id, i.saveConfig());
+        for (Module i : SigmaUtils.modules.values()) modules.put(i.id, i.saveConfig());
         configFile.getParentFile().mkdirs();
         nbt.put("modules", modules);
 

@@ -14,6 +14,7 @@ import net.minecraft.util.Util;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class ConfigGui extends Screen {
 
     public static int getPadding() {
         try {
-            if (!Config.getEnabled("padding")) return 2;
+            if (!Config.getEnabled(Padding.class)) return 2;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,8 +40,9 @@ public class ConfigGui extends Screen {
         // Draw Module toggles
         for (int x = 0; x < Category.values().length; x++) {
             Category category = Category.values()[x];
-            List<Module> categoryModules = SigmaUtils.modules.stream()
+            List<Module> categoryModules = SigmaUtils.modules.values().stream()
                     .filter(m -> m.category == category)
+                    .sorted(Comparator.comparing(m -> m.name))
                     .toList();
 
             for (int y = 0; y < categoryModules.size(); y++) {

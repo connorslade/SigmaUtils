@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
@@ -41,8 +41,8 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     }
 
     public EnumSetting<K> build() {
-        String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
+            String moduleId = SigmaUtils.modules.get(this.module).id;
             dispatcher.register(ClientCommandManager.literal("util")
                     .then(ClientCommandManager.literal("config")
                             .then(ClientCommandManager.literal(moduleId)

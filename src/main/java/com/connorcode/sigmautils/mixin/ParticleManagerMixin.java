@@ -1,6 +1,8 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules.rendering.NoBreakParticles;
+import com.connorcode.sigmautils.modules.rendering.NoParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -14,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ParticleManagerMixin {
     @Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
     private void onAddBlockDestroyEffects(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (Config.getEnabled("no_break_particles")) ci.cancel();
+        if (Config.getEnabled(NoBreakParticles.class)) ci.cancel();
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
     private void disableAllParticles(Particle effect, CallbackInfo ci) {
-        if (Config.getEnabled("no_particles")) ci.cancel();
+        if (Config.getEnabled(NoParticles.class)) ci.cancel();
     }
 }

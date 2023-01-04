@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules.rendering.NoHurtTilt;
 import com.connorcode.sigmautils.modules.rendering.Zoom;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
@@ -27,6 +28,6 @@ public class GameRendererMixin {
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
     void onBobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (Config.getEnabled("no_hurt_tilt")) ci.cancel();
+        if (Config.getEnabled(NoHurtTilt.class)) ci.cancel();
     }
 }

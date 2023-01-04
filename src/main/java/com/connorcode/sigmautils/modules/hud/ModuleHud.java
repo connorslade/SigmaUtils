@@ -22,7 +22,7 @@ public class ModuleHud extends HudModule {
 
     @Override
     public List<String> lines() {
-        return SigmaUtils.modules.stream()
+        return SigmaUtils.modules.values().stream()
                 .filter(m -> m.enabled && (hudModules.value() || !(m instanceof HudModule)))
                 .map(m -> getTextColor() + m.name)
                 .toList();

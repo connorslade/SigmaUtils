@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.InventoryMove;
+import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
 import com.connorcode.sigmautils.modules.misc.WindowTitle;
 import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
@@ -71,7 +72,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;beginRenderTick(J)I", shift = At.Shift.AFTER))
     void onTick(boolean tick, CallbackInfo ci) {
         assert tick;
-        SigmaUtils.modules.forEach(Module::tick);
+        SigmaUtils.modules.values().forEach(Module::tick);
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
@@ -89,7 +90,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
     void onGetStackInHand(CallbackInfo ci) {
-        if (!Config.getEnabled("sign_click_through") || crosshairTarget == null || Objects.requireNonNull(player)
+        if (!Config.getEnabled(SignClickThrough.class) || crosshairTarget == null || Objects.requireNonNull(player)
                 .isSneaking()) return;
 
         // Handle Item frames

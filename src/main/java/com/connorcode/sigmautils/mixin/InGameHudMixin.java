@@ -4,7 +4,9 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
 import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules._interface.HotbarPosition;
+import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
 import com.connorcode.sigmautils.modules.hud.Hud;
+import com.connorcode.sigmautils.modules.misc.BlockDistance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -38,7 +40,7 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
-        if (!Config.getEnabled("block_distance")) return;
+        if (!Config.getEnabled(BlockDistance.class)) return;
         client.getProfiler()
                 .push("SigmaUtils::BlockDistance");
         Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity)
@@ -84,20 +86,20 @@ public abstract class InGameHudMixin {
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
     int onGetWidth(TextRenderer instance, String text) {
-        if (Config.getEnabled("no_scoreboard_value")) return 0;
+        if (Config.getEnabled(NoScoreboardValue.class)) return 0;
         return instance.getWidth(text);
     }
 
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;FFI)I"))
     int onDraw(TextRenderer instance, MatrixStack matrices, String text, float x, float y, int color) {
-        if (Config.getEnabled("no_scoreboard_value")) return 0;
+        if (Config.getEnabled(NoScoreboardValue.class)) return 0;
         return instance.draw(matrices, text, x, y, color);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Integer;toString(I)Ljava/lang/String;"))
     String onToString(int buf) {
-        if (Config.getEnabled("no_scoreboard_value")) return "";
+        if (Config.getEnabled(NoScoreboardValue.class)) return "";
         return Integer.toString(buf);
     }
 
@@ -158,7 +160,7 @@ public abstract class InGameHudMixin {
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 1)
     private double modifyChat(double value) {
-        if (Config.getEnabled("chat_position"))
+        if (Config.getEnabled(ChatPosition.class))
             return value - ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight;
         return value;
     }

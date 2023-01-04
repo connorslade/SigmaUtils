@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
@@ -33,37 +33,41 @@ public class NumberSetting extends Setting<NumberSetting> {
     public NumberSetting build() {
         if (this.min > this.max) throw new RuntimeException("Min cannot be greater than max");
 
-        String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(
-                (dispatcher, dedicated) -> dispatcher.register(ClientCommandManager.literal("util")
-                        .then(ClientCommandManager.literal("config")
-                                .then(ClientCommandManager.literal(moduleId)
-                                        .then(ClientCommandManager.literal(this.id)
-                                                .executes(context -> {
-                                                    context.getSource()
-                                                            .sendFeedback(Text.of(String.format(
-                                                                    "%s::%s: %." + this.precision + "f", moduleId,
-                                                                    this.id, this.value)));
-                                                    return 1;
-                                                })
-                                                .then(ClientCommandManager.argument("value", doubleArg())
-                                                        .executes(context -> {
-                                                            double value = context.getArgument("value", Double.class);
-                                                            if (enforceBounds &&
-                                                                    (value < this.min || value > this.max)) {
+                (dispatcher, dedicated) -> {
+                    String moduleId = SigmaUtils.modules.get(this.module).id;
+                    dispatcher.register(ClientCommandManager.literal("util")
+                            .then(ClientCommandManager.literal("config")
+                                    .then(ClientCommandManager.literal(moduleId)
+                                            .then(ClientCommandManager.literal(this.id)
+                                                    .executes(context -> {
+                                                        context.getSource()
+                                                                .sendFeedback(Text.of(String.format(
+                                                                        "%s::%s: %." + this.precision + "f", moduleId,
+                                                                        this.id, this.value)));
+                                                        return 1;
+                                                    })
+                                                    .then(ClientCommandManager.argument("value", doubleArg())
+                                                            .executes(context -> {
+                                                                double value =
+                                                                        context.getArgument("value", Double.class);
+                                                                if (enforceBounds &&
+                                                                        (value < this.min || value > this.max)) {
+                                                                    context.getSource()
+                                                                            .sendError(Text.of(String.format(
+                                                                                    "Value must be between %s and %s",
+                                                                                    this.min, this.max)));
+                                                                    return 0;
+                                                                }
+                                                                this.value = value;
                                                                 context.getSource()
-                                                                        .sendError(Text.of(String.format(
-                                                                                "Value must be between %s and %s",
-                                                                                this.min, this.max)));
-                                                                return 0;
-                                                            }
-                                                            this.value = value;
-                                                            context.getSource()
-                                                                    .sendFeedback(Text.of(String.format(
-                                                                            "Set %s::%s to %." + this.precision + "f",
-                                                                            moduleId, this.id, this.value)));
-                                                            return 1;
-                                                        })))))));
+                                                                        .sendFeedback(Text.of(String.format(
+                                                                                "Set %s::%s to %." + this.precision +
+                                                                                        "f",
+                                                                                moduleId, this.id, this.value)));
+                                                                return 1;
+                                                            }))))));
+                });
 
         return super.build();
     }

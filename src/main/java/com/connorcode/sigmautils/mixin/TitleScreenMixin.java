@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ConfigGui;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.modules._interface.EscapeExit;
+import com.connorcode.sigmautils.modules._interface.Minceraft;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -66,7 +67,7 @@ public class TitleScreenMixin extends Screen {
     // For minceraft
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/TitleScreen;isMinceraft:Z", opcode = Opcodes.GETFIELD))
     boolean isMinecraft(TitleScreen instance) {
-        return Config.getEnabled("minceraft");
+        return Config.getEnabled(Minceraft.class);
     }
 
     // For escape_exit

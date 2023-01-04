@@ -1,6 +1,8 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules._interface.PortalInventory;
+import com.connorcode.sigmautils.modules.chat.NoChatSignatures;
 import com.connorcode.sigmautils.modules.misc.ForceFly;
 import com.connorcode.sigmautils.modules.misc.PrintDeathCords;
 import com.mojang.authlib.GameProfile;
@@ -57,7 +59,7 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
 
     @Inject(method = "requestRespawn", at = @At("TAIL"))
     public void onRequestRespawn(CallbackInfo ci) {
-        if (!Config.getEnabled("print_death_cords") || PrintDeathCords.lastDeath == null) return;
+        if (!Config.getEnabled(PrintDeathCords.class) || PrintDeathCords.lastDeath == null) return;
 
         long[] lastDeath = Arrays.stream(PrintDeathCords.lastDeath)
                 .mapToLong(Math::round)
@@ -71,21 +73,21 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
 
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V"))
     void onCloseHandledScreen(ClientPlayerEntity instance) {
-        if (!Config.getEnabled("portal_inventory")) instance.closeHandledScreen();
+        if (!Config.getEnabled(PortalInventory.class)) instance.closeHandledScreen();
     }
 
     @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     void onSetScreen(MinecraftClient instance, Screen screen) {
-        if (!Config.getEnabled("portal_inventory")) instance.setScreen(screen);
+        if (!Config.getEnabled(PortalInventory.class)) instance.setScreen(screen);
     }
 
     @Inject(method = "signChatMessage", at = @At("HEAD"), cancellable = true)
     void onSignChatMessage(MessageMetadata metadata, DecoratedContents content, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<MessageSignatureData> cir) {
-        if (Config.getEnabled("no_chat_signatures")) cir.setReturnValue(MessageSignatureData.EMPTY);
+        if (Config.getEnabled(NoChatSignatures.class)) cir.setReturnValue(MessageSignatureData.EMPTY);
     }
 
     @Inject(method = "signArguments", at = @At("HEAD"), cancellable = true)
     void onSignArguments(MessageMetadata signer, ParseResults<CommandSource> parseResults, Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        if (Config.getEnabled("no_chat_signatures")) cir.setReturnValue(ArgumentSignatureDataMap.EMPTY);
+        if (Config.getEnabled(NoChatSignatures.class)) cir.setReturnValue(ArgumentSignatureDataMap.EMPTY);
     }
 }

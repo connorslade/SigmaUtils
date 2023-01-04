@@ -24,7 +24,7 @@ public class Toggle implements Command {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("toggle")
                         .then(ClientCommandManager.argument("module", string())
-                                .suggests(((context, builder) -> suggestMatching(SigmaUtils.modules.stream()
+                                .suggests(((context, builder) -> suggestMatching(SigmaUtils.modules.values().stream()
                                         .map(m -> m.id)
                                         .toList(), builder)))
                                 .then(ClientCommandManager.argument("state", bool())
@@ -36,7 +36,7 @@ public class Toggle implements Command {
         boolean setState = getBool(context, "state");
         ClientPlayerEntity player = Objects.requireNonNull(context.getSource()
                 .getClient().player);
-        Optional<Module> module = SigmaUtils.modules.stream()
+        Optional<Module> module = SigmaUtils.modules.values().stream()
                 .filter(m -> Objects.equals(m.id, moduleId))
                 .findFirst();
 

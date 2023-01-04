@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -43,7 +43,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
     public SelectorSetting build() {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
-            String moduleId = Config.getModule(this.module).id;
+            String moduleId = SigmaUtils.modules.get(this.module).id;
             dispatcher.register(ClientCommandManager.literal("util")
                     .then(ClientCommandManager.literal("config")
                             .then(ClientCommandManager.literal(moduleId)

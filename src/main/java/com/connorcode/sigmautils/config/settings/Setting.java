@@ -56,7 +56,7 @@ public abstract class Setting<T extends Setting<T>> {
     }
 
     public Module getModule() {
-        return SigmaUtils.modules.stream()
+        return SigmaUtils.modules.values().stream()
                 .filter(module -> module.getClass() == this.module)
                 .findFirst()
                 .orElse(null);

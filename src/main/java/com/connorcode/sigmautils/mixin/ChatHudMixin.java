@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.modules._interface.NoChatFade;
 import com.connorcode.sigmautils.modules.chat.NoMessageHiding;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.network.message.MessageSignatureData;
@@ -18,7 +19,7 @@ public abstract class ChatHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;isChatFocused()Z"))
     boolean isChatFocused(ChatHud instance) {
-        if (Config.getEnabled("no_chat_fade")) return true;
+        if (Config.getEnabled(NoChatFade.class)) return true;
         return isChatFocused();
     }
 

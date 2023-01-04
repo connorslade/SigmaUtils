@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules.chat.EggChat;
+import com.connorcode.sigmautils.modules.chat.NoChatNormalization;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -20,8 +21,8 @@ public class ChatScreenMixin {
                 .addToMessageHistory(chatText);
 
         String text = chatText;
-        if (!Config.getEnabled("no_chat_normalization")) text = instance.normalize(chatText);
-        if (Config.getEnabled("egg_chat") && !text.startsWith("/")) text = EggChat.eggify(text);
+        if (!Config.getEnabled(NoChatNormalization.class)) text = instance.normalize(chatText);
+        if (Config.getEnabled(EggChat.class) && !text.startsWith("/")) text = EggChat.eggify(text);
         return text;
     }
 
@@ -46,7 +47,7 @@ public class ChatScreenMixin {
     }
 
     int mouseYModifier() {
-        if (Config.getEnabled("chat_position"))
+        if (Config.getEnabled(ChatPosition.class))
             return ChatPosition.yPosition.intValue() * MinecraftClient.getInstance().textRenderer.fontHeight;
         return 0;
     }

@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
@@ -25,27 +25,33 @@ public class BoolSetting extends Setting<BoolSetting> {
     }
 
     public BoolSetting build() {
-        String moduleId = Config.getModule(this.module).id;
         ClientCommandRegistrationCallback.EVENT.register(
-                ((dispatcher, registryAccess) -> dispatcher.register(ClientCommandManager.literal("util")
-                        .then(ClientCommandManager.literal("config")
-                                .then(ClientCommandManager.literal(moduleId)
-                                        .then(ClientCommandManager.literal(this.id)
-                                                .executes(context -> {
-                                                    context.getSource()
-                                                            .sendFeedback(Text.of(String.format("%s::%s: %s", moduleId,
-                                                                    this.id, this.value)));
-                                                    return 1;
-                                                })
-                                                .then(ClientCommandManager.argument("value", bool())
-                                                        .executes(context -> {
-                                                            this.value = context.getArgument("value", Boolean.class);
-                                                            context.getSource()
-                                                                    .sendFeedback(
-                                                                            Text.of(String.format("Set %s::%s to %s",
-                                                                                    moduleId, this.id, this.value)));
-                                                            return 1;
-                                                        }))))))));
+                (dispatcher, registryAccess) -> {
+                    String moduleId = SigmaUtils.modules.get(this.module).id;
+                    dispatcher.register(ClientCommandManager.literal("util")
+                            .then(ClientCommandManager.literal("config")
+                                    .then(ClientCommandManager.literal(moduleId)
+                                            .then(ClientCommandManager.literal(this.id)
+                                                    .executes(context -> {
+                                                        context.getSource()
+                                                                .sendFeedback(
+                                                                        Text.of(String.format("%s::%s: %s", moduleId,
+                                                                                this.id, this.value)));
+                                                        return 1;
+                                                    })
+                                                    .then(ClientCommandManager.argument("value", bool())
+                                                            .executes(context -> {
+                                                                this.value =
+                                                                        context.getArgument("value", Boolean.class);
+                                                                context.getSource()
+                                                                        .sendFeedback(
+                                                                                Text.of(String.format(
+                                                                                        "Set %s::%s to %s",
+                                                                                        moduleId, this.id,
+                                                                                        this.value)));
+                                                                return 1;
+                                                            }))))));
+                });
 
         return super.build();
     }
