@@ -76,6 +76,7 @@ public class BadlionTimers extends HudModule {
     @Override
     public List<String> lines() {
         return timers.stream()
+                .filter(timer -> timer.remainingTicks > 0)
                 .map(timer -> String.format("%s%s: §f%s", getTextColor(), timer.name,
                         timeFormat.value().format(timer.remainingTicks * 50)))
                 .toList();

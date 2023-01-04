@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 
 import java.util.Objects;
@@ -23,6 +24,7 @@ public class TimePlayedHud extends HudModule {
                             "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
                     .build();
     private static long worldOpenTimestamp = System.currentTimeMillis();
+    private static long serverJoinTimestamp = System.currentTimeMillis();
 
     public TimePlayedHud() {
         super("time_played_hud", "Time Played Hud", "Shows how long your client has been open for this session",
@@ -37,6 +39,7 @@ public class TimePlayedHud extends HudModule {
 
         PacketReceiveCallback.EVENT.register(packet -> {
             if (packet.get() instanceof GameJoinS2CPacket) worldOpenTimestamp = System.currentTimeMillis();
+            if (packet.get() instanceof LoginSuccessS2CPacket) serverJoinTimestamp = System.currentTimeMillis();
         });
     }
 
@@ -44,6 +47,7 @@ public class TimePlayedHud extends HudModule {
         long time = switch (timeSince.value()) {
             case GameStart -> System.currentTimeMillis() - openTimestamp;
             case WorldLoad -> System.currentTimeMillis() - worldOpenTimestamp;
+            case ServerJoin -> System.currentTimeMillis() - serverJoinTimestamp;
             case WorldCreate -> Objects.requireNonNull(MinecraftClient.getInstance().world)
                     .getTime() * 50;
         };
@@ -53,6 +57,7 @@ public class TimePlayedHud extends HudModule {
 
     public enum TimeSince {
         GameStart,
+        ServerJoin,
         WorldLoad,
         WorldCreate
     }
