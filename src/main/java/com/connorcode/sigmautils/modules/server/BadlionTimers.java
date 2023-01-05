@@ -19,8 +19,7 @@ import java.util.List;
 public class BadlionTimers extends HudModule {
     private static final Identifier BADLION_TIMER = new Identifier("badlion", "timers");
     private static final EnumSetting<Util.TimeFormat> timeFormat =
-            new EnumSetting<>(BadlionTimers.class, "Time Format", Util.TimeFormat.class).value(
-                            Util.TimeFormat.HMS)
+            new EnumSetting<>(BadlionTimers.class, "Time Format", Util.TimeFormat.class).value(Util.TimeFormat.HMS)
                     .description(
                             "The format of the time played. (HMS = Hours:Minutes:Seconds) (BestFit = 5 seconds, 3 hours")
                     .build();
@@ -37,24 +36,28 @@ public class BadlionTimers extends HudModule {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
+            synchronized (timers) {
+                if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
+            }
         });
 
         UnknownPacketCallback.EVENT.register(unknownPacket -> {
             if (!enabled || !unknownPacket.getIdentifier().equals(BADLION_TIMER)) return;
             Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
 
-            switch (packet.getLeft()) {
-                case REMOVE_ALL_TIMERS, CHANGE_WORLD, REGISTER -> timers.clear();
-                case ADD_TIMER -> timers.add(new Timer(packet.getRight()));
-                case REMOVE_TIMER -> timers.removeIf(timer -> timer.id == packet.getRight().get("id").getAsInt());
-                case SYNC_TIMERS -> timers.stream()
-                        .filter(timer -> timer.id == packet.getRight().get("id").getAsInt())
-                        .forEach(t -> t.setTicks(packet.getRight().get("time").getAsInt()));
-                case UPDATE_TIMER -> timers.replaceAll(timer -> {
-                    if (timer.id == packet.getRight().get("id").getAsInt()) return new Timer(packet.getRight());
-                    return timer;
-                });
+            synchronized (timers) {
+                switch (packet.getLeft()) {
+                    case REMOVE_ALL_TIMERS, CHANGE_WORLD, REGISTER -> timers.clear();
+                    case ADD_TIMER -> timers.add(new Timer(packet.getRight()));
+                    case REMOVE_TIMER -> timers.removeIf(timer -> timer.id == packet.getRight().get("id").getAsInt());
+                    case SYNC_TIMERS -> timers.stream()
+                            .filter(timer -> timer.id == packet.getRight().get("id").getAsInt())
+                            .forEach(t -> t.setTicks(packet.getRight().get("time").getAsInt()));
+                    case UPDATE_TIMER -> timers.replaceAll(timer -> {
+                        if (timer.id == packet.getRight().get("id").getAsInt()) return new Timer(packet.getRight());
+                        return timer;
+                    });
+                }
             }
             unknownPacket.cancel();
         });
@@ -67,19 +70,23 @@ public class BadlionTimers extends HudModule {
         long now = System.currentTimeMillis();
         if (lastTick + 50 > now) return;
         lastTick = now;
-        timers.stream().filter(timer -> timer.remainingTicks > 0).forEach(timer -> {
-            timer.remainingTicks--;
-            if (timer.remainingTicks <= 0 && timer.repeating) timer.remainingTicks = timer.ogTicks;
-        });
+        synchronized (timers) {
+            timers.stream().filter(timer -> timer.remainingTicks > 0).forEach(timer -> {
+                timer.remainingTicks--;
+                if (timer.remainingTicks <= 0 && timer.repeating) timer.remainingTicks = timer.ogTicks;
+            });
+        }
     }
 
     @Override
     public List<String> lines() {
-        return timers.stream()
-                .filter(timer -> timer.remainingTicks > 0)
-                .map(timer -> String.format("%s%s: §f%s", getTextColor(), timer.name,
-                        timeFormat.value().format(timer.remainingTicks * 50)))
-                .toList();
+        synchronized (timers) {
+            return timers.stream()
+                    .filter(timer -> timer.remainingTicks > 0)
+                    .map(timer -> String.format("%s%s: §f%s", getTextColor(), timer.name,
+                            timeFormat.value().format(timer.remainingTicks * 50)))
+                    .toList();
+        }
     }
 
     private Pair<Action, JsonObject> decodePacket(PacketByteBuf packetByteBuf) {

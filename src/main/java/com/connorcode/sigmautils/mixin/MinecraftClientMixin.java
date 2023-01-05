@@ -119,11 +119,11 @@ public abstract class MinecraftClientMixin {
     }
 
     // For inventory_move
-    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
-    boolean passScreenEvents(Screen instance) {
-//        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
-        return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
-    }
+//    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
+//    boolean passScreenEvents(Screen instance) {
+////        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
+//        return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
+//    }
 
     // For no_pause
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))

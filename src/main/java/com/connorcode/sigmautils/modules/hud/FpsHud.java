@@ -15,6 +15,6 @@ public class FpsHud extends HudModule {
 
     public String line() {
         return String.format("§r%sFps: §f%d", this.getTextColor(),
-                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+                MinecraftClientAccessor.getCurrentFps());
     }
 }

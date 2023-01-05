@@ -11,5 +11,7 @@ public interface MinecraftClientAccessor {
     RenderTickCounter getRenderTickCounter();
 
     @Accessor
-    int getCurrentFps();
+    static int getCurrentFps() {
+        throw new RuntimeException();
+    }
 }
