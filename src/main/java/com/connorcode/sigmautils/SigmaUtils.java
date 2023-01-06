@@ -13,6 +13,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.util.JsonHelper;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,13 +24,13 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
     public static final String VERSION = "0.1*";
+    public static final Logger logger = LogUtils.getLogger();
     public static final HashMap<Class<?>, Module> modules = new HashMap<>();
     public static final List<Command> commands = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
-        LogUtils.getLogger()
-                .info("Starting Sigma Utils v" + VERSION);
+        logger.info("Starting Sigma Utils v" + VERSION);
         // Load modules
         JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules.json"));
         String modulePackageName = moduleJsonObject.get("package")

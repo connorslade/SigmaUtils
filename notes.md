@@ -10,6 +10,7 @@
 - Memory usage / cpu usage hud (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
 - Capslock sprint lock module
 - Alt hotbar switch module
+- Seen players list
 
 ## To Finish
 - Inventory Move

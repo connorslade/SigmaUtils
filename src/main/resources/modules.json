@@ -72,6 +72,7 @@
     "rendering.ShowInvisibleEntities",
     "rendering.Zoom",
     "server.AutoVoidTrade",
-    "server.BadlionTimers"
+    "server.BadlionTimers",
+    "server.PlayerHistory"
   ]
 }
