@@ -4,7 +4,6 @@ import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
-import net.minecraft.client.MinecraftClient;
 
 public class FpsHud extends HudModule {
     public FpsHud() {

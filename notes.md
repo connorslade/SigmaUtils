@@ -1,7 +1,7 @@
 ## Ideas
 - Christmas Chest module - Allows you to render Christmas chests ALWAYS or NEVER
 - Fix No Dark Sky
-- Timers module
+- Timers module / maybe genaralize to nametags or titles module
 - Map Section Render
 - Deadmau ear config
 - Fullbright no error messages
@@ -10,7 +10,7 @@
 - Memory usage / cpu usage hud (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
 - Capslock sprint lock module
 - Alt hotbar switch module
-- Seen players list
+- Look into if the ClientShutdown hook runs on game crashes
 
 ## To Finish
 - Inventory Move

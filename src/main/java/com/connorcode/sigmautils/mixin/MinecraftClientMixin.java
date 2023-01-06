@@ -4,7 +4,6 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
-import com.connorcode.sigmautils.modules._interface.InventoryMove;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
 import com.connorcode.sigmautils.modules.misc.WindowTitle;

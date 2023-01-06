@@ -163,7 +163,7 @@ public class PlayerHistory extends Module {
                 @Override
                 public void render(RenderData data, int x, int y) {
                     MinecraftClient.getInstance().textRenderer.draw(data.matrices(),
-                            "§fTotal Seen Players: " + totalSeen, x, y + getPadding(), 0xFFFFFF);
+                            "§fTotal Seen Players: " + totalSeen, x, y + getPadding(), 0);
                 }
             }.category("Info").build();
 
@@ -186,7 +186,7 @@ public class PlayerHistory extends Module {
                 public void render(RenderData data, int x, int y) {
                     if (MinecraftClient.getInstance().getCurrentServerEntry() == null) return;
                     MinecraftClient.getInstance().textRenderer.draw(data.matrices(),
-                            "§fSeen on Current Server: " + thisServer, x, y + getPadding(), 0xFFFFFF);
+                            "§fSeen on Current Server: " + thisServer, x, y + getPadding(), 0);
                 }
             }.category("Info").build();
         }
