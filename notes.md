@@ -11,6 +11,7 @@
 - Capslock sprint lock module
 - Alt hotbar switch module
 - Look into if the ClientShutdown hook runs on game crashes
+- No Texture Rotations / Modify texture rotations
 
 ## To Finish
 - Inventory Move

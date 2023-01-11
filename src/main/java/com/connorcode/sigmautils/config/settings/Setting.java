@@ -25,26 +25,28 @@ public abstract class Setting<T extends Setting<T>> {
         this.name = name;
     }
 
+    protected abstract T getThis();
+
     public T build() {
         Config.moduleSettings.putIfAbsent((Class<Module>) this.module, new ArrayList<>());
         Config.moduleSettings.get(this.module)
                 .add(this);
-        return (T) this;
+        return getThis();
     }
 
     public T id(String id) {
         this.id = id;
-        return (T) this;
+        return getThis();
     }
 
     public T category(String category) {
         this.category = category;
-        return (T) this;
+        return getThis();
     }
 
     public T description(String description) {
         this.description = description;
-        return (T) this;
+        return getThis();
     }
 
     public String getName() {

@@ -13,6 +13,11 @@ public class DummySetting extends Setting<DummySetting> {
     }
 
     @Override
+    protected DummySetting getThis() {
+        return this;
+    }
+
+    @Override
     public void serialize(NbtCompound nbt) {
 
     }

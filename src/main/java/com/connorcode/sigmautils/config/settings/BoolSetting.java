@@ -24,6 +24,11 @@ public class BoolSetting extends Setting<BoolSetting> {
         super(module, name);
     }
 
+    @Override
+    protected BoolSetting getThis() {
+        return this;
+    }
+
     public BoolSetting build() {
         ClientCommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess) -> {

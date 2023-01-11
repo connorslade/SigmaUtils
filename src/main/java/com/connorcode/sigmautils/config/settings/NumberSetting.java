@@ -30,6 +30,11 @@ public class NumberSetting extends Setting<NumberSetting> {
         this.id = Util.toSnakeCase(name);
     }
 
+    @Override
+    protected NumberSetting getThis() {
+        return this;
+    }
+
     public NumberSetting build() {
         if (this.min > this.max) throw new RuntimeException("Min cannot be greater than max");
 

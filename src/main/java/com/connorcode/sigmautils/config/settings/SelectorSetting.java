@@ -41,6 +41,11 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         return this.value;
     }
 
+    @Override
+    protected SelectorSetting getThis() {
+        return this;
+    }
+
     public SelectorSetting build() {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             String moduleId = SigmaUtils.modules.get(this.module).id;

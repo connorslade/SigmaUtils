@@ -40,6 +40,11 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
         return this;
     }
 
+    @Override
+    protected EnumSetting<K> getThis() {
+        return this;
+    }
+
     public EnumSetting<K> build() {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             String moduleId = SigmaUtils.modules.get(this.module).id;

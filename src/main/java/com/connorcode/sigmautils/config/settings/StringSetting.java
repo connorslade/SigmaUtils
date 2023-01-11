@@ -25,6 +25,11 @@ public class StringSetting extends Setting<StringSetting> {
         super(module, name);
     }
 
+    @Override
+    protected StringSetting getThis() {
+        return this;
+    }
+
     public StringSetting build() {
         ClientCommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess) -> {

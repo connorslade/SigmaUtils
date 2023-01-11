@@ -26,6 +26,11 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     }
 
     @Override
+    protected KeyBindSetting getThis() {
+        return this;
+    }
+
+    @Override
     public KeyBindSetting build() {
         Config.moduleKeybinds.add(this);
         return super.build();
