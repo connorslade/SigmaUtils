@@ -12,9 +12,8 @@ public interface PacketSendCallback {
 
     void handle(PacketSendEvent event);
 
-    class PacketSendEvent {
+    class PacketSendEvent extends EventData {
         public Packet<?> packet;
-        public boolean cancel = false;
 
         public PacketSendEvent(Packet<?> packet) {
             this.packet = packet;
@@ -22,10 +21,6 @@ public interface PacketSendCallback {
 
         public Packet<?> get() {
             return packet;
-        }
-
-        public void cancel() {
-            cancel = true;
         }
     }
 }

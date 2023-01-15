@@ -1,15 +1,20 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import com.connorcode.sigmautils.modules.rendering.NoDarkSky;
 import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.world.HeightLimitView;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,5 +58,19 @@ public class WorldRendererMixin {
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
     void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
         if (Config.getEnabled(NoWorldBorder.class)) ci.cancel();
+    }
+
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+        WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
+        WorldRender.PreWorldRenderCallback.EVENT.invoker().handle(event);
+        if (event.isCancelled()) ci.cancel();
+    }
+
+    @Inject(method = "render", at = @At("RETURN"), cancellable = true)
+    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+        WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
+        WorldRender.PostWorldRenderCallback.EVENT.invoker().handle(event);
+        if (event.isCancelled()) ci.cancel();
     }
 }

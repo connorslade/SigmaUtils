@@ -13,10 +13,9 @@ public interface UnknownPacketCallback {
 
     void handle(UnknownPacketEvent unknownPacket);
 
-    class UnknownPacketEvent {
+    class UnknownPacketEvent extends EventData {
         public CustomPayloadS2CPacket packet;
         public Identifier identifier;
-        public boolean cancel = false;
 
         public UnknownPacketEvent(CustomPayloadS2CPacket packet) {
             this.packet = packet;
@@ -29,10 +28,6 @@ public interface UnknownPacketCallback {
 
         public Identifier getIdentifier() {
             return identifier;
-        }
-
-        public void cancel() {
-            cancel = true;
         }
     }
 }

@@ -12,6 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 
@@ -24,6 +25,7 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
     public static final String VERSION = "0.1.2 alpha";
+    public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger logger = LogUtils.getLogger();
     public static final HashMap<Class<?>, Module> modules = new HashMap<>();
     public static final List<Command> commands = new ArrayList<>();

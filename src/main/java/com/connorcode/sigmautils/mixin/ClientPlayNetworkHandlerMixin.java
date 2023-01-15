@@ -14,6 +14,6 @@ public class ClientPlayNetworkHandlerMixin {
     void onCustomPayload(CustomPayloadS2CPacket packet, CallbackInfo ci) {
         UnknownPacketCallback.UnknownPacketEvent event = new UnknownPacketCallback.UnknownPacketEvent(packet);
         UnknownPacketCallback.EVENT.invoker().handle(event);
-        if (event.cancel) ci.cancel();
+        if (event.isCancelled()) ci.cancel();
     }
 }

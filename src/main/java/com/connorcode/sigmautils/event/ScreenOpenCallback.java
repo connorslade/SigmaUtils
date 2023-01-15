@@ -12,9 +12,8 @@ public interface ScreenOpenCallback {
 
     void handle(ScreenOpenEvent screen);
 
-    class ScreenOpenEvent {
+    class ScreenOpenEvent extends EventData {
         public Screen screen;
-        public boolean cancel = false;
 
         public ScreenOpenEvent(Screen screen) {
             this.screen = screen;
@@ -22,10 +21,6 @@ public interface ScreenOpenCallback {
 
         public Screen get() {
             return screen;
-        }
-
-        public void cancel() {
-            cancel = true;
         }
     }
 }

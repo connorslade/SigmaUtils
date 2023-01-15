@@ -78,7 +78,7 @@ public abstract class MinecraftClientMixin {
     void onSetScreen(Screen screen, CallbackInfo ci) {
         ScreenOpenCallback.ScreenOpenEvent event = new ScreenOpenCallback.ScreenOpenEvent(screen);
         ScreenOpenCallback.EVENT.invoker().handle(event);
-        if (event.cancel) ci.cancel();
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)

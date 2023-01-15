@@ -71,6 +71,7 @@
     "rendering.NoWorldBorder",
     "rendering.ShowInvisibleEntities",
     "rendering.Zoom",
+    "rendering.Titles",
     "server.AutoVoidTrade",
     "server.BadlionTimers",
     "server.PlayerHistory"
