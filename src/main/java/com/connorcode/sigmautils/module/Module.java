@@ -5,7 +5,6 @@ import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.modules.meta.Notifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -37,13 +36,14 @@ public abstract class Module {
     }
 
     public void loadConfig(NbtCompound config) {
-        enabled = Util.loadEnabled(config);
+        enabled = config.getBoolean("enabled");
         Config.moduleSettings.getOrDefault(getClass(), List.of())
                 .forEach(setting -> setting.deserialize(config));
     }
 
     public NbtCompound saveConfig() {
-        NbtCompound nbt = Util.saveEnabled(enabled);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putBoolean("enabled", enabled);
         Config.moduleSettings.getOrDefault(getClass(), List.of())
                 .forEach(setting -> setting.serialize(nbt));
         return nbt;

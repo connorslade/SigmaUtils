@@ -11,10 +11,16 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.TntEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
+
+import java.util.ArrayList;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
@@ -60,6 +66,11 @@ public class Titles extends Module {
                     .description("Shows if an arrow is infinite. (Not able to be picked up)")
                     .category("Titles")
                     .build();
+    public static final BoolSetting tamableOwner =
+            new BoolSetting(Titles.class, "Tamable Owner").displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .description("Shows the owner of a tamable entity")
+                    .category("Titles")
+                    .build();
 
     public Titles() {
         super("titles", "Titles", "Adds in-game titles to different *things*", Category.Rendering);
@@ -98,6 +109,18 @@ public class Titles extends Module {
                             (arrow.pickupType == PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY) ? " ∞" : "";
 
                     WorldRenderUtils.renderText(Text.of(text), e.getPos().add(0, yOffset.value(), 0), scale.value());
+                }
+
+                if (tamableOwner.value() && (e instanceof TameableEntity || e instanceof AbstractHorseEntity)) {
+                    var owner = (e instanceof TameableEntity tamable) ? tamable.getOwnerUuid() : ((AbstractHorseEntity) e).getOwnerUuid();
+                    if (owner != null) {
+                        var lines = new ArrayList<Text>();
+                        var name = e.getCustomName();
+                        if (name != null) lines.add(name);
+                        lines.add(Text.of(textColor.value().code + "Owner: " +
+                                Util.uuidToName(owner).orElse(owner.toString())));
+                        WorldRenderUtils.renderLines(lines,  e.getPos().add(0, 1.5 + yOffset.value(), 0), scale.value());
+                    }
                 }
             }
         });

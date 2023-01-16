@@ -42,8 +42,8 @@ public class WorldRenderUtils {
         return matrixStack;
     }
 
-    void renderLines(List<Text> lines, Vec3d pos, double scale) {
-        for (int i = 0; i < lines.size(); i++) {
+    public static void renderLines(List<Text> lines, Vec3d pos, double scale) {
+        for (int i = lines.size() - 1; i > 0; i--) {
             var line = lines.get(i);
             renderText(line, pos.add(0, i * 0.25 * scale, 0), scale);
         }

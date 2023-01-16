@@ -42,10 +42,12 @@ public class AsyncRunner {
     public interface Task {
         String getName();
 
-        boolean running();
+        default boolean running() {
+            return true;
+        }
 
         void start(UUID uuid);
 
-        void stop();
+        default void stop() {}
     }
 }
