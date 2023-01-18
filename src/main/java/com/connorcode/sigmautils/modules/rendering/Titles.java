@@ -135,7 +135,7 @@ public class Titles extends Module {
             final var units = new Pair[]{
                     new Pair<>("s", 60),
                     new Pair<>("m", 60),
-                    new Pair<>("h", 24)
+                    new Pair<>("h", 0)
             };
 
             return switch (this) {

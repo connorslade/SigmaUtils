@@ -70,10 +70,11 @@
     "rendering.NoParticles",
     "rendering.NoWorldBorder",
     "rendering.ShowInvisibleEntities",
-    "rendering.Zoom",
     "rendering.Titles",
+    "rendering.Zoom",
     "server.AutoVoidTrade",
     "server.BadlionTimers",
-    "server.PlayerHistory"
+    "server.PlayerHistory",
+    "server.VictoryMute"
   ]
 }
