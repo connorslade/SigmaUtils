@@ -18,19 +18,21 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class VictoryMute extends Module {
+    public static final NumberSetting reduction =
+            new NumberSetting(VictoryMute.class, "Reduction", 0, 1).description(
+                            "Reduction in volume when muted (Percentage)")
+                    .enforceBounds(true)
+                    .value(1)
+                    .build();
     public static boolean muted = false;
     final StringSetting victoryRegex =
             new StringSetting(VictoryMute.class, "Victory Regex").description("Regex to match victory messages")
                     .value(".*VICTORY!")
                     .build();
-    public static final NumberSetting reduction =
-            new NumberSetting(VictoryMute.class, "Reduction", 0, 1).description("Reduction in volume when muted (Percentage)")
-                    .enforceBounds(true)
-                    .value(1)
-                    .build();
 
     public VictoryMute() {
-        super("victory_mute", "Victory Mute", "Automatically mute the game when you finish a game of bedwars on hypixel",
+        super("victory_mute", "Victory Mute",
+                "Automatically mute the game when you finish a game of bedwars on hypixel",
                 Category.Server);
     }
 
@@ -46,7 +48,7 @@ public class VictoryMute extends Module {
             @Override
             public void render(RenderData data, int x, int y) {
                 if (!muted || !enabled) return;
-                client.textRenderer.draw(data.matrices(), TextStyle.Color.LightPurple.code + "Muted", x,
+                client.textRenderer.draw(data.matrices(), TextStyle.Color.LightPurple.code + "Currently Muted", x,
                         y + getPadding(), 0);
             }
         }.build();

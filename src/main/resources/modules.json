@@ -76,6 +76,7 @@
     "server.AutoVoidTrade",
     "server.BadlionTimers",
     "server.PlayerHistory",
-    "server.VictoryMute"
+    "server.VictoryMute",
+    "server.ItemShortcuts"
   ]
 }

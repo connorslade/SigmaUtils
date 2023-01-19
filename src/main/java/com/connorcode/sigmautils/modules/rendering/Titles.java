@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class Titles extends Module {
+    public static final BoolSetting tamableOwner =
+            new BoolSetting(Titles.class, "Tamable Owner").displayType(BoolSetting.DisplayType.CHECKBOX)
+                    .description("Shows the owner of a tamable entity")
+                    .category("Titles")
+                    .build();
     private static final NumberSetting scale = new NumberSetting(Titles.class, "Scale", 0.5, 5).value(2).build();
     private static final NumberSetting yOffset = new NumberSetting(Titles.class, "Y Offset", 0, 3).value(0.25)
             .description("Number of blocks to offset the text from the entity")
@@ -39,7 +44,6 @@ public class Titles extends Module {
     private static final EnumSetting<TextStyle.Color> textColor =
             new EnumSetting<>(Titles.class, "Text Color", TextStyle.Color.class).description(
                     "The color of the text. (who would have thought)").value(TextStyle.Color.White).build();
-
     // == Titles ==
     private static final BoolSetting tntCountdown =
             new BoolSetting(Titles.class, "TNT Countdown").displayType(BoolSetting.DisplayType.CHECKBOX)
@@ -64,11 +68,6 @@ public class Titles extends Module {
     private static final BoolSetting arrowInfinity =
             new BoolSetting(Titles.class, "Arrow Infinity").displayType(BoolSetting.DisplayType.CHECKBOX)
                     .description("Shows if an arrow is infinite. (Not able to be picked up)")
-                    .category("Titles")
-                    .build();
-    public static final BoolSetting tamableOwner =
-            new BoolSetting(Titles.class, "Tamable Owner").displayType(BoolSetting.DisplayType.CHECKBOX)
-                    .description("Shows the owner of a tamable entity")
                     .category("Titles")
                     .build();
 
@@ -112,14 +111,15 @@ public class Titles extends Module {
                 }
 
                 if (tamableOwner.value() && (e instanceof TameableEntity || e instanceof AbstractHorseEntity)) {
-                    var owner = (e instanceof TameableEntity tamable) ? tamable.getOwnerUuid() : ((AbstractHorseEntity) e).getOwnerUuid();
+                    var owner =
+                            (e instanceof TameableEntity tamable) ? tamable.getOwnerUuid() : ((AbstractHorseEntity) e).getOwnerUuid();
                     if (owner != null) {
                         var lines = new ArrayList<Text>();
                         var name = e.getCustomName();
                         if (name != null) lines.add(name);
                         lines.add(Text.of(textColor.value().code + "Owner: " +
                                 Util.uuidToName(owner).orElse(owner.toString())));
-                        WorldRenderUtils.renderLines(lines,  e.getPos().add(0, 1.5 + yOffset.value(), 0), scale.value());
+                        WorldRenderUtils.renderLines(lines, e.getPos().add(0, 1.5 + yOffset.value(), 0), scale.value());
                     }
                 }
             }

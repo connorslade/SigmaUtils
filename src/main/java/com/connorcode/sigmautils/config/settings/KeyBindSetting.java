@@ -1,6 +1,5 @@
 package com.connorcode.sigmautils.config.settings;
 
-import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.module.Module;
@@ -13,13 +12,14 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static net.minecraft.client.util.InputUtil.*;
 
 public class KeyBindSetting extends Setting<KeyBindSetting> {
     InputUtil.Key key;
     boolean shift, ctrl, alt, strict;
-    boolean editing;
-    boolean pressed;
+    boolean editing, pressed, showTitle;
 
     public <T extends Module> KeyBindSetting(Class<T> module, String name) {
         super(module, name);
@@ -30,10 +30,9 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
         return this;
     }
 
-    @Override
-    public KeyBindSetting build() {
-        Config.moduleKeybinds.add(this);
-        return super.build();
+    public KeyBindSetting showTitle(boolean showTitle) {
+        this.showTitle = showTitle;
+        return this;
     }
 
     private boolean nonStrict() {
@@ -76,12 +75,12 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
         if (this.shift) keybind.putBoolean("shift", true);
         if (this.ctrl) keybind.putBoolean("ctrl", true);
         if (this.alt) keybind.putBoolean("alt", true);
-        nbt.put("keybind", keybind);
+        nbt.put(this.id, keybind);
     }
 
     @Override
     public void deserialize(NbtCompound nbt) {
-        if (!nbt.contains("keybind")) return;
+        if (!nbt.contains(this.id)) return;
         NbtCompound keybind = nbt.getCompound("keybind");
         this.key = InputUtil.fromKeyCode(keybind.getInt("key"), 0);
         this.strict = keybind.getBoolean("strict");
@@ -92,28 +91,31 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addDrawable(screen, new Components.MultiClickButton(x, y, width, 20, this.getBind(), (button) -> {
-            if (button.click == 1 && key != null) KeyBindSetting.this.strict ^= true;
-            else editing = true;
-        },
-                (((button, matrices, mouseX, mouseY) -> {
+        var padding =  getPadding();
+        Util.addDrawable(screen,
+                new Components.MultiClickButton(x, y + (showTitle ? padding + client.textRenderer.fontHeight : 0), width, 20, this.getBind(),
+                        (button) -> {
+                            if (button.click == 1 && key != null) KeyBindSetting.this.strict ^= true;
+                            else editing = true;
+                        }, (((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
                     screen.renderOrderedTooltip(matrices,
                             MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
                             mouseY);
                 }))) {
-            @Override
-            public Text getMessage() {
-                if (KeyBindSetting.this.editing) return Text.of("...");
-                return KeyBindSetting.this.getBind();
-            }
-        });
-        return 20;
+                    @Override
+                    public Text getMessage() {
+                        if (KeyBindSetting.this.editing) return Text.of("...");
+                        return KeyBindSetting.this.getBind();
+                    }
+                });
+        return 20 + (showTitle ? 2 * padding + client.textRenderer.fontHeight : 0);
     }
 
     @Override
     public void render(RenderData data, int x, int y) {
-
+        if (!showTitle) return;
+        client.textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x, y, 0);
     }
 
     @Override

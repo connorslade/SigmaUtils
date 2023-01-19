@@ -38,7 +38,4 @@ public interface ScreenAccessor {
 
     @Invoker
     void invokeRenderOrderedTooltip(MatrixStack matrices, List<OrderedText> sigma_utils, int mouseX, int mouseY);
-
-    @Invoker
-    <T extends Element & Drawable & Selectable> T invokeAddDrawableChild(T drawableElement);
 }
