@@ -16,6 +16,7 @@
     "_interface.SeeThruLoading",
     "_interface.SignClickThrough",
     "_interface.SplashRefresh",
+    "_interface.UiTweaks",
     "chat.ChatMessageDing",
     "chat.EggChat",
     "chat.NoChatNormalization",

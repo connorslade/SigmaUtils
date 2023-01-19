@@ -36,6 +36,7 @@
     "MapTextureAccessor",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
+    "OptionsScreenMixin",
     "ParticleManagerMixin",
     "PerspectiveMixin",
     "ProfileKeysMixin",

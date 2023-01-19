@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.modules._interface.UiTweaks;
 import com.connorcode.sigmautils.modules.server.VictoryMute;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.sound.SoundCategory;
@@ -13,5 +14,6 @@ public class GameOptionsMixin {
     @Inject(method = "getSoundVolume", at = @At("HEAD"), cancellable = true)
     void onGetSoundVolume(SoundCategory category, CallbackInfoReturnable<Float> cir) {
         if (VictoryMute.muted) cir.setReturnValue((float) (cir.getReturnValueF() * (1f - VictoryMute.reduction.value())));
+        if (UiTweaks.isMuted()) cir.setReturnValue(0f);
     }
 }
