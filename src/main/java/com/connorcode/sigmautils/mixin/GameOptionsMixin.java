@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class GameOptionsMixin {
     @Inject(method = "getSoundVolume", at = @At("HEAD"), cancellable = true)
     void onGetSoundVolume(SoundCategory category, CallbackInfoReturnable<Float> cir) {
-        if (VictoryMute.muted) cir.setReturnValue(0f);
+        if (VictoryMute.muted) cir.setReturnValue((float) (cir.getReturnValueF() * (1f - VictoryMute.reduction.value())));
     }
 }
