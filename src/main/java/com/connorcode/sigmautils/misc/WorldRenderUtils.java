@@ -11,7 +11,7 @@ import java.util.List;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class WorldRenderUtils {
-    public static void renderText(Text text, Vec3d pos, double scale) {
+    public static void renderText(Text text, Vec3d pos, double scale, boolean shadow) {
         var camera = client.gameRenderer.getCamera();
         var matrixStack = getMatrices(pos);
 
@@ -23,7 +23,7 @@ public class WorldRenderUtils {
         matrixStack.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
 
         var immediate = client.getBufferBuilders().getEntityVertexConsumers();
-        client.textRenderer.draw(text, client.textRenderer.getWidth(text) / -2f, 0f, -1, false,
+        client.textRenderer.draw(text, client.textRenderer.getWidth(text) / -2f, 0f, -1, shadow,
                 matrixStack.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
         immediate.draw();
 
@@ -42,10 +42,10 @@ public class WorldRenderUtils {
         return matrixStack;
     }
 
-    public static void renderLines(List<Text> lines, Vec3d pos, double scale) {
+    public static void renderLines(List<Text> lines, Vec3d pos, double scale, boolean shadow) {
         for (int i = lines.size() - 1; i > 0; i--) {
             var line = lines.get(i);
-            renderText(line, pos.add(0, i * 0.25 * scale, 0), scale);
+            renderText(line, pos.add(0, i * 0.25 * scale, 0), scale, shadow);
         }
     }
 }

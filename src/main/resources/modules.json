@@ -75,8 +75,8 @@
     "rendering.Zoom",
     "server.AutoVoidTrade",
     "server.BadlionTimers",
+    "server.ItemShortcuts",
     "server.PlayerHistory",
-    "server.VictoryMute",
-    "server.ItemShortcuts"
+    "server.VictoryMute"
   ]
 }

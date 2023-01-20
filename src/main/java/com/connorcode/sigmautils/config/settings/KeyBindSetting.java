@@ -81,7 +81,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     @Override
     public void deserialize(NbtCompound nbt) {
         if (!nbt.contains(this.id)) return;
-        NbtCompound keybind = nbt.getCompound("keybind");
+        NbtCompound keybind = nbt.getCompound(this.id);
         this.key = InputUtil.fromKeyCode(keybind.getInt("key"), 0);
         this.strict = keybind.getBoolean("strict");
         this.shift = keybind.getBoolean("shift");
@@ -91,9 +91,10 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        var padding =  getPadding();
+        var padding = getPadding();
         Util.addDrawable(screen,
-                new Components.MultiClickButton(x, y + (showTitle ? padding + client.textRenderer.fontHeight : 0), width, 20, this.getBind(),
+                new Components.MultiClickButton(x, y + (showTitle ? padding + client.textRenderer.fontHeight : 0),
+                        width, 20, this.getBind(),
                         (button) -> {
                             if (button.click == 1 && key != null) KeyBindSetting.this.strict ^= true;
                             else editing = true;

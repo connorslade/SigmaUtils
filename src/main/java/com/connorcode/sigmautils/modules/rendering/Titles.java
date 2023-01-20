@@ -9,20 +9,23 @@ import com.connorcode.sigmautils.misc.Util;
 import com.connorcode.sigmautils.misc.WorldRenderUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
+import static com.connorcode.sigmautils.misc.EntityUtils.entityPos;
 
 public class Titles extends Module {
     public static final BoolSetting tamableOwner =
@@ -44,6 +47,10 @@ public class Titles extends Module {
     private static final EnumSetting<TextStyle.Color> textColor =
             new EnumSetting<>(Titles.class, "Text Color", TextStyle.Color.class).description(
                     "The color of the text. (who would have thought)").value(TextStyle.Color.White).build();
+    private static final BoolSetting textShadow =
+            new BoolSetting(Titles.class, "Text Shadow").description("Whether or not to show a shadow under the text")
+                    .value(true)
+                    .build();
     // == Titles ==
     private static final BoolSetting tntCountdown =
             new BoolSetting(Titles.class, "TNT Countdown").displayType(BoolSetting.DisplayType.CHECKBOX)
@@ -58,6 +65,11 @@ public class Titles extends Module {
     private static final BoolSetting itemStackCount =
             new BoolSetting(Titles.class, "Item Stack Count").displayType(BoolSetting.DisplayType.CHECKBOX)
                     .description("Shows the number of items in a stack")
+                    .category("Titles")
+                    .build();
+    private static final NumberSetting itemStackMergeRange =
+            new NumberSetting(Titles.class, "Item Merge Range", 0, 10).value(5)
+                    .description("The maximum distance between two items to merge their stacks")
                     .category("Titles")
                     .build();
     private static final BoolSetting arrowDespawn =
@@ -80,22 +92,22 @@ public class Titles extends Module {
         super.init();
 
         WorldRender.PostWorldRenderCallback.EVENT.register(event -> {
+            var itemTitles = new ArrayList<ItemTitleData>();
             assert client.world != null;
+
             for (var e : client.world.getEntities()) {
                 if (tntCountdown.value() && e instanceof TntEntity tnt) {
                     var fuze = tnt.getFuse();
                     var text = Text.of(textColor.value().code + timeFormat.value().format(fuze));
-                    WorldRenderUtils.renderText(text, e.getPos().add(0, .5 + yOffset.value(), 0), scale.value());
+                    renderText(text, tnt, event, .5);
                 }
 
                 if ((itemCountdown.value() || itemStackCount.value()) && e instanceof ItemEntity item) {
-                    var toDespawn = Math.max(6000 - item.getItemAge(), 0);
-                    var count = item.getStack().getCount();
-
-                    String text = textColor.value().code;
-                    if (itemCountdown.value()) text += timeFormat.value().format(toDespawn);
-                    if (itemStackCount.value()) text += " ×" + count;
-                    WorldRenderUtils.renderText(Text.of(text), e.getPos().add(0, yOffset.value(), 0), scale.value());
+                    var data = new ItemTitleData(item);
+                    itemTitles.stream()
+                            .filter(d -> d.stackable(data))
+                            .findFirst()
+                            .ifPresentOrElse(d -> d.merge(data), () -> itemTitles.add(data));
                 }
 
                 if ((arrowDespawn.value() || arrowInfinity.value()) && e instanceof ArrowEntity arrow) {
@@ -107,7 +119,7 @@ public class Titles extends Module {
                     if (arrowInfinity.value()) text +=
                             (arrow.pickupType == PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY) ? " ∞" : "";
 
-                    WorldRenderUtils.renderText(Text.of(text), e.getPos().add(0, yOffset.value(), 0), scale.value());
+                    renderText(Text.of(text), arrow, event, 0);
                 }
 
                 if (tamableOwner.value() && (e instanceof TameableEntity || e instanceof AbstractHorseEntity)) {
@@ -119,11 +131,28 @@ public class Titles extends Module {
                         if (name != null) lines.add(name);
                         lines.add(Text.of(textColor.value().code + "Owner: " +
                                 Util.uuidToName(owner).orElse(owner.toString())));
-                        WorldRenderUtils.renderLines(lines, e.getPos().add(0, 1.5 + yOffset.value(), 0), scale.value());
+                        WorldRenderUtils.renderLines(lines,
+                                entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(),
+                                textShadow.value());
                     }
                 }
             }
+
+            for (var i : itemTitles) {
+                var text = textColor.value().code;
+                if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
+                if (itemStackCount.value()) text += " ×" + i.count;
+
+                WorldRenderUtils.renderText(Text.of(text),
+                        entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(),
+                        textShadow.value());
+            }
         });
+    }
+
+    void renderText(Text text, Entity pos, WorldRender.WorldRenderEvent event, double offset) {
+        WorldRenderUtils.renderText(text, entityPos(pos, event.tickDelta).add(0, offset + yOffset.value(), 0),
+                scale.value(), textShadow.value());
     }
 
     public enum TimeFormat {
@@ -143,6 +172,35 @@ public class Titles extends Module {
                 case Seconds -> String.format("%.1fs", ticks / 20f);
                 case Ticks -> String.format("%d", ticks);
             };
+        }
+    }
+
+    static class ItemTitleData {
+        Item item;
+        Vec3d pos;
+        Vec3d lastPos;
+        int count;
+        int age;
+
+        ItemTitleData(ItemEntity item) {
+            this.item = item.getStack().getItem();
+            this.pos = item.getPos();
+            this.lastPos = new Vec3d(item.lastRenderX, item.lastRenderY, item.lastRenderZ);
+            this.count = item.getStack().getCount();
+            this.age = item.getItemAge();
+        }
+
+        boolean stackable(ItemTitleData other) {
+            return item.equals(other.item) && pos.distanceTo(other.pos) < itemStackMergeRange.value();
+        }
+
+        void merge(ItemTitleData other) {
+            count += other.count;
+            age = Math.max(age, other.age);
+        }
+
+        int toDespawn() {
+            return Math.max(6000 - age, 0);
         }
     }
 }

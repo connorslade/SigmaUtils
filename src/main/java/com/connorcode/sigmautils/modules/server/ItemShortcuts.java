@@ -65,7 +65,8 @@ public class ItemShortcuts extends Module {
     }
 
     private void switchTo(Item[] items) {
-        var inventory = Objects.requireNonNull(client.player).getInventory();
+        if (client.player == null) return;
+        var inventory = client.player.getInventory();
         findItem(i -> Arrays.stream(items).anyMatch(s -> s.equals(i.getItem()))).ifPresent(
                 integer -> inventory.selectedSlot = integer);
     }
