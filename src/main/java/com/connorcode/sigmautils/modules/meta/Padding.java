@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;

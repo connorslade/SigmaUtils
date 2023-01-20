@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.misc;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;

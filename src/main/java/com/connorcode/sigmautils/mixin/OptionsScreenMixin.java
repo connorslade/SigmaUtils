@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules._interface.UiTweaks;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;

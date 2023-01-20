@@ -16,7 +16,7 @@ public class OpenFolder extends Module {
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
-        com.connorcode.sigmautils.misc.Util.addDrawable(screen, new Components.MultiClickButton(x, y, 150, 20,
+        com.connorcode.sigmautils.misc.util.Util.addDrawable(screen, new Components.MultiClickButton(x, y, 150, 20,
                 Text.of(name), button -> enable(MinecraftClient.getInstance()),
                 ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
                         .wrapLines(Text.of(description), 200), mouseX, mouseY))));

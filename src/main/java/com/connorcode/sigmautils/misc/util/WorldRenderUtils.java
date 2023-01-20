@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.misc;
+package com.connorcode.sigmautils.misc.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;

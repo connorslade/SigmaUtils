@@ -1,6 +1,7 @@
-package com.connorcode.sigmautils.misc;
+package com.connorcode.sigmautils.misc.util;
 
 import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.misc.AsyncRunner;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.Drawable;

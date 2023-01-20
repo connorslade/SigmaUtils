@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.config.settings;
 
 import com.connorcode.sigmautils.SigmaUtils;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;

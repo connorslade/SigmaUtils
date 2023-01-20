@@ -2,7 +2,7 @@ package com.connorcode.sigmautils;
 
 import com.connorcode.sigmautils.commands.Command;
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Notifications;
 import com.google.gson.JsonObject;

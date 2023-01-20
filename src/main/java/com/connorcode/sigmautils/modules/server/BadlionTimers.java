@@ -3,7 +3,7 @@ package com.connorcode.sigmautils.modules.server;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.event.UnknownPacketCallback;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.google.gson.JsonObject;

@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ConfigGui;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules._interface.EscapeExit;
 import com.connorcode.sigmautils.modules._interface.Minceraft;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;

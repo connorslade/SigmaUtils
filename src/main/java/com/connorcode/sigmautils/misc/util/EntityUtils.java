@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.misc;
+package com.connorcode.sigmautils.misc.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;

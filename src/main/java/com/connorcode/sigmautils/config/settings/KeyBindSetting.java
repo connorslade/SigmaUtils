@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.config.settings;
 
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.misc.Util;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;

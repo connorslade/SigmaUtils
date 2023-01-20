@@ -5,8 +5,8 @@ import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.WorldRender;
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.misc.Util;
-import com.connorcode.sigmautils.misc.WorldRenderUtils;
+import com.connorcode.sigmautils.misc.util.Util;
+import com.connorcode.sigmautils.misc.util.WorldRenderUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.entity.Entity;
@@ -19,13 +19,12 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.misc.EntityUtils.entityPos;
+import static com.connorcode.sigmautils.misc.util.EntityUtils.entityPos;
 
 public class Titles extends Module {
     public static final BoolSetting tamableOwner =
