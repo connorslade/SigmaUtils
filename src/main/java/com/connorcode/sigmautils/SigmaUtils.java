@@ -10,12 +10,9 @@ import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 
@@ -36,30 +33,31 @@ public class SigmaUtils implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         logger.info("Starting Sigma Utils v" + VERSION);
+
         // Load modules
         JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules.json"));
-        String modulePackageName = moduleJsonObject.get("package")
-                .getAsString();
-        moduleJsonObject.get("modules")
-                .getAsJsonArray()
-                .forEach(json -> {
-                    Module module = (Module) Util.loadNewClass(modulePackageName + "." + json.getAsString());
-                    modules.put(Objects.requireNonNull(module).getClass(), module);
-                });
+        String modulePackageName = moduleJsonObject.get("package").getAsString();
+        moduleJsonObject.get("modules").getAsJsonArray().forEach(json -> {
+            Module module = (Module) Util.loadNewClass(modulePackageName + "." + json.getAsString());
+            modules.put(Objects.requireNonNull(module).getClass(), module);
+        });
+
         // Load Commands
         JsonObject commandJsonObject = JsonHelper.deserialize(Util.loadResourceString("commands.json"));
-        String commandPackageName = commandJsonObject.get("package")
-                .getAsString();
+        String commandPackageName = commandJsonObject.get("package").getAsString();
         commandJsonObject.get("commands")
                 .getAsJsonArray()
                 .forEach(json -> commands.add(
                         (Command) Util.loadNewClass(commandPackageName + "." + json.getAsString())));
+
         // Init modules
         Config.initKeybindings();
         for (Module i : modules.values()) i.init();
+
         // Init Commands
         ClientCommandRegistrationCallback.EVENT.register(
                 ((dispatcher, registryAccess) -> commands.forEach(c -> c.register(dispatcher))));
+
         // Load config
         ClientLifecycleEvents.CLIENT_STARTED.register((client -> {
             try {
@@ -69,7 +67,5 @@ public class SigmaUtils implements ClientModInitializer {
             }
             Notifications.onStartup();
         }));
-
-        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.BARRIER, RenderLayer.getTranslucent());
     }
 }
