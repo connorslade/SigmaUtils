@@ -97,7 +97,7 @@ public class Titles extends Module {
             for (var e : client.world.getEntities()) {
                 if (tntCountdown.value() && e instanceof TntEntity tnt) {
                     var fuze = tnt.getFuse();
-                    var text = Text.of(textColor.value().code + timeFormat.value().format(fuze));
+                    var text = Text.of(textColor.value().code() + timeFormat.value().format(fuze));
                     renderText(text, tnt, event, .5);
                 }
 
@@ -128,7 +128,7 @@ public class Titles extends Module {
                         var lines = new ArrayList<Text>();
                         var name = e.getCustomName();
                         if (name != null) lines.add(name);
-                        lines.add(Text.of(textColor.value().code + "Owner: " +
+                        lines.add(Text.of(textColor.value().code() + "Owner: " +
                                 Util.uuidToName(owner).orElse(owner.toString())));
                         WorldRenderUtils.renderLines(lines,
                                 entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(),

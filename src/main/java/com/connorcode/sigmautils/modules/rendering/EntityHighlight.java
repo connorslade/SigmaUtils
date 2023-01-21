@@ -155,6 +155,7 @@ public class EntityHighlight extends Module {
                 ((ScreenAccessor) screen).invokeClearAndInit();
             }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                     List.of(Text.of("Add element").asOrderedText()), mouseX, mouseY))));
+            // TODO: ^ Fix tooltips being cut off
             Util.addDrawable(screen,
                     (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, resource.getName(),
                             x + 20 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,

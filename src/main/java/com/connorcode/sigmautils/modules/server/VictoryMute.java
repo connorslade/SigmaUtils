@@ -48,7 +48,7 @@ public class VictoryMute extends Module {
             @Override
             public void render(RenderData data, int x, int y) {
                 if (!muted || !enabled) return;
-                client.textRenderer.draw(data.matrices(), TextStyle.Color.LightPurple.code + "Currently Muted", x,
+                client.textRenderer.draw(data.matrices(), TextStyle.Color.LightPurple.code() + "Currently Muted", x,
                         y + getPadding(), 0);
             }
         }.build();

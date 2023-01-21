@@ -36,7 +36,7 @@ public class ServerHud extends HudModule {
 
         return String.format("§r%sServer: §f%s%s", this.getTextColor(),
                 serverEntry == null ? "Integrated Server" : serverEntry.address,
-                (serverType.value() && client.player != null) ? String.format(" %s[%s]", serverTypeStyle.value().code,
+                (serverType.value() && client.player != null) ? String.format(" %s[%s]", serverTypeStyle.value().code(),
                         client.player.getServerBrand()) : "");
     }
 }

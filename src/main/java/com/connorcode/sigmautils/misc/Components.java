@@ -18,7 +18,6 @@ import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.system.MathUtil;
 
 import java.util.Objects;
 

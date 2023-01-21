@@ -2,7 +2,6 @@ package com.connorcode.sigmautils.config.settings;
 
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -29,7 +28,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
     }
 
     public DynamicListSetting<K> value(K[] resources) {
-        this.resources = List.of(resources);
+        this.resources = new ArrayList<>(List.of(resources));
         return this;
     }
 
@@ -67,12 +66,13 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen, new ButtonWidget(x, y, width, 20, Text.of("Edit " + this.name), button -> {
-            client.setScreen(new ResourceScreen(screen, this.manager));
-        }, ((button, matrices, mouseX, mouseY) -> {
-            if (this.description == null) return;
-            screen.renderOrderedTooltip(matrices, client.textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
-        })));
+        Util.addChild(screen, new ButtonWidget(x, y, width, 20, Text.of("Edit " + this.name),
+                button -> client.setScreen(new ResourceScreen(screen, this.manager)),
+                ((button, matrices, mouseX, mouseY) -> {
+                    if (this.description == null) return;
+                    screen.renderOrderedTooltip(matrices, client.textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            mouseY);
+                })));
 
         return 20;
     }

@@ -56,7 +56,7 @@ public class CoordinatesHud extends HudModule {
         else if (registryKey == NETHER) otherPos = player.getPos()
                 .multiply(8, 1, 8);
         return String.format("§r%sPos: §f%s%s", this.getTextColor(), formatPos(player.getPos()),
-                nether.value() && otherPos != null ? String.format(" %s[%s]", netherStyle.value().code,
+                nether.value() && otherPos != null ? String.format(" %s[%s]", netherStyle.value().code(),
                         formatPos(otherPos)) : "");
     }
 }

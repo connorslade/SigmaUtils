@@ -5,8 +5,6 @@ import net.minecraft.util.Formatting;
 
 import java.util.Objects;
 
-import static com.connorcode.sigmautils.SigmaUtils.client;
-
 public class TextStyle {
     //        Reset("§r"),
     //        Bold("§l"),
