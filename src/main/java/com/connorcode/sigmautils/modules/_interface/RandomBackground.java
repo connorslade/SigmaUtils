@@ -10,11 +10,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+
+import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class RandomBackground extends Module {
-    public static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
+    static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtils.class.getClassLoader().getResourceAsStream("background_blocks.txt")))).lines().toList();
-    public static int assetIndex = -1;
+    static int assetIndex = -1;
+    static int screenHash = -1;
+
 
     public RandomBackground() {
         super("random_background", "Random Background", "Uses random textures for the background tessellation",
@@ -22,8 +27,14 @@ public class RandomBackground extends Module {
     }
 
     public static void setTexture() {
-        if (assetIndex == -1) assetIndex = (int) (Math.random() * validBackgrounds.size());
-        RenderSystem.setShaderTexture(0, Identifier.tryParse(
-                "textures/block/" + RandomBackground.validBackgrounds.get(RandomBackground.assetIndex) + ".png"));
+        int currentScreenHash = Objects.requireNonNull(Objects.requireNonNull(client).currentScreen).hashCode();
+
+        if (screenHash != currentScreenHash || assetIndex < 0) {
+            screenHash = currentScreenHash;
+            assetIndex = new Random().nextInt(RandomBackground.validBackgrounds.size());
+        }
+
+        RenderSystem.setShaderTexture(0,
+                Identifier.tryParse("textures/block/" + RandomBackground.validBackgrounds.get(assetIndex) + ".png"));
     }
 }
