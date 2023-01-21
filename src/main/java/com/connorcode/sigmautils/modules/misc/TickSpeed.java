@@ -43,7 +43,7 @@ public class TickSpeed extends Module {
         Components.addToggleButton(screen, this, x, y, 20, true);
         int padding = getPadding();
 
-        Util.addDrawable(screen, new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
+        Util.addChild(screen, new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
                 MathHelper.clamp(mspt.value() / 100d, 0, 1)) {
             @Override
             protected Text getTooltip() {

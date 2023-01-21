@@ -92,7 +92,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
         var padding = getPadding();
-        Util.addDrawable(screen,
+        Util.addChild(screen,
                 new Components.MultiClickButton(x, y + (showTitle ? padding + client.textRenderer.fontHeight : 0),
                         width, 20, this.getBind(),
                         (button) -> {

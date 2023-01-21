@@ -130,7 +130,7 @@ public class NumberSetting extends Setting<NumberSetting> {
     }
 
     public int initRender(Screen screen, SliderText slider, int x, int y, int width) {
-        Util.addDrawable(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(),
+        Util.addChild(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(),
                 MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
             @Override
             protected Text getTooltip() {

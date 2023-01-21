@@ -92,7 +92,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addDrawable(screen,
+        Util.addChild(screen,
                 new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.value)), (button -> {
                     MinecraftClient.getInstance()
                             .setScreen(new SelectorScreen(screen));
@@ -130,7 +130,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                     new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32,
                             this.height - 32, textRenderer.fontHeight + 8);
             this.addSelectableChild(selectorWidget);
-            Util.addDrawable(this, new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, Text.of("Done"),
+            Util.addChild(this, new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, Text.of("Done"),
                     (button) -> Objects.requireNonNull(this.client)
                             .setScreen(this.parent)));
         }

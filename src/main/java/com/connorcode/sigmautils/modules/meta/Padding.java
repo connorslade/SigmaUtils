@@ -31,7 +31,7 @@ public class Padding extends Module {
         int padding = getPadding();
         ScreenAccessor sa = (ScreenAccessor) screen;
         Components.addToggleButton(screen, this, x, y, 20, true);
-        Util.addDrawable(screen,
+        Util.addChild(screen,
                 new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
                         MathHelper.clamp(padding / 10f, 0, 1)) {
                     @Override

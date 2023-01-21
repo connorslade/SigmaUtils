@@ -112,7 +112,7 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addDrawable(screen,
+        Util.addChild(screen,
                 new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.values[this.index])),
                         (button) -> {
                             this.index = (this.index + (Screen.hasShiftDown() ? this.values.length - 1 : 1)) %

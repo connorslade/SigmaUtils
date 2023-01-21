@@ -41,7 +41,7 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     void init(CallbackInfo ci) {
         ScreenAccessor screen = ((ScreenAccessor) this);
-        Util.addDrawable(this,
+        Util.addChild(this,
                 new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20,
                         Text.of("Σ"), button -> MinecraftClient.getInstance()
                         .setScreen(new ConfigGui()),

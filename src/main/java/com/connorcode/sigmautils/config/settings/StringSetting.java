@@ -104,7 +104,7 @@ public class StringSetting extends Setting<StringSetting> {
             text.ifPresent(s -> StringSetting.this.value = s);
         });
         textField.setText(this.value);
-        Util.addDrawable(screen, textField);
+        Util.addChild(screen, textField);
 
         return 20 + padding + (showName ? client.textRenderer.fontHeight + padding * 4 : 0);
     }

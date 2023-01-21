@@ -43,6 +43,10 @@ public class Util {
 
     // == Graphics ==
     public static void addDrawable(Screen screen, Drawable drawable) {
+        ((ScreenAccessor) screen).getDrawables().add(drawable);
+    }
+
+    public static void addChild(Screen screen, Drawable drawable) {
         ScreenAccessor sa = ((ScreenAccessor) screen);
         sa.getDrawables().add(drawable);
         sa.getChildren().add(drawable);

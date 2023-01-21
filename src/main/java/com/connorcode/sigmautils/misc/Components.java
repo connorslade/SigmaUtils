@@ -23,7 +23,7 @@ public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
 //        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
         ScreenAccessor sa = (ScreenAccessor) screen;
-        Util.addDrawable(screen, new MultiClickButton(x, y, width, 20,
+        Util.addChild(screen, new MultiClickButton(x, y, width, 20,
                 Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
                         mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
@@ -52,7 +52,7 @@ public class Components {
     public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting, char[] values) {
         ScreenAccessor sa = (ScreenAccessor) screen;
 
-        Util.addDrawable(screen,
+        Util.addChild(screen,
                 new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(values[setting.index()])), button -> {
                     setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
                     sa.invokeClearAndInit();

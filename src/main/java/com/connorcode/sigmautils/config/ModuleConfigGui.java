@@ -49,7 +49,7 @@ public class ModuleConfigGui extends Screen {
         }
 
         // Add an 'enabled' setting
-        Util.addDrawable(this,
+        Util.addChild(this,
                 new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 150 - padding, 20,
                         Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
                     module.enabled ^= true;
