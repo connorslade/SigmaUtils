@@ -27,7 +27,7 @@ public abstract class HudModule extends Module {
     }
 
     protected String getTextColor() {
-        return textColor.value().code;
+        return textColor.value().code();
     }
 
     @Override

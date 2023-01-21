@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
+import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
 import com.connorcode.sigmautils.modules.rendering.NoDarkSky;
 import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;
 import net.minecraft.client.render.Camera;
@@ -11,6 +12,7 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +47,7 @@ public class WorldRendererMixin {
         };
 
         if (sound == null || NoGlobalSounds.disabled(eventId)) return;
-        Objects.requireNonNull(world)
-                .playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
+        Objects.requireNonNull(world).playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }
 
     @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
@@ -72,5 +73,12 @@ public class WorldRendererMixin {
         WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
         WorldRender.PostWorldRenderCallback.EVENT.invoker().handle(event);
         if (event.isCancelled()) ci.cancel();
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getTeamColorValue()I"))
+    int onGetTeamColorValue(Entity instance) {
+        var base = instance.getTeamColorValue();
+        if (!Config.getEnabled(GlowingPlayers.class)) return base;
+        return GlowingPlayers.instance.getGlowingColor(instance).orElse(base);
     }
 }

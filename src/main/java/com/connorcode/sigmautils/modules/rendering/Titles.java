@@ -112,7 +112,7 @@ public class Titles extends Module {
                 if ((arrowDespawn.value() || arrowInfinity.value()) && e instanceof ArrowEntity arrow) {
                     var remainingLife = Math.max(1200 - arrow.age, 0);
 
-                    var text = textColor.value().code;
+                    var text = textColor.value().code();
                     if (arrowDespawn.value()) text += timeFormat.value().format(remainingLife);
                     // TODO: Dosent work with infinity enchantment in survival
                     if (arrowInfinity.value()) text +=
@@ -138,7 +138,7 @@ public class Titles extends Module {
             }
 
             for (var i : itemTitles) {
-                var text = textColor.value().code;
+                var text = textColor.value().code();
                 if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
                 if (itemStackCount.value()) text += " ×" + i.count;
 

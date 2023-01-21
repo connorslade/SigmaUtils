@@ -28,7 +28,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         this.manager = manager;
     }
 
-    DynamicListSetting<K> value(K[] resources) {
+    public DynamicListSetting<K> value(K[] resources) {
         this.resources = List.of(resources);
         return this;
     }

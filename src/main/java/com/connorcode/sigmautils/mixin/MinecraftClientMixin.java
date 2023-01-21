@@ -83,7 +83,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.renderGlowing(entity) &&
+        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.instance.isGlowing(entity) &&
                 !(GlowingPlayers.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
     }
 

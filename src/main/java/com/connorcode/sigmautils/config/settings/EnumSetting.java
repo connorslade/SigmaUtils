@@ -24,8 +24,7 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     public <T extends Module> EnumSetting(Class<T> module, String name, Class<K> enumClass) {
         super(module, name);
         try {
-            this.values = (K[]) enumClass.getMethod("values")
-                    .invoke(null);
+            this.values = (K[]) enumClass.getMethod("values").invoke(null);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

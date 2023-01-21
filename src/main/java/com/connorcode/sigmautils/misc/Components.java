@@ -7,12 +7,18 @@ import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.system.MathUtil;
 
 import java.util.Objects;
 
@@ -60,6 +66,16 @@ public class Components {
                         .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
     }
 
+    public abstract static class DrawableElement implements Drawable, Element, Selectable {
+        @Override
+        public SelectionType getType() {
+            return SelectionType.NONE;
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder) {}
+    }
+
     public abstract static class ScrollableScreen extends Screen {
         protected int padding;
         protected int entryHeight;
@@ -87,7 +103,8 @@ public class Components {
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
             scroll -= amount * (entryHeight + padding);
-            scroll = Math.max(0, scroll);
+            scroll = MathHelper.clamp(scroll, 0,
+                    Math.max(0, ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) - height));
             return true;
         }
 
