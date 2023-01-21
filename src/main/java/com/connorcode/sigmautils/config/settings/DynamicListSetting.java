@@ -1,11 +1,14 @@
 package com.connorcode.sigmautils.config.settings;
 
+import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
+import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -38,6 +41,10 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         this.resources.add(resource);
     }
 
+    public void remove(K resource) {
+        this.resources.remove(resource);
+    }
+
     @Override
     protected DynamicListSetting<K> getThis() {
         return this;
@@ -53,15 +60,15 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
     @Override
     public void deserialize(NbtCompound nbt) {
         if (!nbt.contains(this.id)) return;
-        var data = this.manager.deserialize(nbt.getCompound(this.id));
+        var data = this.manager.deserialize(nbt.get(this.id));
         if (data == null) return;
         this.resources = data;
     }
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen, new ButtonWidget(x, y, width, 20, Text.of("Edit " + this.id), button -> {
-            client.setScreen(new ResourceScreen<>(screen, this.manager));
+        Util.addChild(screen, new ButtonWidget(x, y, width, 20, Text.of("Edit " + this.name), button -> {
+            client.setScreen(new ResourceScreen(screen, this.manager));
         }, ((button, matrices, mouseX, mouseY) -> {
             if (this.description == null) return;
             screen.renderOrderedTooltip(matrices, client.textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
@@ -78,39 +85,51 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         List<T> getAllResources();
 
         // Render the resource line (main screen)
-        int render(T resource, Screen data, int x, int y);
+        void render(T resource, Screen data, int x, int y);
 
         // Render the add resource line
-        int renderSelector(T resource, Screen data, int x, int y);
+        boolean renderSelector(T resource, Screen data, int x, int y);
+
+        // Get the width of the resource line
+        default int width() {
+            return 220;
+        }
+
+        default int height() {
+            return 20;
+        }
 
         // Save the active resources to NBT
-        NbtCompound serialize(List<T> resources);
+        NbtElement serialize(List<T> resources);
 
         // Load the active resources from NBT
-        List<T> deserialize(NbtCompound nbt);
+        List<T> deserialize(NbtElement nbt);
     }
 
-    public static class ResourceScreen<T> extends Screen {
+    public static class ResourceAddScreen<K> extends Components.ScrollableScreen {
         Screen _super;
-        ResourceManager<T> renderer;
+        ResourceManager<K> renderer;
 
-        int padding;
-
-        protected ResourceScreen(Screen _super, ResourceManager<T> renderer) {
-            super(Text.of("Resource Screen"));
+        protected ResourceAddScreen(Screen _super, ResourceManager<K> renderer) {
+            super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
             this.renderer = renderer;
             this._super = _super;
-            this.padding = getPadding();
         }
 
         @Override
         protected void init() {
-            int y = padding * 4;
+            var y = padding * 4;
+            var x = 20 + padding + startX();
 
-            var text = "+ Add";
-            var textWidth = Objects.requireNonNull(client).textRenderer.getWidth(text);
-            addDrawableChild(new ButtonWidget(20 + padding, y, textWidth + padding * 8, 20, Text.of(text),
-                    button -> Objects.requireNonNull(client).setScreen(new ResourceAddScreen<>(this, this.renderer))));
+            for (var i : renderer.getAllResources()) {
+                if (!renderer.renderSelector(i, this, x, y)) continue;
+                y += entryHeight + padding;
+            }
+        }
+
+        @Override
+        public void close() {
+            Objects.requireNonNull(client).setScreen(_super);
         }
 
         @Override
@@ -118,25 +137,41 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
         }
+    }
+
+    public class ResourceScreen extends Components.ScrollableScreen {
+        Screen _super;
+        ResourceManager<K> renderer;
+
+        protected ResourceScreen(Screen _super, ResourceManager<K> renderer) {
+            super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
+            this.renderer = renderer;
+            this._super = _super;
+        }
+
+        @Override
+        protected void init() {
+            var x = 20 + padding + startX();
+            var y = padding * 4;
+
+            for (var i : DynamicListSetting.this.resources) {
+                renderer.render(i, this, x, y);
+                y += entryHeight + padding;
+            }
+
+            addDrawableChild(new ButtonWidget(startX() + entryWidth / 4, y, entryWidth / 2, 20, Text.of("+ Add"),
+                    button -> Objects.requireNonNull(client).setScreen(new ResourceAddScreen<>(this, this.renderer))));
+        }
 
         @Override
         public void close() {
             Objects.requireNonNull(client).setScreen(_super);
         }
-    }
-
-    public static class ResourceAddScreen<T> extends ResourceScreen<T> {
-        protected ResourceAddScreen(Screen _super, ResourceManager<T> renderer) {
-            super(_super, renderer);
-        }
 
         @Override
-        protected void init() {
-            int y = padding * 4;
-
-            for (var i : renderer.getAllResources()) {
-                y += renderer.renderSelector(i, this, 20 + padding, y);
-            }
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            renderBackground(matrices);
+            super.render(matrices, mouseX, mouseY, delta);
         }
     }
 }

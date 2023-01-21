@@ -60,6 +60,67 @@ public class Components {
                         .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
     }
 
+    public abstract static class ScrollableScreen extends Screen {
+        protected int padding;
+        protected int entryHeight;
+        protected int entryWidth;
+        protected double scroll;
+
+        protected ScrollableScreen(Text title, int padding, int entryHeight, int entryWidth) {
+            super(title);
+            this.padding = padding;
+            this.entryHeight = entryHeight;
+            this.entryWidth = entryWidth;
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            var xStart = startX();
+            fill(matrices, xStart, 0, xStart + entryWidth, height, 0x80000000);
+            matrices.push();
+            matrices.translate(0, -scroll, 0);
+            var drawables = ((ScreenAccessor) this).getDrawables();
+            for (var i : drawables) i.render(matrices, mouseX, (int) (mouseY + scroll), delta);
+            matrices.pop();
+        }
+
+        @Override
+        public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+            scroll -= amount * (entryHeight + padding);
+            scroll = Math.max(0, scroll);
+            return true;
+        }
+
+        protected int startX() {
+            return (width - entryWidth) / 2;
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            return super.mouseClicked(mouseX, mouseY + scroll, button);
+        }
+
+        @Override
+        public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+            return super.mouseDragged(mouseX, mouseY + scroll, button, deltaX, deltaY);
+        }
+
+        @Override
+        public boolean mouseReleased(double mouseX, double mouseY, int button) {
+            return super.mouseReleased(mouseX, mouseY + scroll, button);
+        }
+
+        @Override
+        public void mouseMoved(double mouseX, double mouseY) {
+            super.mouseMoved(mouseX, mouseY + scroll);
+        }
+
+        @Override
+        public boolean isMouseOver(double mouseX, double mouseY) {
+            return super.isMouseOver(mouseX, mouseY + scroll);
+        }
+    }
+
     // A button that detects let and right clicks (and is scalable)
     public static class MultiClickButton extends ButtonWidget {
         private final PressAction onPress;

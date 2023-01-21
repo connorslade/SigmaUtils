@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.text.Text;
@@ -28,6 +29,9 @@ public class GlowingPlayers extends Module {
     public static BoolSetting disableF1 = new BoolSetting(GlowingPlayers.class, "Disable F1").value(true)
             .description("Turns off when in F1 mode")
             .build();
+    public static DynamicListSetting<EntityType<?>> selector =
+            new DynamicListSetting<>(GlowingPlayers.class, "Glowing Entities",
+                    new GlowingEntitySelectorManager()).build();
 
     public GlowingPlayers() {
         super("glowing_players", "Glowing Players", "Makes all players glow!", Category.Rendering);
@@ -37,74 +41,57 @@ public class GlowingPlayers extends Module {
         return entity instanceof PlayerEntity;
     }
 
-    public static DynamicListSetting<EntityType<?>> selector =
-            new DynamicListSetting<>(GlowingPlayers.class, "Glowing Entities",
-                    new DynamicListSetting.ResourceManager<EntityType<?>>() {
-                        @Override
-                        public List<EntityType<?>> getAllResources() {
-                            return Registry.ENTITY_TYPE.stream().toList();
-                        }
+    static class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<EntityType<?>> {
 
-                        @Override
-                        public int render(EntityType<?> resource, Screen screen, int x, int y) {
-                            return 0;
-                        }
+        @Override
+        public List<EntityType<?>> getAllResources() {
+            return Registry.ENTITY_TYPE.stream().toList();
+        }
 
-                        @Override
-                        public int renderSelector(EntityType<?> resource, Screen screen, int x, int y) {
-                            if (selector.value().contains(resource)) return 0;
-                            var padding = getPadding();
-                            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
-                                selector.add(resource);
-                                ((ScreenAccessor) screen).invokeClearAndInit();
-                            }));
-                            Util.addDrawable(screen,
-                                    (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices,
-                                            resource.getName().getString(), x + 20 + padding,
-                                            y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
-                            return 20 + getPadding();
-                        }
+        @Override
+        public void render(EntityType<?> resource, Screen screen, int x, int y) {
+            var padding = getPadding();
+            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
+                selector.remove(resource);
+                ((ScreenAccessor) screen).invokeClearAndInit();
+            }));
+            Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices,
+                    resource.getName().getString(), x + 20 + padding,
+                    y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
+        }
 
-                        @Override
-                        public NbtCompound serialize(List<EntityType<?>> resources) {
-                            if (resources == null) return null;
-                            var resourceList = new NbtList() {{
-                                addAll(resources.stream()
-                                        .map(Registry.ENTITY_TYPE::getId)
-                                        .map(i -> NbtString.of(i.toString()))
-                                        .toList());
-                            }};
+        @Override
+        public boolean renderSelector(EntityType<?> resource, Screen screen, int x, int y) {
+            if (selector.value().contains(resource)) return false;
+            var padding = getPadding();
+            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
+                selector.add(resource);
+                ((ScreenAccessor) screen).invokeClearAndInit();
+            }));
+            Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices,
+                    resource.getName().getString(), x + 20 + padding,
+                    y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
+            return true;
+        }
 
-                            var nbt = new NbtCompound();
-                            nbt.put("resources", resourceList);
-                            return nbt;
-                        }
+        @Override
+        public NbtElement serialize(List<EntityType<?>> resources) {
+            if (resources == null) return null;
+            var resourceList = new NbtList();
+            resourceList.addAll(
+                    resources.stream().map(Registry.ENTITY_TYPE::getId).map(i -> NbtString.of(i.toString())).toList());
+            return resourceList;
+        }
 
-                        @Override
-                        public List<EntityType<?>> deserialize(NbtCompound nbt) {
-                            if (!nbt.contains("resources")) return List.of();
-                            var resourceList = nbt.getList("resources", 8);
-                            var list = resourceList.stream()
-                                    .map(NbtString.class::cast)
-                                    .map(s -> Identifier.tryParse(s.asString()))
-                                    .map(Registry.ENTITY_TYPE::get)
-                                    .toList();
-                            return new ArrayList<>(list);
-                        }
-                    }).build();
-
-
-
-
-
-    /*
-    Entity Groups:
-        - Player
-        - Mob
-        - Passive
-        - Projectile
-        - Vehicle
-        - Item
-        - Misc
-     */
+        @Override
+        public List<EntityType<?>> deserialize(NbtElement nbt) {
+            if (!(nbt instanceof NbtList resourceList)) return null;
+            var list = resourceList.stream()
+                    .map(NbtString.class::cast)
+                    .map(s -> Identifier.tryParse(s.asString()))
+                    .map(Registry.ENTITY_TYPE::get)
+                    .toList();
+            return new ArrayList<>(list);
+        }
+    }
 }
