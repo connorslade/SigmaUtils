@@ -31,28 +31,29 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static net.minecraft.client.gui.DrawableHelper.fill;
 
-public class GlowingPlayers extends Module {
-    public static BoolSetting disableF1 = new BoolSetting(GlowingPlayers.class, "Disable F1").value(true)
+public class EntityHighlight extends Module {
+    public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
+            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .description("Turns off when in F1 mode")
             .build();
-    public static GlowingPlayers instance;
-    public DynamicListSetting<GlowingEntity> selector =
-            new DynamicListSetting<>(GlowingPlayers.class, "Glowing Entities",
+    public static EntityHighlight instance;
+    public DynamicListSetting<GlowingEntity> entities =
+            new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
                     new GlowingEntitySelectorManager()).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
-            }).build();
+            }).description("Edit which entities are highlighted and what color.").build();
 
-    public GlowingPlayers() {
-        super("glowing_players", "Glowing Players", "Makes all players glow!", Category.Rendering);
+    public EntityHighlight() {
+        super("entity_highlight", "Entity Highlight", "Outlines entities through blocks", Category.Rendering);
         instance = this;
     }
 
     public boolean isGlowing(Entity entity) {
-        return selector.value().stream().anyMatch(glowingEntity -> glowingEntity.type.equals(entity.getType()));
+        return entities.value().stream().anyMatch(glowingEntity -> glowingEntity.type.equals(entity.getType()));
     }
 
     public Optional<Integer> getGlowingColor(Entity entity) {
-        return selector.value()
+        return entities.value()
                 .stream()
                 .filter(glowingEntity -> glowingEntity.type.equals(entity.getType()))
                 .findFirst()
@@ -135,7 +136,7 @@ public class GlowingPlayers extends Module {
                 });
             }
             Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
-                selector.remove(resource);
+                entities.remove(resource);
                 ((ScreenAccessor) screen).invokeClearAndInit();
             }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                     List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
@@ -147,10 +148,10 @@ public class GlowingPlayers extends Module {
 
         @Override
         public boolean renderSelector(GlowingEntity resource, Screen screen, int x, int y) {
-            if (selector.value().stream().anyMatch(s -> s.type.equals(resource.type))) return false;
+            if (entities.value().stream().anyMatch(s -> s.type.equals(resource.type))) return false;
             var padding = getPadding();
             Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
-                selector.add(resource);
+                entities.add(resource);
                 ((ScreenAccessor) screen).invokeClearAndInit();
             }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                     List.of(Text.of("Add element").asOrderedText()), mouseX, mouseY))));

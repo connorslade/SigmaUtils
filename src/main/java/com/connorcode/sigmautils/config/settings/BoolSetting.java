@@ -67,6 +67,7 @@ public class BoolSetting extends Setting<BoolSetting> {
     }
 
     public BoolSetting displayType(DisplayType displayType) {
+        // TODO: make checkbox the default
         this.displayType = displayType;
         return this;
     }

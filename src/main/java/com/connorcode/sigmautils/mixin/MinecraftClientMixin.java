@@ -7,7 +7,7 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
 import com.connorcode.sigmautils.modules.misc.WindowTitle;
-import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
+import com.connorcode.sigmautils.modules.rendering.EntityHighlight;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
@@ -83,8 +83,8 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(GlowingPlayers.class) && GlowingPlayers.instance.isGlowing(entity) &&
-                !(GlowingPlayers.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
+        if (Config.getEnabled(EntityHighlight.class) && EntityHighlight.instance.isGlowing(entity) &&
+                !(EntityHighlight.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))

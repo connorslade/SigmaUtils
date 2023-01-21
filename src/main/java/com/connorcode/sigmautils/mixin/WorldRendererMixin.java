@@ -3,7 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
-import com.connorcode.sigmautils.modules.rendering.GlowingPlayers;
+import com.connorcode.sigmautils.modules.rendering.EntityHighlight;
 import com.connorcode.sigmautils.modules.rendering.NoDarkSky;
 import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;
 import net.minecraft.client.render.Camera;
@@ -78,7 +78,7 @@ public class WorldRendererMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getTeamColorValue()I"))
     int onGetTeamColorValue(Entity instance) {
         var base = instance.getTeamColorValue();
-        if (!Config.getEnabled(GlowingPlayers.class)) return base;
-        return GlowingPlayers.instance.getGlowingColor(instance).orElse(base);
+        if (!Config.getEnabled(EntityHighlight.class)) return base;
+        return EntityHighlight.instance.getGlowingColor(instance).orElse(base);
     }
 }
