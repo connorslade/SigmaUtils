@@ -74,9 +74,8 @@ public class ItemShortcuts extends Module {
 
     Optional<Integer> findItem(ItemFinder itemFinder) {
         var inventory = Objects.requireNonNull(client.player).getInventory();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
             if (itemFinder.test(inventory.main.get(i))) return Optional.of(i);
-        }
         return Optional.empty();
     }
 

@@ -126,7 +126,9 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
             this.renderer = renderer;
             this._super = _super;
-            searchField = new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, Text.empty());
+            this.searchField =
+                    new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, Text.empty());
+            focusOn(this.searchField);
         }
 
         @Override
@@ -191,6 +193,11 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
                 return true;
             }
             return super.charTyped(chr, modifiers);
+        }
+
+        @Override
+        protected int scrollOffset() {
+            return 20;
         }
     }
 

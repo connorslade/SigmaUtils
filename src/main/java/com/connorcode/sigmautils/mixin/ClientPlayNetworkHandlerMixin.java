@@ -16,4 +16,9 @@ public class ClientPlayNetworkHandlerMixin {
         UnknownPacketCallback.EVENT.invoker().handle(event);
         if (event.isCancelled()) ci.cancel();
     }
+
+    @Inject(method = "onGameJoin", at = @At("HEAD"))
+    void onGameJoin(CallbackInfo ci) {
+        Thread.dumpStack();
+    }
 }

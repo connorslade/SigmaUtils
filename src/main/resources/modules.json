@@ -54,6 +54,7 @@
     "misc.NoGlobalSounds",
     "misc.NoPause",
     "misc.NoTelemetry",
+    "misc.PacketCanceler",
     "misc.PrintDeathCords",
     "misc.SoundControl",
     "misc.TickSpeed",

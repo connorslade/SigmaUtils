@@ -106,11 +106,17 @@ public class Components {
 
         protected void refreshScrollConstrains() {
             scroll = MathHelper.clamp(scroll, 0,
-                    Math.max(0, ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) - height));
+                    Math.max(0,
+                            ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) + scrollOffset() -
+                                    height));
         }
 
         protected int startX() {
             return (width - entryWidth) / 2;
+        }
+
+        protected int scrollOffset() {
+            return 0;
         }
     }
 
