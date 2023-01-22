@@ -14,6 +14,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
@@ -35,22 +36,13 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
             ((ScreenAccessor) screen).invokeClearAndInit();
         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                 List.of(Text.of("Add element").asOrderedText()), mouseX, mouseY))));
-        // TODO: ^ Fix tooltips being cut off
         Util.addDrawable(screen,
                 (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
                         x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
                         0xFFFFFF));
     }
 
-    abstract public String getDisplay(T value);
-
-    @Override
-    public List<T> getAllResources() {
-        return registry.stream().toList();
-    }
-
-    @Override
-    public void render(T resource, Screen screen, int x, int y) {
+    public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
         var padding = getPadding();
         Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
             setting.remove(resource);
@@ -58,9 +50,28 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                 List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
         Util.addDrawable(screen,
-                (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, getDisplay(resource),
-                        x + 20 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
+                (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
+                        x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
                         0xffffff));
+    }
+
+
+    @Override
+    public List<T> getAllResources() {
+        return registry.stream().toList();
+    }
+
+    @Override
+    public String[] getSearch(T resource) {
+        return new String[]{
+                Objects.requireNonNull(registry.getId(resource)).toString(),
+                getDisplay(resource).toLowerCase(Locale.ROOT)
+        };
+    }
+
+    @Override
+    public void render(T resource, Screen screen, int x, int y) {
+        render(setting, resource, getDisplay(resource), screen, x, y, 0);
     }
 
     @Override

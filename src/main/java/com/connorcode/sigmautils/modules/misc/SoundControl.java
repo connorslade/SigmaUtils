@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -30,6 +31,12 @@ public class SoundControl extends Module {
     public SoundControl() {
         super("sound_control", "Sound Control",
                 "Lets you control the volume of every sound event. Ground Control To Major Tom.", Category.Misc);
+    }
+
+    public static float getVolumeAdjuster(Identifier id) {
+        return soundEvents.value().stream()
+                .filter(soundSettings -> soundSettings.event.getId().equals(id))
+                .findFirst().map(soundSettings -> soundSettings.volume).orElse(1f);
     }
 
     static class SoundEventManager implements DynamicListSetting.ResourceManager<SoundSettings> {
@@ -58,21 +65,27 @@ public class SoundControl extends Module {
                 ((ScreenAccessor) screen).invokeClearAndInit();
             }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
                     List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
-//                Util.addChild(screen, new SliderWidget(x + 20 + padding, y, 100, 20, ) {
-//                    @Override
-//                    protected void updateMessage() {
-//                        this.setMessage(Text.of(String.format("%.2f", this.value)));
-//                    }
-//
-//                    @Override
-//                    protected void applyValue() {
-//
-//                    }
-//                });
+            Util.addChild(screen,
+                    new SliderWidget(x + 20 + padding, y, 100, 20, getSliderText(resource), resource.volume) {
+                        @Override
+                        protected void updateMessage() {
+                            this.setMessage(getSliderText(resource));
+                        }
+
+                        @Override
+                        protected void applyValue() {
+                            resource.volume = (float) this.value;
+                        }
+                    });
             Util.addDrawable(screen,
                     (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, getDisplay(resource),
-                            x + 20 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
+                            x + 120 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
                             0xffffff));
+        }
+
+        Text getSliderText(SoundSettings resource) {
+            if (resource.volume == 0) return Text.of("Off");
+            return Text.of(String.format("%.2f", resource.volume));
         }
 
         @Override
@@ -98,7 +111,7 @@ public class SoundControl extends Module {
 
         @Override
         public int width() {
-            return 300;
+            return 400;
         }
     }
 

@@ -1,18 +1,18 @@
 package com.connorcode.sigmautils.config.settings;
 
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
@@ -89,6 +89,12 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         // Get all selectable resources
         List<T> getAllResources();
 
+        String getDisplay(T resource);
+
+        default String[] getSearch(T resource) {
+            return new String[]{getDisplay(resource).toLowerCase(Locale.ROOT)};
+        }
+
         // Render the resource line (main screen)
         void render(T resource, Screen data, int x, int y);
 
@@ -114,22 +120,39 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
     public static class ResourceAddScreen<K> extends Components.ScrollableScreen {
         Screen _super;
         ResourceManager<K> renderer;
+        TextFieldWidget searchField;
 
         protected ResourceAddScreen(Screen _super, ResourceManager<K> renderer) {
             super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
             this.renderer = renderer;
             this._super = _super;
+            searchField = new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, Text.empty());
         }
 
         @Override
         protected void init() {
-            var y = padding * 4;
+            searchField.setX(width / 2 - searchField.getWidth() / 2);
+            var y = padding * 6 + 20 - (int) this.scroll;
             var x = 20 + padding + startX();
 
-            for (var i : renderer.getAllResources()) {
+            var search = searchField.getText();
+            for (var i : renderer.getAllResources()
+                    .stream()
+                    .filter(r -> search.isEmpty() || search(r, search))
+                    .toList()) {
+                if (y < -entryHeight - padding) {
+                    y += entryHeight + padding;
+                    continue;
+                }
+                if (y > height + scroll) break;
                 if (!renderer.renderSelector(i, this, x, y)) continue;
                 y += entryHeight + padding;
             }
+        }
+
+        private boolean search(K resource, String search) {
+            var finalSearch = search.toLowerCase(Locale.ROOT);
+            return Arrays.stream(renderer.getSearch(resource)).anyMatch(s -> s.contains(finalSearch));
         }
 
         @Override
@@ -141,6 +164,33 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
+            this.searchField.render(matrices, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (this.searchField.mouseClicked(mouseX, mouseY, button)) return true;
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
+        @Override
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            if (this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
+                clearAndInit();
+                refreshScrollConstrains();
+                return true;
+            }
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        @Override
+        public boolean charTyped(char chr, int modifiers) {
+            if (this.searchField.charTyped(chr, modifiers)) {
+                clearAndInit();
+                refreshScrollConstrains();
+                return true;
+            }
+            return super.charTyped(chr, modifiers);
         }
     }
 

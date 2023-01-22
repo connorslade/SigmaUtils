@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SoundSystem.class)
-public class SoundSystemMixin {
+public abstract class SoundSystemMixin {
     @Inject(method = "getAdjustedVolume(FLnet/minecraft/sound/SoundCategory;)F", at = @At("HEAD"), cancellable = true)
     void onGetAdjustedVolume(float volume, SoundCategory category, CallbackInfoReturnable<Float> cir) {
         if (VictoryMute.muted)

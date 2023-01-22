@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.modules.rendering;
 
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
+import com.connorcode.sigmautils.config.settings.list.SimpleList;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
@@ -36,6 +37,7 @@ public class EntityHighlight extends Module {
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .description("Turns off when in F1 mode")
             .build();
+    // TODO: remove needing an instance var
     public static EntityHighlight instance;
     public DynamicListSetting<GlowingEntity> entities =
             new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
@@ -109,6 +111,11 @@ public class EntityHighlight extends Module {
         }
 
         @Override
+        public String getDisplay(GlowingEntity resource) {
+            return resource.getName();
+        }
+
+        @Override
         public void render(GlowingEntity resource, Screen screen, int x, int y) {
             var padding = getPadding();
             if (resource.color == -1) {
@@ -136,31 +143,13 @@ public class EntityHighlight extends Module {
                     }
                 });
             }
-            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
-                entities.remove(resource);
-                ((ScreenAccessor) screen).invokeClearAndInit();
-            }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                    List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
-            Util.addDrawable(screen,
-                    (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, resource.getName(),
-                            x + 40 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
-                            0xffffff));
+            SimpleList.render(entities, resource, getDisplay(resource), screen, x, y, 20);
         }
 
         @Override
         public boolean renderSelector(GlowingEntity resource, Screen screen, int x, int y) {
             if (entities.value().stream().anyMatch(s -> s.type.equals(resource.type))) return false;
-            var padding = getPadding();
-            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
-                entities.add(resource);
-                ((ScreenAccessor) screen).invokeClearAndInit();
-            }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                    List.of(Text.of("Add element").asOrderedText()), mouseX, mouseY))));
-            // TODO: ^ Fix tooltips being cut off
-            Util.addDrawable(screen,
-                    (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, resource.getName(),
-                            x + 20 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
-                            0xFFFFFF));
+            SimpleList.selector(entities, resource, getDisplay(resource), screen, x, y, 0);
             return true;
         }
 

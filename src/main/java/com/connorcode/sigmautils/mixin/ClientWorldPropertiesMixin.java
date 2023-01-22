@@ -14,4 +14,9 @@ public class ClientWorldPropertiesMixin {
     void onGetTimeOfDay(CallbackInfoReturnable<Long> cir) {
         if (Config.getEnabled(ForceGameTime.class)) cir.setReturnValue((long) ForceGameTime.forceTime.intValue());
     }
+
+    @Inject(method = "getTime", at = @At("RETURN"), cancellable = true)
+    void onGetTime(CallbackInfoReturnable<Long> cir) {
+        if (Config.getEnabled(ForceGameTime.class)) cir.setReturnValue((long) ForceGameTime.forceTime.intValue());
+    }
 }

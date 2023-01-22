@@ -13,7 +13,7 @@ public class ForceGameTime extends Module {
             .build();
 
     public ForceGameTime() {
-        super("force_game_time", "Force Game Time", "Sets how far away the 3rd person camera is", Category.Misc);
+        super("force_game_time", "Force Game Time", "Forces the client world's time of day.", Category.Misc);
     }
 
     @Override

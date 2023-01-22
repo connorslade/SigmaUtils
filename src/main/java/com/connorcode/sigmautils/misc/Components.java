@@ -92,48 +92,25 @@ public class Components {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             var xStart = startX();
             fill(matrices, xStart, 0, xStart + entryWidth, height, 0x80000000);
-            matrices.push();
-            matrices.translate(0, -scroll, 0);
             var drawables = ((ScreenAccessor) this).getDrawables();
-            for (var i : drawables) i.render(matrices, mouseX, (int) (mouseY + scroll), delta);
-            matrices.pop();
+            for (var i : drawables) i.render(matrices, mouseX, mouseY, delta);
         }
 
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
             scroll -= amount * (entryHeight + padding);
+            refreshScrollConstrains();
+            this.clearAndInit();
+            return true;
+        }
+
+        protected void refreshScrollConstrains() {
             scroll = MathHelper.clamp(scroll, 0,
                     Math.max(0, ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) - height));
-            return true;
         }
 
         protected int startX() {
             return (width - entryWidth) / 2;
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            return super.mouseClicked(mouseX, mouseY + scroll, button);
-        }
-
-        @Override
-        public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-            return super.mouseDragged(mouseX, mouseY + scroll, button, deltaX, deltaY);
-        }
-
-        @Override
-        public boolean mouseReleased(double mouseX, double mouseY, int button) {
-            return super.mouseReleased(mouseX, mouseY + scroll, button);
-        }
-
-        @Override
-        public void mouseMoved(double mouseX, double mouseY) {
-            super.mouseMoved(mouseX, mouseY + scroll);
-        }
-
-        @Override
-        public boolean isMouseOver(double mouseX, double mouseY) {
-            return super.isMouseOver(mouseX, mouseY + scroll);
         }
     }
 
