@@ -16,6 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixin {
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void onRenderShadow(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity, float opacity, float tickDelta, WorldView world, float radius, CallbackInfo ci) {
-        if (Config.getEnabled(DisableShadows.class)) ci.cancel();
+        if (Config.getEnabled(DisableShadows.class) && DisableShadows.isDisabled(entity)) ci.cancel();
     }
 }

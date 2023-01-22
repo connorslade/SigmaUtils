@@ -22,9 +22,9 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
     ResourceManager<K> manager;
     List<K> resources = new ArrayList<>();
 
-    public DynamicListSetting(Class<? extends Module> module, String name, ResourceManager<K> manager) {
+    public DynamicListSetting(Class<? extends Module> module, String name, ResourceManagerCallback<K> callback) {
         super(module, name);
-        this.manager = manager;
+        this.manager = callback.get(this);
     }
 
     public DynamicListSetting<K> value(K[] resources) {
@@ -66,7 +66,8 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen, new ButtonWidget(x, y, width, 20, Text.of("Edit " + this.name),
+        Util.addChild(screen, new ButtonWidget(x, y, width, 20,
+                Text.of(String.format("Edit %s (%d)", this.name, this.resources.size())),
                 button -> client.setScreen(new ResourceScreen(screen, this.manager)),
                 ((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
@@ -79,6 +80,10 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
     @Override
     public void render(RenderData data, int x, int y) {}
+
+    public interface ResourceManagerCallback<K> {
+        ResourceManager<K> get(DynamicListSetting<K> setting);
+    }
 
     public interface ResourceManager<T> {
         // Get all selectable resources

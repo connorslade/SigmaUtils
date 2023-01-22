@@ -39,7 +39,7 @@ public class EntityHighlight extends Module {
     public static EntityHighlight instance;
     public DynamicListSetting<GlowingEntity> entities =
             new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
-                    new GlowingEntitySelectorManager()).value(new GlowingEntity[]{
+                    GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
             }).description("Edit which entities are highlighted and what color.").build();
 
@@ -101,6 +101,7 @@ public class EntityHighlight extends Module {
     }
 
     class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<GlowingEntity> {
+        GlowingEntitySelectorManager(DynamicListSetting<GlowingEntity> _setting) {}
 
         @Override
         public List<GlowingEntity> getAllResources() {

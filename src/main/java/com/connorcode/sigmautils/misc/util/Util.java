@@ -1,8 +1,10 @@
 package com.connorcode.sigmautils.misc.util;
 
 import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.AsyncRunner;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
+import com.connorcode.sigmautils.module.Module;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
@@ -139,6 +141,11 @@ public class Util {
         return Optional.empty();
     }
 
+    public static <T extends Module> EnumSetting<FilterType> filterSetting(Class<T> _class) {
+        return new EnumSetting<>(_class, "Filter Type", Util.FilterType.class).value(FilterType.Blacklist)
+                .description("Whether to blacklist or whitelist entities.");
+    }
+
     public enum TimeFormat {
         HMS,
         BestFit;
@@ -149,5 +156,10 @@ public class Util {
                 case BestFit -> Util.bestTime(ms);
             };
         }
+    }
+
+    public enum FilterType {
+        Blacklist,
+        Whitelist
     }
 }
