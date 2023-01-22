@@ -37,4 +37,6 @@ public class RandomBackground extends Module {
         RenderSystem.setShaderTexture(0,
                 Identifier.tryParse("textures/block/" + RandomBackground.validBackgrounds.get(assetIndex) + ".png"));
     }
+    // If you dare try to make backgrounds selectable again:
+    // https://gist.github.com/Basicprogrammer10/2c0b3f0dd815e93cd64abe4bf4810511
 }

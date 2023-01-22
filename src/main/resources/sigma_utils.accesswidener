@@ -1,3 +1,5 @@
 accessWidener   v1  named
+# https://fabricmc.net/wiki/tutorial:accesswideners
+# for future reference
 accessible class net/minecraft/client/render/MapRenderer$MapTexture
 accessible method net/minecraft/client/font/TextRenderer tweakTransparency (I)I

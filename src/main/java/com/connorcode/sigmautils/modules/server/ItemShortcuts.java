@@ -15,6 +15,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class ItemShortcuts extends Module {
     final Item[] swords = new Item[]{
+            Items.NETHERITE_SWORD,
             Items.DIAMOND_SWORD,
             Items.IRON_SWORD,
             Items.GOLDEN_SWORD,
