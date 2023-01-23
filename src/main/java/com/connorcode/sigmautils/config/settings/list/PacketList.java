@@ -34,7 +34,7 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
 
     @Override
     public String getDisplay(Class<? extends Packet<?>> resource) {
-        return resource.getSimpleName();
+        return NetworkUtils.getPacketName(resource);
     }
 
     @Override

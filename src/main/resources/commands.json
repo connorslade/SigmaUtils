@@ -2,14 +2,15 @@
   "package": "com.connorcode.sigmautils.commands",
   "commands": [
     "About",
-    "Fotd",
-    "Toggle",
-    "Save",
-    "Run",
-    "Task",
     "Chat",
+    "Dump",
+    "Fotd",
     "Map",
+    "Note",
     "ResourcePack",
-    "Note"
+    "Run",
+    "Save",
+    "Task",
+    "Toggle"
   ]
 }

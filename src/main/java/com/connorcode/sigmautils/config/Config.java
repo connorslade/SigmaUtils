@@ -21,9 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.directory;
+
 public class Config {
-    public static final File configFile =
-            new File(MinecraftClient.getInstance().runDirectory, "config/SigmaUtils/config.nbt");
+    public static final File configFile = new File(directory.toFile(), "config.nbt");
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("Open Gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_U, "Sigma Utils"));
     public static HashMap<Class<Module>, List<Setting<?>>> moduleSettings = new HashMap<>();

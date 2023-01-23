@@ -106,9 +106,8 @@ public class Components {
 
         protected void refreshScrollConstrains() {
             scroll = MathHelper.clamp(scroll, 0,
-                    Math.max(0,
-                            ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) + scrollOffset() -
-                                    height));
+                    Math.max(0, ((ScreenAccessor) this).getDrawables().size() * (entryHeight + padding) - height));
+            // TODO: Fix this. Allow for scrolling to the bottom.
         }
 
         protected int startX() {

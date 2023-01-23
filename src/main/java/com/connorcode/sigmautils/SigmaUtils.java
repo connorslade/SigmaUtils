@@ -17,6 +17,7 @@ import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Objects;
 public class SigmaUtils implements ClientModInitializer {
     public static final String VERSION = "0.1.2 alpha";
     public static final MinecraftClient client = MinecraftClient.getInstance();
+    public static final Path directory = client.runDirectory.toPath().resolve("config/SigmaUtils");
     public static final Logger logger = LogUtils.getLogger();
     public static final HashMap<Class<?>, Module> modules = new HashMap<>();
     public static final List<Command> commands = new ArrayList<>();
