@@ -26,7 +26,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
     void onModelRender(M instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay,
                        float red, float green, float blue, float alpha, T livingEntity) {
         // TODO: make work with mobs
-        if (Config.getEnabled(ShowInvisibleEntities.class) && ShowInvisibleEntities.isInvisible(livingEntity))
+        if (Config.getEnabled(ShowInvisibleEntities.class) && ShowInvisibleEntities.isInvisible(livingEntity) && livingEntity.getFlag(5))
             alpha = (float) ShowInvisibleEntities.opacity.value();
         instance.render(matrixStack, vertexConsumer, light, overlay, red, green, blue, alpha);
     }

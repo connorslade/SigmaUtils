@@ -5,3 +5,4 @@ accessible class net/minecraft/client/render/MapRenderer$MapTexture
 accessible method net/minecraft/client/font/TextRenderer tweakTransparency (I)I
 accessible field net/minecraft/network/NetworkState packetHandlers Ljava/util/Map;
 accessible field net/minecraft/network/NetworkState$PacketHandler packetIds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
+accessible method net/minecraft/entity/Entity getFlag (I)Z

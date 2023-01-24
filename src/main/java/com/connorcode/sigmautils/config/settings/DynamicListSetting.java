@@ -32,6 +32,11 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         return this;
     }
 
+    public DynamicListSetting<K> value(List<K> resources) {
+        this.resources = new ArrayList<>(resources);
+        return this;
+    }
+
     public List<K> value() {
         return this.resources;
     }
