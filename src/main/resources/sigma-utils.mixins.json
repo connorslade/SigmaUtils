@@ -37,6 +37,7 @@
     "MapTextureAccessor",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
+    "MultiplayerScreenMixin",
     "OptionsScreenMixin",
     "ParticleManagerMixin",
     "PerspectiveMixin",
@@ -52,9 +53,13 @@
     "TelemetrySenderMixin",
     "TitleScreenMixin",
     "WorldMixin",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "YggdrasilUserAuthenticationAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "YggdrasilAuthenticationServiceAccessor"
+  ]
 }

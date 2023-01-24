@@ -1,4 +1,4 @@
-# SigmaUtils ![build](https://github.com/Basicprogrammer10/SigmaUtils/actions/workflows/build.yml/badge.svg) ![GitHub all releases](https://img.shields.io/github/downloads/Basicprogrammer10/SigmaUtils/total)
+# SigmaUtils ![build](https://github.com/Basicprogrammer10/SigmaUtils/actions/workflows/build.yml/badge.svg) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/Basicprogrammer10/SigmaUtils?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/Basicprogrammer10/SigmaUtils/total) 
 
 🛸 A little utility mod for Minecraft 1.19.2
 

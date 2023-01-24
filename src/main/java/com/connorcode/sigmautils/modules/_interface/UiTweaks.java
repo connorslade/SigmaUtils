@@ -13,6 +13,11 @@ public class UiTweaks extends Module {
             .displayType(BoolSetting.DisplayType.CHECKBOX)
             .value(true)
             .build();
+    public static BoolSetting validSession = new BoolSetting(UiTweaks.class, "Valid Session")
+            .description("Adds a display to the multiplayer screen to show if your session is valid")
+            .displayType(BoolSetting.DisplayType.CHECKBOX)
+            .value(true)
+            .build();
 
     public UiTweaks() {
         super("ui_tweaks", "UI Tweaks", "Random interface tweaks.",
@@ -21,6 +26,10 @@ public class UiTweaks extends Module {
 
     public static boolean isMuted() {
         return Config.getEnabled(UiTweaks.class) && audioMuteButton.value() && muted;
+    }
+
+    public static boolean showValidSession() {
+        return Config.getEnabled(UiTweaks.class) && validSession.value();
     }
 
     @Override
