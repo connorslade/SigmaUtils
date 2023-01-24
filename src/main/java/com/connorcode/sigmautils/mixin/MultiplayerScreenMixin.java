@@ -28,7 +28,8 @@ public class MultiplayerScreenMixin extends Screen {
             @Override
             public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                 var text = NetworkUtils.getAuthStatus().getText();
-                Objects.requireNonNull(client).textRenderer.draw(matrices, text, width - client.textRenderer.getWidth(text) - 10, 10, 0xFFFFFF);
+                Objects.requireNonNull(client).textRenderer.draw(matrices, text,
+                        width - client.textRenderer.getWidth(text) - 10, 10, 0xFFFFFF);
             }
         });
     }

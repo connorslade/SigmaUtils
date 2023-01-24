@@ -5,7 +5,6 @@ import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.SelectorSetting;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;

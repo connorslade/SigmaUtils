@@ -5,7 +5,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
@@ -393,7 +392,8 @@ public class Run implements Command {
                         yield working.toString();
                     }
                     case isOnline -> {
-                        Collection<PlayerListEntry> playerListEntries = Objects.requireNonNull(client.player).networkHandler.getPlayerList();
+                        Collection<PlayerListEntry> playerListEntries =
+                                Objects.requireNonNull(client.player).networkHandler.getPlayerList();
                         String finalString = string;
                         String finalUUIDString = string.replaceAll("-", "");
                         boolean nameMatch = playerListEntries.stream()

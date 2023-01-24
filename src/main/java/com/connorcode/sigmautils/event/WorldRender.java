@@ -6,19 +6,21 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class WorldRender {
     public interface PreWorldRenderCallback {
-        Event<PreWorldRenderCallback> EVENT = EventFactory.createArrayBacked(PreWorldRenderCallback.class, callbacks -> event -> {
-            for (PreWorldRenderCallback i : callbacks)
-                i.handle(event);
-        });
+        Event<PreWorldRenderCallback> EVENT =
+                EventFactory.createArrayBacked(PreWorldRenderCallback.class, callbacks -> event -> {
+                    for (PreWorldRenderCallback i : callbacks)
+                        i.handle(event);
+                });
 
         void handle(WorldRenderEvent event);
     }
 
     public interface PostWorldRenderCallback {
-        Event<PostWorldRenderCallback> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallback.class, callbacks -> event -> {
-            for (PostWorldRenderCallback i : callbacks)
-                i.handle(event);
-        });
+        Event<PostWorldRenderCallback> EVENT =
+                EventFactory.createArrayBacked(PostWorldRenderCallback.class, callbacks -> event -> {
+                    for (PostWorldRenderCallback i : callbacks)
+                        i.handle(event);
+                });
 
         void handle(WorldRenderEvent event);
     }

@@ -36,7 +36,8 @@ public class WorldRenderUtils {
         var camera = client.gameRenderer.getCamera();
         matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
         matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
-        matrixStack.translate(pos.getX() - camera.getPos().x, pos.getY() - camera.getPos().y, pos.getZ() - camera.getPos().z);
+        matrixStack.translate(pos.getX() - camera.getPos().x, pos.getY() - camera.getPos().y,
+                pos.getZ() - camera.getPos().z);
 
         return matrixStack;
     }

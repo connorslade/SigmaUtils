@@ -24,10 +24,11 @@ public class GameMenuScreenMixin extends Screen {
             return;
         ci.cancel();
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 102, this.height / 4 + 120 - 16, 204, 20, text, (button) -> {
-            button.active = false;
-            assert this.client != null;
-            this.client.setScreen(new ConfirmDisconnect.ConfirmDisconnectScreen());
-        }));
+        this.addDrawableChild(
+                new ButtonWidget(this.width / 2 - 102, this.height / 4 + 120 - 16, 204, 20, text, (button) -> {
+                    button.active = false;
+                    assert this.client != null;
+                    this.client.setScreen(new ConfirmDisconnect.ConfirmDisconnectScreen());
+                }));
     }
 }

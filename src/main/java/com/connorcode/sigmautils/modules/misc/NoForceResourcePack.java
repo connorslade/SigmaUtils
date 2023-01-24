@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.modules.misc;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;

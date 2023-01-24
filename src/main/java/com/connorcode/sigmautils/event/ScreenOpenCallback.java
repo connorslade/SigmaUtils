@@ -5,10 +5,11 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.gui.screen.Screen;
 
 public interface ScreenOpenCallback {
-    Event<ScreenOpenCallback> EVENT = EventFactory.createArrayBacked(ScreenOpenCallback.class, screenOpenCallbacks -> event -> {
-        for (ScreenOpenCallback i : screenOpenCallbacks)
-            i.handle(event);
-    });
+    Event<ScreenOpenCallback> EVENT =
+            EventFactory.createArrayBacked(ScreenOpenCallback.class, screenOpenCallbacks -> event -> {
+                for (ScreenOpenCallback i : screenOpenCallbacks)
+                    i.handle(event);
+            });
 
     void handle(ScreenOpenEvent screen);
 

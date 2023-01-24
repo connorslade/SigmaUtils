@@ -70,7 +70,8 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
 
         long[] lastDeath = Arrays.stream(PrintDeathCords.lastDeath).mapToLong(Math::round).toArray();
         Objects.requireNonNull(client.player)
-                .sendMessage(Text.of(String.format("§6Σ] Last death: %d, %d, %d", lastDeath[0], lastDeath[1], lastDeath[2])));
+                .sendMessage(Text.of(String.format("§6Σ] Last death: %d, %d, %d", lastDeath[0], lastDeath[1],
+                        lastDeath[2])));
         PrintDeathCords.lastDeath = null;
     }
 

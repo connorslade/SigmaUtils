@@ -7,7 +7,6 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.ToggleSound;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.nbt.NbtCompound;
@@ -16,7 +15,10 @@ import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.SigmaUtils.directory;

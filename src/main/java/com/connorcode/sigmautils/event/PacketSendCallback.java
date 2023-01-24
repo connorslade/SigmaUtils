@@ -5,10 +5,11 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.network.Packet;
 
 public interface PacketSendCallback {
-    Event<PacketSendCallback> EVENT = EventFactory.createArrayBacked(PacketSendCallback.class, packetReceiveCallbacks -> event -> {
-        for (PacketSendCallback i : packetReceiveCallbacks)
-            i.handle(event);
-    });
+    Event<PacketSendCallback> EVENT =
+            EventFactory.createArrayBacked(PacketSendCallback.class, packetReceiveCallbacks -> event -> {
+                for (PacketSendCallback i : packetReceiveCallbacks)
+                    i.handle(event);
+            });
 
     void handle(PacketSendEvent event);
 

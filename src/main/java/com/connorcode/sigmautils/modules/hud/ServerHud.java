@@ -5,7 +5,6 @@ import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;

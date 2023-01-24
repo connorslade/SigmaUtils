@@ -17,6 +17,10 @@ public class DeathScreenMixin {
     @Inject(method = "init", at = @At("TAIL"))
     void onDeath(CallbackInfo ci) {
         Entity player = Objects.requireNonNull(client.player);
-        PrintDeathCords.lastDeath = new double[]{player.getX(), player.getY(), player.getZ()};
+        PrintDeathCords.lastDeath = new double[]{
+                player.getX(),
+                player.getY(),
+                player.getZ()
+        };
     }
 }

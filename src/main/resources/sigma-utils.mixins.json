@@ -54,8 +54,8 @@
     "TitleScreenMixin",
     "WorldMixin",
     "WorldRendererMixin",
-    "YggdrasilUserAuthenticationAccessor",
-    "YggdrasilAuthenticationServiceAccessor"
+    "YggdrasilAuthenticationServiceAccessor",
+    "YggdrasilUserAuthenticationAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

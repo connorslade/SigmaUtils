@@ -4,7 +4,6 @@ import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;

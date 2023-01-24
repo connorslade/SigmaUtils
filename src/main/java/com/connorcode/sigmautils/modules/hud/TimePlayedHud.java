@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 

@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.modules.hud;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.registry.Registry;

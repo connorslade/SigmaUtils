@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
@@ -183,7 +182,8 @@ public class PlayerHistory extends Module {
                 @Override
                 public void render(RenderData data, int x, int y) {
                     if (client.getCurrentServerEntry() == null) return;
-                    client.textRenderer.draw(data.matrices(), "§fSeen on Current Server: " + thisServer, x, y + getPadding(), 0);
+                    client.textRenderer.draw(data.matrices(), "§fSeen on Current Server: " + thisServer, x,
+                            y + getPadding(), 0);
                 }
             }.category("Info").build();
         }

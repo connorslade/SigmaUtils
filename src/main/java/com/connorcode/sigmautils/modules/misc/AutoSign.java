@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.mixin.SignEditScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 

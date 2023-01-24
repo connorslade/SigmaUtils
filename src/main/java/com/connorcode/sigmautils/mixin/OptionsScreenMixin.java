@@ -25,10 +25,12 @@ public class OptionsScreenMixin {
         var padding = getPadding();
         var button = ((ButtonWidget) element);
         button.setWidth(150 - 20 - padding);
-        Util.addChild(instance, new ButtonWidget(button.x + 150 - 20, button.y, 20, 20, Text.of(UiTweaks.muted ? "U" : "M"), (buttonWidget) -> {
-            UiTweaks.muted ^= true;
-            buttonWidget.setMessage(Text.of(UiTweaks.muted ? "U" : "M"));
-        }));
+        Util.addChild(instance,
+                new ButtonWidget(button.x + 150 - 20, button.y, 20, 20, Text.of(UiTweaks.muted ? "U" : "M"),
+                        (buttonWidget) -> {
+                            UiTweaks.muted ^= true;
+                            buttonWidget.setMessage(Text.of(UiTweaks.muted ? "U" : "M"));
+                        }));
         return element;
     }
 }

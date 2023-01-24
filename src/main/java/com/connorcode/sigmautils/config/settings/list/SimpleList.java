@@ -37,7 +37,8 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
             ((ScreenAccessor) screen).invokeClearAndInit();
         }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, List.of(Text.of("Add element")
                 .asOrderedText()), mouseX, mouseY))));
-        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display, x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
+                x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
     }
 
     public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x,
@@ -46,9 +47,11 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
         Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
             setting.remove(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, List.of(Text.of("Remove element")
-                .asOrderedText()), mouseX, mouseY))));
-        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display, x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xffffff));
+        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
+                List.of(Text.of("Remove element")
+                        .asOrderedText()), mouseX, mouseY))));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
+                x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xffffff));
     }
 
 
@@ -59,7 +62,10 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
 
     @Override
     public String[] getSearch(T resource) {
-        return new String[]{Objects.requireNonNull(registry.getId(resource)).toString(), getDisplay(resource).toLowerCase(Locale.ROOT)};
+        return new String[]{
+                Objects.requireNonNull(registry.getId(resource)).toString(),
+                getDisplay(resource).toLowerCase(Locale.ROOT)
+        };
     }
 
     @Override

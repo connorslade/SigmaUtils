@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 
 public class ModuleConfigGui extends Screen {
     private final Module module;
@@ -85,11 +83,8 @@ public class ModuleConfigGui extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         Setting.RenderData renderData = new Setting.RenderData(this, matrices, mouseX, mouseY, delta);
         int padding = getPadding();
-        float scale = getScale();
 
         this.renderBackground(matrices);
-        matrices.scale(scale, scale, scale);
-
         super.render(matrices, mouseX, mouseY, delta);
 
         int x = -75 + 20 + padding;

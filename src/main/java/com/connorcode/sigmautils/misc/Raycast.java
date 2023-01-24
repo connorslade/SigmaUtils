@@ -27,7 +27,8 @@ public class Raycast {
         Box box = entity.getBoundingBox()
                 .stretch(entity.getRotationVec(1.0F).multiply(maxDistance))
                 .expand(1.0D, 1.0D, 1.0D);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, cameraPos, vec3d3, box, (entityX) -> !entityX.isSpectator() && entityX.canHit(), maxDistance);
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, cameraPos, vec3d3, box,
+                (entityX) -> !entityX.isSpectator() && entityX.canHit(), maxDistance);
 
         if (entityHitResult == null)
             return target;
@@ -59,6 +60,8 @@ public class Raycast {
     public static HitResult raycast(Entity entity, double maxDistance, float tickDelta, boolean includeFluids,
                                     Vec3d direction) {
         Vec3d end = entity.getCameraPosVec(tickDelta).add(direction.multiply(maxDistance));
-        return entity.world.raycast(new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, entity));
+        return entity.world.raycast(
+                new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE,
+                        includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, entity));
     }
 }

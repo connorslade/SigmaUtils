@@ -4,7 +4,6 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Padding;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,8 +16,6 @@ import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
-import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
 
 public class ConfigGui extends Screen {
     public ConfigGui() {
@@ -69,16 +66,13 @@ public class ConfigGui extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         int padding = getPadding();
-        float scale = getScale();
-
         this.renderBackground(matrices);
-        matrices.scale(scale, scale, scale);
 
         for (int x = 0; x < Category.values().length; x++)
             drawCenteredText(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
 
-        super.render(matrices, (int) ((float) mouseX / scale), (int) ((float) mouseY / scale), delta);
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     public void close() {

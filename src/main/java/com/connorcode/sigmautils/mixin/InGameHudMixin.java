@@ -58,7 +58,8 @@ public abstract class InGameHudMixin {
         verticalRotationAxis = new Vec3f(cameraDirection);
         verticalRotationAxis.cross(horizontalRotationAxis);
 
-        Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis, scaledWidth / 2, scaledHeight / 2, scaledWidth, scaledHeight);
+        Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis,
+                scaledWidth / 2, scaledHeight / 2, scaledWidth, scaledHeight);
         HitResult hitResult = Raycast.raycastInDirection(client, client.getTickDelta(), 500, direction);
         if (Objects.requireNonNull(hitResult).getType() == HitResult.Type.MISS) {
             return;
@@ -68,7 +69,8 @@ public abstract class InGameHudMixin {
                 .distanceTo(Objects.requireNonNull(client.player).getPos());
 
         String text = String.format("§f[%d]", (int) distance);
-        client.textRenderer.draw(matrices, Text.of(text), scaledWidth / 2f - client.textRenderer.getWidth(text) / 2f, scaledHeight / 2f + client.textRenderer.fontHeight, 0);
+        client.textRenderer.draw(matrices, Text.of(text), scaledWidth / 2f - client.textRenderer.getWidth(text) / 2f,
+                scaledHeight / 2f + client.textRenderer.fontHeight, 0);
         client.getProfiler().pop();
     }
 
@@ -121,7 +123,7 @@ public abstract class InGameHudMixin {
         return value - getHotbarPos();
     }
 
-    @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 3)
+    @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 1)
     private int modifyJumpBar(int value) {
         return value - getHotbarPos();
     }

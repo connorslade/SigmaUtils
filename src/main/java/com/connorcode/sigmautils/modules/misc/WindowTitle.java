@@ -36,7 +36,8 @@ public class WindowTitle extends Module {
         lastTitle = titleFormatter.value()
                 .replace("{version}", VERSION)
                 .replace("{server}",
-                        client.getCurrentServerEntry() == null ? "Singleplayer" : client.getCurrentServerEntry().address)
+                        client.getCurrentServerEntry() ==
+                                null ? "Singleplayer" : client.getCurrentServerEntry().address)
                 .replace("{player}", client.player == null ? "Offline" : client.player.getName()
                         .getString());
         return lastTitle;

@@ -5,7 +5,6 @@ import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.nbt.NbtCompound;

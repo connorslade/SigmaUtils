@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.misc.util;
 
 import com.connorcode.sigmautils.misc.TextStyle;
+import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
@@ -50,8 +51,7 @@ public class NetworkUtils {
     }
 
     public static synchronized AuthStatus getAuthStatus() {
-        if (authStatus == AuthStatus.Waiting)
-            return authStatus;
+        if (authStatus == AuthStatus.Waiting) return authStatus;
 
         if (System.currentTimeMillis() - lastAuthStatusCheck > 1000 * 60 * 5) {
             authStatus = AuthStatus.Waiting;
@@ -69,7 +69,7 @@ public class NetworkUtils {
                     sessionService.joinServer(profile, token, id);
                     authStatus = sessionService.hasJoinedServer(profile, id, null)
                             .isComplete() ? AuthStatus.Online : AuthStatus.Offline;
-                } catch (Exception e) {
+                } catch (AuthenticationException e) {
                     authStatus = AuthStatus.Invalid;
                 }
             }).start();
@@ -79,7 +79,11 @@ public class NetworkUtils {
     }
 
     public enum AuthStatus {
-        Unknown, Waiting, Invalid, Online, Offline;
+        Unknown,
+        Waiting,
+        Invalid,
+        Online,
+        Offline;
 
         public String getText() {
             return switch (this) {
