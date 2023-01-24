@@ -18,8 +18,8 @@ public abstract class PerspectiveMixin {
 
     @Inject(method = "next", at = @At("RETURN"), cancellable = true)
     void onNext(CallbackInfoReturnable<Perspective> cir) {
-        if (!Config.getEnabled(DisableFrontPerspective.class)) return;
-        cir.setReturnValue(DisableFrontPerspective.nextPerspective(values()[(cir.getReturnValue()
-                .ordinal() + 2) % 3]));
+        if (!Config.getEnabled(DisableFrontPerspective.class))
+            return;
+        cir.setReturnValue(DisableFrontPerspective.nextPerspective(values()[(cir.getReturnValue().ordinal() + 2) % 3]));
     }
 }

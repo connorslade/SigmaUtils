@@ -20,23 +20,18 @@ public class AsyncRunner {
     }
 
     public static void stop(UUID uuid) {
-        Task task = tasks.get(uuid)
-                .getLeft();
+        Task task = tasks.get(uuid).getLeft();
         task.stop();
-        if (!task.running()) tasks.remove(uuid);
+        if (!task.running())
+            tasks.remove(uuid);
     }
 
     public static void kill(UUID uuid) {
-        tasks.remove(uuid)
-                .getRight()
-                .interrupt();
+        tasks.remove(uuid).getRight().interrupt();
     }
 
     public static List<String> getUuidList() {
-        return tasks.keySet()
-                .stream()
-                .map(UUID::toString)
-                .toList();
+        return tasks.keySet().stream().map(UUID::toString).toList();
     }
 
     public interface Task {
@@ -48,6 +43,7 @@ public class AsyncRunner {
 
         void start(UUID uuid);
 
-        default void stop() {}
+        default void stop() {
+        }
     }
 }

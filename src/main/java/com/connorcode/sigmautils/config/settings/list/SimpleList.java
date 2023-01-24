@@ -29,30 +29,26 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
         this.registry = registry;
     }
 
-    public static <T> void selector(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
+    public static <T> void selector(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x,
+                                    int y, int gap) {
         var padding = getPadding();
         Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
             setting.add(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                List.of(Text.of("Add element").asOrderedText()), mouseX, mouseY))));
-        Util.addDrawable(screen,
-                (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
-                        x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
-                        0xFFFFFF));
+        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, List.of(Text.of("Add element")
+                .asOrderedText()), mouseX, mouseY))));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display, x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
     }
 
-    public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
+    public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x,
+                                  int y, int gap) {
         var padding = getPadding();
         Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
             setting.remove(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
-        Util.addDrawable(screen,
-                (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
-                        x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
-                        0xffffff));
+        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, List.of(Text.of("Remove element")
+                .asOrderedText()), mouseX, mouseY))));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display, x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xffffff));
     }
 
 
@@ -63,10 +59,7 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
 
     @Override
     public String[] getSearch(T resource) {
-        return new String[]{
-                Objects.requireNonNull(registry.getId(resource)).toString(),
-                getDisplay(resource).toLowerCase(Locale.ROOT)
-        };
+        return new String[]{Objects.requireNonNull(registry.getId(resource)).toString(), getDisplay(resource).toLowerCase(Locale.ROOT)};
     }
 
     @Override
@@ -76,7 +69,8 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
 
     @Override
     public boolean renderSelector(T resource, Screen screen, int x, int y) {
-        if (setting.value().contains(resource)) return false;
+        if (setting.value().contains(resource))
+            return false;
         selector(setting, resource, getDisplay(resource), screen, x, y, 0);
         return true;
     }
@@ -92,7 +86,8 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
 
     @Override
     public List<T> deserialize(NbtElement nbt) {
-        if (!(nbt instanceof NbtList resourceList) || registry == null) return null;
+        if (!(nbt instanceof NbtList resourceList) || registry == null)
+            return null;
         var list = resourceList.stream()
                 .map(e -> Objects.requireNonNull(registry.get(Identifier.tryParse(e.asString()))))
                 .toList();

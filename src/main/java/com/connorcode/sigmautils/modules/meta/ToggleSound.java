@@ -14,6 +14,8 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class ToggleSound extends Module {
     private static final SelectorSetting sound =
             new SelectorSetting(ToggleSound.class, "Sound", () -> Registry.SOUND_EVENT.stream()
@@ -37,7 +39,6 @@ public class ToggleSound extends Module {
 
     public static void play(boolean enable) {
         if (!Config.getEnabled(ToggleSound.class)) return;
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
 
         // Play button click sound

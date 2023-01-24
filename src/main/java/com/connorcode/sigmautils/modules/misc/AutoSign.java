@@ -12,6 +12,8 @@ import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class AutoSign extends Module {
     public static StringSetting line1 = lineSetting(1).value("Hello, world!")
             .build();
@@ -35,7 +37,7 @@ public class AutoSign extends Module {
         ScreenOpenCallback.EVENT.register(screen -> {
             if (!(screen.get() instanceof SignEditScreen && enabled)) return;
             SignBlockEntity signBlock = ((SignEditScreenAccessor) screen.get()).getSign();
-            Objects.requireNonNull(MinecraftClient.getInstance().player).networkHandler.sendPacket(
+            Objects.requireNonNull(client.player).networkHandler.sendPacket(
                     new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(),
                             line4.value()));
             screen.cancel();

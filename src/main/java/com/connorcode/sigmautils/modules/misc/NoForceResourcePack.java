@@ -13,6 +13,8 @@ import net.minecraft.util.Formatting;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class NoForceResourcePack extends Module {
     public NoForceResourcePack() {
         super("no_force_resourcepack", "No Force ResourcePack",
@@ -47,8 +49,7 @@ public class NoForceResourcePack extends Module {
                                     .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                             Text.of("Click to download resource pack.")))));
 
-            Objects.requireNonNull(MinecraftClient.getInstance().player)
-                    .sendMessage(text);
+            Objects.requireNonNull(client.player).sendMessage(text);
             packet.cancel();
         });
     }

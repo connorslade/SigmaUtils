@@ -9,12 +9,14 @@ import net.minecraft.text.Text;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class About implements Command {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("about")
                         .executes(context -> {
-                            Objects.requireNonNull(MinecraftClient.getInstance().player)
+                            Objects.requireNonNull(client.player)
                                     .sendMessage(
                                             Text.of(String.format("Σ] Sigma Utils v%s", SigmaUtils.VERSION)),
                                             false);

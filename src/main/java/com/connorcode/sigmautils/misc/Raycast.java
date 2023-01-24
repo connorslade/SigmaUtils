@@ -14,20 +14,20 @@ import net.minecraft.world.RaycastContext;
 
 public class Raycast {
     // Modified from https://fabricmc.net/wiki/tutorial:pixel_raycast
-    public static HitResult raycastInDirection(MinecraftClient client, float tickDelta, double maxDistance, Vec3d direction) {
+    public static HitResult raycastInDirection(MinecraftClient client, float tickDelta, double maxDistance,
+                                               Vec3d direction) {
         Entity entity = client.getCameraEntity();
-        if (entity == null || client.world == null) return null;
+        if (entity == null || client.world == null)
+            return null;
 
         HitResult target = raycast(entity, maxDistance, tickDelta, false, direction);
         Vec3d cameraPos = entity.getCameraPosVec(tickDelta);
 
         Vec3d vec3d3 = cameraPos.add(direction.multiply(maxDistance));
         Box box = entity.getBoundingBox()
-                .stretch(entity.getRotationVec(1.0F)
-                        .multiply(maxDistance))
+                .stretch(entity.getRotationVec(1.0F).multiply(maxDistance))
                 .expand(1.0D, 1.0D, 1.0D);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, cameraPos, vec3d3, box,
-                (entityX) -> !entityX.isSpectator() && entityX.canHit(), maxDistance);
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, cameraPos, vec3d3, box, (entityX) -> !entityX.isSpectator() && entityX.canHit(), maxDistance);
 
         if (entityHitResult == null)
             return target;
@@ -45,7 +45,8 @@ public class Raycast {
         return target;
     }
 
-    public static Vec3d map(float anglePerPixel, Vec3d center, Vec3f horizontalRotationAxis, Vec3f verticalRotationAxis, int x, int y, int width, int height) {
+    public static Vec3d map(float anglePerPixel, Vec3d center, Vec3f horizontalRotationAxis, Vec3f verticalRotationAxis,
+                            int x, int y, int width, int height) {
         float horizontalRotation = (x - width / 2f) * anglePerPixel;
         float verticalRotation = (y - height / 2f) * anglePerPixel;
 
@@ -55,11 +56,9 @@ public class Raycast {
         return new Vec3d(temp2);
     }
 
-    public static HitResult raycast(Entity entity, double maxDistance, float tickDelta, boolean includeFluids, Vec3d direction) {
-        Vec3d end = entity.getCameraPosVec(tickDelta)
-                .add(direction.multiply(maxDistance));
-        return entity.world.raycast(
-                new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE,
-                        includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, entity));
+    public static HitResult raycast(Entity entity, double maxDistance, float tickDelta, boolean includeFluids,
+                                    Vec3d direction) {
+        Vec3d end = entity.getCameraPosVec(tickDelta).add(direction.multiply(maxDistance));
+        return entity.world.raycast(new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, entity));
     }
 }

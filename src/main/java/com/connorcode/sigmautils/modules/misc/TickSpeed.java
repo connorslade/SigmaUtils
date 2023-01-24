@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class TickSpeed extends Module {
@@ -29,8 +30,7 @@ public class TickSpeed extends Module {
     }
 
     void setTickSpeed(long mspt) {
-        ((RenderTickCounterAccessor) ((MinecraftClientAccessor) MinecraftClient.getInstance()).getRenderTickCounter()).tickTime(
-                mspt);
+        ((RenderTickCounterAccessor) ((MinecraftClientAccessor) client).getRenderTickCounter()).tickTime(mspt);
     }
 
     void setTickSpeedFromPercent(double percent) {

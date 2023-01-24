@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 import static com.mojang.brigadier.arguments.BoolArgumentType.getBool;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -46,13 +47,11 @@ public class Toggle implements Command {
         }
 
         if (setState) {
-            module.get()
-                    .enable(MinecraftClient.getInstance());
+            module.get().enable(client);
             return 0;
         }
 
-        module.get()
-                .disable(MinecraftClient.getInstance());
+        module.get().disable(client);
         return 0;
     }
 }

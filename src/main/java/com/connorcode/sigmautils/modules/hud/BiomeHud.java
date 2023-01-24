@@ -11,6 +11,8 @@ import net.minecraft.world.biome.Biome;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class BiomeHud extends HudModule {
     public BiomeHud() {
         super("biome_hud", "Biome Hud", "Shows the biome you are currently located within on the HUD", Category.Hud);
@@ -23,7 +25,6 @@ public class BiomeHud extends HudModule {
     }
 
     String getBiomeName() {
-        MinecraftClient client = MinecraftClient.getInstance();
         RegistryEntry<Biome> biome = Objects.requireNonNull(client.world)
                 .getBiome(Objects.requireNonNull(client.player)
                         .getBlockPos());

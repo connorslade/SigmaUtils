@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules._interface.EscapeExit;
 import com.connorcode.sigmautils.modules._interface.Minceraft;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -41,13 +40,9 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     void init(CallbackInfo ci) {
         ScreenAccessor screen = ((ScreenAccessor) this);
-        Util.addChild(this,
-                new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20,
-                        Text.of("Σ"), button -> MinecraftClient.getInstance()
-                        .setScreen(new ConfigGui()),
-                        ((button, matrices, mouseX, mouseY) -> screen.invokeRenderOrderedTooltip(matrices,
-                                Language.getInstance()
-                                        .reorder(List.of(Text.of("Sigma Utils"))), mouseX, mouseY))));
+        Util.addChild(this, new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20, Text.of("Σ"), button -> Objects.requireNonNull(client)
+                .setScreen(new ConfigGui()), ((button, matrices, mouseX, mouseY) -> screen.invokeRenderOrderedTooltip(matrices, Language.getInstance()
+                .reorder(List.of(Text.of("Sigma Utils"))), mouseX, mouseY))));
     }
 
 
@@ -60,8 +55,7 @@ public class TitleScreenMixin extends Screen {
 
         updateTime = now;
         assert this.client != null;
-        this.splashText = this.client.getSplashTextLoader()
-                .get();
+        this.splashText = this.client.getSplashTextLoader().get();
     }
 
     // For minceraft
@@ -73,7 +67,7 @@ public class TitleScreenMixin extends Screen {
     // For escape_exit
     @Inject(method = "shouldCloseOnEsc", at = @At("HEAD"))
     void shouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(EscapeExit.class)) Objects.requireNonNull(this.client)
-                .scheduleStop();
+        if (Config.getEnabled(EscapeExit.class))
+            Objects.requireNonNull(this.client).scheduleStop();
     }
 }

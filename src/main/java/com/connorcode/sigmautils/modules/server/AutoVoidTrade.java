@@ -19,6 +19,8 @@ import net.minecraft.village.TradeOffer;
 import java.util.HashSet;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class AutoVoidTrade extends Module {
     // [In Progress]
     // Settings:
@@ -52,7 +54,6 @@ public class AutoVoidTrade extends Module {
     public void tick() {
         super.tick();
 
-        MinecraftClient client = MinecraftClient.getInstance();
         if (!enabled || waiting < 0 || client.player == null || client.world == null) return;
         if (waiting != 0) {
             waiting--;
@@ -84,7 +85,6 @@ public class AutoVoidTrade extends Module {
 
         PacketReceiveCallback.EVENT.register(packet -> {
             if (!enabled) return;
-            MinecraftClient client = MinecraftClient.getInstance();
             if (packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket) {
                 if (setTradeOffersS2CPacket.getOffers().size() <= tradeIndex.value()) error("Invalid trade index");
                 TradeOffer tradeOffer = setTradeOffersS2CPacket.getOffers().get(tradeIndex.intValue());
@@ -112,7 +112,7 @@ public class AutoVoidTrade extends Module {
     }
 
     private void error(String message) {
-        Objects.requireNonNull(MinecraftClient.getInstance().player)
+        Objects.requireNonNull(client.player)
                 .sendMessage(Text.of("[SIGMAUTILS::AutoVoidTrade] " + message), false);
         waiting = delay.intValue();
     }

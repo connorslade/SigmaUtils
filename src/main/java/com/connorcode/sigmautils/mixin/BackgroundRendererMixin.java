@@ -14,8 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
     @Inject(method = "applyFog", at = @At("RETURN"))
-    private static void applyFogModifyDistance(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
-        if (!Config.getEnabled(NoFog.class)) return;
+    private static void applyFogModifyDistance(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
+                                               boolean thickFog, float tickDelta, CallbackInfo ci) {
+        if (!Config.getEnabled(NoFog.class))
+            return;
         RenderSystem.setShaderFogStart(-8);
         RenderSystem.setShaderFogEnd(1000000);
         RenderSystem.setShaderFogShape(FogShape.CYLINDER);

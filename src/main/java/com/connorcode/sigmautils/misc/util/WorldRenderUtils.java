@@ -23,8 +23,8 @@ public class WorldRenderUtils {
         matrixStack.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
 
         var immediate = client.getBufferBuilders().getEntityVertexConsumers();
-        client.textRenderer.draw(text, client.textRenderer.getWidth(text) / -2f, 0f, -1, shadow,
-                matrixStack.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
+        client.textRenderer.draw(text, client.textRenderer.getWidth(text) / -2f, 0f, -1, shadow, matrixStack.peek()
+                .getPositionMatrix(), immediate, true, 0, 0xf000f0);
         immediate.draw();
 
         RenderSystem.disableBlend();
@@ -36,8 +36,7 @@ public class WorldRenderUtils {
         var camera = client.gameRenderer.getCamera();
         matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
         matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
-        matrixStack.translate(pos.getX() - camera.getPos().x, pos.getY() - camera.getPos().y,
-                pos.getZ() - camera.getPos().z);
+        matrixStack.translate(pos.getX() - camera.getPos().x, pos.getY() - camera.getPos().y, pos.getZ() - camera.getPos().z);
 
         return matrixStack;
     }

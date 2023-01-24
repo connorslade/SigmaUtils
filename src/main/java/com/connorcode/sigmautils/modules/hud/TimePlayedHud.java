@@ -12,6 +12,8 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class TimePlayedHud extends HudModule {
     private static final long openTimestamp = System.currentTimeMillis();
     private static final EnumSetting<TimeSince> timeSince =
@@ -48,7 +50,7 @@ public class TimePlayedHud extends HudModule {
             case GameStart -> System.currentTimeMillis() - openTimestamp;
             case WorldLoad -> System.currentTimeMillis() - worldOpenTimestamp;
             case ServerJoin -> System.currentTimeMillis() - serverJoinTimestamp;
-            case WorldCreate -> Objects.requireNonNull(MinecraftClient.getInstance().world)
+            case WorldCreate -> Objects.requireNonNull(client.world)
                     .getTime() * 50;
         };
 

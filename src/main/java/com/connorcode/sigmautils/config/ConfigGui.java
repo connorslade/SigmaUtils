@@ -49,7 +49,7 @@ public class ConfigGui extends Screen {
                 Module module = categoryModules.get(y);
                 int renderX = padding + x * (150 + padding);
                 int renderY = textRenderer.fontHeight + padding * 2 + y * (20 + padding);
-                module.drawInterface(MinecraftClient.getInstance(), this, renderX, renderY);
+                module.drawInterface(client, this, renderX, renderY);
             }
         }
 

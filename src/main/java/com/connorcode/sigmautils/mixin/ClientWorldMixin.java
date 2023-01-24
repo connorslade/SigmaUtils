@@ -25,11 +25,13 @@ public abstract class ClientWorldMixin {
     private static Set<Item> BLOCK_MARKER_ITEMS;
 
     @Shadow
-    public abstract void randomBlockDisplayTick(int centerX, int centerY, int centerZ, int radius, Random random, @Nullable Block block, BlockPos.Mutable pos);
+    public abstract void randomBlockDisplayTick(int centerX, int centerY, int centerZ, int radius, Random random,
+                                                @Nullable Block block, BlockPos.Mutable pos);
 
     @Inject(method = "doRandomBlockDisplayTicks", at = @At("HEAD"), cancellable = true)
     void onDoRandomBlockDisplayTicks(int centerX, int centerY, int centerZ, CallbackInfo ci) {
-        if (!Config.getEnabled(AllowShowBarrier.class)) return;
+        if (!Config.getEnabled(AllowShowBarrier.class))
+            return;
         Random random = Random.create();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 

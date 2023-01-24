@@ -10,6 +10,8 @@ import net.minecraft.text.Text;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class PrivateMessageNotifier extends Module {
     public PrivateMessageNotifier() {
         super("private_message_notifier", "Private Message Notifier",
@@ -22,12 +24,12 @@ public class PrivateMessageNotifier extends Module {
         super.init();
         PacketReceiveCallback.EVENT.register(packet -> {
             if (!(packet.get() instanceof MessageHeaderS2CPacket header && enabled)) return;
-            PlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().world)
+            PlayerEntity player = Objects.requireNonNull(client.world)
                     .getPlayerByUuid(header.header()
                             .sender());
 
             if (player == null) return;
-            Objects.requireNonNull(MinecraftClient.getInstance().player)
+            Objects.requireNonNull(client.player)
                     .sendMessage(Text.of(String.format("Σ] `%s` just sent a message.", player.getGameProfile()
                             .getName())));
         });

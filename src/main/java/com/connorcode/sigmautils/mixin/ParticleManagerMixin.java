@@ -18,12 +18,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ParticleManagerMixin {
     @Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
     private void onAddBlockDestroyEffects(BlockPos pos, BlockState state, CallbackInfo ci) {
-        if (Config.getEnabled(NoBreakParticles.class)) ci.cancel();
+        if (Config.getEnabled(NoBreakParticles.class))
+            ci.cancel();
     }
 
     @Redirect(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/particle/Particle;)V"))
     void onAddParticle(ParticleManager particleManager, Particle particle, ParticleEffect parameters) {
-        if (Config.getEnabled(ParticleControl.class) && ParticleControl.disabled(parameters.getType())) return;
+        if (Config.getEnabled(ParticleControl.class) && ParticleControl.disabled(parameters.getType()))
+            return;
         particleManager.addParticle(particle);
     }
 }

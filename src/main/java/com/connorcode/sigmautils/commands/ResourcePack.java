@@ -11,13 +11,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class ResourcePack implements Command {
     static int serverPackUninstall(CommandContext<FabricClientCommandSource> context) {
-        Objects.requireNonNull(MinecraftClient.getInstance()
-                        .getResourcePackProvider())
+        Objects.requireNonNull(client.getResourcePackProvider())
                 .clear();
         return 0;
     }
@@ -35,9 +35,7 @@ public class ResourcePack implements Command {
             return 0;
         }
 
-        Objects.requireNonNull(MinecraftClient.getInstance()
-                        .getResourcePackProvider())
-                .download(url, hash, true);
+        Objects.requireNonNull(client.getResourcePackProvider()).download(url, hash, true);
         return 0;
     }
 

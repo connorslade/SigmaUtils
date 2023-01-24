@@ -11,6 +11,8 @@ import net.minecraft.util.registry.RegistryKey;
 
 import java.util.*;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class EffectHud extends HudModule {
     public EffectHud() {
         super("effect_hud", "Effect Hud", "Shows all the status effects you have the HUD", Category.Hud);
@@ -21,7 +23,7 @@ public class EffectHud extends HudModule {
     public List<String> lines() {
         List<String> out = new ArrayList<>();
         String color = this.getTextColor();
-        Map<StatusEffect, StatusEffectInstance> effectMap = Objects.requireNonNull(MinecraftClient.getInstance().player)
+        Map<StatusEffect, StatusEffectInstance> effectMap = Objects.requireNonNull(client.player)
                 .getActiveStatusEffects();
 
         for (Map.Entry<StatusEffect, StatusEffectInstance> i : effectMap.entrySet()) {

@@ -18,11 +18,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class PlayerHistory extends Module {
-    private static final File playerFile =
-            new File(MinecraftClient.getInstance().runDirectory, "config/SigmaUtils/players.nbt");
+    private static final File playerFile = new File(client.runDirectory, "config/SigmaUtils/players.nbt");
     private static final HashMap<String, HashMap<UUID, SeenPlayer>> seenPlayers = new HashMap<>();
     private static final boolean wasEnabled = false;
 
@@ -53,7 +53,6 @@ public class PlayerHistory extends Module {
         });
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            var client = MinecraftClient.getInstance();
             if (packet.get() instanceof LoginSuccessS2CPacket) {
                 synchronized (seenPlayers) {
                     seenPlayers.values().forEach(server -> server.values().forEach(p -> p.setOnline(false)));
@@ -157,12 +156,12 @@ public class PlayerHistory extends Module {
                     synchronized (seenPlayers) {
                         totalSeen = seenPlayers.values().stream().map(HashMap::size).reduce(0, Integer::sum);
                     }
-                    return MinecraftClient.getInstance().textRenderer.fontHeight + getPadding() * 2;
+                    return client.textRenderer.fontHeight + getPadding() * 2;
                 }
 
                 @Override
                 public void render(RenderData data, int x, int y) {
-                    MinecraftClient.getInstance().textRenderer.draw(data.matrices(),
+                    client.textRenderer.draw(data.matrices(),
                             "§fTotal Seen Players: " + totalSeen, x, y + getPadding(), 0);
                 }
             }.category("Info").build();
@@ -170,7 +169,6 @@ public class PlayerHistory extends Module {
             new DummySetting(PlayerHistory.class, "Seen on Current Server", 0) {
                 @Override
                 public int initRender(Screen screen, int x, int y, int width) {
-                    var client = MinecraftClient.getInstance();
                     if (client.getCurrentServerEntry() != null) {
                         synchronized (seenPlayers) {
                             thisServer =
@@ -184,9 +182,8 @@ public class PlayerHistory extends Module {
 
                 @Override
                 public void render(RenderData data, int x, int y) {
-                    if (MinecraftClient.getInstance().getCurrentServerEntry() == null) return;
-                    MinecraftClient.getInstance().textRenderer.draw(data.matrices(),
-                            "§fSeen on Current Server: " + thisServer, x, y + getPadding(), 0);
+                    if (client.getCurrentServerEntry() == null) return;
+                    client.textRenderer.draw(data.matrices(), "§fSeen on Current Server: " + thisServer, x, y + getPadding(), 0);
                 }
             }.category("Info").build();
         }

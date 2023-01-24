@@ -19,12 +19,14 @@ public abstract class ChatHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;isChatFocused()Z"))
     boolean isChatFocused(ChatHud instance) {
-        if (Config.getEnabled(NoChatFade.class)) return true;
+        if (Config.getEnabled(NoChatFade.class))
+            return true;
         return isChatFocused();
     }
 
     @Inject(method = "hideMessage", at = @At("HEAD"), cancellable = true)
     void onHideMessage(MessageSignatureData signature, CallbackInfo ci) {
-        if (Config.getEnabled(NoMessageHiding.class)) ci.cancel();
+        if (Config.getEnabled(NoMessageHiding.class))
+            ci.cancel();
     }
 }

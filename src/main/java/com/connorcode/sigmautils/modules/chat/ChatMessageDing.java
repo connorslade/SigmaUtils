@@ -10,6 +10,8 @@ import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.sound.SoundEvents;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class ChatMessageDing extends Module {
     private static final BoolSetting alertSystemMessages =
             new BoolSetting(ChatMessageDing.class, "System Messages").value(true)
@@ -28,7 +30,7 @@ public class ChatMessageDing extends Module {
     }
 
     private void playDing() {
-        MinecraftClient.getInstance()
+        client
                 .getSoundManager()
                 .play(PositionedSoundInstance.master(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f));
     }

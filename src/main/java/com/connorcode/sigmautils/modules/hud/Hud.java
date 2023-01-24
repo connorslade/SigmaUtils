@@ -13,6 +13,7 @@ import net.minecraft.util.Pair;
 
 import java.util.*;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class Hud extends Module {
@@ -40,8 +41,6 @@ public class Hud extends Module {
     }
 
     public static List<HudStack> getHud(int scaledHeight, int scaledWidth) {
-        MinecraftClient client = MinecraftClient.getInstance();
-
         HashMap<RealLocation, List<String>> lines = makeHudText();
         List<HudStack> hudStacks = new ArrayList<>();
 
@@ -58,7 +57,6 @@ public class Hud extends Module {
     }
 
     public static void renderHud(MatrixStack matrices) {
-        MinecraftClient client = MinecraftClient.getInstance();
         InGameHudAccessor hudAccessor = (InGameHudAccessor) client.inGameHud;
         int padding = getPadding();
 
@@ -97,7 +95,7 @@ public class Hud extends Module {
         }
 
         Pair<Integer, Integer> getPos(int scaledHeight, int scaledWidth, int maxWidth, int lines) {
-            int fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight;
+            int fontHeight = client.textRenderer.fontHeight;
             int padding = getPadding();
 
             int x = switch (this) {
@@ -118,7 +116,6 @@ public class Hud extends Module {
 
     record HudStack(RealLocation location, List<String> lines, int startX, int startY, int maxWidth) {
         void render(MatrixStack matrices, int padding) {
-            MinecraftClient client = MinecraftClient.getInstance();
             int y = startY;
             for (String line : lines) {
                 client.textRenderer.drawWithShadow(matrices, line,

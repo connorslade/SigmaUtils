@@ -13,6 +13,7 @@ import net.minecraft.util.Pair;
 
 import java.util.*;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -285,7 +286,6 @@ public class Run implements Command {
         public Pair<String, Boolean> next(boolean inc) {
             if (!init) {
                 init = true;
-                MinecraftClient client = MinecraftClient.getInstance();
                 switch (type) {
                     case PlayerName -> {
                         assert client.player != null;
@@ -393,8 +393,7 @@ public class Run implements Command {
                         yield working.toString();
                     }
                     case isOnline -> {
-                        Collection<PlayerListEntry> playerListEntries = Objects.requireNonNull(
-                                MinecraftClient.getInstance().player).networkHandler.getPlayerList();
+                        Collection<PlayerListEntry> playerListEntries = Objects.requireNonNull(client.player).networkHandler.getPlayerList();
                         String finalString = string;
                         String finalUUIDString = string.replaceAll("-", "");
                         boolean nameMatch = playerListEntries.stream()

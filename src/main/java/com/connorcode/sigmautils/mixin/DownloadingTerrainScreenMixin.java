@@ -28,7 +28,8 @@ public class DownloadingTerrainScreenMixin extends Screen {
     // For see_through_loading
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(I)V"))
     void onRenderBackground(DownloadingTerrainScreen instance, int i) {
-        if (!Config.getEnabled(SeeThruLoading.class)) this.renderBackgroundTexture(0);
+        if (!Config.getEnabled(SeeThruLoading.class))
+            this.renderBackgroundTexture(0);
     }
 
     @Inject(method = "render", at = @At("HEAD"))

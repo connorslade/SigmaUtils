@@ -8,6 +8,8 @@ import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class ServerHud extends HudModule {
     private static final BoolSetting serverType = new BoolSetting(ServerHud.class, "Server Type").value(true)
             .description("Show Server Type")
@@ -31,7 +33,6 @@ public class ServerHud extends HudModule {
     }
 
     public String line() {
-        MinecraftClient client = MinecraftClient.getInstance();
         ServerInfo serverEntry = client.getCurrentServerEntry();
 
         return String.format("§r%sServer: §f%s%s", this.getTextColor(),

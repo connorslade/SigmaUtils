@@ -13,6 +13,7 @@ import net.minecraft.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.modules.meta.Scale.getScale;
@@ -77,7 +78,7 @@ public class ModuleConfigGui extends Screen {
         for (List<Setting<?>> settings : this.settings.stream().map(Pair::getRight).toList())
             for (Setting<?> setting : settings)
                 setting.onClose();
-        MinecraftClient.getInstance().setScreen(parent);
+        Objects.requireNonNull(client).setScreen(parent);
     }
 
     @Override

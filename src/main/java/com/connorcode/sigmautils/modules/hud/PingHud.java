@@ -8,6 +8,8 @@ import net.minecraft.client.network.PlayerListEntry;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class PingHud extends HudModule {
     public PingHud() {
         super("ping_hud", "Ping Hud", "Shows your ping", Category.Hud);
@@ -16,7 +18,6 @@ public class PingHud extends HudModule {
     }
 
     public String line() {
-        MinecraftClient client = MinecraftClient.getInstance();
         PlayerListEntry playerListEntry =
                 Objects.requireNonNull(client.player).networkHandler.getPlayerListEntry(client.player.getUuid());
         return String.format("§r%sPing: §f%s", this.getTextColor(),

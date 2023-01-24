@@ -17,13 +17,15 @@ public class ClientConnectionMixin {
     void onChannelRead(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo ci) {
         PacketReceiveCallback.PacketReceiveEvent event = new PacketReceiveCallback.PacketReceiveEvent(packet);
         PacketReceiveCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled()) ci.cancel();
+        if (event.isCancelled())
+            ci.cancel();
     }
 
     @Inject(method = "sendImmediately", at = @At("HEAD"), cancellable = true)
     void onPacketSend(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
         PacketSendCallback.PacketSendEvent event = new PacketSendCallback.PacketSendEvent(packet);
         PacketSendCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled()) ci.cancel();
+        if (event.isCancelled())
+            ci.cancel();
     }
 }

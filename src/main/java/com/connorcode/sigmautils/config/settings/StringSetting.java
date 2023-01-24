@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 
 import java.util.Optional;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
@@ -94,7 +95,6 @@ public class StringSetting extends Setting<StringSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        MinecraftClient client = MinecraftClient.getInstance();
         int padding = getPadding();
 
         TextFieldWidget textField = new TextFieldWidget(client.textRenderer, x,
@@ -112,7 +112,7 @@ public class StringSetting extends Setting<StringSetting> {
     @Override
     public void render(RenderData data, int x, int y) {
         if (!showName) return;
-        MinecraftClient.getInstance().textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x,
+        client.textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x,
                 y + getPadding(), 0);
     }
 

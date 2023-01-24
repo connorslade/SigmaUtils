@@ -22,13 +22,13 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     void onInit(CallbackInfo ci) {
-        if (!UiTweaks.showValidSession()) return;
+        if (!UiTweaks.showValidSession())
+            return;
         addDrawableChild(new Components.DrawableElement() {
             @Override
             public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                 var text = NetworkUtils.getAuthStatus().getText();
-                Objects.requireNonNull(client).textRenderer.draw(matrices, text,
-                        width - client.textRenderer.getWidth(text) - 10, 10, 0xFFFFFF);
+                Objects.requireNonNull(client).textRenderer.draw(matrices, text, width - client.textRenderer.getWidth(text) - 10, 10, 0xFFFFFF);
             }
         });
     }

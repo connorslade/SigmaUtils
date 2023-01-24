@@ -18,11 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> {
     @Inject(method = "shouldFlipUpsideDown", at = @At("HEAD"), cancellable = true)
     private static void shouldFlipUpsideDown(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(FlippedEntities.class) && FlippedEntities.isFlipped(entity)) cir.setReturnValue(true);
+        if (Config.getEnabled(FlippedEntities.class) && FlippedEntities.isFlipped(entity))
+            cir.setReturnValue(true);
     }
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    void onModelRender(M instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha, T livingEntity) {
+    void onModelRender(M instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay,
+                       float red, float green, float blue, float alpha, T livingEntity) {
         // TODO: make work with mobs
         if (Config.getEnabled(ShowInvisibleEntities.class) && ShowInvisibleEntities.isInvisible(livingEntity))
             alpha = (float) ShowInvisibleEntities.opacity.value();

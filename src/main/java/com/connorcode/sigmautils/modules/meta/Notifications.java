@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 public class Notifications extends Module {
@@ -59,7 +60,7 @@ public class Notifications extends Module {
 
     public static void onStartup() {
         if (!Notifications.startup.value() || Notifications.display.value() != Display.TOAST) return;
-        MinecraftClient.getInstance()
+        client
                 .getToastManager()
                 .add(new SystemToast(SystemToast.Type.PERIODIC_NOTIFICATION, Text.of("Sigma Utils"),
                         Text.of("Started V" + SigmaUtils.VERSION)));

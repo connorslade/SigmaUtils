@@ -15,14 +15,16 @@ public class AllowedAddressResolverMixin {
     // For allow_blocked_servers
     @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/BlockListChecker;isAllowed(Lnet/minecraft/client/network/Address;)Z"))
     boolean onIsAllowed(BlockListChecker instance, Address address) {
-        if (Config.getEnabled(AllowBlockedServers.class)) return true;
+        if (Config.getEnabled(AllowBlockedServers.class))
+            return true;
         return instance.isAllowed(address);
     }
 
     // For allow_blocked_servers
     @Redirect(method = "resolve", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/BlockListChecker;isAllowed(Lnet/minecraft/client/network/ServerAddress;)Z"))
     boolean onIsAllowed(BlockListChecker instance, ServerAddress serverAddress) {
-        if (Config.getEnabled(AllowBlockedServers.class)) return true;
+        if (Config.getEnabled(AllowBlockedServers.class))
+            return true;
         return instance.isAllowed(serverAddress);
     }
 }

@@ -9,6 +9,8 @@ import net.minecraft.text.Text;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 
 public class ForceFly extends Module {
     static NumberSetting flyTickCutoff = new NumberSetting(ForceFly.class, "flyTickCutoff", 0, 100).value(60)
@@ -25,7 +27,6 @@ public class ForceFly extends Module {
 
     @Override
     public void tick() {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (!enabled || client.player == null || client.player.isOnGround()) {
             flyTicks = 0;
             return;

@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 // TODO: Use a ? implementing a option interface to make this more clean
@@ -94,12 +95,11 @@ public class SelectorSetting extends Setting<SelectorSetting> {
     public int initRender(Screen screen, int x, int y, int width) {
         Util.addChild(screen,
                 new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.value)), (button -> {
-                    MinecraftClient.getInstance()
-                            .setScreen(new SelectorScreen(screen));
+                    client.setScreen(new SelectorScreen(screen));
                 }), ((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
                     screen.renderOrderedTooltip(matrices,
-                            MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            client.textRenderer.wrapLines(getDescription(), 200), mouseX,
                             mouseY);
                 })));
 

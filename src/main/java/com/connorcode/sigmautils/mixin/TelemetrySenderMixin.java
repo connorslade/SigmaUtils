@@ -12,7 +12,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class TelemetrySenderMixin {
     @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/SharedConstants;isDevelopment:Z"))
     boolean isDevelopment() {
-        if (Config.getEnabled(NoTelemetry.class)) return true;
+        if (Config.getEnabled(NoTelemetry.class))
+            return true;
         return SharedConstants.isDevelopment;
     }
 }

@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class Deadmau5FeatureRendererMixin {
     @Redirect(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/network/AbstractClientPlayerEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Ljava/lang/String;equals(Ljava/lang/Object;)Z"))
     private boolean isDeadmau5(String stringA, Object stringB) {
-        if (Config.getEnabled(Deadmau5Ears.class)) return true;
+        if (Config.getEnabled(Deadmau5Ears.class))
+            return true;
         return stringA.equals(stringB);
     }
 }

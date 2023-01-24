@@ -44,7 +44,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     public boolean pressed() {
         if (this.key == null || editing) return false;
         boolean nowPressed =
-                InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), key.getCode()) &&
+                InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode()) &&
                         (strict ? (shift == Screen.hasShiftDown() && ctrl == Screen.hasControlDown() &&
                                 alt == Screen.hasAltDown()) : nonStrict());
 
@@ -101,7 +101,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
                         }, (((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
                     screen.renderOrderedTooltip(matrices,
-                            MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            client.textRenderer.wrapLines(getDescription(), 200), mouseX,
                             mouseY);
                 }))) {
                     @Override

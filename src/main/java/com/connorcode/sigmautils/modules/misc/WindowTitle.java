@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 
 import static com.connorcode.sigmautils.SigmaUtils.VERSION;
+import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class WindowTitle extends Module {
     private static final NumberSetting refreshPeriod =
@@ -25,7 +26,6 @@ public class WindowTitle extends Module {
 
     public static String getTitle() {
         if (lastRefresh + refreshPeriod.intValue() >= System.currentTimeMillis()) return lastTitle;
-        MinecraftClient mc = MinecraftClient.getInstance();
         lastRefresh = System.currentTimeMillis();
 
         // TODO: Formatter system
@@ -36,8 +36,8 @@ public class WindowTitle extends Module {
         lastTitle = titleFormatter.value()
                 .replace("{version}", VERSION)
                 .replace("{server}",
-                        mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address)
-                .replace("{player}", mc.player == null ? "Offline" : mc.player.getName()
+                        client.getCurrentServerEntry() == null ? "Singleplayer" : client.getCurrentServerEntry().address)
+                .replace("{player}", client.player == null ? "Offline" : client.player.getName()
                         .getString());
         return lastTitle;
     }
@@ -47,8 +47,7 @@ public class WindowTitle extends Module {
         super.tick();
 
         if (System.currentTimeMillis() + refreshPeriod.intValue() >= lastRefresh) return;
-        MinecraftClient.getInstance()
-                .updateWindowTitle();
+        client.updateWindowTitle();
     }
 
     @Override

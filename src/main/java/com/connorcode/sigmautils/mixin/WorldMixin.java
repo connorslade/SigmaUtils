@@ -15,11 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WorldMixin {
     @Inject(method = "getRainGradient", at = @At("HEAD"), cancellable = true)
     void onIsRaining(CallbackInfoReturnable<Float> cir) {
-        if (Config.getEnabled(ForceWeather.class)) cir.setReturnValue(ForceWeather.weather.index() > 0 ? 1f : 0f);
+        if (Config.getEnabled(ForceWeather.class))
+            cir.setReturnValue(ForceWeather.weather.index() > 0 ? 1f : 0f);
     }
 
     @Inject(method = "getThunderGradient", at = @At("HEAD"), cancellable = true)
     void onIsThundering(CallbackInfoReturnable<Float> cir) {
-        if (Config.getEnabled(ForceWeather.class)) cir.setReturnValue(ForceWeather.weather.index() == 2 ? 1f : 0f);
+        if (Config.getEnabled(ForceWeather.class))
+            cir.setReturnValue(ForceWeather.weather.index() == 2 ? 1f : 0f);
     }
 }

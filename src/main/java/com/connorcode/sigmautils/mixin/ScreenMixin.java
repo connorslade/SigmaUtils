@@ -22,7 +22,9 @@ public class ScreenMixin {
 
     @Redirect(method = "renderBackgroundTexture", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
     private void setShaderTexture(int texture, Identifier id) {
-        if (Config.getEnabled(RandomBackground.class)) RandomBackground.setTexture();
-        else RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
+        if (Config.getEnabled(RandomBackground.class))
+            RandomBackground.setTexture();
+        else
+            RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
     }
 }

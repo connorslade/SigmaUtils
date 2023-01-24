@@ -25,9 +25,10 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class Map implements Command {
     private static int save(CommandContext<FabricClientCommandSource> context) {
-        MinecraftClient client = MinecraftClient.getInstance();
         Optional<Pair<Integer, MapState>> rawMap = getMap(context);
         if (rawMap.isEmpty()) return 0;
         int mapId = rawMap.get()
@@ -89,7 +90,6 @@ public class Map implements Command {
     }
 
     static Optional<Pair<Integer, MapState>> getMap(CommandContext<FabricClientCommandSource> context) {
-        MinecraftClient client = MinecraftClient.getInstance();
         assert client.player != null;
 
         ItemStack itemStack = client.player.getInventory()

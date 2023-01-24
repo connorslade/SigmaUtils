@@ -78,65 +78,62 @@ public abstract class MinecraftClientMixin {
     void onSetScreen(Screen screen, CallbackInfo ci) {
         ScreenOpenCallback.ScreenOpenEvent event = new ScreenOpenCallback.ScreenOpenEvent(screen);
         ScreenOpenCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled()) ci.cancel();
+        if (event.isCancelled())
+            ci.cancel();
     }
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(EntityHighlight.class) && EntityHighlight.instance.isGlowing(entity) &&
-                !(EntityHighlight.disableF1.value() && this.options.hudHidden)) cir.setReturnValue(true);
+        if (Config.getEnabled(EntityHighlight.class) && EntityHighlight.instance.isGlowing(entity) && !(EntityHighlight.disableF1.value() && this.options.hudHidden))
+            cir.setReturnValue(true);
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
     void onGetStackInHand(CallbackInfo ci) {
         if (!Config.getEnabled(SignClickThrough.class) || crosshairTarget == null || Objects.requireNonNull(player)
-                .isSneaking()) return;
+                .isSneaking())
+            return;
 
         // Handle Item frames
-        if (crosshairTarget.getType() == HitResult.Type.ENTITY &&
-                ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
+        if (crosshairTarget.getType() == HitResult.Type.ENTITY && ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
             BlockPos behindBlockPos = itemFrameEntity.getDecorationBlockPos()
-                    .offset(itemFrameEntity.getHorizontalFacing()
-                            .getOpposite());
+                    .offset(itemFrameEntity.getHorizontalFacing().getOpposite());
 
-            crosshairTarget =
-                    new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos,
-                            false);
+            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos, false);
         }
 
         // Handle Wall Signs
         if (crosshairTarget.getType() == HitResult.Type.BLOCK) {
             BlockPos blockPos = ((BlockHitResult) crosshairTarget).getBlockPos();
-            BlockState blockState = Objects.requireNonNull(world)
-                    .getBlockState(blockPos);
-            if (!(blockState.getBlock() instanceof WallSignBlock)) return;
+            BlockState blockState = Objects.requireNonNull(world).getBlockState(blockPos);
+            if (!(blockState.getBlock() instanceof WallSignBlock))
+                return;
 
-            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(),
-                    blockPos.offset(blockState.get(WallSignBlock.FACING)
-                            .getOpposite()), false);
+            crosshairTarget = new BlockHitResult(crosshairTarget.getPos(), ((BlockHitResult) crosshairTarget).getSide(), blockPos.offset(blockState.get(WallSignBlock.FACING)
+                    .getOpposite()), false);
         }
     }
 
     // For inventory_move
-//    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
-//    boolean passScreenEvents(Screen instance) {
-////        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
-//        return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
-//    }
+    //    @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/Screen;passEvents:Z", opcode = Opcodes.GETFIELD))
+    //    boolean passScreenEvents(Screen instance) {
+    ////        System.out.printf("PN: %b - PS: %b - PE: %b OT: %b\n", player != null, this.paused, instance.passEvents, (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents);
+    //        return (Config.getEnabled(InventoryMove.class) && this.player != null) || instance.passEvents;
+    //    }
 
     // For no_pause
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
     boolean isPaused(MinecraftClient instance) {
-        if (!Config.getEnabled(NoPause.class)) return this.paused;
-        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() ||
-                this.overlay != null && this.overlay.pausesGame()) &&
-                !Objects.requireNonNull(this.server)
-                        .isRemote();
+        if (!Config.getEnabled(NoPause.class))
+            return this.paused;
+        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() || this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(this.server)
+                .isRemote();
     }
 
     // For window_title
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     void onGetWindowTitle(CallbackInfoReturnable<String> cir) {
-        if (Config.getEnabled(WindowTitle.class)) cir.setReturnValue(WindowTitle.getTitle());
+        if (Config.getEnabled(WindowTitle.class))
+            cir.setReturnValue(WindowTitle.getTitle());
     }
 }

@@ -29,8 +29,7 @@ public class Util {
     public static Object loadNewClass(String classPath) {
         try {
             return SigmaUtils.class.getClassLoader().loadClass(classPath).getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException |
-                 NoSuchMethodException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
 
@@ -38,9 +37,8 @@ public class Util {
     }
 
     public static String loadResourceString(String name) {
-        return new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(SigmaUtils.class.getClassLoader().getResourceAsStream(name)))).lines()
-                .collect(Collectors.joining("\n"));
+        return new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
+                .getResourceAsStream(name)))).lines().collect(Collectors.joining("\n"));
     }
 
     // == Graphics ==
@@ -61,14 +59,7 @@ public class Util {
     }
 
     public static String bestTime(long ms) {
-        Pair<String, Integer>[] units = new Pair[]{
-                new Pair<>("second", 60),
-                new Pair<>("minute", 60),
-                new Pair<>("hour", 24),
-                new Pair<>("day", 30),
-                new Pair<>("month", 12),
-                new Pair<>("year", 0)
-        };
+        Pair<String, Integer>[] units = new Pair[]{new Pair<>("second", 60), new Pair<>("minute", 60), new Pair<>("hour", 24), new Pair<>("day", 30), new Pair<>("month", 12), new Pair<>("year", 0)};
         return bestTime(ms, units, false, 0);
     }
 
@@ -77,8 +68,7 @@ public class Util {
         for (Pair<String, Integer> unit : units) {
             if (unit.getRight() == 0 || seconds < unit.getRight()) {
                 float intSeconds = precision == 0 ? Math.round(seconds) : seconds;
-                return String.format("%." + precision + "f%s%s%s", intSeconds, small ? "" : " ", unit.getLeft(),
-                        (intSeconds > 1 && !small) ? "s" : "");
+                return String.format("%." + precision + "f%s%s%s", intSeconds, small ? "" : " ", unit.getLeft(), (intSeconds > 1 && !small) ? "s" : "");
             }
 
             seconds /= unit.getRight();
@@ -89,12 +79,15 @@ public class Util {
 
     // == Minecraft ==
     public static Optional<String> uuidToName(UUID uuid) {
-        if (uuidCache.containsKey(uuid)) return Optional.of(uuidCache.get(uuid));
+        if (uuidCache.containsKey(uuid))
+            return Optional.of(uuidCache.get(uuid));
         synchronized (invalidUuids) {
-            if (invalidUuids.contains(uuid)) return Optional.empty();
+            if (invalidUuids.contains(uuid))
+                return Optional.empty();
         }
         synchronized (uuidQueue) {
-            if (uuidQueue.contains(uuid)) return Optional.empty();
+            if (uuidQueue.contains(uuid))
+                return Optional.empty();
         }
 
         // Check if the player is in the player list
@@ -124,8 +117,9 @@ public class Util {
 
             @Override
             public void start(UUID uuid) {
-                var name =
-                        client.getSessionService().fillProfileProperties(new GameProfile(uuid, null), false).getName();
+                var name = client.getSessionService()
+                        .fillProfileProperties(new GameProfile(uuid, null), false)
+                        .getName();
                 if (name == null) {
                     synchronized (invalidUuids) {
                         invalidUuids.add(uuid);
@@ -147,8 +141,7 @@ public class Util {
     }
 
     public enum TimeFormat {
-        HMS,
-        BestFit;
+        HMS, BestFit;
 
         public String format(long ms) {
             return switch (this) {
@@ -159,7 +152,6 @@ public class Util {
     }
 
     public enum FilterType {
-        Blacklist,
-        Whitelist
+        Blacklist, Whitelist
     }
 }

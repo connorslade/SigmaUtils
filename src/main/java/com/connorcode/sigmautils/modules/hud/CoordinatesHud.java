@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static net.minecraft.world.World.NETHER;
 import static net.minecraft.world.World.OVERWORLD;
 
@@ -47,7 +48,7 @@ public class CoordinatesHud extends HudModule {
 
     @Override
     public String line() {
-        ClientPlayerEntity player = Objects.requireNonNull(MinecraftClient.getInstance().player);
+        ClientPlayerEntity player = Objects.requireNonNull(client.player);
         RegistryKey<World> registryKey = player.world.getRegistryKey();
 
         Vec3d otherPos = null;

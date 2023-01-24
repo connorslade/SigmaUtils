@@ -38,7 +38,8 @@ public class WorldRendererMixin {
 
     @Inject(method = "processGlobalEvent", at = @At("HEAD"))
     void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
-        if (!Config.getEnabled(NoGlobalSounds.class)) return;
+        if (!Config.getEnabled(NoGlobalSounds.class))
+            return;
         SoundEvent sound = switch (eventId) {
             case 1023 -> ENTITY_WITHER_SPAWN;
             case 1038 -> BLOCK_END_PORTAL_SPAWN;
@@ -46,39 +47,49 @@ public class WorldRendererMixin {
             default -> null;
         };
 
-        if (sound == null || NoGlobalSounds.disabled(eventId)) return;
+        if (sound == null || NoGlobalSounds.disabled(eventId))
+            return;
         Objects.requireNonNull(world).playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }
 
     @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
     double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) {
-        if (Config.getEnabled(NoDarkSky.class) && this.world != null) return this.world.getBottomY() - 32;
+        if (Config.getEnabled(NoDarkSky.class) && this.world != null)
+            return this.world.getBottomY() - 32;
         return instance.getSkyDarknessHeight(world);
     }
 
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
     void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
-        if (Config.getEnabled(NoWorldBorder.class)) ci.cancel();
+        if (Config.getEnabled(NoWorldBorder.class))
+            ci.cancel();
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera,
+                  GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix,
+                  CallbackInfo ci) {
         WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
         WorldRender.PreWorldRenderCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled()) ci.cancel();
+        if (event.isCancelled())
+            ci.cancel();
     }
 
     @Inject(method = "render", at = @At("RETURN"), cancellable = true)
-    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera,
+                      GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix,
+                      CallbackInfo ci) {
         WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
         WorldRender.PostWorldRenderCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled()) ci.cancel();
+        if (event.isCancelled())
+            ci.cancel();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getTeamColorValue()I"))
     int onGetTeamColorValue(Entity instance) {
         var base = instance.getTeamColorValue();
-        if (!Config.getEnabled(EntityHighlight.class)) return base;
+        if (!Config.getEnabled(EntityHighlight.class))
+            return base;
         return EntityHighlight.instance.getGlowingColor(instance).orElse(base);
     }
 }

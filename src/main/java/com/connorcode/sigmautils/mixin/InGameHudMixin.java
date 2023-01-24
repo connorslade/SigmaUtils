@@ -40,17 +40,16 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
-        if (!Config.getEnabled(BlockDistance.class)) return;
-        client.getProfiler()
-                .push("SigmaUtils::BlockDistance");
-        Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity)
-                .getRotationVec(client.getTickDelta());
-        double fov = client.options.getFov()
-                .getValue();
+        if (!Config.getEnabled(BlockDistance.class))
+            return;
+        client.getProfiler().push("SigmaUtils::BlockDistance");
+        Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity).getRotationVec(client.getTickDelta());
+        double fov = client.options.getFov().getValue();
         double angleSize = fov / scaledHeight;
         Vec3f verticalRotationAxis = new Vec3f(cameraDirection);
         verticalRotationAxis.cross(Vec3f.POSITIVE_Y);
-        if (!verticalRotationAxis.normalize()) return;
+        if (!verticalRotationAxis.normalize())
+            return;
 
         Vec3f horizontalRotationAxis = new Vec3f(cameraDirection);
         horizontalRotationAxis.cross(verticalRotationAxis);
@@ -59,47 +58,46 @@ public abstract class InGameHudMixin {
         verticalRotationAxis = new Vec3f(cameraDirection);
         verticalRotationAxis.cross(horizontalRotationAxis);
 
-        Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis,
-                scaledWidth / 2, scaledHeight / 2, scaledWidth, scaledHeight);
+        Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis, scaledWidth / 2, scaledHeight / 2, scaledWidth, scaledHeight);
         HitResult hitResult = Raycast.raycastInDirection(client, client.getTickDelta(), 500, direction);
-        if (Objects.requireNonNull(hitResult)
-                .getType() == HitResult.Type.MISS) {
+        if (Objects.requireNonNull(hitResult).getType() == HitResult.Type.MISS) {
             return;
         }
         double distance = Objects.requireNonNull(hitResult)
                 .getPos()
-                .distanceTo(Objects.requireNonNull(client.player)
-                        .getPos());
+                .distanceTo(Objects.requireNonNull(client.player).getPos());
 
         String text = String.format("§f[%d]", (int) distance);
-        client.textRenderer.draw(matrices, Text.of(text), scaledWidth / 2f - client.textRenderer.getWidth(text) / 2f,
-                scaledHeight / 2f + client.textRenderer.fontHeight, 0);
-        client.getProfiler()
-                .pop();
+        client.textRenderer.draw(matrices, Text.of(text), scaledWidth / 2f - client.textRenderer.getWidth(text) / 2f, scaledHeight / 2f + client.textRenderer.fontHeight, 0);
+        client.getProfiler().pop();
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (client.options.hudHidden || !Config.getEnabled(Hud.class)) return;
+        if (client.options.hudHidden || !Config.getEnabled(Hud.class))
+            return;
         Hud.renderHud(matrices);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
     int onGetWidth(TextRenderer instance, String text) {
-        if (Config.getEnabled(NoScoreboardValue.class)) return 0;
+        if (Config.getEnabled(NoScoreboardValue.class))
+            return 0;
         return instance.getWidth(text);
     }
 
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;FFI)I"))
     int onDraw(TextRenderer instance, MatrixStack matrices, String text, float x, float y, int color) {
-        if (Config.getEnabled(NoScoreboardValue.class)) return 0;
+        if (Config.getEnabled(NoScoreboardValue.class))
+            return 0;
         return instance.draw(matrices, text, x, y, color);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Integer;toString(I)Ljava/lang/String;"))
     String onToString(int buf) {
-        if (Config.getEnabled(NoScoreboardValue.class)) return "";
+        if (Config.getEnabled(NoScoreboardValue.class))
+            return "";
         return Integer.toString(buf);
     }
 

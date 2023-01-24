@@ -21,6 +21,7 @@ public class GameRendererMixin {
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
     void onBobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (Config.getEnabled(NoHurtTilt.class)) ci.cancel();
+        if (Config.getEnabled(NoHurtTilt.class))
+            ci.cancel();
     }
 }

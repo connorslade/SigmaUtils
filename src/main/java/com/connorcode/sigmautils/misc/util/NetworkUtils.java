@@ -50,7 +50,8 @@ public class NetworkUtils {
     }
 
     public static synchronized AuthStatus getAuthStatus() {
-        if (authStatus == AuthStatus.Waiting) return authStatus;
+        if (authStatus == AuthStatus.Waiting)
+            return authStatus;
 
         if (System.currentTimeMillis() - lastAuthStatusCheck > 1000 * 60 * 5) {
             authStatus = AuthStatus.Waiting;
@@ -78,11 +79,7 @@ public class NetworkUtils {
     }
 
     public enum AuthStatus {
-        Unknown,
-        Waiting,
-        Invalid,
-        Online,
-        Offline;
+        Unknown, Waiting, Invalid, Online, Offline;
 
         public String getText() {
             return switch (this) {

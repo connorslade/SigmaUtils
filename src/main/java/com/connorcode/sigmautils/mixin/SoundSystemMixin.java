@@ -15,6 +15,7 @@ public abstract class SoundSystemMixin {
     void onGetAdjustedVolume(float volume, SoundCategory category, CallbackInfoReturnable<Float> cir) {
         if (VictoryMute.muted)
             cir.setReturnValue((float) (cir.getReturnValueF() * (1f - VictoryMute.reduction.value())));
-        if (UiTweaks.isMuted()) cir.setReturnValue(0f);
+        if (UiTweaks.isMuted())
+            cir.setReturnValue(0f);
     }
 }

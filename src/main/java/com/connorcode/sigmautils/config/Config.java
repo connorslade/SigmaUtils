@@ -16,11 +16,9 @@ import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.SigmaUtils.directory;
 
 public class Config {
@@ -40,8 +38,8 @@ public class Config {
                 Module module = s.getModule();
                 module.enabled ^= true;
                 ToggleSound.play(module.enabled);
-                if (module.enabled) module.enable(MinecraftClient.getInstance());
-                else module.disable(MinecraftClient.getInstance());
+                if (module.enabled) module.enable(client);
+                else module.disable(client);
                 try {
                     save();
                 } catch (IOException e) {
@@ -61,7 +59,7 @@ public class Config {
         if (nbt == null) return;
         for (Module i : SigmaUtils.modules.values()) {
             i.loadConfig(nbt.getCompound(i.id));
-            if (i.enabled) i.enable(MinecraftClient.getInstance());
+            if (i.enabled) i.enable(client);
         }
     }
 

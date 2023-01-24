@@ -13,6 +13,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 
 
@@ -97,7 +98,7 @@ public class BoolSetting extends Setting<BoolSetting> {
             }, (((button, matrices, mouseX, mouseY) -> {
                 if (this.description == null) return;
                 screen.renderOrderedTooltip(matrices,
-                        MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
+                        client.textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
             }))));
             case CHECKBOX -> Util.addChild(screen,
                     new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value,
@@ -105,7 +106,7 @@ public class BoolSetting extends Setting<BoolSetting> {
                             ((button, matrices, mouseX, mouseY) -> {
                                 if (this.description == null) return;
                                 screen.renderOrderedTooltip(matrices,
-                                        MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200),
+                                        client.textRenderer.wrapLines(getDescription(), 200),
                                         mouseX, mouseY);
                             })));
         }

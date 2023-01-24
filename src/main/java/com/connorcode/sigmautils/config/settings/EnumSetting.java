@@ -15,6 +15,7 @@ import net.minecraft.text.Text;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
@@ -120,7 +121,7 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
                         }, (((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
                     screen.renderOrderedTooltip(matrices,
-                            MinecraftClient.getInstance().textRenderer.wrapLines(getDescription(), 200), mouseX,
+                            client.textRenderer.wrapLines(getDescription(), 200), mouseX,
                             mouseY);
                 }))));
 

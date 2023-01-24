@@ -44,7 +44,8 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
 
     @Override
     public boolean renderSelector(Class<? extends Packet<?>> resource, Screen data, int x, int y) {
-        if (setting.value().contains(resource)) return false;
+        if (setting.value().contains(resource))
+            return false;
         SimpleList.selector(setting, resource, getDisplay(resource), data, x, y, 0);
         return true;
     }
@@ -58,7 +59,8 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
 
     @Override
     public List<Class<? extends Packet<?>>> deserialize(NbtElement nbt) {
-        if (!(nbt instanceof NbtIntArray resourceList)) return null;
+        if (!(nbt instanceof NbtIntArray resourceList))
+            return null;
         var list = resourceList.stream().map(e -> getPacket(e.intValue())).toList();
         return new ArrayList<>(list);
     }
@@ -69,7 +71,8 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
     }
 
     Object2IntOpenHashMap<Class<? extends Packet<?>>> getPackets() {
-        if (packets == null) this.packets = NetworkUtils.getPackets(side);
+        if (packets == null)
+            this.packets = NetworkUtils.getPackets(side);
         return packets;
     }
 }

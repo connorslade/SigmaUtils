@@ -28,7 +28,8 @@ public class ProgressScreenMixin extends Screen {
     // For see_through_loading
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ProgressScreen;renderBackground(Lnet/minecraft/client/util/math/MatrixStack;)V"))
     void onRenderBackground(ProgressScreen instance, MatrixStack matrixStack) {
-        if (!Config.getEnabled(SeeThruLoading.class)) this.renderBackground(matrixStack);
+        if (!Config.getEnabled(SeeThruLoading.class))
+            this.renderBackground(matrixStack);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ProgressScreen;renderBackground(Lnet/minecraft/client/util/math/MatrixStack;)V", shift = At.Shift.BEFORE))
