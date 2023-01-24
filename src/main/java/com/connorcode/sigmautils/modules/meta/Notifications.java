@@ -21,13 +21,11 @@ public class Notifications extends Module {
 
     private static final BoolSetting module =
             new BoolSetting(Notifications.class, "Module").description("Show a notification when a module is toggled.")
-                    .displayType(BoolSetting.DisplayType.CHECKBOX)
                     .value(true)
                     .build();
 
     private static final BoolSetting startup =
             new BoolSetting(Notifications.class, "Startup").description("Show a notification when Sigma Utils starts.")
-                    .displayType(BoolSetting.DisplayType.CHECKBOX)
                     .value(false)
                     .build();
 

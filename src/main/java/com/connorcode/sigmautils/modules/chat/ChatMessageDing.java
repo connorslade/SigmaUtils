@@ -15,11 +15,9 @@ public class ChatMessageDing extends Module {
     private static final BoolSetting alertSystemMessages =
             new BoolSetting(ChatMessageDing.class, "System Messages").value(true)
                     .description("Play ding for system messages")
-                    .displayType(BoolSetting.DisplayType.CHECKBOX)
                     .build();
     private static final BoolSetting alertActionBar = new BoolSetting(ChatMessageDing.class, "Action Bar").value(false)
             .description("Play ding for action bar messages")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
 
     // TODO: Self messages

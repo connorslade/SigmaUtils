@@ -18,7 +18,7 @@ import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 
 public class BoolSetting extends Setting<BoolSetting> {
     boolean value;
-    DisplayType displayType = DisplayType.BUTTON;
+    DisplayType displayType = DisplayType.CHECKBOX;
 
     public BoolSetting(Class<? extends Module> module, String name) {
         super(module, name);

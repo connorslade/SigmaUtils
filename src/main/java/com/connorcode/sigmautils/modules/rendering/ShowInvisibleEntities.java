@@ -26,6 +26,7 @@ public class ShowInvisibleEntities extends Module {
     }
 
     public static boolean isInvisible(Entity entity) {
+        if (!entity.isInvisible()) return false;
         var inList = entities.value().contains(entity.getType());
         return filterType.value() == Util.FilterType.Whitelist == inList;
     }

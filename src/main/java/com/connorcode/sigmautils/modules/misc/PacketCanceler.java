@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.PacketList;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.event.PacketSendCallback;
+import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.network.NetworkSide;
@@ -20,7 +21,7 @@ public class PacketCanceler extends Module {
     DynamicListSetting<Class<? extends Packet<?>>> serverPackets =
             new DynamicListSetting<>(PacketCanceler.class, "Server Packets",
                     PacketCanceler::getServerPacketManager).description("Packets to the server.").build();
-    BoolSetting debug = new BoolSetting(PacketCanceler.class, "Debug").displayType(BoolSetting.DisplayType.CHECKBOX)
+    BoolSetting debug = new BoolSetting(PacketCanceler.class, "Debug")
             .description("Prints debug messages when a packet is canceled.")
             .build();
 
@@ -55,6 +56,6 @@ public class PacketCanceler extends Module {
     void sendDebug(NetworkSide side, Packet<?> packet) {
         if (client.player == null || !debug.value()) return;
         client.player.sendMessage(Text.of(String.format("[SIGMAUTILS::PacketCancel] Cancelling %s packet %s", side,
-                packet.getClass().getSimpleName())), false);
+                NetworkUtils.getPacketName(packet.getClass().getName()))), false);
     }
 }

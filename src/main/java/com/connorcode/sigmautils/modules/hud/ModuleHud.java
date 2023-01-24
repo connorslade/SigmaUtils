@@ -11,7 +11,6 @@ import java.util.List;
 public class ModuleHud extends HudModule {
     private static final BoolSetting hudModules = new BoolSetting(ModuleHud.class, "Hud Modules").value(false)
             .description("Show hud modules in the list")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
 
     public ModuleHud() {

@@ -25,7 +25,6 @@ public class CoordinatesHud extends HudModule {
                     .build();
     private static final BoolSetting nether = new BoolSetting(CoordinatesHud.class, "Nether Coordinates").value(false)
             .description("When in the overworld or nether, display the coordinates of the other dimension")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
     private static final EnumSetting<TextStyle.Color> netherStyle =
             new EnumSetting<>(CoordinatesHud.class, "Nether Color", TextStyle.Color.class).value(TextStyle.Color.Red)

@@ -40,7 +40,11 @@ public class NetworkUtils {
     }
 
     public static String getPacketName(Class<? extends Packet<?>> packet) {
-        var intermediary = mappingResolver.unmapClassName("intermediary", packet.getName());
+        return getPacketName(packet.getName());
+    }
+
+    public static String getPacketName(String bytecodeName) {
+        var intermediary = mappingResolver.unmapClassName("intermediary", bytecodeName);
         if (packetNames.isEmpty())
             Util.loadResourceString("packets.txt")
                     .lines()

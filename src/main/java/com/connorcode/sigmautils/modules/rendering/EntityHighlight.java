@@ -34,7 +34,6 @@ import static net.minecraft.client.gui.DrawableHelper.fill;
 
 public class EntityHighlight extends Module {
     public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .description("Turns off when in F1 mode")
             .build();
     // TODO: remove needing an instance var

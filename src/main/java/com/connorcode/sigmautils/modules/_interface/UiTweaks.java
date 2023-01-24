@@ -10,12 +10,10 @@ public class UiTweaks extends Module {
     public static boolean muted = false;
     public static BoolSetting audioMuteButton = new BoolSetting(UiTweaks.class, "Audio Mute Button")
             .description("Adds a button to pause menu to mute / unmute all audio")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .value(true)
             .build();
     public static BoolSetting validSession = new BoolSetting(UiTweaks.class, "Valid Session")
             .description("Adds a display to the multiplayer screen to show if your session is valid")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .value(true)
             .build();
 

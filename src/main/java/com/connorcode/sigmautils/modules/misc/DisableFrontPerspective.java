@@ -17,9 +17,7 @@ public class DisableFrontPerspective extends Module {
 
     private static BoolSetting perspectiveSetting(String perspective, boolean _default) {
         return new BoolSetting(DisableFrontPerspective.class, String.format("Allow %s perspective", perspective)).value(
-                        _default)
-                .displayType(BoolSetting.DisplayType.CHECKBOX)
-                .build();
+                _default).build();
     }
 
     public static Perspective nextPerspective(Perspective old) {

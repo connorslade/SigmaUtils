@@ -19,7 +19,6 @@ public class Zoom extends Module {
     private static final BoolSetting smoothZoom = new BoolSetting(Zoom.class, "Smooth Zoom").value(true)
             .description("Smooth Zoom")
             .category("Smooth Zoom")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
     private static final NumberSetting tweenTicks = new NumberSetting(Zoom.class, "Tween Ticks", 5, 20).value(5)
             .description("How many ticks it takes to zoom in/out")

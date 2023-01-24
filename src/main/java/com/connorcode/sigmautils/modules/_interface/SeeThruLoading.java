@@ -7,7 +7,6 @@ import com.connorcode.sigmautils.module.Module;
 public class SeeThruLoading extends Module {
     public static BoolSetting escToClose = new BoolSetting(SeeThruLoading.class, "Close on ESC").value(true)
             .description("Close the loading screen when you press escape.")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
 
     public SeeThruLoading() {

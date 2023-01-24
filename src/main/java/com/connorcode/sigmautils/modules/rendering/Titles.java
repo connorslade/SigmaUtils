@@ -28,7 +28,7 @@ import static com.connorcode.sigmautils.misc.util.EntityUtils.entityPos;
 
 public class Titles extends Module {
     public static final BoolSetting tamableOwner =
-            new BoolSetting(Titles.class, "Tamable Owner").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "Tamable Owner")
                     .description("Shows the owner of a tamable entity")
                     .category("Titles")
                     .build();
@@ -47,24 +47,22 @@ public class Titles extends Module {
             new EnumSetting<>(Titles.class, "Text Color", TextStyle.Color.class).description(
                     "The color of the text. (who would have thought)").value(TextStyle.Color.White).build();
     private static final BoolSetting textShadow =
-            new BoolSetting(Titles.class, "Text Shadow").description("Whether or not to show a shadow under the text")
-                    .value(true)
+            new BoolSetting(Titles.class, "Text Shadow").value(true)
+                    .description("Whether or not to show a shadow under the text")
+                    .displayType(BoolSetting.DisplayType.BUTTON)
                     .build();
     // == Titles ==
     private static final BoolSetting tntCountdown =
-            new BoolSetting(Titles.class, "TNT Countdown").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "TNT Countdown").category("Titles")
                     .description("Shows the time until the TNT explodes.")
-                    .category("Titles")
                     .build();
     private static final BoolSetting itemCountdown =
-            new BoolSetting(Titles.class, "Item Despawn").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "Item Despawn").category("Titles")
                     .description("Shows the time until an item despawns")
-                    .category("Titles")
                     .build();
     private static final BoolSetting itemStackCount =
-            new BoolSetting(Titles.class, "Item Stack Count").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "Item Stack Count").category("Titles")
                     .description("Shows the number of items in a stack")
-                    .category("Titles")
                     .build();
     private static final NumberSetting itemStackMergeRange =
             new NumberSetting(Titles.class, "Item Merge Range", 0, 10).value(5)
@@ -72,14 +70,12 @@ public class Titles extends Module {
                     .category("Titles")
                     .build();
     private static final BoolSetting arrowDespawn =
-            new BoolSetting(Titles.class, "Arrow Despawn").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "Arrow Despawn").category("Titles")
                     .description("Shows the time until an arrow despawns")
-                    .category("Titles")
                     .build();
     private static final BoolSetting arrowInfinity =
-            new BoolSetting(Titles.class, "Arrow Infinity").displayType(BoolSetting.DisplayType.CHECKBOX)
+            new BoolSetting(Titles.class, "Arrow Infinity").category("Titles")
                     .description("Shows if an arrow is infinite. (Not able to be picked up)")
-                    .category("Titles")
                     .build();
 
     public Titles() {

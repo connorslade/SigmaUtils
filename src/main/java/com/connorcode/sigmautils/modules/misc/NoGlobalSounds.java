@@ -7,16 +7,13 @@ import com.connorcode.sigmautils.module.Module;
 public class NoGlobalSounds extends Module {
     public static BoolSetting disableWither = new BoolSetting(NoGlobalSounds.class, "Disable Wither").value(true)
             .description("Disables the global wither spawn sound")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
     public static BoolSetting disableEndPortal = new BoolSetting(NoGlobalSounds.class, "Disable End Portal").value(true)
             .description("Disables the global end portal opening sound")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
     public static BoolSetting disableDragonDeath =
             new BoolSetting(NoGlobalSounds.class, "Disable Dragon Death").value(true)
                     .description("Disables the global dragon death sound")
-                    .displayType(BoolSetting.DisplayType.CHECKBOX)
                     .build();
 
     public NoGlobalSounds() {

@@ -12,7 +12,6 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 public class ServerHud extends HudModule {
     private static final BoolSetting serverType = new BoolSetting(ServerHud.class, "Server Type").value(true)
             .description("Show Server Type")
-            .displayType(BoolSetting.DisplayType.CHECKBOX)
             .build();
     private static final EnumSetting<TextStyle.Color> serverTypeStyle =
             new EnumSetting<>(ServerHud.class, "Server type color", TextStyle.Color.class).value(TextStyle.Color.Red)
