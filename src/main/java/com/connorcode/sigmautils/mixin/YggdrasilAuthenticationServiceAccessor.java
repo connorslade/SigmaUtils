@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(YggdrasilAuthenticationService.class)
 public interface YggdrasilAuthenticationServiceAccessor {
-    @Accessor
+    @Accessor(remap = false)
     String getClientToken();
 }

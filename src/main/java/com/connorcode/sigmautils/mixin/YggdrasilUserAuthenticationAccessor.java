@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(YggdrasilUserAuthentication.class)
 public interface YggdrasilUserAuthenticationAccessor {
-    @Invoker
+    @Invoker(remap = false)
     boolean invokeCheckTokenValidity();
 }

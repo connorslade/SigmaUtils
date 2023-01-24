@@ -1,11 +1,7 @@
 package com.connorcode.sigmautils.misc.util;
 
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.mixin.YggdrasilAuthenticationServiceAccessor;
-import com.connorcode.sigmautils.mixin.YggdrasilUserAuthenticationAccessor;
-import com.mojang.authlib.Agent;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
@@ -16,6 +12,7 @@ import net.minecraft.network.Packet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
@@ -58,17 +55,22 @@ public class NetworkUtils {
         if (System.currentTimeMillis() - lastAuthStatusCheck > 1000 * 60 * 5) {
             authStatus = AuthStatus.Waiting;
             lastAuthStatusCheck = System.currentTimeMillis();
+
             new Thread(() -> {
-                if (!(client.getSessionService() instanceof YggdrasilMinecraftSessionService sessionService)) return;
-                var authService = sessionService.getAuthenticationService();
-                if (((YggdrasilAuthenticationServiceAccessor) authService).getClientToken() == null) {
+                var session = client.getSession();
+                var profile = session.getProfile();
+                var token = session.getAccessToken();
+                var id = UUID.randomUUID().toString();
+
+                // Thank-you https://github.com/axieum/authme
+                var sessionService = (YggdrasilMinecraftSessionService) client.getSessionService();
+                try {
+                    sessionService.joinServer(profile, token, id);
+                    authStatus = sessionService.hasJoinedServer(profile, id, null)
+                            .isComplete() ? AuthStatus.Online : AuthStatus.Offline;
+                } catch (Exception e) {
                     authStatus = AuthStatus.Invalid;
-                    return;
                 }
-                var auth = authService.createUserAuthentication(Agent.MINECRAFT);
-                if (!(auth instanceof YggdrasilUserAuthentication userAuth)) return;
-                authStatus =
-                        ((YggdrasilUserAuthenticationAccessor) userAuth).invokeCheckTokenValidity() ? AuthStatus.Online : AuthStatus.Offline;
             }).start();
         }
 
