@@ -18,11 +18,13 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
+    private final Class<K> enumClass;
     private final K[] values;
     private int index;
 
     public <T extends Module> EnumSetting(Class<T> module, String name, Class<K> enumClass) {
         super(module, name);
+        this.enumClass = enumClass;
         try {
             this.values = (K[]) enumClass.getMethod("values").invoke(null);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -42,6 +44,10 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     @Override
     protected EnumSetting<K> getThis() {
         return this;
+    }
+
+    public Class<K> getEnum() {
+        return this.enumClass;
     }
 
     public EnumSetting<K> build() {

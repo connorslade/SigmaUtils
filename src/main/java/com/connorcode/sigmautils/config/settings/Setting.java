@@ -39,6 +39,10 @@ public abstract class Setting<T extends Setting<T>> {
         return getThis();
     }
 
+    public String getId() {
+        return this.id;
+    }
+
     public T category(String category) {
         this.category = category;
         return getThis();
