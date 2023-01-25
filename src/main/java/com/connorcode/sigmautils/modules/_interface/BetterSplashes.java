@@ -12,7 +12,7 @@ import java.util.Objects;
 public class BetterSplashes extends Module {
     public static final List<String> betterSplashes =
             new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
-                    .getResourceAsStream("splashes.txt")))).lines()
+                    .getResourceAsStream("assets/sigma-utils/splashes.txt")))).lines()
                     .toList();
 
     public BetterSplashes() {

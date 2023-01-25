@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.*;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
@@ -57,7 +58,7 @@ public class Dump implements Command {
                         .append(" ")
                         .append(i.getSimpleName())
                         .append("\n");
-            Files.write(dumps.toPath().resolve("packets.txt"), out.toString().getBytes());
+            Files.write(dumps.toPath().resolve("assets/sigma-utils/packets.txt"), out.toString().getBytes());
             return 0;
         }
 
@@ -117,8 +118,14 @@ public class Dump implements Command {
 
                 if (j instanceof EnumSetting<?> es) {
                     builder.append("> #### Options\n>\n");
+                    var docs = j instanceof Util.DocumentedEnum doc ? Arrays.stream(doc.getDocs())
+                            .iterator() : Collections.emptyIterator();
                     for (var k : es.getEnum().getEnumConstants())
-                        builder.append("> - ").append(k.name()).append("\n");
+                        builder.append("> - ")
+                                .append(k.name())
+                                .append(docs.hasNext() ? " - " : "")
+                                .append(docs.hasNext() ? docs.next() : "")
+                                .append("\n");
                 }
             }
         }
@@ -133,7 +140,7 @@ public class Dump implements Command {
             return "Double";
         }
         if (setting instanceof BoolSetting) return "Boolean";
-        if (setting instanceof EnumSetting<?> es) return String.format("Enum<%s>", es.getEnum().getSimpleName());
+        if (setting instanceof EnumSetting<?> es) return String.format("Enum\\<%s\\>", es.getEnum().getSimpleName());
         if (setting instanceof DummySetting) return "Dummy";
         if (setting instanceof KeyBindSetting) return "Keybinding";
         if (setting instanceof StringSetting) return "String";

@@ -12,6 +12,7 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Pair;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import javax.print.Doc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -149,7 +150,7 @@ public class Util {
                 .description("Whether to blacklist or whitelist entities.");
     }
 
-    public enum TimeFormat {
+    public enum TimeFormat implements DocumentedEnum {
         HMS,
         BestFit;
 
@@ -159,10 +160,30 @@ public class Util {
                 case BestFit -> Util.bestTime(ms);
             };
         }
+
+        @Override
+        public String[] getDocs() {
+            return new String[] {
+                    "Hours, minutes, seconds (HH:mm:ss)",
+                    "Best time format (e.g. 1 minute, 2 days)"
+            };
+        }
     }
 
-    public enum FilterType {
+    public enum FilterType implements DocumentedEnum {
         Blacklist,
-        Whitelist
+        Whitelist;
+
+        @Override
+        public String[] getDocs() {
+            return new String[] {
+                    "Only elements in the list will be targeted.",
+                    "All elements except those in the list will be targeted."
+            };
+        }
+    }
+
+    public interface DocumentedEnum {
+        String[] getDocs();
     }
 }

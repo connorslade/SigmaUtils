@@ -38,7 +38,7 @@ public class SigmaUtils implements ClientModInitializer {
         logger.info("Starting Sigma Utils v" + VERSION);
 
         // Load modules
-        JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules.json"));
+        JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules/modules.json"));
         String modulePackageName = moduleJsonObject.get("package").getAsString();
         moduleJsonObject.get("modules").getAsJsonArray().forEach(json -> {
             Module module = (Module) Util.loadNewClass(modulePackageName + "." + json.getAsString());
@@ -46,7 +46,7 @@ public class SigmaUtils implements ClientModInitializer {
         });
 
         // Load Commands
-        JsonObject commandJsonObject = JsonHelper.deserialize(Util.loadResourceString("commands.json"));
+        JsonObject commandJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules/commands.json"));
         String commandPackageName = commandJsonObject.get("package").getAsString();
         commandJsonObject.get("commands")
                 .getAsJsonArray()

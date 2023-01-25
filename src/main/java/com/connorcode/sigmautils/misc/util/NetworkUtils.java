@@ -46,7 +46,7 @@ public class NetworkUtils {
     public static String getPacketName(String bytecodeName) {
         var intermediary = mappingResolver.unmapClassName("intermediary", bytecodeName);
         if (packetNames.isEmpty())
-            Util.loadResourceString("packets.txt")
+            Util.loadResourceString("assets/sigma-utils/packets.txt")
                     .lines()
                     .filter(line -> !line.startsWith("#"))
                     .map(line -> line.split(" "))
