@@ -11,6 +11,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
@@ -54,16 +55,14 @@ public class Components {
                 x + 20 + padding, y, 130 - padding);
     }
 
-    public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting,
-                                                      char[] values) {
+    public static <K extends Enum<?>> void enumConfig(Screen screen, int x, int y, EnumSetting<K> setting, char[] values) {
         ScreenAccessor sa = (ScreenAccessor) screen;
 
-        Util.addChild(screen,
-                new ButtonWidget(x + 130, y, 20, 20, Text.of(String.valueOf(values[setting.index()])), button -> {
-                    setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
-                    sa.invokeClearAndInit();
-                }, (((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
-                        .wrapLines(setting.getDescription(), 200), mouseX, mouseY)))));
+        var button = ButtonWidget.builder(Text.of(String.valueOf(values[setting.index()])), b -> {
+            setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
+            sa.invokeClearAndInit();
+        }).position(130 + x, y).size(20, 20).tooltip(Util.nullMap(setting.getDescription(), Tooltip::of)).build();
+        Util.addChild(screen, button);
     }
 
     public abstract static class DrawableElement implements Drawable, Element, Selectable {
@@ -124,12 +123,13 @@ public class Components {
 
     // A button that detects let and right clicks (and is scalable)
     public static class MultiClickButton extends ButtonWidget {
-        private final PressAction onPress;
+        private final MultiClickButton.PressAction onPress;
+        private final TooltipSupplier tooltipSupplier;
         public int click = 0;
 
-        public MultiClickButton(int x, int y, int width, int height, Text message, PressAction onPress,
-                                TooltipSupplier tooltipSupplier) {
-            super(x, y, width, height, message, null, tooltipSupplier);
+        public MultiClickButton(int x, int y, int width, int height, Text message, com.connorcode.sigmautils.misc.Components.MultiClickButton.PressAction onPress, TooltipSupplier tooltipSupplier) {
+            super(x, y, width, height, message, null, DEFAULT_NARRATION_SUPPLIER);
+            this.tooltipSupplier = tooltipSupplier;
             this.onPress = onPress;
         }
 
@@ -144,8 +144,19 @@ public class Components {
             return button == 0 || button == 1;
         }
 
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.render(matrices, mouseX, mouseY, delta);
+            if (this.hovered) tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
+            super.render(matrices, mouseX, mouseY, delta);
+        }
+
         public interface PressAction {
             void onPress(MultiClickButton button);
+        }
+
+        public interface TooltipSupplier {
+            void onTooltip(MultiClickButton button, MatrixStack matrices, int mouseX, int mouseY);
         }
     }
 
@@ -176,8 +187,7 @@ public class Components {
         PressAction onPress;
         TooltipSupplier tooltipSupplier;
 
-        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress,
-                             TooltipSupplier tooltipSupplier) {
+        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress, TooltipSupplier tooltipSupplier) {
             super(x, y, width, height, message, checked);
             this.onPress = onPress;
             this.tooltipSupplier = tooltipSupplier;
@@ -189,9 +199,7 @@ public class Components {
             this.onPress.onPress(this);
         }
 
-        @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-            super.renderTooltip(matrices, mouseX, mouseY);
             tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
         }
 

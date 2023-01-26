@@ -8,7 +8,7 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ public class ParticleControl extends Module {
     }
 
     static SimpleList<ParticleType<?>> getParticleList(DynamicListSetting<ParticleType<?>> setting) {
-        return new SimpleList<>(setting, Registry.PARTICLE_TYPE) {
+        return new SimpleList<>(setting, Registries.PARTICLE_TYPE) {
 
             @Override
             public String getDisplay(ParticleType<?> value) {

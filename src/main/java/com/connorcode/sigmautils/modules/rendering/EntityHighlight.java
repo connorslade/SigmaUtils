@@ -19,10 +19,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,7 @@ public class EntityHighlight extends Module {
     public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
             .description("Turns off when in F1 mode")
             .build();
-    // TODO: remove needing an instance var
-    public static EntityHighlight instance;
-    public DynamicListSetting<GlowingEntity> entities =
+    public static DynamicListSetting<GlowingEntity> entities =
             new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
                     GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
@@ -46,14 +44,13 @@ public class EntityHighlight extends Module {
 
     public EntityHighlight() {
         super("entity_highlight", "Entity Highlight", "Outlines entities through blocks", Category.Rendering);
-        instance = this;
     }
 
-    public boolean isGlowing(Entity entity) {
+    public static boolean isGlowing(Entity entity) {
         return entities.value().stream().anyMatch(glowingEntity -> glowingEntity.type.equals(entity.getType()));
     }
 
-    public Optional<Integer> getGlowingColor(Entity entity) {
+    public static Optional<Integer> getGlowingColor(Entity entity) {
         return entities.value()
                 .stream()
                 .filter(glowingEntity -> glowingEntity.type.equals(entity.getType()))
@@ -62,7 +59,7 @@ public class EntityHighlight extends Module {
                         glowingEntity.color == -1 ? entity.getTeamColorValue() : getColor(glowingEntity.color));
     }
 
-    private int getColor(int index) {
+    private static int getColor(int index) {
         var color = TextStyle.Color.values()[index].asHexColor();
         return TextRenderer.tweakTransparency(color);
     }
@@ -73,7 +70,7 @@ public class EntityHighlight extends Module {
         int color;
 
         public GlowingEntity(NbtCompound nbt) {
-            this.type = Registry.ENTITY_TYPE.get(Identifier.tryParse(nbt.getString("type")));
+            this.type = Registries.ENTITY_TYPE.get(Identifier.tryParse(nbt.getString("type")));
             this.color = nbt.getInt("color");
         }
 
@@ -91,7 +88,7 @@ public class EntityHighlight extends Module {
 
         public NbtCompound toNbt() {
             var nbt = new NbtCompound();
-            nbt.putString("type", Registry.ENTITY_TYPE.getId(type).toString());
+            nbt.putString("type", Registries.ENTITY_TYPE.getId(type).toString());
             nbt.putInt("color", color);
             return nbt;
         }
@@ -101,12 +98,16 @@ public class EntityHighlight extends Module {
         }
     }
 
-    class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<GlowingEntity> {
-        GlowingEntitySelectorManager(DynamicListSetting<GlowingEntity> _setting) {}
+    static class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<GlowingEntity> {
+        DynamicListSetting<GlowingEntity> setting;
+
+        GlowingEntitySelectorManager(DynamicListSetting<GlowingEntity> setting) {
+            this.setting = setting;
+        }
 
         @Override
         public List<GlowingEntity> getAllResources() {
-            return Registry.ENTITY_TYPE.stream().map(e -> new GlowingEntity(e, -1)).toList();
+            return Registries.ENTITY_TYPE.stream().map(e -> new GlowingEntity(e, -1)).toList();
         }
 
         @Override
@@ -118,10 +119,10 @@ public class EntityHighlight extends Module {
         public void render(GlowingEntity resource, Screen screen, int x, int y) {
             var padding = getPadding();
             if (resource.color == -1) {
-                Util.addChild(screen, new ButtonWidget(x + 20 + padding, y, 20, 20, Text.of("T"), button -> {
+                Util.addChild(screen, ButtonWidget.builder(Text.of("T"), button -> {
                     resource.nextColor();
                     ((ScreenAccessor) screen).invokeClearAndInit();
-                }));
+                }).position(x + 20 + padding, y).size(20, 20).build());
             } else {
                 Util.addChild(screen, new Components.DrawableElement() {
                     @Override

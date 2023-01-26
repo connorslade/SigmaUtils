@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -14,7 +15,6 @@ import net.minecraft.text.Text;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
@@ -118,17 +118,15 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
         Util.addChild(screen,
-                new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.values[this.index])),
-                        (button) -> {
+                ButtonWidget.builder(Text.of(String.format("%s: %s", this.name, this.values[this.index])), button -> {
                             this.index = (this.index + (Screen.hasShiftDown() ? this.values.length - 1 : 1)) %
                                     this.values.length;
                             ((ScreenAccessor) screen).invokeClearAndInit();
-                        }, (((button, matrices, mouseX, mouseY) -> {
-                    if (this.description == null) return;
-                    screen.renderOrderedTooltip(matrices,
-                            client.textRenderer.wrapLines(getDescription(), 200), mouseX,
-                            mouseY);
-                }))));
+                        })
+                        .position(x, y)
+                        .size(width, 20)
+                        .tooltip(Util.nullMap(getDescription(), Tooltip::of))
+                        .build());
 
         return 20;
     }

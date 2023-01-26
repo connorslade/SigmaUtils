@@ -8,9 +8,9 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Objects;
 
 @Mixin(GameMenuScreen.class)
 public class GameMenuScreenMixin extends Screen {
@@ -18,17 +18,14 @@ public class GameMenuScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 8, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
-    void onDisconnectButton(CallbackInfo ci, int i, int j, String string, ButtonWidget buttonWidget, Text text) {
+    @Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1))
+    ButtonWidget.Builder onDisconnectButton(Text message, ButtonWidget.PressAction onPress) {
         if (!Config.getEnabled(ConfirmDisconnect.class))
-            return;
-        ci.cancel();
+            return ButtonWidget.builder(message, onPress);
 
-        this.addDrawableChild(
-                new ButtonWidget(this.width / 2 - 102, this.height / 4 + 120 - 16, 204, 20, text, (button) -> {
-                    button.active = false;
-                    assert this.client != null;
-                    this.client.setScreen(new ConfirmDisconnect.ConfirmDisconnectScreen());
-                }));
+        return ButtonWidget.builder(message, (button) -> {
+            button.active = false;
+            Objects.requireNonNull(client).setScreen(new ConfirmDisconnect.ConfirmDisconnectScreen());
+        });
     }
 }

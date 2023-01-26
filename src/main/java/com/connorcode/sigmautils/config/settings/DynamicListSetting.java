@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -71,14 +72,13 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen, new ButtonWidget(x, y, width, 20,
-                Text.of(String.format("Edit %s (%d)", this.name, this.resources.size())),
-                button -> client.setScreen(new ResourceScreen(screen, this.manager)),
-                ((button, matrices, mouseX, mouseY) -> {
-                    if (this.description == null) return;
-                    screen.renderOrderedTooltip(matrices, client.textRenderer.wrapLines(getDescription(), 200), mouseX,
-                            mouseY);
-                })));
+        Util.addChild(screen,
+                ButtonWidget.builder(Text.of(String.format("Edit %s (%d)", this.name, this.resources.size())),
+                                button -> client.setScreen(new ResourceScreen(screen, this.manager)))
+                        .position(x, y)
+                        .size(width, 20)
+                        .tooltip(Util.nullMap(getDescription(), Tooltip::of))
+                        .build());
 
         return 20;
     }
@@ -226,8 +226,11 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
                 y += entryHeight + padding;
             }
 
-            addDrawableChild(new ButtonWidget(startX() + entryWidth / 4, y, entryWidth / 2, 20, Text.of("+ Add"),
-                    button -> Objects.requireNonNull(client).setScreen(new ResourceAddScreen<>(this, this.renderer))));
+            addDrawableChild(ButtonWidget.builder(Text.of("+ Add"),
+                            button -> Objects.requireNonNull(client).setScreen(new ResourceAddScreen<>(this, this.renderer)))
+                    .position(startX() + entryWidth / 4, y)
+                    .size(entryWidth / 2, 20)
+                    .build());
         }
 
         @Override

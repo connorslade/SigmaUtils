@@ -4,6 +4,7 @@
   "package": "com.connorcode.sigmautils.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "AbstractSignEditScreenAccessor",
     "AbstractSoundInstanceMixin",
     "AllowedAddressResolverMixin",
     "ArmorFeatureRendererMixin",
@@ -46,7 +47,6 @@
     "RenderTickCounterAccessor",
     "ScreenAccessor",
     "ScreenMixin",
-    "SignEditScreenAccessor",
     "SimpleOptionAccessor",
     "SoundSystemMixin",
     "SplashTextResourceSupplierMixin",
@@ -55,7 +55,8 @@
     "WorldMixin",
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
-    "YggdrasilUserAuthenticationAccessor"
+    "YggdrasilUserAuthenticationAccessor",
+    "YggdrasilUserApiServiceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

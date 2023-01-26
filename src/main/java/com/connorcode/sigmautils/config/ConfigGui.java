@@ -52,16 +52,14 @@ public class ConfigGui extends Screen {
 
         // GitHub Link
         int githubLen = textRenderer.getWidth("Github");
-        addDrawableChild(
-                new ButtonWidget(width - githubLen - padding * 5, height - 20 - padding, githubLen + padding * 4, 20,
-                        Text.of("Github"), button -> {
-                    try {
-                        Util.getOperatingSystem()
-                                .open(new URI("https://github.com/Basicprogrammer10/SigmaUtils"));
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                }));
+        addDrawableChild(ButtonWidget.builder(Text.of("Github"), b -> {
+            try {
+                Util.getOperatingSystem()
+                        .open(new URI("https://github.com/Basicprogrammer10/SigmaUtils"));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }).position(width - githubLen - padding * 5, height - 20 - padding).size(githubLen + padding * 4, 20).build());
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

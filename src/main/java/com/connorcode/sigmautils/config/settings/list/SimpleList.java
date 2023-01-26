@@ -4,13 +4,14 @@ import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +30,22 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
         this.registry = registry;
     }
 
-    public static <T> void selector(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x,
-                                    int y, int gap) {
+    public static <T> void selector(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
         var padding = getPadding();
-        Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("+"), button -> {
-            setting.add(resource);
+        Util.addChild(screen, ButtonWidget.builder(Text.of("+"), button -> {
+            setting.remove(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, List.of(Text.of("Add element")
-                .asOrderedText()), mouseX, mouseY))));
+        }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Add element"))).build());
         Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
                 x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
     }
 
-    public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x,
-                                  int y, int gap) {
+    public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
         var padding = getPadding();
-        Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
+        Util.addChild(screen, ButtonWidget.builder(Text.of("×"), button -> {
             setting.remove(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                List.of(Text.of("Remove element")
-                        .asOrderedText()), mouseX, mouseY))));
+        }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Remove element"))).build());
         Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
                 x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xffffff));
     }

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -93,15 +94,12 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen,
-                new ButtonWidget(x, y, width, 20, Text.of(String.format("%s: %s", this.name, this.value)), (button -> {
-                    client.setScreen(new SelectorScreen(screen));
-                }), ((button, matrices, mouseX, mouseY) -> {
-                    if (this.description == null) return;
-                    screen.renderOrderedTooltip(matrices,
-                            client.textRenderer.wrapLines(getDescription(), 200), mouseX,
-                            mouseY);
-                })));
+        Util.addChild(screen, ButtonWidget.builder(Text.of(String.format("%s: %s", this.name, this.value)),
+                        button -> client.setScreen(new SelectorScreen(screen)))
+                .position(x, y)
+                .width(width)
+                .tooltip(Util.nullMap(getDescription(), Tooltip::of))
+                .build());
 
         return 20;
     }
@@ -130,9 +128,11 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                     new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32,
                             this.height - 32, textRenderer.fontHeight + 8);
             this.addSelectableChild(selectorWidget);
-            Util.addChild(this, new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, Text.of("Done"),
-                    (button) -> Objects.requireNonNull(this.client)
-                            .setScreen(this.parent)));
+            Util.addChild(this, ButtonWidget.builder(Text.of("Done"),
+                            button -> Objects.requireNonNull(this.client).setScreen(this.parent))
+                    .position(this.width / 2 - 100, this.height - 27)
+                    .width(200)
+                    .build());
         }
 
         @Override
