@@ -6,3 +6,4 @@ accessible method net/minecraft/client/font/TextRenderer tweakTransparency (I)I
 accessible field net/minecraft/network/NetworkState packetHandlers Ljava/util/Map;
 accessible field net/minecraft/network/NetworkState$PacketHandler packetIds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible method net/minecraft/entity/Entity getFlag (I)Z
+accessible method net/minecraft/client/gui/screen/option/OptionsScreen createButton (Lnet/minecraft/text/Text;Ljava/util/function/Supplier;)Lnet/minecraft/client/gui/widget/ButtonWidget;
