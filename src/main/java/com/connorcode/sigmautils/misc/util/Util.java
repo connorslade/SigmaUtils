@@ -12,11 +12,11 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Pair;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import javax.print.Doc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
@@ -53,6 +53,10 @@ public class Util {
         sa.getDrawables().add(drawable);
         sa.getChildren().add(drawable);
         sa.getSelectables().add(drawable);
+    }
+
+    public static <T, K>K nullMap(T t, Function<T, K> mapper) {
+        return t == null ? null : mapper.apply(t);
     }
 
     // == String ==
@@ -163,7 +167,7 @@ public class Util {
 
         @Override
         public String[] getDocs() {
-            return new String[] {
+            return new String[]{
                     "Hours, minutes, seconds (HH:mm:ss)",
                     "Best time format (e.g. 1 minute, 2 days)"
             };
@@ -176,7 +180,7 @@ public class Util {
 
         @Override
         public String[] getDocs() {
-            return new String[] {
+            return new String[]{
                     "Only elements in the list will be targeted.",
                     "All elements except those in the list will be targeted."
             };

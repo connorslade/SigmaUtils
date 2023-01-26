@@ -16,7 +16,8 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class RandomBackground extends Module {
     static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
-            SigmaUtils.class.getClassLoader().getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines().toList();
+            SigmaUtils.class.getClassLoader().getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines()
+            .toList();
     static int assetIndex = -1;
     static int screenHash = -1;
 

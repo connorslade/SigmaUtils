@@ -6,15 +6,17 @@ import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class SoundControl extends Module {
     static class SoundEventManager implements DynamicListSetting.ResourceManager<SoundSettings> {
         protected DynamicListSetting<SoundSettings> setting;
 
-        Registry<SoundEvent> registry = Registry.SOUND_EVENT;
+        Registry<SoundEvent> registry = Registries.SOUND_EVENT;
 
         SoundEventManager(DynamicListSetting<SoundSettings> setting) {
             this.setting = setting;
@@ -60,11 +62,10 @@ public class SoundControl extends Module {
         @Override
         public void render(SoundSettings resource, Screen screen, int x, int y) {
             var padding = getPadding();
-            Util.addChild(screen, new ButtonWidget(x, y, 20, 20, Text.of("×"), button -> {
+            Util.addChild(screen, ButtonWidget.builder(Text.of("×"), button -> {
                 setting.remove(resource);
                 ((ScreenAccessor) screen).invokeClearAndInit();
-            }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices,
-                    List.of(Text.of("Remove element").asOrderedText()), mouseX, mouseY))));
+            }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Remove element"))).build());
             Util.addChild(screen,
                     new SliderWidget(x + 20 + padding, y, 100, 20, getSliderText(resource), resource.volume) {
                         @Override
@@ -120,7 +121,7 @@ public class SoundControl extends Module {
         float volume;
 
         SoundSettings(NbtCompound nbt) {
-            this.event = Registry.SOUND_EVENT.get(Identifier.tryParse(nbt.getString("event")));
+            this.event = Registries.SOUND_EVENT.get(Identifier.tryParse(nbt.getString("event")));
             this.volume = nbt.getFloat("volume");
         }
 
@@ -131,7 +132,7 @@ public class SoundControl extends Module {
 
         NbtCompound toNbt() {
             var nbt = new NbtCompound();
-            nbt.putString("event", Objects.requireNonNull(Registry.SOUND_EVENT.getId(event)).toString());
+            nbt.putString("event", Objects.requireNonNull(Registries.SOUND_EVENT.getId(event)).toString());
             nbt.putFloat("volume", volume);
             return nbt;
         }

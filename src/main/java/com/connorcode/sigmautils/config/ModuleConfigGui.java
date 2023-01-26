@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -49,15 +50,17 @@ public class ModuleConfigGui extends Screen {
 
         // Add an 'enabled' setting
         Util.addChild(this,
-                new ButtonWidget(20 + padding, textRenderer.fontHeight * 2 + padding * 4, 150 - padding, 20,
-                        Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
-                    module.enabled ^= true;
-                    assert this.client != null;
-                    if (module.enabled) module.enable(this.client);
-                    else module.disable(this.client);
-                    this.clearAndInit();
-                }, (((button, matrices, mouseX, mouseY) -> this.renderOrderedTooltip(matrices,
-                        textRenderer.wrapLines(Text.of(module.description), 200), mouseX, mouseY)))));
+                ButtonWidget.builder(Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
+                            module.enabled ^= true;
+                            assert this.client != null;
+                            if (module.enabled) module.enable(this.client);
+                            else module.disable(this.client);
+                            this.clearAndInit();
+                        })
+                        .position(20 + padding, textRenderer.fontHeight * 2 + padding * 4)
+                        .size(150 - padding, 20)
+                        .tooltip(Tooltip.of(Text.of(module.description)))
+                        .build());
 
         List<List<Setting<?>>> settingsList = this.settings.stream().map(Pair::getRight).toList();
         for (int x = 0; x < settingsList.size(); x++) {

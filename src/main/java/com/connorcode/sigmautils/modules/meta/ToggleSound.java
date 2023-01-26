@@ -6,10 +6,10 @@ import com.connorcode.sigmautils.config.settings.SelectorSetting;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class ToggleSound extends Module {
     private static final SelectorSetting sound =
-            new SelectorSetting(ToggleSound.class, "Sound", () -> Registry.SOUND_EVENT.stream()
+            new SelectorSetting(ToggleSound.class, "Sound", () -> Registries.SOUND_EVENT.stream()
                     .map(s -> s.getId()
                             .toString())
                     .toList()).value("minecraft:ui.button.click")
@@ -41,8 +41,9 @@ public class ToggleSound extends Module {
         if (client.player == null) return;
 
         // Play button click sound
-        SoundEvent soundEvent = sound.value() == null ? SoundEvents.UI_BUTTON_CLICK : Registry.SOUND_EVENT.get(
-                Identifier.tryParse(sound.value()));
+        SoundEvent soundEvent =
+                sound.value() == null ? SoundEvents.UI_BUTTON_CLICK.value() : Registries.SOUND_EVENT.get(
+                        Identifier.tryParse(sound.value()));
         client.getSoundManager()
                 .play(PositionedSoundInstance.master(Objects.requireNonNull(soundEvent),
                         (float) (enable ? enablePitch.value() : disablePitch.value())));

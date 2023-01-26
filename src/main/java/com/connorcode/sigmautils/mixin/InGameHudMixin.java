@@ -2,7 +2,6 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
-import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules._interface.HotbarPosition;
 import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
 import com.connorcode.sigmautils.modules.hud.Hud;
@@ -14,7 +13,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,16 +45,15 @@ public abstract class InGameHudMixin {
         Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity).getRotationVec(client.getTickDelta());
         double fov = client.options.getFov().getValue();
         double angleSize = fov / scaledHeight;
-        Vec3f verticalRotationAxis = new Vec3f(cameraDirection);
-        verticalRotationAxis.cross(Vec3f.POSITIVE_Y);
-        if (!verticalRotationAxis.normalize())
-            return;
+        Vector3f verticalRotationAxis = cameraDirection.toVector3f();
+        verticalRotationAxis.cross(new Vector3f(0, 1, 0));
+        verticalRotationAxis.normalize();
 
-        Vec3f horizontalRotationAxis = new Vec3f(cameraDirection);
+        Vector3f horizontalRotationAxis = cameraDirection.toVector3f();
         horizontalRotationAxis.cross(verticalRotationAxis);
         horizontalRotationAxis.normalize();
 
-        verticalRotationAxis = new Vec3f(cameraDirection);
+        verticalRotationAxis = cameraDirection.toVector3f();
         verticalRotationAxis.cross(horizontalRotationAxis);
 
         Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis,
@@ -153,16 +151,9 @@ public abstract class InGameHudMixin {
         return value - getHotbarPos();
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 0), index = 1)
-    private double modifyActionbar(double value) {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 1)
+    private float modifyActionbar(float value) {
         return value - getHotbarPos();
-    }
-
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 1)
-    private double modifyChat(double value) {
-        if (Config.getEnabled(ChatPosition.class))
-            return value - ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight;
-        return value;
     }
     // End
 }

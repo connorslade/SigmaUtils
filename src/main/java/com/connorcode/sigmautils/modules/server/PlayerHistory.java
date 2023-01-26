@@ -59,18 +59,16 @@ public class PlayerHistory extends Module {
                 return;
             }
 
-            if (!(packet.get() instanceof PlayerListS2CPacket playerListS2CPacket) ||
-                    playerListS2CPacket.getAction() != PlayerListS2CPacket.Action.ADD_PLAYER ||
-                    client.getCurrentServerEntry() == null) return;
+            if (!(packet.get() instanceof PlayerListS2CPacket list) || client.getCurrentServerEntry() == null) return;
 
             synchronized (seenPlayers) {
-                for (PlayerListS2CPacket.Entry entry : playerListS2CPacket.getEntries()) {
-                    var uuid = entry.getProfile().getId();
+                for (PlayerListS2CPacket.Entry entry : list.getPlayerAdditionEntries()) {
+                    var uuid = entry.profile().getId();
                     seenPlayers.putIfAbsent(client.getCurrentServerEntry().address, new HashMap<>());
                     var server = seenPlayers.get(client.getCurrentServerEntry().address);
 
                     if (server.containsKey(uuid)) server.get(uuid).update();
-                    else server.put(uuid, new SeenPlayer(entry.getProfile().getName(), uuid));
+                    else server.put(uuid, new SeenPlayer(entry.profile().getName(), uuid));
                 }
             }
         });

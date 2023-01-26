@@ -16,7 +16,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.string;
 
 public class ResourcePack implements Command {
     static int serverPackUninstall(CommandContext<FabricClientCommandSource> context) {
-        Objects.requireNonNull(client.getResourcePackProvider())
+        Objects.requireNonNull(client.getServerResourcePackProvider())
                 .clear();
         return 0;
     }
@@ -34,7 +34,7 @@ public class ResourcePack implements Command {
             return 0;
         }
 
-        Objects.requireNonNull(client.getResourcePackProvider()).download(url, hash, true);
+        Objects.requireNonNull(client.getServerResourcePackProvider()).download(url, hash, true);
         return 0;
     }
 

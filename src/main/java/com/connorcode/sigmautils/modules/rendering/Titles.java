@@ -46,11 +46,6 @@ public class Titles extends Module {
     private static final EnumSetting<TextStyle.Color> textColor =
             new EnumSetting<>(Titles.class, "Text Color", TextStyle.Color.class).description(
                     "The color of the text. (who would have thought)").value(TextStyle.Color.White).build();
-    private static final BoolSetting textShadow =
-            new BoolSetting(Titles.class, "Text Shadow").value(true)
-                    .description("Whether or not to show a shadow under the text")
-                    .displayType(BoolSetting.DisplayType.BUTTON)
-                    .build();
     // == Titles ==
     private static final BoolSetting tntCountdown =
             new BoolSetting(Titles.class, "TNT Countdown").category("Titles")
@@ -127,8 +122,7 @@ public class Titles extends Module {
                         lines.add(Text.of(textColor.value().code() + "Owner: " +
                                 Util.uuidToName(owner).orElse(owner.toString())));
                         WorldRenderUtils.renderLines(lines,
-                                entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(),
-                                textShadow.value());
+                                entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
                     }
                 }
             }
@@ -139,15 +133,14 @@ public class Titles extends Module {
                 if (itemStackCount.value()) text += " ×" + i.count;
 
                 WorldRenderUtils.renderText(Text.of(text),
-                        entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(),
-                        textShadow.value());
+                        entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(), false);
             }
         });
     }
 
     void renderText(Text text, Entity pos, WorldRender.WorldRenderEvent event, double offset) {
         WorldRenderUtils.renderText(text, entityPos(pos, event.tickDelta).add(0, offset + yOffset.value(), 0),
-                scale.value(), textShadow.value());
+                scale.value(), false);
     }
 
     public enum TimeFormat {

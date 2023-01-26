@@ -24,30 +24,27 @@ public class ConfirmDisconnect extends Module {
 
         @Override
         protected void init() {
-            this.addDrawableChild(
-                    new ButtonWidget(this.width / 2 - 122, this.height / 4 - 10, 120, 20, Text.of("Disconnect"),
-                            (button -> {
-                                assert this.client != null;
-                                assert this.client.world != null;
-                                boolean singlePlayer = client.isInSingleplayer();
-                                boolean realms = client.isConnectedToRealms();
+            this.addDrawableChild(ButtonWidget.builder(Text.of("Disconnect"), button -> {
+                assert this.client != null;
+                assert this.client.world != null;
+                boolean singlePlayer = client.isInSingleplayer();
+                boolean realms = client.isConnectedToRealms();
 
-                                client.world.disconnect();
-                                if (singlePlayer)
-                                    client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
-                                else client.disconnect();
+                client.world.disconnect();
+                if (singlePlayer)
+                    client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
+                else client.disconnect();
 
-                                TitleScreen titleScreen = new TitleScreen();
-                                if (singlePlayer) client.setScreen(titleScreen);
-                                else if (realms) client.setScreen(new RealmsMainScreen(titleScreen));
-                                else client.setScreen(new MultiplayerScreen(titleScreen));
-                            })));
+                TitleScreen titleScreen = new TitleScreen();
+                if (singlePlayer) client.setScreen(titleScreen);
+                else if (realms) client.setScreen(new RealmsMainScreen(titleScreen));
+                else client.setScreen(new MultiplayerScreen(titleScreen));
+            }).position(this.width / 2 - 122, this.height / 4 - 10).size(120, 20).build());
 
-            this.addDrawableChild(
-                    new ButtonWidget(this.width / 2 + 2, this.height / 4 - 10, 120, 20, Text.of("Back"), (button -> {
-                        assert client != null;
-                        client.setScreen(null);
-                    })));
+            this.addDrawableChild(ButtonWidget.builder(Text.of("Back"), button -> {
+                assert client != null;
+                client.setScreen(null);
+            }).position(this.width / 2 + 2, this.height / 4 - 10).size(120, 20).build());
         }
 
         @Override

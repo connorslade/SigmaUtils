@@ -8,10 +8,10 @@ import com.connorcode.sigmautils.modules._interface.Minceraft;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Language;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Objects;
 
 @Mixin(TitleScreen.class)
@@ -40,12 +39,12 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     void init(CallbackInfo ci) {
         ScreenAccessor screen = ((ScreenAccessor) this);
-        Util.addChild(this, new ButtonWidget(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24, 20, 20,
-                Text.of("Σ"), button -> Objects.requireNonNull(client)
-                .setScreen(new ConfigGui()),
-                ((button, matrices, mouseX, mouseY) -> screen.invokeRenderOrderedTooltip(matrices,
-                        Language.getInstance()
-                                .reorder(List.of(Text.of("Sigma Utils"))), mouseX, mouseY))));
+        Util.addChild(this,
+                ButtonWidget.builder(Text.of("Σ"), button -> Objects.requireNonNull(client).setScreen(new ConfigGui()))
+                        .position(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24)
+                        .size(20, 20)
+                        .tooltip(Tooltip.of(Text.of("Sigma Utils")))
+                        .build());
     }
 
 

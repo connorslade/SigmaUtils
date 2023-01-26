@@ -3,8 +3,8 @@ package com.connorcode.sigmautils.misc.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ public class WorldRenderUtils {
         var camera = client.gameRenderer.getCamera();
         var matrixStack = getMatrices(pos);
 
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-camera.getYaw()));
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
@@ -34,8 +34,8 @@ public class WorldRenderUtils {
         var matrixStack = new MatrixStack();
 
         var camera = client.gameRenderer.getCamera();
-        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
         matrixStack.translate(pos.getX() - camera.getPos().x, pos.getY() - camera.getPos().y,
                 pos.getZ() - camera.getPos().z);
 

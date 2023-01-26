@@ -1,36 +1,32 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.modules._interface.UiTweaks;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin {
-    @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/option/OptionsScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;", ordinal = 5))
-    Element onSoundButtonRender(OptionsScreen instance, Element element) {
-        Util.addChild(instance, (Drawable) element);
-        if (!Config.getEnabled(UiTweaks.class) || !UiTweaks.audioMuteButton.value())
-            return element;
-
-        var padding = getPadding();
-        var button = ((ButtonWidget) element);
-        button.setWidth(150 - 20 - padding);
-        Util.addChild(instance,
-                new ButtonWidget(button.x + 150 - 20, button.y, 20, 20, Text.of(UiTweaks.muted ? "U" : "M"),
-                        (buttonWidget) -> {
-                            UiTweaks.muted ^= true;
-                            buttonWidget.setMessage(Text.of(UiTweaks.muted ? "U" : "M"));
-                        }));
-        return element;
-    }
+    // TODO: Fix this
+//    @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/option/OptionsScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;", ordinal = 5))
+//    Element onSoundButtonRender(OptionsScreen instance, Element element) {
+//        Util.addChild(instance, (Drawable) element);
+//        if (!Config.getEnabled(UiTweaks.class) || !UiTweaks.audioMuteButton.value())
+//            return element;
+//
+//        var padding = getPadding();
+//        var button = ((ButtonWidget) element);
+//        button.setWidth(150 - 20 - padding);
+//        Util.addChild(instance,
+//                new ButtonWidget(button.x + 150 - 20, button.y, 20, 20, Text.of(UiTweaks.muted ? "U" : "M"),
+//                        (buttonWidget) -> {
+//                            UiTweaks.muted ^= true;
+//                            buttonWidget.setMessage(Text.of(UiTweaks.muted ? "U" : "M"));
+//                        }));
+//        return element;
+//    }
+//
+//    @Inject(method = "init", at = @At("TAIL"))
+//    void onOptionScreenInit(CallbackInfo ci) {
+//        if (!Config.getEnabled(UiTweaks.class) || !UiTweaks.audioMuteButton.value()) return;
+//
+//    }
 }

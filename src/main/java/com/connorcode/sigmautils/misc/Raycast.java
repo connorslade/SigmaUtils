@@ -8,9 +8,10 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
+import org.joml.Vector3f;
 
 public class Raycast {
     // Modified from https://fabricmc.net/wiki/tutorial:pixel_raycast
@@ -46,19 +47,17 @@ public class Raycast {
         return target;
     }
 
-    public static Vec3d map(float anglePerPixel, Vec3d center, Vec3f horizontalRotationAxis, Vec3f verticalRotationAxis,
-                            int x, int y, int width, int height) {
+    public static Vec3d map(float anglePerPixel, Vec3d center, Vector3f horizontalRotationAxis, Vector3f verticalRotationAxis, int x, int y, int width, int height) {
         float horizontalRotation = (x - width / 2f) * anglePerPixel;
         float verticalRotation = (y - height / 2f) * anglePerPixel;
 
-        final Vec3f temp2 = new Vec3f(center);
-        temp2.rotate(verticalRotationAxis.getDegreesQuaternion(verticalRotation));
-        temp2.rotate(horizontalRotationAxis.getDegreesQuaternion(horizontalRotation));
+        Vector3f temp2 = center.toVector3f();
+        temp2.rotate(RotationAxis.of(verticalRotationAxis).rotationDegrees(verticalRotation));
+        temp2.rotate(RotationAxis.of(horizontalRotationAxis).rotationDegrees(horizontalRotation));
         return new Vec3d(temp2);
     }
 
-    public static HitResult raycast(Entity entity, double maxDistance, float tickDelta, boolean includeFluids,
-                                    Vec3d direction) {
+    public static HitResult raycast(Entity entity, double maxDistance, float tickDelta, boolean includeFluids, Vec3d direction) {
         Vec3d end = entity.getCameraPosVec(tickDelta).add(direction.multiply(maxDistance));
         return entity.world.raycast(
                 new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE,

@@ -5,8 +5,8 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class EffectHud extends HudModule {
                 .getActiveStatusEffects();
 
         for (Map.Entry<StatusEffect, StatusEffectInstance> i : effectMap.entrySet()) {
-            Optional<RegistryKey<StatusEffect>> effectKey = Registry.STATUS_EFFECT.getKey(i.getKey());
+            Optional<RegistryKey<StatusEffect>> effectKey = Registries.STATUS_EFFECT.getKey(i.getKey());
             if (effectKey.isEmpty()) continue;
 
             out.add(String.format("§r%sEffect: §f%s %d %ds", color, effectKey.get()

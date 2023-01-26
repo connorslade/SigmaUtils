@@ -24,9 +24,8 @@ public abstract class ChatHudMixin {
         return isChatFocused();
     }
 
-    @Inject(method = "hideMessage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "removeMessage", at = @At("HEAD"), cancellable = true)
     void onHideMessage(MessageSignatureData signature, CallbackInfo ci) {
-        if (Config.getEnabled(NoMessageHiding.class))
-            ci.cancel();
+        if (Config.getEnabled(NoMessageHiding.class)) ci.cancel();
     }
 }

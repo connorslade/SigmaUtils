@@ -10,7 +10,6 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleHud extends HudModule {

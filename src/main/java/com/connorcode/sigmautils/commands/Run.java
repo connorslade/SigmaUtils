@@ -48,8 +48,9 @@ public class Run implements Command {
                     if (!running) break;
 
                     String thisCommand = command.replaceAll("%INDEX%", String.valueOf(i));
-                    if (command.startsWith("/")) player.sendCommand(thisCommand.substring(1), null);
-                    else player.sendChatMessage(thisCommand, null);
+                    // TODO: Verify this works
+                    if (command.startsWith("/")) player.networkHandler.sendCommand(thisCommand.substring(1));
+                    else player.networkHandler.sendChatMessage(thisCommand);
                     if (count != -1 && i >= count) break;
 
                     try {
@@ -97,8 +98,8 @@ public class Run implements Command {
                     e.printStackTrace();
                 }
 
-                if (command.startsWith("/")) player.sendCommand(command.substring(1), null);
-                else player.sendChatMessage(command, null);
+                if (command.startsWith("/")) player.networkHandler.sendCommand(command.substring(1));
+                else player.networkHandler.sendChatMessage(command);
             }
 
             @Override
@@ -138,8 +139,8 @@ public class Run implements Command {
                     String text = command.getLeft();
 
                     if (text == null) break;
-                    if (text.startsWith("/")) player.sendCommand(text.substring(1), null);
-                    else player.sendChatMessage(text, null);
+                    if (text.startsWith("/")) player.networkHandler.sendCommand(text.substring(1));
+                    else player.networkHandler.sendChatMessage(text);
                     if (command.getRight()) break;
 
                     try {

@@ -2,11 +2,11 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
-import com.connorcode.sigmautils.mixin.SignEditScreenAccessor;
+import com.connorcode.sigmautils.mixin.AbstractSignEditScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
+import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 
 import java.util.Objects;
@@ -34,8 +34,8 @@ public class AutoSign extends Module {
     public void init() {
         super.init();
         ScreenOpenCallback.EVENT.register(screen -> {
-            if (!(screen.get() instanceof SignEditScreen && enabled)) return;
-            SignBlockEntity signBlock = ((SignEditScreenAccessor) screen.get()).getSign();
+            if (!(screen.get() instanceof AbstractSignEditScreen && enabled)) return;
+            SignBlockEntity signBlock = ((AbstractSignEditScreenAccessor) screen.get()).getSign();
             Objects.requireNonNull(client.player).networkHandler.sendPacket(
                     new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(),
                             line4.value()));

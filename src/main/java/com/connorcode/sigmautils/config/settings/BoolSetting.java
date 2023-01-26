@@ -8,6 +8,7 @@ import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -90,15 +91,11 @@ public class BoolSetting extends Setting<BoolSetting> {
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
         switch (this.displayType) {
-            case BUTTON -> Util.addChild(screen, new ButtonWidget(x, y, width, 20,
-                    Text.of(String.format("%s: %s", this.name, BoolSetting.this.value ? "On" : "Off")), (button) -> {
-                BoolSetting.this.value ^= true;
-                ((ScreenAccessor) screen).invokeClearAndInit();
-            }, (((button, matrices, mouseX, mouseY) -> {
-                if (this.description == null) return;
-                screen.renderOrderedTooltip(matrices,
-                        client.textRenderer.wrapLines(getDescription(), 200), mouseX, mouseY);
-            }))));
+            case BUTTON -> ButtonWidget.builder(Text.of(String.format("%s: %s", this.name, this.value ? "On" : "Off")),
+                    button -> {
+                        BoolSetting.this.value ^= true;
+                        ((ScreenAccessor) screen).invokeClearAndInit();
+                    }).position(x, y).size(width, 20).tooltip(Tooltip.of(Util.nullMap(this.description, d -> getDescription()))).build();
             case CHECKBOX -> Util.addChild(screen,
                     new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value,
                             (button -> BoolSetting.this.value = button.isChecked()),

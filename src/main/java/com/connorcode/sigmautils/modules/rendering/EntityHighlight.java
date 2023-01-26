@@ -19,10 +19,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ public class EntityHighlight extends Module {
         int color;
 
         public GlowingEntity(NbtCompound nbt) {
-            this.type = Registry.ENTITY_TYPE.get(Identifier.tryParse(nbt.getString("type")));
+            this.type = Registries.ENTITY_TYPE.get(Identifier.tryParse(nbt.getString("type")));
             this.color = nbt.getInt("color");
         }
 
@@ -91,7 +91,7 @@ public class EntityHighlight extends Module {
 
         public NbtCompound toNbt() {
             var nbt = new NbtCompound();
-            nbt.putString("type", Registry.ENTITY_TYPE.getId(type).toString());
+            nbt.putString("type", Registries.ENTITY_TYPE.getId(type).toString());
             nbt.putInt("color", color);
             return nbt;
         }
@@ -106,7 +106,7 @@ public class EntityHighlight extends Module {
 
         @Override
         public List<GlowingEntity> getAllResources() {
-            return Registry.ENTITY_TYPE.stream().map(e -> new GlowingEntity(e, -1)).toList();
+            return Registries.ENTITY_TYPE.stream().map(e -> new GlowingEntity(e, -1)).toList();
         }
 
         @Override
@@ -118,10 +118,10 @@ public class EntityHighlight extends Module {
         public void render(GlowingEntity resource, Screen screen, int x, int y) {
             var padding = getPadding();
             if (resource.color == -1) {
-                Util.addChild(screen, new ButtonWidget(x + 20 + padding, y, 20, 20, Text.of("T"), button -> {
+                Util.addChild(screen, ButtonWidget.builder(Text.of("T"), button -> {
                     resource.nextColor();
                     ((ScreenAccessor) screen).invokeClearAndInit();
-                }));
+                }).position(x + 20 + padding, y).size(20, 20).build());
             } else {
                 Util.addChild(screen, new Components.DrawableElement() {
                     @Override

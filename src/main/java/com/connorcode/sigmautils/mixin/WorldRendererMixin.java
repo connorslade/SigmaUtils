@@ -16,9 +16,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.world.HeightLimitView;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,10 +49,10 @@ public class WorldRendererMixin {
 
         if (sound == null || NoGlobalSounds.disabled(eventId))
             return;
-        Objects.requireNonNull(world).playSound(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
+        Objects.requireNonNull(world).playSoundAtBlockCenter(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }
 
-    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
+    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
     double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) {
         if (Config.getEnabled(NoDarkSky.class) && this.world != null)
             return this.world.getBottomY() - 32;
@@ -66,9 +66,7 @@ public class WorldRendererMixin {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera,
-                  GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix,
-                  CallbackInfo ci) {
+    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
         WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
         WorldRender.PreWorldRenderCallback.EVENT.invoker().handle(event);
         if (event.isCancelled())
@@ -76,9 +74,7 @@ public class WorldRendererMixin {
     }
 
     @Inject(method = "render", at = @At("RETURN"), cancellable = true)
-    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera,
-                      GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix,
-                      CallbackInfo ci) {
+    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
         WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
         WorldRender.PostWorldRenderCallback.EVENT.invoker().handle(event);
         if (event.isCancelled())
