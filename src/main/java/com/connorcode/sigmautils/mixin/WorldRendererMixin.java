@@ -86,6 +86,6 @@ public class WorldRendererMixin {
         var base = instance.getTeamColorValue();
         if (!Config.getEnabled(EntityHighlight.class))
             return base;
-        return EntityHighlight.instance.getGlowingColor(instance).orElse(base);
+        return EntityHighlight.getGlowingColor(instance).orElse(base);
     }
 }

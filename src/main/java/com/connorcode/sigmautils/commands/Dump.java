@@ -58,7 +58,7 @@ public class Dump implements Command {
                         .append(" ")
                         .append(i.getSimpleName())
                         .append("\n");
-            Files.write(dumps.toPath().resolve("assets/sigma-utils/packets.txt"), out.toString().getBytes());
+            Files.write(dumps.toPath().resolve("packets.txt"), out.toString().getBytes());
             return 0;
         }
 

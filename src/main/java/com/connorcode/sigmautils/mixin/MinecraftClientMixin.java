@@ -84,7 +84,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)
     void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (Config.getEnabled(EntityHighlight.class) && EntityHighlight.instance.isGlowing(entity) &&
+        if (Config.getEnabled(EntityHighlight.class) && EntityHighlight.isGlowing(entity) &&
                 !(EntityHighlight.disableF1.value() && this.options.hudHidden))
             cir.setReturnValue(true);
     }

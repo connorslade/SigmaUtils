@@ -36,9 +36,7 @@ public class EntityHighlight extends Module {
     public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
             .description("Turns off when in F1 mode")
             .build();
-    // TODO: remove needing an instance var
-    public static EntityHighlight instance;
-    public DynamicListSetting<GlowingEntity> entities =
+    public static DynamicListSetting<GlowingEntity> entities =
             new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
                     GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
@@ -46,14 +44,13 @@ public class EntityHighlight extends Module {
 
     public EntityHighlight() {
         super("entity_highlight", "Entity Highlight", "Outlines entities through blocks", Category.Rendering);
-        instance = this;
     }
 
-    public boolean isGlowing(Entity entity) {
+    public static boolean isGlowing(Entity entity) {
         return entities.value().stream().anyMatch(glowingEntity -> glowingEntity.type.equals(entity.getType()));
     }
 
-    public Optional<Integer> getGlowingColor(Entity entity) {
+    public static Optional<Integer> getGlowingColor(Entity entity) {
         return entities.value()
                 .stream()
                 .filter(glowingEntity -> glowingEntity.type.equals(entity.getType()))
@@ -62,7 +59,7 @@ public class EntityHighlight extends Module {
                         glowingEntity.color == -1 ? entity.getTeamColorValue() : getColor(glowingEntity.color));
     }
 
-    private int getColor(int index) {
+    private static int getColor(int index) {
         var color = TextStyle.Color.values()[index].asHexColor();
         return TextRenderer.tweakTransparency(color);
     }
@@ -101,8 +98,12 @@ public class EntityHighlight extends Module {
         }
     }
 
-    class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<GlowingEntity> {
-        GlowingEntitySelectorManager(DynamicListSetting<GlowingEntity> _setting) {}
+    static class GlowingEntitySelectorManager implements DynamicListSetting.ResourceManager<GlowingEntity> {
+        DynamicListSetting<GlowingEntity> setting;
+
+        GlowingEntitySelectorManager(DynamicListSetting<GlowingEntity> setting) {
+            this.setting = setting;
+        }
 
         @Override
         public List<GlowingEntity> getAllResources() {
