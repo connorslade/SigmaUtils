@@ -55,7 +55,7 @@ public class Util {
         sa.getSelectables().add(drawable);
     }
 
-    public static <T, K>K nullMap(T t, Function<T, K> mapper) {
+    public static <T, K> K nullMap(T t, Function<T, K> mapper) {
         return t == null ? null : mapper.apply(t);
     }
 

@@ -98,7 +98,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                         button -> client.setScreen(new SelectorScreen(screen)))
                 .position(x, y)
                 .width(width)
-                .tooltip(Tooltip.of(Util.nullMap(this.description, d -> getDescription())))
+                .tooltip(Util.nullMap(getDescription(), Tooltip::of))
                 .build());
 
         return 20;

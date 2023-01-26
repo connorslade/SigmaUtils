@@ -95,7 +95,7 @@ public class BoolSetting extends Setting<BoolSetting> {
                     button -> {
                         BoolSetting.this.value ^= true;
                         ((ScreenAccessor) screen).invokeClearAndInit();
-                    }).position(x, y).size(width, 20).tooltip(Tooltip.of(Util.nullMap(this.description, d -> getDescription()))).build();
+                    }).position(x, y).size(width, 20).tooltip(Util.nullMap(getDescription(), Tooltip::of)).build();
             case CHECKBOX -> Util.addChild(screen,
                     new Components.EventCheckbox(x, y, width, 20, Text.of(this.name), BoolSetting.this.value,
                             (button -> BoolSetting.this.value = button.isChecked()),

@@ -61,7 +61,7 @@ public class Components {
         var button = ButtonWidget.builder(Text.of(String.valueOf(values[setting.index()])), b -> {
             setting.value(setting.values()[(setting.index() + 1) % setting.values().length]);
             sa.invokeClearAndInit();
-        }).position(130 + x, y).size(20, 20).tooltip(Tooltip.of(setting.getDescription())).build();
+        }).position(130 + x, y).size(20, 20).tooltip(Util.nullMap(setting.getDescription(), Tooltip::of)).build();
         Util.addChild(screen, button);
     }
 

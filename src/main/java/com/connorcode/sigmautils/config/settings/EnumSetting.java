@@ -125,7 +125,7 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
                         })
                         .position(x, y)
                         .size(width, 20)
-                        .tooltip(Tooltip.of(Util.nullMap(this.description, d -> getDescription())))
+                        .tooltip(Util.nullMap(getDescription(), Tooltip::of))
                         .build());
 
         return 20;

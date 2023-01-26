@@ -59,7 +59,7 @@ public class ModuleConfigGui extends Screen {
                         })
                         .position(20 + padding, textRenderer.fontHeight * 2 + padding * 4)
                         .size(150 - padding, 20)
-                        .tooltip(Tooltip.of(Text.of(module.description)))
+                        .tooltip(Util.nullMap(module.description, d -> Tooltip.of(Text.of(d))))
                         .build());
 
         List<List<Setting<?>>> settingsList = this.settings.stream().map(Pair::getRight).toList();

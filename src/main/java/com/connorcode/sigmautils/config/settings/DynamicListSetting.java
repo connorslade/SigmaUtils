@@ -77,7 +77,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
                                 button -> client.setScreen(new ResourceScreen(screen, this.manager)))
                         .position(x, y)
                         .size(width, 20)
-                        .tooltip(Tooltip.of(Util.nullMap(this.description, d -> getDescription())))
+                        .tooltip(Util.nullMap(getDescription(), Tooltip::of))
                         .build());
 
         return 20;
