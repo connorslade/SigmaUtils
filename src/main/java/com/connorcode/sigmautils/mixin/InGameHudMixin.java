@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.misc.Raycast;
+import com.connorcode.sigmautils.misc.util.WorldUtils;
 import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules._interface.HotbarPosition;
 import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
@@ -14,8 +14,6 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,30 +39,13 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     void onRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
-        if (!Config.getEnabled(BlockDistance.class))
-            return;
+        if (!Config.getEnabled(BlockDistance.class)) return;
+
         client.getProfiler().push("SigmaUtils::BlockDistance");
-        Vec3d cameraDirection = Objects.requireNonNull(client.cameraEntity).getRotationVec(client.getTickDelta());
-        double fov = client.options.getFov().getValue();
-        double angleSize = fov / scaledHeight;
-        Vector3f verticalRotationAxis = cameraDirection.toVector3f();
-        verticalRotationAxis.cross(new Vector3f(0, 1, 0));
-        verticalRotationAxis.normalize();
+        HitResult hitResult = WorldUtils.raycast(Objects.requireNonNull(client.getCameraEntity()), 500, client.getTickDelta());
+        if (Objects.requireNonNull(hitResult).getType() == HitResult.Type.MISS) return;
 
-        Vector3f horizontalRotationAxis = cameraDirection.toVector3f();
-        horizontalRotationAxis.cross(verticalRotationAxis);
-        horizontalRotationAxis.normalize();
-
-        verticalRotationAxis = cameraDirection.toVector3f();
-        verticalRotationAxis.cross(horizontalRotationAxis);
-
-        Vec3d direction = Raycast.map((float) angleSize, cameraDirection, horizontalRotationAxis, verticalRotationAxis,
-                scaledWidth / 2, scaledHeight / 2, scaledWidth, scaledHeight);
-        HitResult hitResult = Raycast.raycastInDirection(client, client.getTickDelta(), 500, direction);
-        if (Objects.requireNonNull(hitResult).getType() == HitResult.Type.MISS) {
-            return;
-        }
-        double distance = Objects.requireNonNull(hitResult)
+        var distance = Objects.requireNonNull(hitResult)
                 .getPos()
                 .distanceTo(Objects.requireNonNull(client.player).getPos());
 

@@ -33,7 +33,7 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
     public static <T> void selector(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
         var padding = getPadding();
         Util.addChild(screen, ButtonWidget.builder(Text.of("+"), button -> {
-            setting.remove(resource);
+            setting.add(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
         }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Add element"))).build());
         Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
