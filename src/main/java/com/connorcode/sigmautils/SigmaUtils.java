@@ -25,7 +25,7 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
-    public static final String VERSION = "0.1.2 alpha";
+    public static final String VERSION = "0.1.3 alpha";
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger logger = LogUtils.getLogger();
 

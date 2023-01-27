@@ -55,8 +55,8 @@
     "WorldMixin",
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
-    "YggdrasilUserAuthenticationAccessor",
-    "YggdrasilUserApiServiceMixin"
+    "YggdrasilUserApiServiceMixin",
+    "YggdrasilUserAuthenticationAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

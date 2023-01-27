@@ -53,7 +53,11 @@ public class Dump implements Command {
         if (resource.equals("packets")) {
             StringBuilder out = new StringBuilder("# Generated with `/util dump packets` (only works in dev builds)\n");
             var mr = FabricLoader.getInstance().getMappingResolver();
-            for (var i : NetworkUtils.getPackets().keySet().stream().sorted(Comparator.comparing(Class::getSimpleName)).toList())
+            for (var i : NetworkUtils.getPackets()
+                    .keySet()
+                    .stream()
+                    .sorted(Comparator.comparing(Class::getSimpleName))
+                    .toList())
                 out.append(mr.unmapClassName("intermediary", i.getName()))
                         .append(" ")
                         .append(i.getSimpleName())

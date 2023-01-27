@@ -2,12 +2,14 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.Raycast;
+import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules._interface.HotbarPosition;
 import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
 import com.connorcode.sigmautils.modules.hud.Hud;
 import com.connorcode.sigmautils.modules.misc.BlockDistance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -99,6 +101,15 @@ public abstract class InGameHudMixin {
         if (Config.getEnabled(NoScoreboardValue.class))
             return "";
         return Integer.toString(buf);
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/util/math/MatrixStack;III)V"))
+    void onRenderChat(ChatHud instance, MatrixStack matrices, int currentTick, int mouseX, int mouseY) {
+        matrices.push();
+        if (Config.getEnabled(ChatPosition.class))
+            matrices.translate(0, -ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight, 0);
+        instance.render(matrices, currentTick, mouseX, mouseY);
+        matrices.pop();
     }
 
     int getHotbarPos() {
