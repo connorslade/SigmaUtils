@@ -42,12 +42,12 @@ public class PacketCanceler extends Module {
         super.init();
 
         PacketReceiveCallback.EVENT.register(packet -> {
-            if (!clientPackets.value().contains(packet.get().getClass())) return;
+            if (!enabled || !clientPackets.value().contains(packet.get().getClass())) return;
             sendDebug(NetworkSide.CLIENTBOUND, packet.get());
             packet.cancel();
         });
         PacketSendCallback.EVENT.register(packet -> {
-            if (!serverPackets.value().contains(packet.get().getClass())) return;
+            if (!enabled || !serverPackets.value().contains(packet.get().getClass())) return;
             sendDebug(NetworkSide.SERVERBOUND, packet.get());
             packet.cancel();
         });

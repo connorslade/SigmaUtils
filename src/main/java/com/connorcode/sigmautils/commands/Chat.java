@@ -6,13 +6,16 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
+import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 public class Chat implements Command {
     static int execute(CommandContext<FabricClientCommandSource> context) {
         String msg = getString(context, "text");
-        context.getSource().sendFeedback(Text.of(msg));
+        Objects.requireNonNull(client.getNetworkHandler()).sendChatMessage(msg);
         return 0;
     }
 

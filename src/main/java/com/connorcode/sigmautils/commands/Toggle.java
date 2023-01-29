@@ -46,10 +46,12 @@ public class Toggle implements Command {
         }
 
         if (setState) {
+            module.get().enabled = true;
             module.get().enable(client);
             return 0;
         }
 
+        module.get().enabled = false;
         module.get().disable(client);
         return 0;
     }

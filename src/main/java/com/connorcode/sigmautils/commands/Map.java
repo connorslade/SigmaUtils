@@ -37,13 +37,9 @@ public class Map implements Command {
                 .getRight();
         assert client.player != null;
 
-        File mapFile = getNewFile(client, mapId);
+        File mapFile = getNewFile(mapId);
         try {
-            Objects.requireNonNull(
-                            ((MapTextureAccessor) (((MapRendererAccessor) client.gameRenderer.getMapRenderer()).invokeGetMapTexture(
-                                    mapId, mapState))).getTexture()
-                                    .getImage())
-                    .writeTo(mapFile);
+            Objects.requireNonNull(((MapTextureAccessor) (((MapRendererAccessor) client.gameRenderer.getMapRenderer()).invokeGetMapTexture(mapId, mapState))).getTexture().getImage()).writeTo(mapFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,32 +88,27 @@ public class Map implements Command {
     static Optional<Pair<Integer, MapState>> getMap(CommandContext<FabricClientCommandSource> context) {
         assert client.player != null;
 
-        ItemStack itemStack = client.player.getInventory()
-                .getMainHandStack();
-        if (!itemStack.isOf(Items.FILLED_MAP) && Objects.requireNonNull(client.crosshairTarget)
-                .getType() == HitResult.Type.ENTITY &&
-                ((EntityHitResult) client.crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrame) {
+        ItemStack itemStack = client.player.getInventory().getMainHandStack();
+        if (!itemStack.isOf(Items.FILLED_MAP) && Objects.requireNonNull(client.crosshairTarget).getType() == HitResult.Type.ENTITY && ((EntityHitResult) client.crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrame)
             itemStack = itemFrame.getHeldItemStack();
-        }
+
 
         if (!itemStack.isOf(Items.FILLED_MAP)) {
-            context.getSource()
-                    .sendError(Text.of("You must be holding or looking at a map!"));
+            context.getSource().sendError(Text.of("You must be holding or looking at a map!"));
             return Optional.empty();
         }
 
         Integer mapId = FilledMapItem.getMapId(itemStack);
         MapState mapState = FilledMapItem.getMapState(mapId, client.world);
         if (mapId == null) {
-            context.getSource()
-                    .sendError(Text.of("Map ID is null?"));
+            context.getSource().sendError(Text.of("Map ID is null?"));
             return Optional.empty();
         }
 
         return Optional.of(new Pair<>(mapId, mapState));
     }
 
-    static File getNewFile(MinecraftClient client, int id) {
+    static File getNewFile(int id) {
         int i = 1;
         while (true) {
             File file = new File(new File(client.runDirectory, "screenshots"),
