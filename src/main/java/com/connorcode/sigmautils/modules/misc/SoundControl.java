@@ -31,8 +31,7 @@ public class SoundControl extends Module {
             new DynamicListSetting<>(SoundControl.class, "Sound Events", SoundEventManager::new).build();
 
     public SoundControl() {
-        super("sound_control", "Sound Control",
-                "Lets you control the volume of every sound event. Ground Control To Major Tom.", Category.Misc);
+        super("sound_control", "Sound Control", "Lets you control the volume of every sound event.", Category.Misc);
     }
 
     public static float getVolumeAdjuster(Identifier id) {

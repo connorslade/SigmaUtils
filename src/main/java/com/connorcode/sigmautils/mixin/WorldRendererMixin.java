@@ -52,13 +52,6 @@ public class WorldRendererMixin {
         Objects.requireNonNull(world).playSoundAtBlockCenter(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }
 
-    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;getSkyDarknessHeight(Lnet/minecraft/world/HeightLimitView;)D"))
-    double onGetSkyDarknessHeight(ClientWorld.Properties instance, HeightLimitView world) {
-        if (Config.getEnabled(NoDarkSky.class) && this.world != null)
-            return this.world.getBottomY() - 32;
-        return instance.getSkyDarknessHeight(world);
-    }
-
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
     void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
         if (Config.getEnabled(NoWorldBorder.class))
