@@ -41,6 +41,8 @@
     "misc.AllowBlockedServers",
     "misc.AutoSign",
     "misc.BlockDistance",
+    "misc.BrandChanger",
+    "misc.CameraClip",
     "misc.CameraDistance",
     "misc.DisableFrontPerspective",
     "misc.ForceGameTime",

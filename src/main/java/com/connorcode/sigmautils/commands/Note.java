@@ -32,8 +32,8 @@ Editing a note will open the editor for the note with the name you give it.
  */
 
 public class Note implements Command {
-    private static HashMap<String, List<SavedNote>> notes = new HashMap<>();
-    private static List<SavedNote> globalNotes = new ArrayList<>();
+    private static final HashMap<String, List<SavedNote>> notes = new HashMap<>();
+    private static final List<SavedNote> globalNotes = new ArrayList<>();
 
     private static int noteAction(CommandContext<FabricClientCommandSource> context) {
         String action = getString(context, "action");

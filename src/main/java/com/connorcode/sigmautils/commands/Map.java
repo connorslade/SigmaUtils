@@ -6,7 +6,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
@@ -39,7 +38,9 @@ public class Map implements Command {
 
         File mapFile = getNewFile(mapId);
         try {
-            Objects.requireNonNull(((MapTextureAccessor) (((MapRendererAccessor) client.gameRenderer.getMapRenderer()).invokeGetMapTexture(mapId, mapState))).getTexture().getImage()).writeTo(mapFile);
+            Objects.requireNonNull(
+                    ((MapTextureAccessor) (((MapRendererAccessor) client.gameRenderer.getMapRenderer()).invokeGetMapTexture(
+                            mapId, mapState))).getTexture().getImage()).writeTo(mapFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,7 +90,9 @@ public class Map implements Command {
         assert client.player != null;
 
         ItemStack itemStack = client.player.getInventory().getMainHandStack();
-        if (!itemStack.isOf(Items.FILLED_MAP) && Objects.requireNonNull(client.crosshairTarget).getType() == HitResult.Type.ENTITY && ((EntityHitResult) client.crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrame)
+        if (!itemStack.isOf(Items.FILLED_MAP) &&
+                Objects.requireNonNull(client.crosshairTarget).getType() == HitResult.Type.ENTITY &&
+                ((EntityHitResult) client.crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrame)
             itemStack = itemFrame.getHeldItemStack();
 
 

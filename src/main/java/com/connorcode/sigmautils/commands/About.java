@@ -30,7 +30,8 @@ public class About implements Command {
 
                             var message =
                                     Text.of(String.format("SigmaUtils v%s\nFabric v%s%s\nMinecraft v%s\nProtocol v%s",
-                                            sigmaUtilsVersion, fabricVersion, fabricDebug, gameVersion, protocolVersion));
+                                            sigmaUtilsVersion, fabricVersion, fabricDebug, gameVersion,
+                                            protocolVersion));
 
                             Objects.requireNonNull(client.player).sendMessage(message, false);
                             return 0;

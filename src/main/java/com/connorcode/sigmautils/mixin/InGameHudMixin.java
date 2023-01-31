@@ -42,7 +42,8 @@ public abstract class InGameHudMixin {
         if (!Config.getEnabled(BlockDistance.class)) return;
 
         client.getProfiler().push("SigmaUtils::BlockDistance");
-        HitResult hitResult = WorldUtils.raycast(Objects.requireNonNull(client.getCameraEntity()), 500, client.getTickDelta());
+        HitResult hitResult =
+                WorldUtils.raycast(Objects.requireNonNull(client.getCameraEntity()), 500, client.getTickDelta());
         if (Objects.requireNonNull(hitResult).getType() == HitResult.Type.MISS) return;
 
         var distance = Objects.requireNonNull(hitResult)
