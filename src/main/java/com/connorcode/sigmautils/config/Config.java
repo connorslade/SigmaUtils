@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.SigmaUtils.directory;
+import static com.connorcode.sigmautils.SigmaUtils.*;
 
 public class Config {
     public static final File configFile = new File(directory.toFile(), "config.nbt");
@@ -67,6 +66,7 @@ public class Config {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void save() throws IOException {
+        logger.debug("Saving config");
         NbtCompound nbt = new NbtCompound();
 
         // Add modules
