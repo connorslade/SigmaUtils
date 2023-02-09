@@ -15,6 +15,7 @@
     "ChatScreenMixin",
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldAccessor",
     "ClientWorldMixin",

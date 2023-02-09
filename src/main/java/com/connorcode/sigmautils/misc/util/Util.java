@@ -64,6 +64,17 @@ public class Util {
         return s.toLowerCase().replace(' ', '_');
     }
 
+    public static String titleString(String s) {
+        StringBuilder out = new StringBuilder();
+
+        for (var i : s.toCharArray()) {
+            if (Character.isUpperCase(i) && !out.isEmpty()) out.append(" ");
+            out.append(i);
+        }
+
+        return out.toString();
+    }
+
     public static String bestTime(long ms) {
         Pair<String, Integer>[] units = new Pair[]{
                 new Pair<>("second", 60),

@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.misc.Components;
+import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules.meta.Notifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,6 +24,14 @@ public abstract class Module {
     protected Module(String id, String name, String description, Category category) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
+    protected Module(String description, Category category) {
+        var name = getClass().getSimpleName();
+        this.id = Util.toSnakeCase(name);
+        this.name = Util.titleString(name);
         this.description = description;
         this.category = category;
     }

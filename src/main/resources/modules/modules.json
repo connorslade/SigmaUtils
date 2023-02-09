@@ -49,6 +49,7 @@
     "misc.ForceWeather",
     "misc.NoForceResourcePack",
     "misc.NoGlobalSounds",
+    "misc.NoCooldown",
     "misc.NoPause",
     "misc.NoTelemetry",
     "misc.PacketCanceler",

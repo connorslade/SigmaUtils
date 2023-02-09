@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.hud;
 
+import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.mixin.InGameHudAccessor;
@@ -22,6 +23,9 @@ public class Hud extends Module {
             new EnumSetting<>(Hud.class, "Location", RealLocation.class).value(RealLocation.BottomLeft)
                     .description("The location of the HUD stack")
                     .build();
+    public static BoolSetting hideF3 = new BoolSetting(Hud.class, "F3 Hide").value(true)
+            .description("Hide the HUD when the F3 menu is open")
+            .build();
 
     public Hud() {
         super("hud", "Hud", "The basic text hud that can be placed in the corners of the window", Category.Hud);
@@ -57,6 +61,7 @@ public class Hud extends Module {
     }
 
     public static void renderHud(MatrixStack matrices) {
+        if (client.options.debugEnabled && hideF3.value()) return;
         InGameHudAccessor hudAccessor = (InGameHudAccessor) client.inGameHud;
         int padding = getPadding();
 
