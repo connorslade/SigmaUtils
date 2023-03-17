@@ -56,28 +56,27 @@ public class NetworkUtils {
 
     public static synchronized AuthStatus getAuthStatus() {
         if (authStatus == AuthStatus.Waiting) return authStatus;
+        if (System.currentTimeMillis() - lastAuthStatusCheck <= 1000 * 60 * 5) return authStatus;
 
-        if (System.currentTimeMillis() - lastAuthStatusCheck > 1000 * 60 * 5) {
-            authStatus = AuthStatus.Waiting;
-            lastAuthStatusCheck = System.currentTimeMillis();
+        authStatus = AuthStatus.Waiting;
+        lastAuthStatusCheck = System.currentTimeMillis();
 
-            new Thread(() -> {
-                var session = client.getSession();
-                var profile = session.getProfile();
-                var token = session.getAccessToken();
-                var id = UUID.randomUUID().toString();
+        new Thread(() -> {
+            var session = client.getSession();
+            var profile = session.getProfile();
+            var token = session.getAccessToken();
+            var id = UUID.randomUUID().toString();
 
-                // Thank-you https://github.com/axieum/authme
-                var sessionService = (YggdrasilMinecraftSessionService) client.getSessionService();
-                try {
-                    sessionService.joinServer(profile, token, id);
-                    authStatus = sessionService.hasJoinedServer(profile, id, null)
-                            .isComplete() ? AuthStatus.Online : AuthStatus.Offline;
-                } catch (AuthenticationException e) {
-                    authStatus = AuthStatus.Invalid;
-                }
-            }).start();
-        }
+            // Thank you https://github.com/axieum/authme
+            var sessionService = (YggdrasilMinecraftSessionService) client.getSessionService();
+            try {
+                sessionService.joinServer(profile, token, id);
+                authStatus = sessionService.hasJoinedServer(profile, id, null)
+                        .isComplete() ? AuthStatus.Online : AuthStatus.Offline;
+            } catch (AuthenticationException e) {
+                authStatus = AuthStatus.Invalid;
+            }
+        }).start();
 
         return authStatus;
     }

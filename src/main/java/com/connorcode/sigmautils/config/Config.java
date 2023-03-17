@@ -68,6 +68,7 @@ public class Config {
     public static void save() throws IOException {
         logger.debug("Saving config");
         NbtCompound nbt = new NbtCompound();
+        nbt.putString("version", "SigmaUtils " + VERSION);
 
         // Add modules
         NbtCompound modules = new NbtCompound();
