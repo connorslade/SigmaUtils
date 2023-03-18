@@ -111,6 +111,8 @@ public class Components {
                 i.render(matrices, mouseX, mouseY, delta);
         }
 
+        protected abstract double maxScroll();
+
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
             scroll -= amount * (entryHeight + padding);
@@ -120,9 +122,7 @@ public class Components {
         }
 
         protected void refreshScrollConstrains() {
-            scroll = MathHelper.clamp(scroll, 0, Math.max(0, ((ScreenAccessor) this).getDrawables()
-                    .size() * (entryHeight + padding) - height));
-            // TODO: Fix this. Allow for scrolling to the bottom.
+            scroll = MathHelper.clamp(scroll, 0, maxScroll());
         }
 
         protected int startX() {

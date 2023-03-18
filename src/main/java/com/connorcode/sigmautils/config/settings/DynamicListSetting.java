@@ -126,6 +126,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         Screen _super;
         ResourceManager<K> renderer;
         TextFieldWidget searchField;
+        int count;
 
         protected ResourceAddScreen(Screen _super, ResourceManager<K> renderer) {
             super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
@@ -139,11 +140,13 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         @Override
         protected void init() {
             searchField.setX(width / 2 - searchField.getWidth() / 2);
-            var y = padding * 6 + 20 - (int) this.scroll;
+            var y = padding * 6 + 30 - (int) this.scroll;
             var x = 20 + padding + startX();
 
             var search = searchField.getText();
-            for (var i : renderer.getAllResources()
+            var res = renderer.getAllResources();
+            count = res.size();
+            for (var i : res
                     .stream()
                     .filter(r -> search.isEmpty() || search(r, search))
                     .toList()) {
@@ -172,6 +175,11 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
             this.searchField.render(matrices, mouseX, mouseY, delta);
+        }
+
+        @Override
+        protected double maxScroll() {
+            return (entryHeight + padding) * count - Math.max(height * 0.80, 0);
         }
 
         @Override
@@ -209,6 +217,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
     public class ResourceScreen extends Components.ScrollableScreen {
         Screen _super;
         ResourceManager<K> renderer;
+        int count;
 
         protected ResourceScreen(Screen _super, ResourceManager<K> renderer) {
             super(Text.of("Resource Screen"), getPadding(), renderer.height(), renderer.width());
@@ -221,7 +230,9 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             var x = 20 + padding + startX();
             var y = padding * 4;
 
-            for (var i : DynamicListSetting.this.resources) {
+            var res = DynamicListSetting.this.resources;
+            count = res.size();
+            for (var i : res) {
                 renderer.render(i, this, x, y);
                 y += entryHeight + padding;
             }
@@ -242,6 +253,11 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
+        }
+
+        @Override
+        protected double maxScroll() {
+            return (entryHeight + padding) * count - Math.max(height * 0.80, 0);
         }
     }
 }
