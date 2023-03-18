@@ -9,8 +9,6 @@ import com.connorcode.sigmautils.module.Module;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
-;
-
 public class DisableShadows extends Module {
     static EnumSetting<Util.FilterType> filterType = Util.filterSetting(DisableShadows.class).build();
     static DynamicListSetting<EntityType<?>> entities =

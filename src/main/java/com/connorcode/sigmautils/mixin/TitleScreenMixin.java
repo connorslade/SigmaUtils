@@ -57,13 +57,6 @@ public class TitleScreenMixin extends Screen {
         this.splashText = this.client.getSplashTextLoader().get();
     }
 
-    // For minceraft
-    // todo: this
-//    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/TitleScreen;isMinceraft:Z", opcode = Opcodes.GETFIELD))
-//    boolean isMinecraft(TitleScreen instance) {
-//        return Config.getEnabled(Minceraft.class);
-//    }
-
     // For escape_exit
     @Inject(method = "shouldCloseOnEsc", at = @At("HEAD"))
     void shouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {

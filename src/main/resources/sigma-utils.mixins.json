@@ -35,6 +35,7 @@
     "InventoryScreenMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
+    "LogoDrawerMixin",
     "MapRendererAccessor",
     "MapTextureAccessor",
     "MinecraftClientAccessor",
