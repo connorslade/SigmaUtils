@@ -24,6 +24,7 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+
 public class Components {
     public static void addToggleButton(Screen screen, Module module, int x, int y, int width, boolean mini) {
         //        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
@@ -66,6 +67,8 @@ public class Components {
     }
 
     public abstract static class DrawableElement implements Drawable, Element, Selectable {
+        protected boolean focused;
+
         @Override
         public SelectionType getType() {
             return SelectionType.NONE;
@@ -73,6 +76,16 @@ public class Components {
 
         @Override
         public void appendNarrations(NarrationMessageBuilder builder) {
+        }
+
+        @Override
+        public boolean isFocused() {
+            return focused;
+        }
+
+        @Override
+        public void setFocused(boolean focused) {
+            this.focused = focused;
         }
     }
 
@@ -206,7 +219,7 @@ public class Components {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.renderButton(matrices, mouseX, mouseY, delta);
-            if (this.isHovered())
+            if (this.isSelected())
                 this.renderTooltip(matrices, mouseX, mouseY);
         }
 

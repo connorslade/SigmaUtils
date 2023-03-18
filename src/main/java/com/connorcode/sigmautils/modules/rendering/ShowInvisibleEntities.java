@@ -10,6 +10,8 @@ import com.connorcode.sigmautils.module.Module;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
+;
+
 public class ShowInvisibleEntities extends Module {
     public static NumberSetting opacity = new NumberSetting(ShowInvisibleEntities.class, "Opacity", 0, 1).value(0.25)
             .description("Opacity of invisible entities.")

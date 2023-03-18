@@ -16,13 +16,14 @@ import net.minecraft.text.Text;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Map;
 import java.util.*;
+import java.util.Map.Entry;
 
 import static com.connorcode.sigmautils.SigmaUtils.directory;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static net.minecraft.command.CommandSource.suggestMatching;
+
 
 public class Dump implements Command {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -107,7 +108,7 @@ public class Dump implements Command {
 
         if (categories.isEmpty()) return builder.toString();
         builder.append("<details>\n<summary>Settings (").append(settings).append(")</summary>\n<br>\n\n");
-        for (var i : categories.entrySet().stream().sorted(Map.Entry.comparingByKey()).toList()) {
+        for (var i : categories.entrySet().stream().sorted(Entry.comparingByKey()).toList()) {
             builder.append("> ## ").append(i.getKey()).append("\n>\n");
             for (var j : i.getValue().stream().sorted(Comparator.comparing(Setting::getName)).toList()) {
                 builder.append("> ### ")

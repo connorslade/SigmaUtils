@@ -17,10 +17,10 @@ public class About implements Command {
         dispatcher.register(ClientCommandManager.literal("util")
                 .then(ClientCommandManager.literal("about")
                         .executes(context -> {
-                            var gameVersion = client.getGame().getVersion().getName();
+                            var gameVersion = client.getGameVersion();
                             var fabricVersion = FabricLoader.getInstance()
                                     .getModContainer("fabricloader")
-                                    .get()
+                                    .orElseThrow()
                                     .getMetadata()
                                     .getVersion()
                                     .getFriendlyString();

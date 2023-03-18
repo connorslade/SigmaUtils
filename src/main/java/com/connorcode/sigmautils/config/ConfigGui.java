@@ -67,7 +67,7 @@ public class ConfigGui extends Screen {
         this.renderBackground(matrices);
 
         for (int x = 0; x < Category.values().length; x++)
-            drawCenteredText(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
+            drawCenteredTextWithShadow(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
 
         super.render(matrices, mouseX, mouseY, delta);

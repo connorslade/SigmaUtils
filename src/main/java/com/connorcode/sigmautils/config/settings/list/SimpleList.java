@@ -21,6 +21,7 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+
 public abstract class SimpleList<T> implements DynamicListSetting.ResourceManager<T> {
     protected Registry<T> registry;
     protected DynamicListSetting<T> setting;

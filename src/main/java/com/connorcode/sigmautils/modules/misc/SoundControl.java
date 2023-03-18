@@ -26,6 +26,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.config.settings.list.SimpleList.selector;
 
+
 public class SoundControl extends Module {
     static DynamicListSetting<SoundSettings> soundEvents =
             new DynamicListSetting<>(SoundControl.class, "Sound Events", SoundEventManager::new).build();

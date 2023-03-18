@@ -18,6 +18,9 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.*;
 import static net.minecraft.command.CommandSource.suggestMatching;
 
+
+
+
 /*
 New note system:
 - /util note <global | server> <new | delete | list | edit> <name>

@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 
 public interface PacketSendCallback {
     Event<PacketSendCallback> EVENT =

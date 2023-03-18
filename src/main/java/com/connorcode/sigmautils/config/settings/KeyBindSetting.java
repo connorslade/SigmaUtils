@@ -15,6 +15,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static net.minecraft.client.util.InputUtil.*;
 
+
 public class KeyBindSetting extends Setting<KeyBindSetting> {
     InputUtil.Key key;
     boolean shift, ctrl, alt, strict;

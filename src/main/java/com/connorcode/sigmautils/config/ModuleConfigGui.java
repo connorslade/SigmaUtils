@@ -94,14 +94,16 @@ public class ModuleConfigGui extends Screen {
         for (Pair<String, List<Setting<?>>> entry : settings) {
             x += 150 + padding;
             if (entry.getLeft() != null)
-                drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())), x,
+                drawCenteredTextWithShadow(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())),
+                        x,
                         padding * 2 + textRenderer.fontHeight, 0);
 
             for (Setting<?> setting : entry.getRight())
                 setting.render(renderData, x - 75, elementPositions.get(setting.getName()));
         }
 
-        drawCenteredText(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)), width / 2,
+        drawCenteredTextWithShadow(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)),
+                width / 2,
                 padding, 0);
     }
 

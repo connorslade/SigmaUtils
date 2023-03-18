@@ -26,15 +26,15 @@ public class DownloadingTerrainScreenMixin extends Screen {
     }
 
     // For see_through_loading
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(I)V"))
-    void onRenderBackground(DownloadingTerrainScreen instance, int i) {
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(Lnet/minecraft/client/util/math/MatrixStack;)V"))
+    void onRenderBackground(DownloadingTerrainScreen instance, MatrixStack matrixStack) {
         if (!Config.getEnabled(SeeThruLoading.class))
-            this.renderBackgroundTexture(0);
+            this.renderBackgroundTexture(matrixStack);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (Config.getEnabled(SeeThruLoading.class))
-            this.fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
+            fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
     }
 }

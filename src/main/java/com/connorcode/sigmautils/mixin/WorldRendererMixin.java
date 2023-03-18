@@ -28,6 +28,7 @@ import java.util.Objects;
 
 import static net.minecraft.sound.SoundEvents.*;
 
+
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
     @Shadow

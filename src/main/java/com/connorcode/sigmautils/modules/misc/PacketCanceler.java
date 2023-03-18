@@ -9,7 +9,7 @@ import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.network.NetworkSide;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;

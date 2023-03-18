@@ -110,10 +110,11 @@ public abstract class InGameHudMixin {
         return value + 2;
     }
 
-    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V"), index = 1)
-    private int modifyItem(int value) {
-        return value - getHotbarPos();
-    }
+    // todo: this
+//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V"), index = 1)
+//    private int modifyItem(int value) {
+//        return value - getHotbarPos();
+//    }
 
     @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 1)
     private int modifyJumpBar(int value) {

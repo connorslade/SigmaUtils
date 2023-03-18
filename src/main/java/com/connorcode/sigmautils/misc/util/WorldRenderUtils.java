@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.misc.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.RotationAxis;
@@ -24,7 +25,7 @@ public class WorldRenderUtils {
 
         var immediate = client.getBufferBuilders().getEntityVertexConsumers();
         client.textRenderer.draw(text, client.textRenderer.getWidth(text) / -2f, 0f, -1, shadow, matrixStack.peek()
-                .getPositionMatrix(), immediate, true, 0, 0xf000f0);
+                .getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0xf000f0, 0);
         immediate.draw();
 
         RenderSystem.disableBlend();
