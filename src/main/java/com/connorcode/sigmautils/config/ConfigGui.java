@@ -18,8 +18,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigGui extends Screen {
+    Screen _super;
+
     public ConfigGui() {
         super(Text.of("Sigma Utils - Config"));
+    }
+
+    public ConfigGui(Screen screen) {
+        this();
+        this._super = screen;
     }
 
     public static int getPadding() {
@@ -74,8 +81,7 @@ public class ConfigGui extends Screen {
     }
 
     public void close() {
-        Objects.requireNonNull(client)
-                .setScreen(null);
+        Objects.requireNonNull(client).setScreen(_super);
         try {
             Config.save();
         } catch (IOException e) {

@@ -18,6 +18,9 @@
   "entrypoints": {
     "client": [
       "com.connorcode.sigmautils.SigmaUtils"
+    ],
+    "modmenu": [
+      "com.connorcode.sigmautils.misc.ModMenu"
     ]
   },
   "mixins": [
