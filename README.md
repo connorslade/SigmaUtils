@@ -1,11 +1,13 @@
 # SigmaUtils ![build](https://github.com/Basicprogrammer10/SigmaUtils/actions/workflows/build.yml/badge.svg) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/Basicprogrammer10/SigmaUtils?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/Basicprogrammer10/SigmaUtils/total)
 
-Requires: <kbd>[Minecraft 1.19.3](https://minecraft.fandom.com/wiki/Java_Edition_1.19.3)</kbd> <kbd>[Fabric API](https://modrinth.com/mod/fabric-api/version/0.73.0%2B1.19.3)</kbd>
+Requires: <kbd>[Minecraft 1.19.4](https://minecraft.fandom.com/wiki/Java_Edition_1.19.4)</kbd> <kbd>[Fabric API](https://modrinth.com/mod/fabric-api/version/0.75.3+1.19.4)</kbd>
 
-SigmaUtils is a utility mod for Minecraft 1.19.3.
+SigmaUtils is a utility mod for Minecraft 1.19.4.
 It is made up of 'modules', which are discrete features that can be toggled and configured.
-By default, SigmaUtils changes nothing about the game, except adding a button to the title screen to open the config GUI.
-To see all the modules you can check out the [module documentation](https://github.com/Basicprogrammer10/SigmaUtils/wiki/Modules).
+By default, SigmaUtils changes nothing about the game, except adding a button to the title screen to open the config
+GUI.
+To see all the modules you can check out
+the [module documentation](https://github.com/Basicprogrammer10/SigmaUtils/wiki/Modules).
 
 ## Usage
 
