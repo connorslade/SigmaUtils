@@ -14,6 +14,7 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+// Warning: When updating versions the packets may change and this won't be automatically updated, causing unexpected behaviour (gasp)
 public class PacketCanceler extends Module {
     DynamicListSetting<Class<? extends Packet<?>>> clientPackets =
             new DynamicListSetting<>(PacketCanceler.class, "Client Packets",

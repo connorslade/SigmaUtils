@@ -26,7 +26,9 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
         super(module, name);
         this.enumClass = enumClass;
         try {
-            this.values = (K[]) enumClass.getMethod("values").invoke(null);
+            var valueGet = enumClass.getMethod("values");
+            valueGet.setAccessible(true);
+            this.values = (K[]) valueGet.invoke(null);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

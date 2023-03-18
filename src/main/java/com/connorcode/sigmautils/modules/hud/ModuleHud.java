@@ -10,6 +10,8 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ModuleHud extends HudModule {
@@ -19,6 +21,10 @@ public class ModuleHud extends HudModule {
     static DynamicListSetting<Class<? extends Module>> modules =
             new DynamicListSetting<>(ModuleHud.class, "Modules", ModuleList::new).description(
                     "Modules to display in the HUD.").build();
+    static EnumSetting<Sort> sort =
+            new EnumSetting<>(ModuleHud.class, "Sort", Sort.class).description("The way to sort modules in the list.")
+                    .value(Sort.None)
+                    .build();
 
     public ModuleHud() {
         super("module_hud", "Module Hud", "Shows all enabled modules in the hud", Category.Hud);
@@ -34,9 +40,25 @@ public class ModuleHud extends HudModule {
 
     @Override
     public List<String> lines() {
-        return SigmaUtils.modules.values().stream()
+        var list = new ArrayList<>(SigmaUtils.modules.values().stream()
                 .filter(ModuleHud::shouldShow)
                 .map(m -> getTextColor() + m.name)
-                .toList();
+                .toList());
+
+        switch (sort.value()) {
+            case None -> {}
+            case SmallToLarge -> list.sort(Comparator.comparing(String::length));
+            case LargeToSmall -> list.sort(Comparator.comparing(String::length).reversed());
+            case Alphabetical -> list.sort(Comparator.naturalOrder());
+        }
+
+        return list;
+    }
+
+    enum Sort {
+        None,
+        SmallToLarge,
+        LargeToSmall,
+        Alphabetical
     }
 }
