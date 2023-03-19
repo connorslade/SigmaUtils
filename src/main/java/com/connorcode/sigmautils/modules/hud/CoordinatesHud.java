@@ -41,6 +41,7 @@ public class CoordinatesHud extends HudModule {
 
     private String formatPos(Vec3d pos) {
         int p = precision.intValue();
+        if (p == 0) return String.format("%d, %d, %s", (int) pos.getX(), (int) pos.getY(), (int) pos.getZ());
         return String.format("%." + p + "f, %." + p + "f, %." + p + "f", pos.getX(), pos.getY(), pos.getZ());
     }
 

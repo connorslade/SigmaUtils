@@ -104,6 +104,10 @@ public class NumberSetting extends Setting<NumberSetting> {
         return (int) value;
     }
 
+    public long longValue() {
+        return (long) value;
+    }
+
     @Nullable
     @Override
     public Text getDescription() {

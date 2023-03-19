@@ -2,7 +2,6 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.modules._interface.UiTweaks;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
@@ -42,9 +41,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         entity.prevYaw = entity.getYaw();
         entity.prevPitch = entity.getPitch();
         entity.prevHeadYaw = entity.headYaw;
-        RenderSystem.runAsFancy(
-                () -> entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, tickDelta, matrices, immediate,
-                        15728880));
+        entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, tickDelta, matrices, immediate, 0xF000F0);
         entity.prevBodyYaw = h;
         entity.prevYaw = i;
         entity.prevPitch = j;
@@ -53,6 +50,6 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
     @Redirect(method = "drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"))
     private static void onRender(Runnable runnable) {
-        if (!UiTweaks.fastDoll()) RenderSystem.runAsFancy(runnable);
+        if (!UiTweaks.fastDoll()) runnable.run();
     }
 }
