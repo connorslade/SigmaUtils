@@ -17,6 +17,11 @@ public class UiTweaks extends Module {
             .value(true)
             .build();
 
+    public static BoolSetting fastDoll = new BoolSetting(UiTweaks.class, "Fast Doll")
+            .description("Makes the inventory player model render at full speed")
+            .value(true)
+            .build();
+
     public UiTweaks() {
         super("ui_tweaks", "UI Tweaks", "Random interface tweaks.",
                 Category.Interface);
@@ -28,6 +33,10 @@ public class UiTweaks extends Module {
 
     public static boolean showValidSession() {
         return Config.getEnabled(UiTweaks.class) && validSession.value();
+    }
+
+    public static boolean fastDoll() {
+        return Config.getEnabled(UiTweaks.class) && fastDoll.value();
     }
 
     @Override

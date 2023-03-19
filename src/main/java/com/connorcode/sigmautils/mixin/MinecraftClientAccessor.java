@@ -13,5 +13,8 @@ public interface MinecraftClientAccessor {
     }
 
     @Accessor
+    float getPausedTickDelta();
+
+    @Accessor
     RenderTickCounter getRenderTickCounter();
 }
