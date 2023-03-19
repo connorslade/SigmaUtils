@@ -31,6 +31,7 @@ public class CameraDistance extends Module {
 
     @Override
     public void init() {
+        super.init();
         MouseScrollCallback.EVENT.register(event -> {
             if (client.currentScreen != null || client.options.getPerspective() == Perspective.FIRST_PERSON ||
                     !Config.getEnabled(CameraDistance.class) || !CameraDistance.scrollZoom.value()) return;
