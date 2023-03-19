@@ -55,6 +55,7 @@
     "SoundSystemMixin",
     "SplashTextResourceSupplierMixin",
     "TelemetrySenderMixin",
+    "TitleScreenAccessor",
     "TitleScreenMixin",
     "WorldMixin",
     "WorldRendererMixin",

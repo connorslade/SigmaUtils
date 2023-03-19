@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.ConfigGui;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules._interface.EscapeExit;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
+import com.connorcode.sigmautils.modules._interface.UiTweaks;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -36,9 +38,11 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;"))
     void init(CallbackInfo ci) {
         ScreenAccessor screen = ((ScreenAccessor) this);
+        var y = screen.getHeight() / 4 + 48 + 24;
+        if (UiTweaks.noRealms()) y += 24 * 2 - 20;
         Util.addChild(this,
                 ButtonWidget.builder(Text.of("Σ"), button -> Objects.requireNonNull(client).setScreen(new ConfigGui()))
-                        .position(screen.getWidth() / 2 - 100 - 24, screen.getHeight() / 4 + 48 + 24)
+                        .position(screen.getWidth() / 2 - 100 - 24, y)
                         .size(20, 20)
                         .tooltip(Tooltip.of(Text.of("Sigma Utils")))
                         .build());
@@ -62,5 +66,16 @@ public class TitleScreenMixin extends Screen {
     void shouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {
         if (Config.getEnabled(EscapeExit.class))
             Objects.requireNonNull(this.client).scheduleStop();
+    }
+
+    @Inject(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;", ordinal = 2, shift = At.Shift.BEFORE), cancellable = true)
+    void onInitRealmsWidget(int y, int spacingY, CallbackInfo ci) {
+        if (UiTweaks.noRealms()) ci.cancel();
+    }
+
+    @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;initWidgetsNormal(II)V"))
+    void onInit(TitleScreen instance, int y, int spacingY) {
+        if (UiTweaks.noRealms()) y += spacingY * 2 - 20;
+        ((TitleScreenAccessor) instance).invokeInitWidgetsNormal(y, spacingY);
     }
 }

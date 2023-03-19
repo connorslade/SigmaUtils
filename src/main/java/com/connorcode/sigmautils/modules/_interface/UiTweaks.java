@@ -12,12 +12,16 @@ public class UiTweaks extends Module {
             .description("Adds a button to pause menu to mute / unmute all audio")
             .value(true)
             .build();
-    public static BoolSetting validSession = new BoolSetting(UiTweaks.class, "Valid Session")
+    static BoolSetting validSession = new BoolSetting(UiTweaks.class, "Valid Session")
             .description("Adds a display to the multiplayer screen to show if your session is valid")
             .value(true)
             .build();
 
-    public static BoolSetting fastDoll = new BoolSetting(UiTweaks.class, "Fast Doll")
+    static BoolSetting noRealms =
+            new BoolSetting(UiTweaks.class, "No Realms").description("Hides the 'Realms' button on the title screen.")
+                    .build();
+
+    static BoolSetting fastDoll = new BoolSetting(UiTweaks.class, "Fast Doll")
             .description("Makes the inventory player model render at full speed")
             .value(true)
             .build();
@@ -33,6 +37,10 @@ public class UiTweaks extends Module {
 
     public static boolean showValidSession() {
         return Config.getEnabled(UiTweaks.class) && validSession.value();
+    }
+
+    public static boolean noRealms() {
+        return Config.getEnabled(UiTweaks.class) && noRealms.value();
     }
 
     public static boolean fastDoll() {
