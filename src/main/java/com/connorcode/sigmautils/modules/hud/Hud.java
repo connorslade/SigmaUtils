@@ -16,6 +16,7 @@ import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static net.minecraft.client.gui.DrawableHelper.fill;
 
 public class Hud extends Module {
     public static List<HudModule> hudModules = new ArrayList<>();
@@ -26,6 +27,8 @@ public class Hud extends Module {
     public static BoolSetting hideF3 = new BoolSetting(Hud.class, "F3 Hide").value(true)
             .description("Hide the HUD when the F3 menu is open")
             .build();
+    static BoolSetting background = new BoolSetting(Hud.class, "Background").description(
+            "Weather to render a background behind all hud elements.").build();
 
     public Hud() {
         super("hud", "Hud", "The basic text hud that can be placed in the corners of the window", Category.Hud);
@@ -122,9 +125,13 @@ public class Hud extends Module {
     record HudStack(RealLocation location, List<String> lines, int startX, int startY, int maxWidth) {
         void render(MatrixStack matrices, int padding) {
             int y = startY;
+            var p = padding / 2f;
+            var pr = (int) Math.ceil(p);
             for (String line : lines) {
-                client.textRenderer.drawWithShadow(matrices, line,
-                        location.isRight() ? startX + (maxWidth - client.textRenderer.getWidth(line)) : startX, y, 0);
+                var x = location.isRight() ? startX + (maxWidth - client.textRenderer.getWidth(line)) : startX;
+                if (background.value()) fill(matrices, x - pr, y - pr, x + client.textRenderer.getWidth(line) + pr,
+                        y + client.textRenderer.fontHeight + (int) (p), 0x88000000);
+                client.textRenderer.drawWithShadow(matrices, line, x, y, 0);
                 y += client.textRenderer.fontHeight + padding;
             }
         }

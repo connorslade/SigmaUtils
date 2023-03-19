@@ -16,7 +16,7 @@ public class CameraMixin {
     double clipToSpace(double desiredCameraDistance) {
         if (!Config.getEnabled(CameraDistance.class))
             return desiredCameraDistance;
-        return CameraDistance.distance.value();
+        return CameraDistance.getDistance();
     }
 
     @Inject(method = "clipToSpace", at = @At("HEAD"), cancellable = true)
