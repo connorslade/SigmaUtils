@@ -38,6 +38,7 @@
     "meta.OpenFolder",
     "meta.Padding",
     "meta.ToggleSound",
+    "meta.UiDebug",
     "misc.AllowBlockedServers",
     "misc.AutoSign",
     "misc.BlockDistance",
