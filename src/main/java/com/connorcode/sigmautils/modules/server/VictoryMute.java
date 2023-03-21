@@ -27,7 +27,7 @@ public class VictoryMute extends Module {
     public static boolean muted = false;
     final StringSetting victoryRegex =
             new StringSetting(VictoryMute.class, "Victory Regex").description("Regex to match victory messages")
-                    .value(".*VICTORY!")
+                    .value(".*(VICTORY|GAME OVER)!")
                     .build();
 
     public VictoryMute() {

@@ -76,6 +76,7 @@
     "rendering.Zoom",
     "server.AutoVoidTrade",
     "server.BadlionTimers",
+    "server.BridgeAnalysis",
     "server.ItemShortcuts",
     "server.PlayerHistory",
     "server.VictoryMute"
