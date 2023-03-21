@@ -50,7 +50,7 @@ public class Zoom extends Module {
         super.init();
         MouseScrollCallback.EVENT.register(event -> {
             if (client.currentScreen != null || !enabled || !scrollZoom.value()) return;
-            zoomModifier += event.vertical / 10f;
+            zoomModifier -= event.vertical / 10f;
             event.cancel();
         });
     }
