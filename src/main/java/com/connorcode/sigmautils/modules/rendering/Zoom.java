@@ -31,6 +31,10 @@ public class Zoom extends Module {
     static double zoomModifier = 1;
     private static long tick = 0;
     private static long animationStart = 0;
+//    private final BoolSetting toggle = new BoolSetting(Zoom.class, "Toggle").value(true)
+//            .description("Makes this module toggle on and off rather than when the keybinding is held down.")
+//            .build();
+
 
     public Zoom() {
         super("zoom", "Zoom", "Zoom (Fov multiplier)", Category.Rendering);
@@ -64,6 +68,14 @@ public class Zoom extends Module {
             tick = 0;
             animationStart = 0;
         }
+//
+//        System.out.printf("%s, %s, %s, %s\n", !enabled, this.toggle.value(),
+//                !(Config.moduleSettings.get(this.getClass()).get(1) instanceof KeyBindSetting),
+//                ((KeyBindSetting) Config.moduleSettings.get(this.getClass()).get(1)).pressed());
+//        if (!enabled || this.toggle.value() ||
+//                !(Config.moduleSettings.get(this.getClass()).get(1) instanceof KeyBindSetting keybinding) ||
+//                keybinding.pressed()) return;
+//        enabled = false;
     }
 
     @Override
