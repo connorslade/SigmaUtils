@@ -37,8 +37,10 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
             setting.add(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
         }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Add element"))).build());
-        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
-                x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xFFFFFF));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) ->
+                matrices.drawText(client.textRenderer, display, x + 20 + padding * 4 + gap,
+                        (int) (y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f), 0xFFFFFF, false)
+        );
     }
 
     public static <T> void render(DynamicListSetting<T> setting, T resource, String display, Screen screen, int x, int y, int gap) {
@@ -47,8 +49,10 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
             setting.remove(resource);
             ((ScreenAccessor) screen).invokeClearAndInit();
         }).position(x, y).size(20, 20).tooltip(Tooltip.of(Text.of("Remove element"))).build());
-        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, display,
-                x + 20 + padding * 4 + gap, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f, 0xffffff));
+        Util.addDrawable(screen, (matrices, mouseX, mouseY, delta) ->
+                matrices.drawText(client.textRenderer, display, x + 20 + padding * 4 + gap,
+                        (int) (y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f), 0xffffff, false))
+        ;
     }
 
 

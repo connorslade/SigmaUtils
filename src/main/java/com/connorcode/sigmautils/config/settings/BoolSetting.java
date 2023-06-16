@@ -100,7 +100,7 @@ public class BoolSetting extends Setting<BoolSetting> {
                             (button -> BoolSetting.this.value = button.isChecked()),
                             ((button, matrices, mouseX, mouseY) -> {
                                 if (this.description == null) return;
-                                screen.renderOrderedTooltip(matrices,
+                                matrices.drawOrderedTooltip(client.textRenderer,
                                         client.textRenderer.wrapLines(getDescription(), 200),
                                         mouseX, mouseY);
                             })));

@@ -3,10 +3,10 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.config.settings.Setting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
@@ -83,7 +83,7 @@ public class ModuleConfigGui extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         Setting.RenderData renderData = new Setting.RenderData(this, matrices, mouseX, mouseY, delta);
         int padding = getPadding();
 
@@ -94,15 +94,14 @@ public class ModuleConfigGui extends Screen {
         for (Pair<String, List<Setting<?>>> entry : settings) {
             x += 150 + padding;
             if (entry.getLeft() != null)
-                drawCenteredTextWithShadow(matrices, textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())),
-                        x,
-                        padding * 2 + textRenderer.fontHeight, 0);
+                matrices.drawCenteredTextWithShadow(textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())),
+                        x, padding * 2 + textRenderer.fontHeight, 0);
 
             for (Setting<?> setting : entry.getRight())
                 setting.render(renderData, x - 75, elementPositions.get(setting.getName()));
         }
 
-        drawCenteredTextWithShadow(matrices, textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)),
+        matrices.drawCenteredTextWithShadow(textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)),
                 width / 2,
                 padding, 0);
     }

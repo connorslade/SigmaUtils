@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 
@@ -142,17 +142,17 @@ public class Note implements Command {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             renderBackground(matrices);
 
             var lines = textRenderer.wrapLines(StringVisitable.plain(note.text), noteWidth);
             var startX = width / 2f - noteWidth / 2f;
             var height = lines.size() * 10;
 
-            fill(matrices, (int) startX, 0, (int) (startX + noteWidth), height, 0x7F000000);
+            matrices.fill((int) startX, 0, (int) (startX + noteWidth), height, 0x7F000000);
 
             for (int i = 0; i < lines.size(); i++)
-                textRenderer.draw(matrices, lines.get(i), startX, i * 10, 0xFFFFFF);
+                matrices.drawText(textRenderer, lines.get(i), (int) startX, i * 10, 0xFFFFFF, false);
 
             super.render(matrices, mouseX, mouseY, delta);
         }

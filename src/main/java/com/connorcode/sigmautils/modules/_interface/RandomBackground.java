@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.modules._interface;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.Identifier;
 
 import java.io.BufferedReader;
@@ -27,7 +26,7 @@ public class RandomBackground extends Module {
                 Category.Interface);
     }
 
-    public static void setTexture() {
+    public static Identifier getTexture() {
         int currentScreenHash = Objects.requireNonNull(Objects.requireNonNull(client).currentScreen).hashCode();
 
         if (screenHash != currentScreenHash || assetIndex < 0) {
@@ -35,8 +34,7 @@ public class RandomBackground extends Module {
             assetIndex = new Random().nextInt(RandomBackground.validBackgrounds.size());
         }
 
-        RenderSystem.setShaderTexture(0,
-                Identifier.tryParse("textures/block/" + RandomBackground.validBackgrounds.get(assetIndex) + ".png"));
+        return Identifier.tryParse("textures/block/" + RandomBackground.validBackgrounds.get(assetIndex) + ".png");
     }
     // If you dare try to make backgrounds selectable again:
     // https://gist.github.com/Basicprogrammer10/2c0b3f0dd815e93cd64abe4bf4810511

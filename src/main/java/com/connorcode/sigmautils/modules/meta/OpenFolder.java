@@ -18,8 +18,10 @@ public class OpenFolder extends Module {
         ScreenAccessor sa = (ScreenAccessor) screen;
         com.connorcode.sigmautils.misc.util.Util.addChild(screen, new Components.MultiClickButton(x, y, 150, 20,
                 Text.of(name), button -> enable(client),
-                ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
-                        .wrapLines(Text.of(description), 200), mouseX, mouseY))));
+                ((button, matrices, mouseX, mouseY) ->
+                        matrices.drawOrderedTooltip(sa.getTextRenderer(),
+                                sa.getTextRenderer().wrapLines(Text.of(description), 200), mouseX, mouseY)
+                )));
     }
 
     @Override

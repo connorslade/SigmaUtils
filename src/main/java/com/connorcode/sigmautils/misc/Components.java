@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -15,11 +16,8 @@ import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
@@ -44,7 +42,7 @@ public class Components {
             else
                 module.disable(client);
             sa.invokeClearAndInit();
-        }, ((button, matrices, mouseX, mouseY) -> screen.renderOrderedTooltip(matrices, sa.getTextRenderer()
+        }, ((button, matrices, mouseX, mouseY) -> matrices.drawOrderedTooltip(sa.getTextRenderer(), sa.getTextRenderer()
                 .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
     }
 
@@ -103,9 +101,9 @@ public class Components {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             var xStart = startX();
-            fill(matrices, xStart, 0, xStart + entryWidth, height, 0x80000000);
+            matrices.fill(xStart, 0, xStart + entryWidth, height, 0x80000000);
             var drawables = ((ScreenAccessor) this).getDrawables();
             for (var i : drawables)
                 i.render(matrices, mouseX, mouseY, delta);
@@ -158,7 +156,7 @@ public class Components {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
             if (this.hovered) tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
             super.render(matrices, mouseX, mouseY, delta);
@@ -169,30 +167,31 @@ public class Components {
         }
 
         public interface TooltipSupplier {
-            void onTooltip(MultiClickButton button, MatrixStack matrices, int mouseX, int mouseY);
+            void onTooltip(MultiClickButton button, DrawContext matrices, int mouseX, int mouseY);
         }
     }
 
+    // TODO: See if this is even needed anymore
     public static abstract class TooltipSlider extends SliderWidget {
         public TooltipSlider(int x, int y, int width, int height, Text text, double value) {
             super(x, y, width, height, text, value);
         }
 
-        protected Text getTooltip() {
+        protected Text tooltip() {
             return null;
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
             if (!this.hovered)
                 return;
-            Text tooltip = this.getTooltip();
+            Text tooltip = this.tooltip();
             if (tooltip == null)
                 return;
 
-            Objects.requireNonNull(client.currentScreen)
-                    .renderOrderedTooltip(matrices, client.textRenderer.wrapLines(tooltip, 200), mouseX, mouseY);
+            matrices.drawOrderedTooltip(client.textRenderer, client.textRenderer.wrapLines(tooltip, 200), mouseX,
+                    mouseY);
         }
     }
 
@@ -212,12 +211,12 @@ public class Components {
             this.onPress.onPress(this);
         }
 
-        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY) {
             tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta) {
             super.renderButton(matrices, mouseX, mouseY, delta);
             if (this.isSelected())
                 this.renderTooltip(matrices, mouseX, mouseY);
@@ -228,7 +227,7 @@ public class Components {
         }
 
         public interface TooltipSupplier {
-            void onTooltip(EventCheckbox button, MatrixStack matrices, int mouseX, int mouseY);
+            void onTooltip(EventCheckbox button, DrawContext matrices, int mouseX, int mouseY);
         }
     }
 }

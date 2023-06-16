@@ -8,15 +8,14 @@ import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Pair;
 
 import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static net.minecraft.client.gui.DrawableHelper.fill;
 
 public class Hud extends Module {
     public static List<HudModule> hudModules = new ArrayList<>();
@@ -63,14 +62,14 @@ public class Hud extends Module {
         return hudStacks;
     }
 
-    public static void renderHud(MatrixStack matrices) {
+    public static void renderHud(DrawContext ctx) {
         if (client.options.debugEnabled && hideF3.value()) return;
         InGameHudAccessor hudAccessor = (InGameHudAccessor) client.inGameHud;
         int padding = getPadding();
 
         client.getProfiler().push("SigmaUtils::Hud");
         getHud(hudAccessor.getScaledHeight(), hudAccessor.getScaledWidth()).forEach(
-                hudStack -> hudStack.render(matrices, padding));
+                hudStack -> hudStack.render(ctx, padding));
         client.getProfiler().pop();
     }
 
@@ -123,15 +122,15 @@ public class Hud extends Module {
     }
 
     record HudStack(RealLocation location, List<String> lines, int startX, int startY, int maxWidth) {
-        void render(MatrixStack matrices, int padding) {
+        void render(DrawContext ctx, int padding) {
             int y = startY;
             var p = padding / 2f;
             var pr = (int) Math.ceil(p);
             for (String line : lines) {
                 var x = location.isRight() ? startX + (maxWidth - client.textRenderer.getWidth(line)) : startX;
-                if (background.value()) fill(matrices, x - pr, y - pr, x + client.textRenderer.getWidth(line) + pr,
+                if (background.value()) ctx.fill(x - pr, y - pr, x + client.textRenderer.getWidth(line) + pr,
                         y + client.textRenderer.fontHeight + (int) (p), 0x88000000);
-                client.textRenderer.drawWithShadow(matrices, line, x, y, 0);
+                ctx.drawTextWithShadow(client.textRenderer, line, x, y, 0);
                 y += client.textRenderer.fontHeight + padding;
             }
         }

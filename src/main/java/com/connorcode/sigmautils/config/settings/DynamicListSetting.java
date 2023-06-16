@@ -4,11 +4,11 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
@@ -171,7 +171,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
             this.searchField.render(matrices, mouseX, mouseY, delta);
@@ -250,7 +250,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
             renderBackground(matrices);
             super.render(matrices, mouseX, mouseY, delta);
         }

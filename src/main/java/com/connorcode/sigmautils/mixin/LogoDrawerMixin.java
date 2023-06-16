@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LogoDrawer.class)
 public class LogoDrawerMixin {
     // For minceraft
-    @Redirect(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;IFI)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/LogoDrawer;minceraft:Z"))
+    @Redirect(method = "draw(Lnet/minecraft/client/gui/DrawContext;IFI)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/LogoDrawer;minceraft:Z"))
     boolean isMinecraft(LogoDrawer instance) {
         return Config.getEnabled(Minceraft.class);
     }

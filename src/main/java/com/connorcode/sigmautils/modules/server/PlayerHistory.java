@@ -158,8 +158,9 @@ public class PlayerHistory extends Module {
 
                 @Override
                 public void render(RenderData data, int x, int y) {
-                    client.textRenderer.draw(data.matrices(),
-                            "§fTotal Seen Players: " + totalSeen, x, y + getPadding(), 0);
+                    data.drawContext()
+                            .drawText(client.textRenderer, "§fTotal Seen Players: " + totalSeen, x, y + getPadding(), 0,
+                                    false);
                 }
             }.category("Info").build();
 
@@ -180,8 +181,8 @@ public class PlayerHistory extends Module {
                 @Override
                 public void render(RenderData data, int x, int y) {
                     if (client.getCurrentServerEntry() == null) return;
-                    client.textRenderer.draw(data.matrices(), "§fSeen on Current Server: " + thisServer, x,
-                            y + getPadding(), 0);
+                    data.drawContext().drawText(client.textRenderer, "§fSeen on Current Server: " + thisServer, x,
+                            y + getPadding(), 0, false);
                 }
             }.category("Info").build();
         }
