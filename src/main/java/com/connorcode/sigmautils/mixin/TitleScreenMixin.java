@@ -52,7 +52,7 @@ public class TitleScreenMixin extends Screen {
 
     // For splash_refresh
     @Inject(method = "render", at = @At("HEAD"))
-    void onRender(DrawContext matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    void onRender(DrawContext drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         long now = System.currentTimeMillis();
         if (!Config.getEnabled(SplashRefresh.class) || now - updateTime < SplashRefresh.refreshTime.intValue() * 1000L)
             return;

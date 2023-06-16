@@ -26,9 +26,9 @@ public class MultiplayerScreenMixin extends Screen {
             return;
         addDrawableChild(new Components.DrawableElement() {
             @Override
-            public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+            public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
                 var text = NetworkUtils.getAuthStatus().getText();
-                matrices.drawText(Objects.requireNonNull(client).textRenderer, text,
+                drawContext.drawText(Objects.requireNonNull(client).textRenderer, text,
                         width - client.textRenderer.getWidth(text) - 10, 10, 0xFFFFFF, false);
             }
         });

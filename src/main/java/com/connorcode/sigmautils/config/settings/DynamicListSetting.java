@@ -171,10 +171,10 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-            renderBackground(matrices);
-            super.render(matrices, mouseX, mouseY, delta);
-            this.searchField.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            renderBackground(drawContext);
+            super.render(drawContext, mouseX, mouseY, delta);
+            this.searchField.render(drawContext, mouseX, mouseY, delta);
         }
 
         @Override
@@ -250,9 +250,9 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-            renderBackground(matrices);
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            renderBackground(drawContext);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
 
         @Override

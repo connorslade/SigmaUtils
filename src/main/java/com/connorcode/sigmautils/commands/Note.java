@@ -142,19 +142,19 @@ public class Note implements Command {
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-            renderBackground(matrices);
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            renderBackground(drawContext);
 
             var lines = textRenderer.wrapLines(StringVisitable.plain(note.text), noteWidth);
             var startX = width / 2f - noteWidth / 2f;
             var height = lines.size() * 10;
 
-            matrices.fill((int) startX, 0, (int) (startX + noteWidth), height, 0x7F000000);
+            drawContext.fill((int) startX, 0, (int) (startX + noteWidth), height, 0x7F000000);
 
             for (int i = 0; i < lines.size(); i++)
-                matrices.drawText(textRenderer, lines.get(i), (int) startX, i * 10, 0xFFFFFF, false);
+                drawContext.drawText(textRenderer, lines.get(i), (int) startX, i * 10, 0xFFFFFF, false);
 
-            super.render(matrices, mouseX, mouseY, delta);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
     }
 }

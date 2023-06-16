@@ -125,8 +125,8 @@ public class EntityHighlight extends Module {
             } else {
                 Util.addChild(screen, new Components.DrawableElement() {
                     @Override
-                    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-                        matrices.fill(x + 20 + padding, y + padding, x - padding + 40, y - padding + 20,
+                    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+                        drawContext.fill(x + 20 + padding, y + padding, x - padding + 40, y - padding + 20,
                                 getColor(resource.color));
                     }
 

@@ -48,14 +48,14 @@ public class ConfirmDisconnect extends Module {
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
             assert client != null;
-            matrices.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+            drawContext.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
             Text text = Text.of("Do you want to disconnect?");
-            matrices.drawText(client.textRenderer, text.asOrderedText(),
+            drawContext.drawText(client.textRenderer, text.asOrderedText(),
                     this.width / 2 - textRenderer.getWidth(text) / 2,
                     this.height / 4 - 20 - textRenderer.fontHeight / 2, 16777215, false);
-            super.render(matrices, mouseX, mouseY, delta);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
     }
 }

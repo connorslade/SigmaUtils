@@ -69,15 +69,15 @@ public class ConfigGui extends Screen {
         }).position(width - githubLen - padding * 5, height - 20 - padding).size(githubLen + padding * 4, 20).build());
     }
 
-    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
         int padding = getPadding();
-        this.renderBackground(matrices);
+        this.renderBackground(drawContext);
 
         for (int x = 0; x < Category.values().length; x++)
-            matrices.drawCenteredTextWithShadow(textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
+            drawContext.drawCenteredTextWithShadow(textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(drawContext, mouseX, mouseY, delta);
     }
 
     public void close() {

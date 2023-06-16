@@ -136,9 +136,9 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-            this.selectorWidget.render(matrices, mouseX, mouseY, delta);
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            this.selectorWidget.render(drawContext, mouseX, mouseY, delta);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
 
         @Override
@@ -183,8 +183,8 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                 }
 
                 @Override
-                public void render(DrawContext matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-                    matrices.drawText(SelectorWidget.this.client.textRenderer, this.value,
+                public void render(DrawContext drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+                    drawContext.drawText(SelectorWidget.this.client.textRenderer, this.value,
                             (int) (width / 2f - client.textRenderer.getWidth(this.value) / 2f), y + 1, 16777215, true);
                 }
 

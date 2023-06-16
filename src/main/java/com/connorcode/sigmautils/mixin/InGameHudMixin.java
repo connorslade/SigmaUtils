@@ -60,10 +60,10 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    void onRender(DrawContext matrices, float tickDelta, CallbackInfo ci) {
+    void onRender(DrawContext drawContext, float tickDelta, CallbackInfo ci) {
         if (client.options.hudHidden || !Config.getEnabled(Hud.class))
             return;
-        Hud.renderHud(matrices);
+        Hud.renderHud(drawContext);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))

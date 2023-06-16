@@ -83,25 +83,26 @@ public class ModuleConfigGui extends Screen {
     }
 
     @Override
-    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-        Setting.RenderData renderData = new Setting.RenderData(this, matrices, mouseX, mouseY, delta);
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        Setting.RenderData renderData = new Setting.RenderData(this, drawContext, mouseX, mouseY, delta);
         int padding = getPadding();
 
-        this.renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
+        this.renderBackground(drawContext);
+        super.render(drawContext, mouseX, mouseY, delta);
 
         int x = -75 + 20 + padding;
         for (Pair<String, List<Setting<?>>> entry : settings) {
             x += 150 + padding;
             if (entry.getLeft() != null)
-                matrices.drawCenteredTextWithShadow(textRenderer, Text.of(String.format("§f§n§l%s", entry.getLeft())),
+                drawContext.drawCenteredTextWithShadow(textRenderer,
+                        Text.of(String.format("§f§n§l%s", entry.getLeft())),
                         x, padding * 2 + textRenderer.fontHeight, 0);
 
             for (Setting<?> setting : entry.getRight())
                 setting.render(renderData, x - 75, elementPositions.get(setting.getName()));
         }
 
-        matrices.drawCenteredTextWithShadow(textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)),
+        drawContext.drawCenteredTextWithShadow(textRenderer, Text.of(String.format("§f§n§l%s Settings", module.name)),
                 width / 2,
                 padding, 0);
     }

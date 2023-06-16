@@ -33,8 +33,8 @@ public class DownloadingTerrainScreenMixin extends Screen {
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    void onRender(DrawContext matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    void onRender(DrawContext drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (Config.getEnabled(SeeThruLoading.class))
-            matrices.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+            drawContext.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
     }
 }
