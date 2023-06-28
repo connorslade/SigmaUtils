@@ -6,12 +6,12 @@ import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -136,9 +136,9 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            this.selectorWidget.render(matrices, mouseX, mouseY, delta);
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            this.selectorWidget.render(drawContext, mouseX, mouseY, delta);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
 
         @Override
@@ -183,9 +183,9 @@ public class SelectorSetting extends Setting<SelectorSetting> {
                 }
 
                 @Override
-                public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-                    SelectorWidget.this.client.textRenderer.drawWithShadow(matrices, this.value,
-                            width / 2f - client.textRenderer.getWidth(this.value) / 2f, y + 1, 16777215, true);
+                public void render(DrawContext drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+                    drawContext.drawText(SelectorWidget.this.client.textRenderer, this.value,
+                            (int) (width / 2f - client.textRenderer.getWidth(this.value) / 2f), y + 1, 16777215, true);
                 }
 
                 @Override

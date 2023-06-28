@@ -111,8 +111,8 @@ public class StringSetting extends Setting<StringSetting> {
     @Override
     public void render(RenderData data, int x, int y) {
         if (!showName) return;
-        client.textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x,
-                y + getPadding(), 0);
+        data.drawContext().drawText(client.textRenderer, String.format("§f%s:", this.name), x,
+                y + getPadding(), 0, false);
     }
 
     interface Callback {

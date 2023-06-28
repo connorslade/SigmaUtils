@@ -2,13 +2,13 @@ package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.MessageScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class ConfirmDisconnect extends Module {
@@ -48,13 +48,14 @@ public class ConfirmDisconnect extends Module {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
             assert client != null;
-            fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
+            drawContext.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
             Text text = Text.of("Do you want to disconnect?");
-            client.textRenderer.draw(matrices, text, this.width / 2f - textRenderer.getWidth(text) / 2f,
-                    this.height / 4f - 20 - textRenderer.fontHeight / 2f, 16777215);
-            super.render(matrices, mouseX, mouseY, delta);
+            drawContext.drawText(client.textRenderer, text.asOrderedText(),
+                    this.width / 2 - textRenderer.getWidth(text) / 2,
+                    this.height / 4 - 20 - textRenderer.fontHeight / 2, 16777215, false);
+            super.render(drawContext, mouseX, mouseY, delta);
         }
     }
 }

@@ -2,9 +2,9 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules._interface.SeeThruLoading;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,15 +26,15 @@ public class DownloadingTerrainScreenMixin extends Screen {
     }
 
     // For see_through_loading
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(Lnet/minecraft/client/util/math/MatrixStack;)V"))
-    void onRenderBackground(DownloadingTerrainScreen instance, MatrixStack matrixStack) {
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(Lnet/minecraft/client/gui/DrawContext;)V"))
+    void onRenderBackground(DownloadingTerrainScreen instance, DrawContext drawContext) {
         if (!Config.getEnabled(SeeThruLoading.class))
-            this.renderBackgroundTexture(matrixStack);
+            this.renderBackgroundTexture(drawContext);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    void onRender(DrawContext drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (Config.getEnabled(SeeThruLoading.class))
-            fillGradient(matrices, 0, 0, this.width, this.height, -1072689136, -804253680);
+            drawContext.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
     }
 }

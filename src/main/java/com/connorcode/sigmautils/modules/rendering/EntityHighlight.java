@@ -10,10 +10,10 @@ import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -30,7 +30,6 @@ import java.util.Optional;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
-import static net.minecraft.client.gui.DrawableHelper.fill;
 
 public class EntityHighlight extends Module {
     public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
@@ -126,8 +125,8 @@ public class EntityHighlight extends Module {
             } else {
                 Util.addChild(screen, new Components.DrawableElement() {
                     @Override
-                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-                        fill(matrices, x + 20 + padding, y + padding, x - padding + 40, y - padding + 20,
+                    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+                        drawContext.fill(x + 20 + padding, y + padding, x - padding + 40, y - padding + 20,
                                 getColor(resource.color));
                     }
 

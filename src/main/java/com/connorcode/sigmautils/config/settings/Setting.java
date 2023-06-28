@@ -4,8 +4,8 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -89,6 +89,6 @@ public abstract class Setting<T extends Setting<T>> {
     public void onClose() {
     }
 
-    public record RenderData(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public record RenderData(Screen screen, DrawContext drawContext, int mouseX, int mouseY, float delta) {
     }
 }

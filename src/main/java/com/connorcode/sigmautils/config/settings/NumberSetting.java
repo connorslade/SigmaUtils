@@ -137,7 +137,7 @@ public class NumberSetting extends Setting<NumberSetting> {
         Util.addChild(screen, new Components.TooltipSlider(x, y, width, 20, slider.getText(),
                 MathHelper.clamp((this.value - this.min) / this.max, 0, 1)) {
             @Override
-            protected Text getTooltip() {
+            protected Text tooltip() {
                 return Text.of(NumberSetting.this.description);
             }
 

@@ -7,7 +7,7 @@ import net.minecraft.world.RaycastContext;
 public class WorldUtils {
     public static HitResult raycast(Entity entity, double maxDistance, float tickDelta) {
         var end = entity.getCameraPosVec(tickDelta).add(entity.getRotationVec(tickDelta).multiply(maxDistance));
-        return entity.world.raycast(
+        return entity.getWorld().raycast(
                 new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE,
                         RaycastContext.FluidHandling.NONE, entity));
     }

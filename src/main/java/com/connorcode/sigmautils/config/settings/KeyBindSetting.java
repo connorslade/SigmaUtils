@@ -100,7 +100,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
                             else editing = true;
                         }, (((button, matrices, mouseX, mouseY) -> {
                     if (this.description == null) return;
-                    screen.renderOrderedTooltip(matrices,
+                    matrices.drawOrderedTooltip(client.textRenderer,
                             client.textRenderer.wrapLines(getDescription(), 200), mouseX,
                             mouseY);
                 }))) {
@@ -116,7 +116,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
     @Override
     public void render(RenderData data, int x, int y) {
         if (!showTitle) return;
-        client.textRenderer.draw(data.matrices(), String.format("§f%s:", this.name), x, y, 0);
+        data.drawContext().drawText(client.textRenderer, String.format("§f%s:", this.name), x, y, 0, false);
     }
 
     @Override

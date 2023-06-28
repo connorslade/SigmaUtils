@@ -79,9 +79,12 @@ public class SoundControl extends Module {
                         }
                     });
             Util.addDrawable(screen,
-                    (matrices, mouseX, mouseY, delta) -> client.textRenderer.draw(matrices, getDisplay(resource),
-                            x + 120 + padding * 4, y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f,
-                            0xffffff));
+                    (matrices, mouseX, mouseY, delta) ->
+                            matrices.drawText(client.textRenderer, getDisplay(resource),
+                                    x + 120 + padding * 4,
+                                    (int) (y + padding / 2f + 10 - client.textRenderer.fontHeight / 2f),
+                                    0xffffff, false)
+            );
         }
 
         Text getSliderText(SoundSettings resource) {

@@ -36,8 +36,9 @@ public class AutoSign extends Module {
         ScreenOpenCallback.EVENT.register(screen -> {
             if (!(screen.get() instanceof AbstractSignEditScreen && enabled)) return;
             SignBlockEntity signBlock = ((AbstractSignEditScreenAccessor) screen.get()).getSign();
+            // TODO: add support for sign backs
             Objects.requireNonNull(client.player).networkHandler.sendPacket(
-                    new UpdateSignC2SPacket(signBlock.getPos(), line1.value(), line2.value(), line3.value(),
+                    new UpdateSignC2SPacket(signBlock.getPos(), true, line1.value(), line2.value(), line3.value(),
                             line4.value()));
             screen.cancel();
         });

@@ -35,7 +35,7 @@ public class Padding extends Module {
                 new Components.TooltipSlider(x + 20 + padding, y, 130 - padding, 20, getSliderTitle(),
                         MathHelper.clamp(padding / 10f, 0, 1)) {
                     @Override
-                    protected Text getTooltip() {
+                    protected Text tooltip() {
                         return Padding.padding.getDescription();
                     }
 

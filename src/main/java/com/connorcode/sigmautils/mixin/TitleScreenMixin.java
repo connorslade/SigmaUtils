@@ -6,11 +6,12 @@ import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules._interface.EscapeExit;
 import com.connorcode.sigmautils.modules._interface.SplashRefresh;
 import com.connorcode.sigmautils.modules._interface.UiTweaks;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.SplashTextRenderer;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +29,7 @@ public class TitleScreenMixin extends Screen {
     long updateTime;
     @Shadow
     @Nullable
-    private String splashText;
+    private SplashTextRenderer splashText;
 
     protected TitleScreenMixin(Text title) {
         super(title);
@@ -51,7 +52,7 @@ public class TitleScreenMixin extends Screen {
 
     // For splash_refresh
     @Inject(method = "render", at = @At("HEAD"))
-    void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    void onRender(DrawContext drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         long now = System.currentTimeMillis();
         if (!Config.getEnabled(SplashRefresh.class) || now - updateTime < SplashRefresh.refreshTime.intValue() * 1000L)
             return;

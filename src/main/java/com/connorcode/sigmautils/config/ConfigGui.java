@@ -4,9 +4,9 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Padding;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
@@ -69,15 +69,15 @@ public class ConfigGui extends Screen {
         }).position(width - githubLen - padding * 5, height - 20 - padding).size(githubLen + padding * 4, 20).build());
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
         int padding = getPadding();
-        this.renderBackground(matrices);
+        this.renderBackground(drawContext);
 
         for (int x = 0; x < Category.values().length; x++)
-            drawCenteredTextWithShadow(matrices, textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
+            drawContext.drawCenteredTextWithShadow(textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(drawContext, mouseX, mouseY, delta);
     }
 
     public void close() {

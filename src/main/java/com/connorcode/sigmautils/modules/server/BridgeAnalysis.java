@@ -35,7 +35,7 @@ public class BridgeAnalysis extends Module {
             if (!this.enabled) return;
             if (!(packet.get() instanceof TitleS2CPacket title)) return;
             var regex = Pattern.compile(endRegex.value());
-            if (!regex.matcher(title.getTitle().getString()).matches()) return;
+            if (!regex.matcher(title.getTitle().getString()).matches()) {}
 
             // wdl
         });
