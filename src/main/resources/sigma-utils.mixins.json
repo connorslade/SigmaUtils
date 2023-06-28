@@ -61,7 +61,9 @@
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
     "YggdrasilUserApiServiceMixin",
-    "YggdrasilUserAuthenticationAccessor"
+    "YggdrasilUserAuthenticationAccessor",
+    "modmenu.DescriptionListWidgetMixin",
+    "modmenu.ModsScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
