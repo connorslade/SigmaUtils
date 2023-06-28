@@ -26,10 +26,10 @@ import java.util.Objects;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
+    long updateTime;
     @Shadow
     @Nullable
     private SplashTextRenderer splashText;
-    long updateTime;
 
     protected TitleScreenMixin(Text title) {
         super(title);
