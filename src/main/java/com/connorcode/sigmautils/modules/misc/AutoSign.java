@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.Interact;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
@@ -25,12 +26,19 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class AutoSign extends Module {
+    // TODO: Option to decide if front/back is defined by the sign or by your current position
+    EnumSetting<Mode> mode = new EnumSetting<>(AutoSign.class, "Mode", Mode.class)
+            .description("If the mode is complete, each side will be written to the sign, even if its empty. " +
+                    "If its lazy, only sids with text will be written.")
+            .value(Mode.Lazy)
+            .build();
     SignTextSetting signText = new SignTextSetting();
     HashMap<BlockPos, UpdateTask> tasks = new HashMap<>();
 
     public AutoSign() {
         super("auto_sign", "Auto Sign",
-                "Automatically writes text on signs you place. If you are looking at a sign, it will edit that sign.",
+                "Automatically writes text on signs you place. " +
+                        "If you are looking at a sign, it will edit that sign.",
                 Category.Misc);
     }
 
@@ -76,6 +84,11 @@ public class AutoSign extends Module {
             } else tasks.remove(sign.getPos());
             packet.cancel();
         });
+    }
+
+    enum Mode {
+        Complete,
+        Lazy
     }
 
     class UpdateTask {
@@ -126,8 +139,13 @@ public class AutoSign extends Module {
             return false;
         }
 
+        boolean toBeWritten(boolean front) {
+            if (mode.value() == Mode.Complete) return true;
+            return hasLines(front);
+        }
+
         UpdateTask asTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos) {
-            return new UpdateTask(event, signPos, this.hasLines(true), this.hasLines(false));
+            return new UpdateTask(event, signPos, this.toBeWritten(true), this.toBeWritten(false));
         }
 
         UpdateSignC2SPacket getPacket(boolean front, BlockPos pos) {
