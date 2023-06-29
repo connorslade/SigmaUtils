@@ -17,4 +17,9 @@ public class ClientPlayNetworkHandlerMixin {
         if (event.isCancelled())
             ci.cancel();
     }
+
+    @Inject(method = "clearWorld", at = @At("HEAD"))
+    void onClearWorld(CallbackInfo ci) {
+        System.out.println("Clearing world");
+    }
 }

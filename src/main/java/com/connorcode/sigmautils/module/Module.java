@@ -10,9 +10,12 @@ import com.connorcode.sigmautils.modules.meta.Notifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public abstract class Module {
     public final String id;
@@ -34,6 +37,14 @@ public abstract class Module {
         this.name = Util.titleString(name);
         this.description = description;
         this.category = category;
+    }
+
+    protected void info(String format, Object... args) {
+        var fmt = String.format(format, args);
+        var text = String.format("[%s] %s", name, fmt);
+
+        if (client.player == null) System.out.println(text);
+        else client.player.sendMessage(Text.of(text));
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {

@@ -1,77 +1,105 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.StringSetting;
-import com.connorcode.sigmautils.event.PacketSendCallback;
-import com.connorcode.sigmautils.event.ScreenOpenCallback;
-import com.connorcode.sigmautils.event.Tick;
-import com.connorcode.sigmautils.mixin.AbstractSignEditScreenAccessor;
+import com.connorcode.sigmautils.event.Interact;
+import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.SignItem;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
-import net.minecraft.network.packet.s2c.play.*;
-import net.minecraft.text.Text;
+import net.minecraft.network.packet.s2c.play.SignEditorOpenS2CPacket;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class AutoSign extends Module {
     SignTextSetting signText = new SignTextSetting();
-    LinkedList<Packet<?>> packets = new LinkedList<>();
-    int packetCooldown;
+    HashMap<BlockPos, UpdateTask> tasks = new HashMap<>();
 
     public AutoSign() {
-        super("auto_sign", "Auto Sign", "Automatically writes text on signs you place. (/set auto_sign text \"Hi\")",
+        super("auto_sign", "Auto Sign",
+                "Automatically writes text on signs you place. If you are looking at a sign, it will edit that sign.",
                 Category.Misc);
     }
 
     public void init() {
         super.init();
 
-        ScreenOpenCallback.EVENT.register(screen -> {
-            if (!(screen.get() instanceof AbstractSignEditScreen && enabled)) return;
-            SignBlockEntity signBlock = ((AbstractSignEditScreenAccessor) screen.get()).getSign();
-            this.signText.updateSign(signBlock);
-            screen.cancel();
+        Interact.InteractBlockCallback.EVENT.register(event -> {
+            assert client.player != null && client.interactionManager != null && client.world != null;
+            if (!enabled || event.getHitResult().getType() != HitResult.Type.BLOCK) return;
+            var lookingAtSign = event.getHitResult().getType() == HitResult.Type.BLOCK &&
+                    (client.world.getBlockEntity(event.getHitResult().getBlockPos()) instanceof SignBlockEntity);
+            var item = client.player.getStackInHand(event.getHand());
+            if (!(item.getItem() instanceof SignItem) && !lookingAtSign) return;
+
+            // Place Sign
+            var signBlock = event.getHitResult().getBlockPos();
+            if (!lookingAtSign) {
+                signBlock = signBlock.offset(event.getHitResult().getSide());
+                var itemUsageContext = new ItemUsageContext(client.player, event.getHand(), event.getHitResult());
+                item.useOnBlock(itemUsageContext);
+            }
+
+            // Interact block
+            client.interactionManager.sendSequencedPacket(client.world,
+                    sequence -> new PlayerInteractBlockC2SPacket(event.getHand(), event.getHitResult(), sequence));
+
+            tasks.put(signBlock, signText.asTask(event, signBlock));
+            event.setReturnValue(ActionResult.CONSUME);
         });
 
-        Tick.GameTickCallback.EVENT.register(tickEvent -> {
-            if (!enabled || packets.isEmpty() || --packetCooldown > 0) return;
+        PacketReceiveCallback.EVENT.register(packet -> {
+            assert client.interactionManager != null && client.world != null;
+            if (!enabled || !(packet.get() instanceof SignEditorOpenS2CPacket sign) ||
+                    !tasks.containsKey(sign.getPos())) return;
+            var task = tasks.get(sign.getPos());
+            var again = task.next();
 
-            var handler = Objects.requireNonNull(client.player).networkHandler;
-            client.player.sendMessage(Text.of("SENDING PACKET"));
-            handler.sendPacket(packets.pop());
-            client.player.sendMessage(Text.of(String.format("PACKETS LEFT: %d", packets.size())));
-            packetCooldown = 20 * 3;
+            if (again) {
+                var hitResult = new BlockHitResult(task.hitResult.getPos(), task.hitResult.getSide().getOpposite(),
+                        sign.getPos(), false);
+                client.interactionManager.sendSequencedPacket(client.world,
+                        sequence -> new PlayerInteractBlockC2SPacket(task.hand, hitResult, sequence));
+            } else tasks.remove(sign.getPos());
+            packet.cancel();
         });
+    }
 
-        PacketSendCallback.EVENT.register(packet -> {
-            if (client.player == null || packet.get() instanceof EntityTrackerUpdateS2CPacket ||
-                    packet.get() instanceof EntityPositionS2CPacket ||
-                    packet.get() instanceof WorldTimeUpdateS2CPacket ||
-                    packet.get() instanceof EntityVelocityUpdateS2CPacket ||
-                    packet.get() instanceof PlaySoundS2CPacket ||
-                    packet.get() instanceof MapUpdateS2CPacket ||
-                    packet.get() instanceof KeepAliveS2CPacket ||
-                    packet.get() instanceof PlayerMoveC2SPacket ||
-                    packet.get() instanceof EntitySetHeadYawS2CPacket || packet.get() instanceof EntityS2CPacket)
-                return;
-            client.player.sendMessage(Text.of(String.format("SENDING %s", packet.get().getClass().getSimpleName())));
+    class UpdateTask {
+        Hand hand;
+        BlockHitResult hitResult;
+        BlockPos signPos;
+        List<Boolean> sides;
 
-            if (!(packet.get() instanceof UpdateSignC2SPacket sign)) return;
+        public UpdateTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean front, boolean back) {
+            this.hand = event.getHand();
+            this.hitResult = event.getHitResult();
+            this.signPos = signPos;
+            this.sides = new ArrayList<>();
+            if (front) sides.add(true);
+            if (back) sides.add(false);
+        }
 
-            var pos = sign.getPos();
-            var text = sign.getText();
-            var info =
-                    String.format("(%d, %d, %d) - [%s, %s, %s, %s] - %s", pos.getX(), pos.getY(), pos.getZ(), text[0],
-                            text[1], text[2], text[3], sign.isFront() ? "Front" : "Back");
-            Objects.requireNonNull(client.player).sendMessage(Text.of(info));
-        });
+        boolean next() {
+            var nextSide = sides.remove(0);
+            var packet = AutoSign.this.signText.getPacket(nextSide, signPos);
+            Objects.requireNonNull(client.getNetworkHandler()).sendPacket(packet);
+
+            return !this.sides.isEmpty();
+        }
     }
 
     class SignTextSetting {
@@ -93,25 +121,19 @@ public class AutoSign extends Module {
                     .showName(false);
         }
 
-        boolean hasFrontLines() {
-            for (StringSetting line : frontLines) if (!line.value().isEmpty()) return true;
+        boolean hasLines(boolean front) {
+            for (StringSetting line : front ? frontLines : backLines) if (!line.value().isEmpty()) return true;
             return false;
         }
 
-        boolean hasBackLines() {
-            for (StringSetting line : backLines) if (!line.value().isEmpty()) return true;
-            return false;
+        UpdateTask asTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos) {
+            return new UpdateTask(event, signPos, this.hasLines(true), this.hasLines(false));
         }
 
-        void updateSign(SignBlockEntity sign) {
-            if (this.hasFrontLines())
-                AutoSign.this.packets.add(
-                        new UpdateSignC2SPacket(sign.getPos(), true, frontLines[0].value(), frontLines[1].value(),
-                                frontLines[2].value(), frontLines[3].value()));
-            if (this.hasBackLines())
-                AutoSign.this.packets.add(
-                        new UpdateSignC2SPacket(sign.getPos(), false, backLines[0].value(), backLines[1].value(),
-                                backLines[2].value(), backLines[3].value()));
+        UpdateSignC2SPacket getPacket(boolean front, BlockPos pos) {
+            var lines = front ? frontLines : backLines;
+            return new UpdateSignC2SPacket(pos, front, lines[0].value(), lines[1].value(), lines[2].value(),
+                    lines[3].value());
         }
     }
 }
