@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.event;
 
-public abstract class EventData {
+public abstract class Cancellable {
     boolean cancelled = false;
 
     public void cancel() {

@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.event.Interact;
+import com.connorcode.sigmautils.event._interface.Interact;
 import com.connorcode.sigmautils.modules.misc.NoCooldown;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;

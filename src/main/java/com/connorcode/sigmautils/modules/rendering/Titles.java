@@ -3,7 +3,7 @@ package com.connorcode.sigmautils.modules.rendering;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.WorldRender;
+import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.misc.util.WorldRenderUtils;

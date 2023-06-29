@@ -3,7 +3,9 @@ package com.connorcode.sigmautils.modules.rendering;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.MouseScrollCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.Tick;
+import com.connorcode.sigmautils.event.network.MouseScrollCallback;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -24,7 +26,7 @@ public class Zoom extends Module {
             .description("Smooth Zoom")
             .category("Smooth Zoom")
             .build();
-    private static final NumberSetting tweenTicks = new NumberSetting(Zoom.class, "Tween Ticks", 5, 20).value(5)
+    private static final NumberSetting tweenTicks = new NumberSetting(Zoom.class, "Tween Ticks", 1, 20).value(5)
             .description("How many ticks it takes to zoom in/out")
             .category("Smooth Zoom")
             .build();
@@ -52,6 +54,7 @@ public class Zoom extends Module {
     @Override
     public void init() {
         super.init();
+
         MouseScrollCallback.EVENT.register(event -> {
             if (client.currentScreen != null || !enabled || !scrollZoom.value()) return;
             zoomModifier -= event.vertical / 10f;
@@ -59,7 +62,7 @@ public class Zoom extends Module {
         });
     }
 
-    @Override
+    @EventHandler(Tick.GameTickCallback.class)
     public void tick() {
         super.tick();
 

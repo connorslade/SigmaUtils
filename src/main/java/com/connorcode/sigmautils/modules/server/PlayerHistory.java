@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.DummySetting;
-import com.connorcode.sigmautils.event.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;

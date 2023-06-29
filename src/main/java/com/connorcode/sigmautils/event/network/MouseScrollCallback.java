@@ -1,9 +1,11 @@
-package com.connorcode.sigmautils.event;
+package com.connorcode.sigmautils.event.network;
 
+import com.connorcode.sigmautils.event.Cancellable;
+import com.connorcode.sigmautils.event.EventI;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
-public interface MouseScrollCallback {
+public interface MouseScrollCallback extends EventI {
     Event<MouseScrollCallback> EVENT =
             EventFactory.createArrayBacked(MouseScrollCallback.class, mouseScrollEvents -> event -> {
                 for (MouseScrollCallback i : mouseScrollEvents)
@@ -12,7 +14,7 @@ public interface MouseScrollCallback {
 
     void handle(MouseScrollEvent screen);
 
-    class MouseScrollEvent extends EventData {
+    class MouseScrollEvent extends Cancellable {
         public double horizontal;
         public double vertical;
 

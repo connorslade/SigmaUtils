@@ -2,6 +2,7 @@ package com.connorcode.sigmautils;
 
 import com.connorcode.sigmautils.commands.Command;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.EventBus;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Notifications;
@@ -32,6 +33,7 @@ public class SigmaUtils implements ClientModInitializer {
     public static final Path directory = client.runDirectory.toPath().resolve("config/SigmaUtils");
     public static final HashMap<Class<? extends Module>, Module> modules = new HashMap<>();
     public static final List<Command> commands = new ArrayList<>();
+    public static final EventBus eventBus = new EventBus();
 
     @Override
     public void onInitializeClient() {
@@ -42,9 +44,12 @@ public class SigmaUtils implements ClientModInitializer {
         String modulePackageName = moduleJsonObject.get("package").getAsString();
         moduleJsonObject.get("modules").getAsJsonArray().forEach(json -> {
             Module module = (Module) Util.loadNewClass(modulePackageName + "." + json.getAsString());
-            modules.put(Objects.requireNonNull(module).getClass(), module);
+            Class<? extends Module> _class = Objects.requireNonNull(module).getClass();
+            modules.put(_class, module);
+            eventBus.register(_class);
         });
         logger.debug(String.format("Loaded %d modules", modules.size()));
+        eventBus._finalize();
 
         // Load Commands
         JsonObject commandJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules/commands.json"));

@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
-import com.connorcode.sigmautils.event.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;

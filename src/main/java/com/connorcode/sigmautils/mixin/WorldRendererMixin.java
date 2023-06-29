@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.event.WorldRender;
+import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import com.connorcode.sigmautils.modules.rendering.EntityHighlight;
 import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;

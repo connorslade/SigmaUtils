@@ -1,10 +1,12 @@
-package com.connorcode.sigmautils.event;
+package com.connorcode.sigmautils.event.network;
 
+import com.connorcode.sigmautils.event.Cancellable;
+import com.connorcode.sigmautils.event.EventI;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.network.packet.Packet;
 
-public interface PacketReceiveCallback {
+public interface PacketReceiveCallback extends EventI {
     Event<PacketReceiveCallback> EVENT =
             EventFactory.createArrayBacked(PacketReceiveCallback.class, packetReceiveCallbacks -> event -> {
                 for (PacketReceiveCallback i : packetReceiveCallbacks)
@@ -13,7 +15,7 @@ public interface PacketReceiveCallback {
 
     void handle(PacketReceiveEvent event);
 
-    class PacketReceiveEvent extends EventData {
+    class PacketReceiveEvent extends Cancellable {
         public Packet<?> packet;
 
         public PacketReceiveEvent(Packet<?> packet) {

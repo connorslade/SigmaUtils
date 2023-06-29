@@ -2,9 +2,9 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
-import com.connorcode.sigmautils.event.GameLifecycle;
-import com.connorcode.sigmautils.event.Interact;
-import com.connorcode.sigmautils.event.PacketReceiveCallback;
+import com.connorcode.sigmautils.event._interface.Interact;
+import com.connorcode.sigmautils.event.misc.GameLifecycle;
+import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;

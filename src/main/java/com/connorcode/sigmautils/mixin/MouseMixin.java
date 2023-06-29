@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.event.MouseScrollCallback;
+import com.connorcode.sigmautils.event.network.MouseScrollCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Final;

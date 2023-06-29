@@ -1,5 +1,7 @@
-package com.connorcode.sigmautils.event;
+package com.connorcode.sigmautils.event._interface;
 
+import com.connorcode.sigmautils.event.Cancellable;
+import com.connorcode.sigmautils.event.EventI;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -8,7 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 
 public class Interact {
-    public interface InteractBlockCallback {
+    public interface InteractBlockCallback extends EventI {
         Event<InteractBlockCallback> EVENT =
                 EventFactory.createArrayBacked(InteractBlockCallback.class, callbacks -> event -> {
                     for (InteractBlockCallback callback : callbacks) {
@@ -18,7 +20,7 @@ public class Interact {
 
         void handle(InteractBlockEvent event);
 
-        class InteractBlockEvent extends EventData {
+        class InteractBlockEvent extends Cancellable {
             ClientPlayerEntity player;
             Hand hand;
             BlockHitResult hitResult;

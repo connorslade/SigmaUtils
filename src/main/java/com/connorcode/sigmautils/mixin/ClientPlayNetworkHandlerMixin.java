@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.event.GameLifecycle;
-import com.connorcode.sigmautils.event.UnknownPacketCallback;
+import com.connorcode.sigmautils.event.misc.GameLifecycle;
+import com.connorcode.sigmautils.event.network.UnknownPacketCallback;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;

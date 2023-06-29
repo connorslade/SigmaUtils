@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules.meta.Notifications;
@@ -79,7 +80,7 @@ public abstract class Module {
     }
 
     /**
-     * @deprecated Use {@link com.connorcode.sigmautils.event.Tick.RenderTickCallback} instead.
+     * @deprecated Use {@link Tick.RenderTickCallback} instead.
      */
     @Deprecated()
     public void tick() {

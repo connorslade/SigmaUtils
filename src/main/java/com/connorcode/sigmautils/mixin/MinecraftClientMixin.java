@@ -2,8 +2,8 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.event.ScreenOpenCallback;
-import com.connorcode.sigmautils.event.Tick;
+import com.connorcode.sigmautils.event.misc.Tick;
+import com.connorcode.sigmautils.event.network.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;

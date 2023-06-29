@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.event.PacketReceiveCallback;
-import com.connorcode.sigmautils.event.PacketSendCallback;
+import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.network.PacketSendCallback;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;

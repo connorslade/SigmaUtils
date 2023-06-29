@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.StringSetting;
-import com.connorcode.sigmautils.event.PacketSendCallback;
+import com.connorcode.sigmautils.event.network.PacketSendCallback;
 import com.connorcode.sigmautils.mixin.CustomPayloadC2SPacketAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;

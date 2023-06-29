@@ -3,7 +3,7 @@ package com.connorcode.sigmautils.modules.misc;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.MouseScrollCallback;
+import com.connorcode.sigmautils.event.network.MouseScrollCallback;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;

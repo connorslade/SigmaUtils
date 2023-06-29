@@ -1,10 +1,12 @@
-package com.connorcode.sigmautils.event;
+package com.connorcode.sigmautils.event.network;
 
+import com.connorcode.sigmautils.event.Cancellable;
+import com.connorcode.sigmautils.event.EventI;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.gui.screen.Screen;
 
-public interface ScreenOpenCallback {
+public interface ScreenOpenCallback extends EventI {
     Event<ScreenOpenCallback> EVENT =
             EventFactory.createArrayBacked(ScreenOpenCallback.class, screenOpenCallbacks -> event -> {
                 for (ScreenOpenCallback i : screenOpenCallbacks)
@@ -13,7 +15,7 @@ public interface ScreenOpenCallback {
 
     void handle(ScreenOpenEvent screen);
 
-    class ScreenOpenEvent extends EventData {
+    class ScreenOpenEvent extends Cancellable {
         public Screen screen;
 
         public ScreenOpenEvent(Screen screen) {

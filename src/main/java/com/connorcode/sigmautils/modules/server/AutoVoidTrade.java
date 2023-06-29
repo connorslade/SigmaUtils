@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
