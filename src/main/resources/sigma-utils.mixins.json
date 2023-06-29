@@ -62,8 +62,7 @@
     "YggdrasilAuthenticationServiceAccessor",
     "YggdrasilUserApiServiceMixin",
     "YggdrasilUserAuthenticationAccessor",
-    "modmenu.DescriptionListWidgetMixin",
-    "modmenu.ModsScreenMixin"
+    "modmenu.DescriptionListWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 1
