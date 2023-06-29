@@ -22,6 +22,10 @@ public class EnumSetting<K extends Enum<?>> extends Setting<EnumSetting<K>> {
     private final K[] values;
     private int index;
 
+//    public <T extends Module> EnumSetting(Class<T> module, String name) {
+//        this(module, name, Util.classFromGeneric());
+//    }
+
     public <T extends Module> EnumSetting(Class<T> module, String name, Class<K> enumClass) {
         super(module, name);
         this.enumClass = enumClass;

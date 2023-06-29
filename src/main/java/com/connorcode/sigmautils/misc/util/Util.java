@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,6 +42,12 @@ public class Util {
     public static String loadResourceString(String name) {
         return new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
                 .getResourceAsStream(name)))).lines().collect(Collectors.joining("\n"));
+    }
+
+    public static <T> Class<T> classFromGeneric() {
+        var list = new ArrayList<T>(0);
+        var type = ((ParameterizedType) list.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        return (Class<T>) type.getClass();
     }
 
     // == Graphics ==

@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.event.GameLifecycle;
 import com.connorcode.sigmautils.event.UnknownPacketCallback;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
@@ -20,6 +21,6 @@ public class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "clearWorld", at = @At("HEAD"))
     void onClearWorld(CallbackInfo ci) {
-        System.out.println("Clearing world");
+        GameLifecycle.WorldCloseCallback.EVENT.invoker().handle();
     }
 }

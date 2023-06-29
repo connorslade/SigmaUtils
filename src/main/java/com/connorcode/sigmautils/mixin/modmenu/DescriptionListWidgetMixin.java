@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = DescriptionListWidget.class, remap = false)
+@Mixin(value = DescriptionListWidget.class)
 public class DescriptionListWidgetMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", shift = At.Shift.AFTER))
     private void render(DrawContext DrawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {

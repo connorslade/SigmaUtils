@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
+import com.connorcode.sigmautils.event.GameLifecycle;
 import com.connorcode.sigmautils.event.Interact;
 import com.connorcode.sigmautils.event.PacketReceiveCallback;
 import com.connorcode.sigmautils.module.Category;
@@ -32,6 +33,13 @@ public class AutoSign extends Module {
                     "If its lazy, only sids with text will be written.")
             .value(Mode.Lazy)
             .build();
+    EnumSetting<FrontDefinition> frontDefinition =
+            new EnumSetting<>(AutoSign.class, "Front Definition", FrontDefinition.class)
+                    .description("Changes how the 'front' of the sign is defined." +
+                            "Placement: The front is the side you placed the sign on." +
+                            "LookingAt: The front is the side you are looking at.")
+                    .value(FrontDefinition.Placement)
+                    .build();
     SignTextSetting signText = new SignTextSetting();
     HashMap<BlockPos, UpdateTask> tasks = new HashMap<>();
 
@@ -58,15 +66,23 @@ public class AutoSign extends Module {
             if (!lookingAtSign) {
                 signBlock = signBlock.offset(event.getHitResult().getSide());
                 var itemUsageContext = new ItemUsageContext(client.player, event.getHand(), event.getHitResult());
+                var count = item.getCount();
                 item.useOnBlock(itemUsageContext);
+                if (client.player.isCreative()) item.setCount(count);
             }
+
+            // Determine if sides should be reversed
+            var mode = frontDefinition.value() == FrontDefinition.Placement;
+            var front = (mode || !lookingAtSign) || ((SignBlockEntity) Objects.requireNonNull(
+                    client.world.getBlockEntity(event.getHitResult().getBlockPos()))).isPlayerFacingFront(
+                    client.player);
+
+            tasks.put(signBlock, signText.asTask(event, signBlock, !front));
 
             // Interact block
             client.interactionManager.sendSequencedPacket(client.world,
                     sequence -> new PlayerInteractBlockC2SPacket(event.getHand(), event.getHitResult(), sequence));
-
-            tasks.put(signBlock, signText.asTask(event, signBlock));
-            event.setReturnValue(ActionResult.CONSUME);
+            event.setReturnValue(ActionResult.CONSUME_PARTIAL);
         });
 
         PacketReceiveCallback.EVENT.register(packet -> {
@@ -84,6 +100,8 @@ public class AutoSign extends Module {
             } else tasks.remove(sign.getPos());
             packet.cancel();
         });
+
+        GameLifecycle.WorldCloseCallback.EVENT.register(() -> tasks.clear());
     }
 
     enum Mode {
@@ -91,16 +109,23 @@ public class AutoSign extends Module {
         Lazy
     }
 
+    enum FrontDefinition {
+        Placement,
+        LookingAt
+    }
+
     class UpdateTask {
         Hand hand;
         BlockHitResult hitResult;
         BlockPos signPos;
         List<Boolean> sides;
+        boolean reverse;
 
-        public UpdateTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean front, boolean back) {
+        public UpdateTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean front, boolean back, boolean reverse) {
             this.hand = event.getHand();
             this.hitResult = event.getHitResult();
             this.signPos = signPos;
+            this.reverse = reverse;
             this.sides = new ArrayList<>();
             if (front) sides.add(true);
             if (back) sides.add(false);
@@ -108,7 +133,7 @@ public class AutoSign extends Module {
 
         boolean next() {
             var nextSide = sides.remove(0);
-            var packet = AutoSign.this.signText.getPacket(nextSide, signPos);
+            var packet = AutoSign.this.signText.getPacket(nextSide, reverse, signPos);
             Objects.requireNonNull(client.getNetworkHandler()).sendPacket(packet);
 
             return !this.sides.isEmpty();
@@ -144,14 +169,18 @@ public class AutoSign extends Module {
             return hasLines(front);
         }
 
-        UpdateTask asTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos) {
-            return new UpdateTask(event, signPos, this.toBeWritten(true), this.toBeWritten(false));
+        UpdateTask asTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean reverse) {
+            return new UpdateTask(event, signPos, this.toBeWritten(true), this.toBeWritten(false), reverse);
         }
 
-        UpdateSignC2SPacket getPacket(boolean front, BlockPos pos) {
-            var lines = front ? frontLines : backLines;
-            return new UpdateSignC2SPacket(pos, front, lines[0].value(), lines[1].value(), lines[2].value(),
-                    lines[3].value());
+        UpdateSignC2SPacket getPacket(boolean front, boolean reverse, BlockPos pos) {
+            var lines = front ^ reverse ? frontLines : backLines;
+            return new UpdateSignC2SPacket(pos, front,
+                    lines[0].value(),
+                    lines[1].value(),
+                    lines[2].value(),
+                    lines[3].value()
+            );
         }
     }
 }
