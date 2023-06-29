@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.StringSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -27,18 +28,14 @@ public class BridgeAnalysis extends Module {
                 "Downloads the wool bridges from the world after a game of hypixel bedwars.", Category.Server);
     }
 
-    @Override
-    public void init() {
-        super.init();
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (!this.enabled) return;
+        if (!(packet.get() instanceof TitleS2CPacket title)) return;
+        var regex = Pattern.compile(endRegex.value());
+        if (!regex.matcher(title.getTitle().getString()).matches()) {}
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (!this.enabled) return;
-            if (!(packet.get() instanceof TitleS2CPacket title)) return;
-            var regex = Pattern.compile(endRegex.value());
-            if (!regex.matcher(title.getTitle().getString()).matches()) {}
-
-            // wdl
-        });
+        // wdl
     }
 
     void download() {

@@ -3,7 +3,8 @@ package com.connorcode.sigmautils.modules.misc;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.network.MouseScrollCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -29,16 +30,13 @@ public class CameraDistance extends Module {
         return distance.value() + Math.signum(distanceMod) * Math.pow(Math.abs(distanceMod), 1.2);
     }
 
-    @Override
-    public void init() {
-        super.init();
-        MouseScrollCallback.EVENT.register(event -> {
-            if (client.currentScreen != null || client.options.getPerspective() == Perspective.FIRST_PERSON ||
-                    !Config.getEnabled(CameraDistance.class) || !CameraDistance.scrollZoom.value()) return;
+    @EventHandler
+    void onMouseScroll(MouseScrollEvent event) {
+        if (client.currentScreen != null || client.options.getPerspective() == Perspective.FIRST_PERSON ||
+                !Config.getEnabled(CameraDistance.class) || !CameraDistance.scrollZoom.value()) return;
 
-            CameraDistance.distanceMod -= event.vertical;
-            event.cancel();
-        });
+        CameraDistance.distanceMod -= event.vertical;
+        event.cancel();
     }
 
     @Override

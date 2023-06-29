@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.StringSetting;
-import com.connorcode.sigmautils.event.network.PacketSendCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.mixin.CustomPayloadC2SPacketAccessor;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -18,14 +19,10 @@ public class BrandChanger extends Module {
         super("brand_changer", "Brand Changer", "Lets you change the brand reported to servers", Category.Misc);
     }
 
-    @Override
-    public void init() {
-        super.init();
-
-        PacketSendCallback.EVENT.register(packet -> {
-            if (!(packet.get() instanceof CustomPayloadC2SPacket) || !enabled) return;
-            CustomPayloadC2SPacketAccessor payloadPacket = (CustomPayloadC2SPacketAccessor) packet.get();
-            payloadPacket.setData(new PacketByteBuf(Unpooled.buffer()).writeString(brand.value()));
-        });
+    @EventHandler
+    void onPacketSend(PacketSendEvent packet) {
+        if (!(packet.get() instanceof CustomPayloadC2SPacket) || !enabled) return;
+        CustomPayloadC2SPacketAccessor payloadPacket = (CustomPayloadC2SPacketAccessor) packet.get();
+        payloadPacket.setData(new PacketByteBuf(Unpooled.buffer()).writeString(brand.value()));
     }
 }

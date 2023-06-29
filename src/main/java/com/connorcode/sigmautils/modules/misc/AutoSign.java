@@ -2,9 +2,10 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
+import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.Interact;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;
@@ -50,58 +51,59 @@ public class AutoSign extends Module {
                 Category.Misc);
     }
 
-    public void init() {
-        super.init();
+    @EventHandler
+    void onInteractBlock(Interact.InteractBlockEvent event) {
+        assert client.player != null && client.interactionManager != null && client.world != null;
+        if (!enabled || event.getHitResult().getType() != HitResult.Type.BLOCK) return;
+        var lookingAtSign = event.getHitResult().getType() == HitResult.Type.BLOCK &&
+                (client.world.getBlockEntity(event.getHitResult().getBlockPos()) instanceof SignBlockEntity);
+        var item = client.player.getStackInHand(event.getHand());
+        if (!(item.getItem() instanceof SignItem) && !lookingAtSign) return;
 
-        Interact.InteractBlockCallback.EVENT.register(event -> {
-            assert client.player != null && client.interactionManager != null && client.world != null;
-            if (!enabled || event.getHitResult().getType() != HitResult.Type.BLOCK) return;
-            var lookingAtSign = event.getHitResult().getType() == HitResult.Type.BLOCK &&
-                    (client.world.getBlockEntity(event.getHitResult().getBlockPos()) instanceof SignBlockEntity);
-            var item = client.player.getStackInHand(event.getHand());
-            if (!(item.getItem() instanceof SignItem) && !lookingAtSign) return;
+        // Place Sign
+        var signBlock = event.getHitResult().getBlockPos();
+        if (!lookingAtSign) {
+            signBlock = signBlock.offset(event.getHitResult().getSide());
+            var itemUsageContext = new ItemUsageContext(client.player, event.getHand(), event.getHitResult());
+            var count = item.getCount();
+            item.useOnBlock(itemUsageContext);
+            if (client.player.isCreative()) item.setCount(count);
+        }
 
-            // Place Sign
-            var signBlock = event.getHitResult().getBlockPos();
-            if (!lookingAtSign) {
-                signBlock = signBlock.offset(event.getHitResult().getSide());
-                var itemUsageContext = new ItemUsageContext(client.player, event.getHand(), event.getHitResult());
-                var count = item.getCount();
-                item.useOnBlock(itemUsageContext);
-                if (client.player.isCreative()) item.setCount(count);
-            }
+        // Determine if sides should be reversed
+        var mode = frontDefinition.value() == FrontDefinition.Placement;
+        var front = (mode || !lookingAtSign) || ((SignBlockEntity) Objects.requireNonNull(
+                client.world.getBlockEntity(event.getHitResult().getBlockPos()))).isPlayerFacingFront(
+                client.player);
 
-            // Determine if sides should be reversed
-            var mode = frontDefinition.value() == FrontDefinition.Placement;
-            var front = (mode || !lookingAtSign) || ((SignBlockEntity) Objects.requireNonNull(
-                    client.world.getBlockEntity(event.getHitResult().getBlockPos()))).isPlayerFacingFront(
-                    client.player);
+        tasks.put(signBlock, signText.asTask(event, signBlock, !front));
 
-            tasks.put(signBlock, signText.asTask(event, signBlock, !front));
+        // Interact block
+        client.interactionManager.sendSequencedPacket(client.world,
+                sequence -> new PlayerInteractBlockC2SPacket(event.getHand(), event.getHitResult(), sequence));
+        event.setReturnValue(ActionResult.CONSUME_PARTIAL);
+    }
 
-            // Interact block
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        assert client.interactionManager != null && client.world != null;
+        if (!enabled || !(packet.get() instanceof SignEditorOpenS2CPacket sign) ||
+                !tasks.containsKey(sign.getPos())) return;
+        var task = tasks.get(sign.getPos());
+        var again = task.next();
+
+        if (again) {
+            var hitResult = new BlockHitResult(task.hitResult.getPos(), task.hitResult.getSide().getOpposite(),
+                    sign.getPos(), false);
             client.interactionManager.sendSequencedPacket(client.world,
-                    sequence -> new PlayerInteractBlockC2SPacket(event.getHand(), event.getHitResult(), sequence));
-            event.setReturnValue(ActionResult.CONSUME_PARTIAL);
-        });
+                    sequence -> new PlayerInteractBlockC2SPacket(task.hand, hitResult, sequence));
+        } else tasks.remove(sign.getPos());
+        packet.cancel();
+    }
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            assert client.interactionManager != null && client.world != null;
-            if (!enabled || !(packet.get() instanceof SignEditorOpenS2CPacket sign) ||
-                    !tasks.containsKey(sign.getPos())) return;
-            var task = tasks.get(sign.getPos());
-            var again = task.next();
-
-            if (again) {
-                var hitResult = new BlockHitResult(task.hitResult.getPos(), task.hitResult.getSide().getOpposite(),
-                        sign.getPos(), false);
-                client.interactionManager.sendSequencedPacket(client.world,
-                        sequence -> new PlayerInteractBlockC2SPacket(task.hand, hitResult, sequence));
-            } else tasks.remove(sign.getPos());
-            packet.cancel();
-        });
-
-        GameLifecycle.WorldCloseCallback.EVENT.register(() -> tasks.clear());
+    @EventHandler
+    void onWorldClose(GameLifecycle.WorldCloseEvent event) {
+        tasks.clear();
     }
 
     enum Mode {
@@ -121,7 +123,7 @@ public class AutoSign extends Module {
         List<Boolean> sides;
         boolean reverse;
 
-        public UpdateTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean front, boolean back, boolean reverse) {
+        public UpdateTask(Interact.InteractBlockEvent event, BlockPos signPos, boolean front, boolean back, boolean reverse) {
             this.hand = event.getHand();
             this.hitResult = event.getHitResult();
             this.signPos = signPos;
@@ -169,7 +171,7 @@ public class AutoSign extends Module {
             return hasLines(front);
         }
 
-        UpdateTask asTask(Interact.InteractBlockCallback.InteractBlockEvent event, BlockPos signPos, boolean reverse) {
+        UpdateTask asTask(Interact.InteractBlockEvent event, BlockPos signPos, boolean reverse) {
             return new UpdateTask(event, signPos, this.toBeWritten(true), this.toBeWritten(false), reverse);
         }
 

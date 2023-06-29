@@ -1,26 +1,41 @@
 package com.connorcode.sigmautils.event;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EventBus {
-    HashMap<Class<? extends EventI>, List<Handler>> listeners = new HashMap<>();
+    HashMap<Class<? extends Event>, List<Handler>> listeners = new HashMap<>();
 
     public EventBus() {}
 
-    public void register(Class<?> _class) {
-        for (var i : _class.getDeclaredMethods()) {
+    public void register(Object _class) {
+        for (var i : _class.getClass().getDeclaredMethods()) {
             if (!i.isAnnotationPresent(EventHandler.class)) continue;
             var annotation = i.getAnnotation(EventHandler.class);
-            var handler = new Handler(i, annotation.priority());
-            System.out.println("Registered handler for " + annotation.value().getSimpleName() + " with priority " +
-                    annotation.priority());
+            i.setAccessible(true);
 
-            if (listeners.containsKey(annotation.value()))
-                listeners.get(annotation.value()).add(handler);
-            else listeners.put(annotation.value(), new ArrayList<>(List.of(handler)));
+            if (i.getParameterCount() != 1)
+                throw new RuntimeException(
+                        String.format("Method %s has %d parameters, expected 1", i.getName(), i.getParameterCount()));
+            var event = (Class<? extends Event>) i.getParameterTypes()[0];
+
+            Consumer<Object> consumer = (arg) -> {
+                try {
+                    i.invoke(_class, arg);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            };
+            var handler = new Handler(consumer, annotation.priority());
+            System.out.println(
+                    "Registered handler for " + event.getSimpleName() + " with priority " + annotation.priority());
+
+            if (listeners.containsKey(event))
+                listeners.get(event).add(handler);
+            else listeners.put(event, new ArrayList<>(List.of(handler)));
         }
     }
 
@@ -29,11 +44,16 @@ public class EventBus {
             i.sort((a, b) -> b.priority.compareTo(a.priority));
     }
 
+    public <T extends Event> void post(T event) {
+        var listeners = this.listeners.get(event.getClass());
+        if (listeners != null) listeners.forEach(handler -> handler.handler.accept(event));
+    }
+
     static class Handler {
-        Method handler;
+        Consumer<Object> handler;
         EventHandler.Priority priority;
 
-        public Handler(Method handler, EventHandler.Priority priority) {
+        public Handler(Consumer<Object> handler, EventHandler.Priority priority) {
             this.handler = handler;
             this.priority = priority;
         }

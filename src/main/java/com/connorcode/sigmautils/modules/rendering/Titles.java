@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.modules.rendering;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
+import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
@@ -77,65 +78,61 @@ public class Titles extends Module {
         super("titles", "Titles", "Adds in-game titles to different *things*", Category.Rendering);
     }
 
-    @Override
-    public void init() {
-        super.init();
+    @EventHandler
+    void onPostWorldRender(WorldRender.PostWorldRenderEvent event) {
+        var itemTitles = new ArrayList<ItemTitleData>();
+        assert client.world != null;
 
-        WorldRender.PostWorldRenderCallback.EVENT.register(event -> {
-            var itemTitles = new ArrayList<ItemTitleData>();
-            assert client.world != null;
-
-            for (var e : client.world.getEntities()) {
-                if (tntCountdown.value() && e instanceof TntEntity tnt) {
-                    var fuze = tnt.getFuse();
-                    var text = Text.of(textColor.value().code() + timeFormat.value().format(fuze));
-                    renderText(text, tnt, event, .5);
-                }
-
-                if ((itemCountdown.value() || itemStackCount.value()) && e instanceof ItemEntity item) {
-                    var data = new ItemTitleData(item);
-                    itemTitles.stream()
-                            .filter(d -> d.stackable(data))
-                            .findFirst()
-                            .ifPresentOrElse(d -> d.merge(data), () -> itemTitles.add(data));
-                }
-
-                if ((arrowDespawn.value() || arrowInfinity.value()) && e instanceof ArrowEntity arrow) {
-                    var remainingLife = Math.max(1200 - arrow.age, 0);
-
-                    var text = textColor.value().code();
-                    if (arrowDespawn.value()) text += timeFormat.value().format(remainingLife);
-                    // TODO: Dosent work with infinity enchantment in survival
-                    if (arrowInfinity.value()) text +=
-                            (arrow.pickupType == PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY) ? " ∞" : "";
-
-                    renderText(Text.of(text), arrow, event, 0);
-                }
-
-                if (tamableOwner.value() && (e instanceof TameableEntity || e instanceof AbstractHorseEntity)) {
-                    var owner =
-                            (e instanceof TameableEntity tamable) ? tamable.getOwnerUuid() : ((AbstractHorseEntity) e).getOwnerUuid();
-                    if (owner != null) {
-                        var lines = new ArrayList<Text>();
-                        var name = e.getCustomName();
-                        if (name != null) lines.add(name);
-                        lines.add(Text.of(textColor.value().code() + "Owner: " +
-                                Util.uuidToName(owner).orElse(owner.toString())));
-                        WorldRenderUtils.renderLines(lines,
-                                entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
-                    }
-                }
+        for (var e : client.world.getEntities()) {
+            if (tntCountdown.value() && e instanceof TntEntity tnt) {
+                var fuze = tnt.getFuse();
+                var text = Text.of(textColor.value().code() + timeFormat.value().format(fuze));
+                renderText(text, tnt, event, .5);
             }
 
-            for (var i : itemTitles) {
+            if ((itemCountdown.value() || itemStackCount.value()) && e instanceof ItemEntity item) {
+                var data = new ItemTitleData(item);
+                itemTitles.stream()
+                        .filter(d -> d.stackable(data))
+                        .findFirst()
+                        .ifPresentOrElse(d -> d.merge(data), () -> itemTitles.add(data));
+            }
+
+            if ((arrowDespawn.value() || arrowInfinity.value()) && e instanceof ArrowEntity arrow) {
+                var remainingLife = Math.max(1200 - arrow.age, 0);
+
                 var text = textColor.value().code();
-                if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
-                if (itemStackCount.value()) text += " ×" + i.count;
+                if (arrowDespawn.value()) text += timeFormat.value().format(remainingLife);
+                // TODO: Dosent work with infinity enchantment in survival
+                if (arrowInfinity.value()) text +=
+                        (arrow.pickupType == PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY) ? " ∞" : "";
 
-                WorldRenderUtils.renderText(Text.of(text),
-                        entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(), false);
+                renderText(Text.of(text), arrow, event, 0);
             }
-        });
+
+            if (tamableOwner.value() && (e instanceof TameableEntity || e instanceof AbstractHorseEntity)) {
+                var owner =
+                        (e instanceof TameableEntity tamable) ? tamable.getOwnerUuid() : ((AbstractHorseEntity) e).getOwnerUuid();
+                if (owner != null) {
+                    var lines = new ArrayList<Text>();
+                    var name = e.getCustomName();
+                    if (name != null) lines.add(name);
+                    lines.add(Text.of(textColor.value().code() + "Owner: " +
+                            Util.uuidToName(owner).orElse(owner.toString())));
+                    WorldRenderUtils.renderLines(lines,
+                            entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
+                }
+            }
+        }
+
+        for (var i : itemTitles) {
+            var text = textColor.value().code();
+            if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
+            if (itemStackCount.value()) text += " ×" + i.count;
+
+            WorldRenderUtils.renderText(Text.of(text),
+                    entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(), false);
+        }
     }
 
     void renderText(Text text, Entity pos, WorldRender.WorldRenderEvent event, double offset) {

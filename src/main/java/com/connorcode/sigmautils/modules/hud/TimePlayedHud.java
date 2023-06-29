@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
@@ -34,14 +35,10 @@ public class TimePlayedHud extends HudModule {
         this.defaultOrder = 8;
     }
 
-    @Override
-    public void init() {
-        super.init();
-
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (packet.get() instanceof GameJoinS2CPacket) worldOpenTimestamp = System.currentTimeMillis();
-            if (packet.get() instanceof LoginSuccessS2CPacket) serverJoinTimestamp = System.currentTimeMillis();
-        });
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (packet.get() instanceof GameJoinS2CPacket) worldOpenTimestamp = System.currentTimeMillis();
+        if (packet.get() instanceof LoginSuccessS2CPacket) serverJoinTimestamp = System.currentTimeMillis();
     }
 
     public String line() {

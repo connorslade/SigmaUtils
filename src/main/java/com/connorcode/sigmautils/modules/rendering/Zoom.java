@@ -4,8 +4,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
-import com.connorcode.sigmautils.event.misc.Tick;
-import com.connorcode.sigmautils.event.network.MouseScrollCallback;
+import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -51,18 +50,13 @@ public class Zoom extends Module {
         return fov * ((10 - zoom.value() * (enabled ? zoomTween : 1 - zoomTween)) / 10) * (enabled ? zoomModifier : 1);
     }
 
-    @Override
-    public void init() {
-        super.init();
-
-        MouseScrollCallback.EVENT.register(event -> {
-            if (client.currentScreen != null || !enabled || !scrollZoom.value()) return;
-            zoomModifier -= event.vertical / 10f;
-            event.cancel();
-        });
+    @EventHandler
+    void onMouseScroll(MouseScrollEvent event) {
+        if (client.currentScreen != null || !enabled || !scrollZoom.value()) return;
+        zoomModifier -= event.vertical / 10f;
+        event.cancel();
     }
 
-    @EventHandler(Tick.GameTickCallback.class)
     public void tick() {
         super.tick();
 

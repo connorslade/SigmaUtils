@@ -3,8 +3,9 @@ package com.connorcode.sigmautils.modules.misc;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.PacketList;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
-import com.connorcode.sigmautils.event.network.PacketSendCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
+import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -38,20 +39,18 @@ public class PacketCanceler extends Module {
         return new PacketList(setting, NetworkSide.SERVERBOUND);
     }
 
-    @Override
-    public void init() {
-        super.init();
+    @EventHandler
+    void onPacketSend(PacketSendEvent packet) {
+        if (!enabled || !serverPackets.value().contains(packet.get().getClass())) return;
+        sendDebug(NetworkSide.SERVERBOUND, packet.get());
+        packet.cancel();
+    }
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (!enabled || !clientPackets.value().contains(packet.get().getClass())) return;
-            sendDebug(NetworkSide.CLIENTBOUND, packet.get());
-            packet.cancel();
-        });
-        PacketSendCallback.EVENT.register(packet -> {
-            if (!enabled || !serverPackets.value().contains(packet.get().getClass())) return;
-            sendDebug(NetworkSide.SERVERBOUND, packet.get());
-            packet.cancel();
-        });
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (!enabled || !clientPackets.value().contains(packet.get().getClass())) return;
+        sendDebug(NetworkSide.CLIENTBOUND, packet.get());
+        packet.cancel();
     }
 
     void sendDebug(NetworkSide side, Packet<?> packet) {

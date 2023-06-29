@@ -1,33 +1,22 @@
 package com.connorcode.sigmautils.event.render;
 
 import com.connorcode.sigmautils.event.Cancellable;
-import com.connorcode.sigmautils.event.EventI;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class WorldRender {
-    public interface PreWorldRenderCallback extends EventI {
-        Event<PreWorldRenderCallback> EVENT =
-                EventFactory.createArrayBacked(PreWorldRenderCallback.class, callbacks -> event -> {
-                    for (PreWorldRenderCallback i : callbacks)
-                        i.handle(event);
-                });
-
-        void handle(WorldRenderEvent event);
+    public static class PostWorldRenderEvent extends WorldRenderEvent {
+        public PostWorldRenderEvent(float tickDelta, MatrixStack matrixStack) {
+            super(tickDelta, matrixStack);
+        }
     }
 
-    public interface PostWorldRenderCallback extends EventI {
-        Event<PostWorldRenderCallback> EVENT =
-                EventFactory.createArrayBacked(PostWorldRenderCallback.class, callbacks -> event -> {
-                    for (PostWorldRenderCallback i : callbacks)
-                        i.handle(event);
-                });
-
-        void handle(WorldRenderEvent event);
+    public static class PreWorldRenderEvent extends WorldRenderEvent {
+        public PreWorldRenderEvent(float tickDelta, MatrixStack matrixStack) {
+            super(tickDelta, matrixStack);
+        }
     }
 
-    public static class WorldRenderEvent extends Cancellable {
+    public static abstract class WorldRenderEvent extends Cancellable {
         public float tickDelta;
         public MatrixStack matrixStack;
 

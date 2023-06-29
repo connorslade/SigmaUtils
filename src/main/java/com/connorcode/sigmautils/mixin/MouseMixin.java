@@ -1,6 +1,7 @@
 package com.connorcode.sigmautils.mixin;
 
-import com.connorcode.sigmautils.event.network.MouseScrollCallback;
+import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Final;
@@ -19,8 +20,8 @@ public class MouseMixin {
     @Inject(method = "onMouseScroll", at = @At("HEAD"), cancellable = true)
     void onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
         if (client.getWindow().getHandle() != window) return;
-        var event = new MouseScrollCallback.MouseScrollEvent(horizontal, vertical);
-        MouseScrollCallback.EVENT.invoker().handle(event);
+        var event = new MouseScrollEvent(horizontal, vertical);
+        SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }
 }

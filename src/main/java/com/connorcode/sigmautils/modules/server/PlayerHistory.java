@@ -2,7 +2,8 @@ package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.DummySetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -50,28 +51,29 @@ public class PlayerHistory extends Module {
                 e.printStackTrace();
             }
         });
+    }
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (packet.get() instanceof LoginSuccessS2CPacket) {
-                synchronized (seenPlayers) {
-                    seenPlayers.values().forEach(server -> server.values().forEach(p -> p.setOnline(false)));
-                }
-                return;
-            }
-
-            if (!(packet.get() instanceof PlayerListS2CPacket list) || client.getCurrentServerEntry() == null) return;
-
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (packet.get() instanceof LoginSuccessS2CPacket) {
             synchronized (seenPlayers) {
-                for (PlayerListS2CPacket.Entry entry : list.getPlayerAdditionEntries()) {
-                    var uuid = entry.profile().getId();
-                    seenPlayers.putIfAbsent(client.getCurrentServerEntry().address, new HashMap<>());
-                    var server = seenPlayers.get(client.getCurrentServerEntry().address);
-
-                    if (server.containsKey(uuid)) server.get(uuid).update();
-                    else server.put(uuid, new SeenPlayer(entry.profile().getName(), uuid));
-                }
+                seenPlayers.values().forEach(server -> server.values().forEach(p -> p.setOnline(false)));
             }
-        });
+            return;
+        }
+
+        if (!(packet.get() instanceof PlayerListS2CPacket list) || client.getCurrentServerEntry() == null) return;
+
+        synchronized (seenPlayers) {
+            for (PlayerListS2CPacket.Entry entry : list.getPlayerAdditionEntries()) {
+                var uuid = entry.profile().getId();
+                seenPlayers.putIfAbsent(client.getCurrentServerEntry().address, new HashMap<>());
+                var server = seenPlayers.get(client.getCurrentServerEntry().address);
+
+                if (server.containsKey(uuid)) server.get(uuid).update();
+                else server.put(uuid, new SeenPlayer(entry.profile().getName(), uuid));
+            }
+        }
     }
 
     void loadPlayers() throws IOException {

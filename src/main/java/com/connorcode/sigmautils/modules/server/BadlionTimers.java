@@ -1,8 +1,9 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
-import com.connorcode.sigmautils.event.network.UnknownPacketCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
+import com.connorcode.sigmautils.event.network.UnknownPacketEvent;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
@@ -31,36 +32,33 @@ public class BadlionTimers extends HudModule {
         this.defaultOrder = 9;
     }
 
-    @Override
-    public void init() {
-        super.init();
+    @EventHandler
+    void onUnknownPacket(UnknownPacketEvent unknownPacket) {
+        if (!enabled || !unknownPacket.getIdentifier().equals(BADLION_TIMER)) return;
+        Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            synchronized (timers) {
-                if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
+        synchronized (timers) {
+            switch (packet.getLeft()) {
+                case REMOVE_ALL_TIMERS, CHANGE_WORLD, REGISTER -> timers.clear();
+                case ADD_TIMER -> timers.add(new Timer(packet.getRight()));
+                case REMOVE_TIMER -> timers.removeIf(timer -> timer.id == packet.getRight().get("id").getAsInt());
+                case SYNC_TIMERS -> timers.stream()
+                        .filter(timer -> timer.id == packet.getRight().get("id").getAsInt())
+                        .forEach(t -> t.setTicks(packet.getRight().get("time").getAsInt()));
+                case UPDATE_TIMER -> timers.replaceAll(timer -> {
+                    if (timer.id == packet.getRight().get("id").getAsInt()) return new Timer(packet.getRight());
+                    return timer;
+                });
             }
-        });
+        }
+        unknownPacket.cancel();
+    }
 
-        UnknownPacketCallback.EVENT.register(unknownPacket -> {
-            if (!enabled || !unknownPacket.getIdentifier().equals(BADLION_TIMER)) return;
-            Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
-
-            synchronized (timers) {
-                switch (packet.getLeft()) {
-                    case REMOVE_ALL_TIMERS, CHANGE_WORLD, REGISTER -> timers.clear();
-                    case ADD_TIMER -> timers.add(new Timer(packet.getRight()));
-                    case REMOVE_TIMER -> timers.removeIf(timer -> timer.id == packet.getRight().get("id").getAsInt());
-                    case SYNC_TIMERS -> timers.stream()
-                            .filter(timer -> timer.id == packet.getRight().get("id").getAsInt())
-                            .forEach(t -> t.setTicks(packet.getRight().get("time").getAsInt()));
-                    case UPDATE_TIMER -> timers.replaceAll(timer -> {
-                        if (timer.id == packet.getRight().get("id").getAsInt()) return new Timer(packet.getRight());
-                        return timer;
-                    });
-                }
-            }
-            unknownPacket.cancel();
-        });
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        synchronized (timers) {
+            if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
+        }
     }
 
     @Override

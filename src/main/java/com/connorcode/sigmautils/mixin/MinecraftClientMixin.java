@@ -2,8 +2,8 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event._interface.ScreenOpenEvent;
 import com.connorcode.sigmautils.event.misc.Tick;
-import com.connorcode.sigmautils.event.network.ScreenOpenCallback;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
@@ -71,25 +71,24 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     void onRenderTick(boolean tick, CallbackInfo ci) {
-        var event = new Tick.TickEvent();
-        Tick.RenderTickCallback.EVENT.invoker().handle(event);
+        var event = new Tick.RenderTickEvent();
+        SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     void onGameTick(CallbackInfo ci) {
-        var event = new Tick.TickEvent();
-        Tick.GameTickCallback.EVENT.invoker().handle(event);
+        var event = new Tick.GameTickEvent();
+        SigmaUtils.eventBus.post(event);
         SigmaUtils.modules.values().forEach(Module::tick);
         if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     void onSetScreen(Screen screen, CallbackInfo ci) {
-        ScreenOpenCallback.ScreenOpenEvent event = new ScreenOpenCallback.ScreenOpenEvent(screen);
-        ScreenOpenCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled())
-            ci.cancel();
+        var event = new ScreenOpenEvent(screen);
+        SigmaUtils.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "hasOutline", at = @At("RETURN"), cancellable = true)

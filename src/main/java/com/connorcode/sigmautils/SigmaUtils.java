@@ -44,9 +44,8 @@ public class SigmaUtils implements ClientModInitializer {
         String modulePackageName = moduleJsonObject.get("package").getAsString();
         moduleJsonObject.get("modules").getAsJsonArray().forEach(json -> {
             Module module = (Module) Util.loadNewClass(modulePackageName + "." + json.getAsString());
-            Class<? extends Module> _class = Objects.requireNonNull(module).getClass();
-            modules.put(_class, module);
-            eventBus.register(_class);
+            modules.put(Objects.requireNonNull(module).getClass(), module);
+            eventBus.register(module);
         });
         logger.debug(String.format("Loaded %d modules", modules.size()));
         eventBus._finalize();

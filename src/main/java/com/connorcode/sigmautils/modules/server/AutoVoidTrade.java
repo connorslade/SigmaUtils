@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -79,36 +80,32 @@ public class AutoVoidTrade extends Module {
         traided.clear();
     }
 
-    @Override
-    public void init() {
-        super.init();
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (!enabled) return;
+        if (packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket) {
+            if (setTradeOffersS2CPacket.getOffers().size() <= tradeIndex.value()) error("Invalid trade index");
+            TradeOffer tradeOffer = setTradeOffersS2CPacket.getOffers().get(tradeIndex.intValue());
 
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (!enabled) return;
-            if (packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket) {
-                if (setTradeOffersS2CPacket.getOffers().size() <= tradeIndex.value()) error("Invalid trade index");
-                TradeOffer tradeOffer = setTradeOffersS2CPacket.getOffers().get(tradeIndex.intValue());
-
-                if (tradeOffer.getUses() > tradeOffer.getMaxUses()) {
-                    error("Trade exhausted");
-                    return;
-                }
-                Objects.requireNonNull(client.getNetworkHandler())
-                        .sendPacket(new SelectMerchantTradeC2SPacket(tradeIndex.intValue()));
-
-                if (client.currentScreen instanceof MerchantScreen merchantScreen) {
-                    System.out.println("Merchant screen open");
-                    Slot slot = merchantScreen.getScreenHandler().getSlot(2);
-//                    if (slot.hasStack()) {
-                    System.out.println("Slot has stack");
-                    Objects.requireNonNull(client.interactionManager)
-                            .clickSlot(merchantScreen.getScreenHandler().syncId, slot.id, 0,
-                                    SlotActionType.QUICK_MOVE, client.player);
-                    waiting = delay.intValue();
-//                    }
-                }
+            if (tradeOffer.getUses() > tradeOffer.getMaxUses()) {
+                error("Trade exhausted");
+                return;
             }
-        });
+            Objects.requireNonNull(client.getNetworkHandler())
+                    .sendPacket(new SelectMerchantTradeC2SPacket(tradeIndex.intValue()));
+
+            if (client.currentScreen instanceof MerchantScreen merchantScreen) {
+                System.out.println("Merchant screen open");
+                Slot slot = merchantScreen.getScreenHandler().getSlot(2);
+//                    if (slot.hasStack()) {
+                System.out.println("Slot has stack");
+                Objects.requireNonNull(client.interactionManager)
+                        .clickSlot(merchantScreen.getScreenHandler().syncId, slot.id, 0,
+                                SlotActionType.QUICK_MOVE, client.player);
+                waiting = delay.intValue();
+//                    }
+            }
+        }
     }
 
     private void error(String message) {

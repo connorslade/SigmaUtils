@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
@@ -26,29 +27,25 @@ public class TpsHud extends HudModule {
         this.defaultOrder = 2;
     }
 
-    @Override
-    public void init() {
-        super.init();
-
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (packet.get() instanceof GameJoinS2CPacket) {
-                synchronized (tickRateHistory) {
-                    tickRateHistory.clear();
-                    lastTickTime = 0;
-                }
-                return;
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (packet.get() instanceof GameJoinS2CPacket) {
+            synchronized (tickRateHistory) {
+                tickRateHistory.clear();
+                lastTickTime = 0;
             }
+            return;
+        }
 
-            if (packet.get() instanceof WorldTimeUpdateS2CPacket) {
-                long now = System.currentTimeMillis();
-                synchronized (tickRateHistory) {
-                    if (lastTickTime != 0) tickRateHistory.add(20f / ((float) (now - lastTickTime) / 1000f));
-                    lastTickTime = now;
+        if (packet.get() instanceof WorldTimeUpdateS2CPacket) {
+            long now = System.currentTimeMillis();
+            synchronized (tickRateHistory) {
+                if (lastTickTime != 0) tickRateHistory.add(20f / ((float) (now - lastTickTime) / 1000f));
+                lastTickTime = now;
 
-                    while (tickRateHistory.size() > samples.intValue()) tickRateHistory.remove(0);
-                }
+                while (tickRateHistory.size() > samples.intValue()) tickRateHistory.remove(0);
             }
-        });
+        }
     }
 
     public String line() {

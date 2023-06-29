@@ -1,7 +1,8 @@
 package com.connorcode.sigmautils.modules.chat;
 
 import com.connorcode.sigmautils.config.settings.BoolSetting;
-import com.connorcode.sigmautils.event.network.PacketReceiveCallback;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -32,17 +33,13 @@ public class ChatMessageDing extends Module {
                 .play(PositionedSoundInstance.master(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f));
     }
 
-    @Override
-    public void init() {
-        super.init();
-
-        PacketReceiveCallback.EVENT.register(packet -> {
-            if (!enabled) return;
-            if (packet.get() instanceof ChatMessageS2CPacket) playDing();
-            if (packet.get() instanceof GameMessageS2CPacket gameMessageS2CPacket && alertSystemMessages.value()) {
-                if (gameMessageS2CPacket.overlay() && !alertActionBar.value()) return;
-                playDing();
-            }
-        });
+    @EventHandler
+    void onPacketReceive(PacketReceiveEvent packet) {
+        if (!enabled) return;
+        if (packet.get() instanceof ChatMessageS2CPacket) playDing();
+        if (packet.get() instanceof GameMessageS2CPacket gameMessageS2CPacket && alertSystemMessages.value()) {
+            if (gameMessageS2CPacket.overlay() && !alertActionBar.value()) return;
+            playDing();
+        }
     }
 }

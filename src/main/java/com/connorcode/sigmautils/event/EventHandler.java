@@ -5,8 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventHandler {
-    Class<? extends EventI> value();
-
     Priority priority() default Priority.NORMAL;
 
     enum Priority {

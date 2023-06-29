@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event._interface.Interact;
 import com.connorcode.sigmautils.modules.misc.NoCooldown;
@@ -40,8 +41,8 @@ public class ClientPlayerInteractionManagerMixin {
 
     @Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
     void onInteractBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
-        var event = new Interact.InteractBlockCallback.InteractBlockEvent(player, hand, hitResult);
-        Interact.InteractBlockCallback.EVENT.invoker().handle(event);
+        var event = new Interact.InteractBlockEvent(player, hand, hitResult);
+        SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) cir.setReturnValue(event.getResult());
     }
 }

@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
@@ -59,18 +60,16 @@ public class WorldRendererMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
-        WorldRender.PreWorldRenderCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled())
-            ci.cancel();
+        var event = new WorldRender.PreWorldRenderEvent(tickDelta, matrices);
+        SigmaUtils.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "render", at = @At("RETURN"), cancellable = true)
     void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        WorldRender.WorldRenderEvent event = new WorldRender.WorldRenderEvent(tickDelta, matrices);
-        WorldRender.PostWorldRenderCallback.EVENT.invoker().handle(event);
-        if (event.isCancelled())
-            ci.cancel();
+        var event = new WorldRender.PostWorldRenderEvent(tickDelta, matrices);
+        SigmaUtils.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getTeamColorValue()I"))
