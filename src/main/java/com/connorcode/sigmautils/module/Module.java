@@ -67,6 +67,10 @@ public abstract class Module {
         Config.moduleKeybinds.add(keyBind);
     }
 
+    /**
+     * @deprecated Use {@link com.connorcode.sigmautils.event.Tick.RenderTickCallback} instead.
+     */
+    @Deprecated()
     public void tick() {
     }
 

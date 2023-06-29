@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.ScreenOpenCallback;
+import com.connorcode.sigmautils.event.Tick;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
@@ -68,10 +69,19 @@ public abstract class MinecraftClientMixin {
     @Shadow
     public abstract boolean isIntegratedServerRunning();
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderTickCounter;beginRenderTick(J)I", shift = At.Shift.AFTER))
-    void onTick(boolean tick, CallbackInfo ci) {
-        assert tick;
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    void onRenderTick(boolean tick, CallbackInfo ci) {
+        var event = new Tick.TickEvent();
+        Tick.RenderTickCallback.EVENT.invoker().handle(event);
+        if (event.isCancelled()) ci.cancel();
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    void onGameTick(CallbackInfo ci) {
+        var event = new Tick.TickEvent();
+        Tick.GameTickCallback.EVENT.invoker().handle(event);
         SigmaUtils.modules.values().forEach(Module::tick);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
