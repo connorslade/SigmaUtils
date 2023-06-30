@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
-    public static final String VERSION = "0.1.3 alpha";
+    public static final String VERSION = "0.1.5-alpha";
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger logger = LogUtils.getLogger();
 
@@ -71,12 +71,8 @@ public class SigmaUtils implements ClientModInitializer {
     }
 
     @EventHandler
-    void onClientStart(GameLifecycle.ClientStartingEvent event) {
-        try {
-            Config.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void onClientStart(GameLifecycle.ClientStartingEvent event) throws IOException {
+        Config.load();
         Notifications.onStartup();
     }
 }
