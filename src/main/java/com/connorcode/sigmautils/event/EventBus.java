@@ -11,6 +11,11 @@ public class EventBus {
 
     public EventBus() {}
 
+    /**
+     * Registers all methods in a class with the {@link EventHandler} annotation
+     *
+     * @param _class The class to register
+     */
     public void register(Object _class) {
         for (var i : _class.getClass().getDeclaredMethods()) {
             if (!i.isAnnotationPresent(EventHandler.class)) continue;

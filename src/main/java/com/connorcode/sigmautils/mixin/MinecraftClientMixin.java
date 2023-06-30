@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.mixin;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event._interface.ScreenOpenEvent;
+import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
@@ -150,5 +151,17 @@ public abstract class MinecraftClientMixin {
     void onGetWindowTitle(CallbackInfoReturnable<String> cir) {
         if (Config.getEnabled(WindowTitle.class))
             cir.setReturnValue(WindowTitle.getTitle());
+    }
+
+    @Inject(method = "stop", at = @At("HEAD"))
+    private void onStopping(CallbackInfo ci) {
+        var event = new GameLifecycle.ClientStoppingEvent();
+        SigmaUtils.eventBus.post(event);
+    }
+
+    @Inject(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;thread:Ljava/lang/Thread;", shift = At.Shift.AFTER, ordinal = 0))
+    private void onStart(CallbackInfo ci) {
+        var event = new GameLifecycle.ClientStartingEvent();
+        SigmaUtils.eventBus.post(event);
     }
 }

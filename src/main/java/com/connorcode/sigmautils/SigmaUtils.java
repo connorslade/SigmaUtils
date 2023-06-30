@@ -3,6 +3,8 @@ package com.connorcode.sigmautils;
 import com.connorcode.sigmautils.commands.Command;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.EventBus;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Notifications;
@@ -12,7 +14,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class SigmaUtils implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         logger.info("Starting Sigma Utils v" + VERSION);
+        eventBus.register(this);
 
         // Load modules
         JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules/modules.json"));
@@ -66,15 +68,20 @@ public class SigmaUtils implements ClientModInitializer {
         // Init Commands
         ClientCommandRegistrationCallback.EVENT.register(
                 ((dispatcher, registryAccess) -> commands.forEach(c -> c.register(dispatcher))));
+    }
 
-        // Load config
-        ClientLifecycleEvents.CLIENT_STARTED.register((client -> {
-            try {
-                Config.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Notifications.onStartup();
-        }));
+    @EventHandler
+    void onClientStart(GameLifecycle.ClientStartingEvent event) {
+        try {
+            Config.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Notifications.onStartup();
     }
 }
+
+// TODO: FIx lighting on titles module
+// TODO: Fix random background on singal plauer scrreen, also maybe allowy picking a static image
+// TODO: Item translate module, mode for shields in offhands
+// TODO: camera no clip - disable culling

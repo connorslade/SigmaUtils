@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.ToggleSound;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.nbt.NbtCompound;
@@ -32,7 +33,8 @@ public class Config {
     public static void initKeybindings() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (configKeybinding.wasPressed()) client.setScreen(new ConfigGui());
-            if (client.currentScreen != null) return;
+            var f3 = InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3);
+            if (client.currentScreen != null || f3) return;
             for (Setting<KeyBindSetting> s : moduleKeybinds) {
                 if (!((KeyBindSetting) s).pressed()) continue;
 

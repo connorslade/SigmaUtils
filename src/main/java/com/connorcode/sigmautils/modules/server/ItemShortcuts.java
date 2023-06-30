@@ -1,6 +1,8 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.item.Item;
@@ -57,10 +59,9 @@ public class ItemShortcuts extends Module {
                 Category.Server);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
+        if (client.currentScreen != null) return;
         if (woolShortcut.pressed()) switchTo(wool);
         if (weaponShortcut.pressed()) switchTo(swords);
     }
