@@ -8,7 +8,6 @@ import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -72,8 +71,8 @@ public class VictoryMute extends Module {
     }
 
     @Override
-    public void disable(MinecraftClient client) {
-        super.disable(client);
+    public void disable() {
+        super.disable();
         muted = false;
     }
 }

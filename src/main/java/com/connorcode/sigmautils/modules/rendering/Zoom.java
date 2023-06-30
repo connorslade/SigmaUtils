@@ -76,14 +76,14 @@ public class Zoom extends Module {
     }
 
     @Override
-    public void enable(MinecraftClient client) {
-        super.enable(client);
+    public void enable() {
+        super.enable();
         animationStart = tick;
     }
 
     @Override
-    public void disable(MinecraftClient client) {
-        super.disable(client);
+    public void disable() {
+        super.disable();
         animationStart = tick;
         zoomModifier = 1;
     }

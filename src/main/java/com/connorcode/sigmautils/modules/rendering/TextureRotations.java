@@ -5,7 +5,8 @@ import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
+
+import static com.connorcode.sigmautils.SigmaUtils.client;
 
 public class TextureRotations extends Module {
     static EnumSetting<Mode> mode =
@@ -38,14 +39,14 @@ public class TextureRotations extends Module {
     }
 
     @Override
-    public void enable(MinecraftClient client) {
-        super.enable(client);
+    public void enable() {
+        super.enable();
         if (autoRefresh.value()) client.worldRenderer.reload();
     }
 
     @Override
-    public void disable(MinecraftClient client) {
-        super.disable(client);
+    public void disable() {
+        super.disable();
         if (autoRefresh.value()) client.worldRenderer.reload();
     }
 

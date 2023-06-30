@@ -9,6 +9,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
+import static com.connorcode.sigmautils.SigmaUtils.client;
+
 public class OpenFolder extends Module {
     public OpenFolder() {
         super("open_folder", "Open Folder", "Opens the folder of this minecraft instance.", Category.Meta);
@@ -17,7 +19,7 @@ public class OpenFolder extends Module {
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         com.connorcode.sigmautils.misc.util.Util.addChild(screen, new Components.MultiClickButton(x, y, 150, 20,
-                Text.of(name), button -> enable(client),
+                Text.of(name), button -> enable(),
                 ((button, matrices, mouseX, mouseY) ->
                         matrices.drawOrderedTooltip(sa.getTextRenderer(),
                                 sa.getTextRenderer().wrapLines(Text.of(description), 200), mouseX, mouseY)
@@ -25,7 +27,7 @@ public class OpenFolder extends Module {
     }
 
     @Override
-    public void enable(MinecraftClient client) {
+    public void enable() {
         enabled = false;
         Util.getOperatingSystem().open(client.runDirectory);
     }

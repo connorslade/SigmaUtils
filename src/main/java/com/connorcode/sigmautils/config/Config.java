@@ -41,8 +41,8 @@ public class Config {
                 Module module = s.getModule();
                 module.enabled ^= true;
                 ToggleSound.play(module.enabled);
-                if (module.enabled) module.enable(client);
-                else module.disable(client);
+                if (module.enabled) module.enable();
+                else module.disable();
                 try {
                     save();
                 } catch (IOException e) {
@@ -62,7 +62,7 @@ public class Config {
         if (nbt == null) return;
         for (Module i : SigmaUtils.modules.values()) {
             i.loadConfig(nbt.getCompound(i.id));
-            if (i.enabled) i.enable(client);
+            if (i.enabled) i.enable();
         }
     }
 

@@ -51,10 +51,8 @@ public class ModuleConfigGui extends Screen {
         // Add an 'enabled' setting
         Util.addChild(this,
                 ButtonWidget.builder(Text.of(String.format("%s█§r Enabled", module.enabled ? "§a" : "§c")), button -> {
-                            module.enabled ^= true;
-                            assert this.client != null;
-                            if (module.enabled) module.enable(this.client);
-                            else module.disable(this.client);
+                            if (!module.enabled) module.enable();
+                            else module.disable();
                             this.clearAndInit();
                         })
                         .position(20 + padding, textRenderer.fontHeight * 2 + padding * 4)

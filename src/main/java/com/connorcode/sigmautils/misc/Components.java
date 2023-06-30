@@ -36,11 +36,8 @@ public class Components {
                 module.openConfigScreen(client, screen);
                 return;
             }
-            module.enabled ^= true;
-            if (module.enabled)
-                module.enable(client);
-            else
-                module.disable(client);
+            if (!module.enabled) module.enable();
+            else module.disable();
             sa.invokeClearAndInit();
         }, ((button, matrices, mouseX, mouseY) -> matrices.drawOrderedTooltip(sa.getTextRenderer(), sa.getTextRenderer()
                 .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));

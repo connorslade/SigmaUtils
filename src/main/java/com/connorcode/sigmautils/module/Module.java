@@ -40,10 +40,18 @@ public abstract class Module {
     }
 
     protected void info(String format, Object... args) {
-        var fmt = String.format(format, args);
-        var text = String.format("[%s] %s", name, fmt);
+        log(format, false, args);
+    }
 
-        if (client.player == null) System.out.println(text);
+    protected void error(String format, Object... args) {
+        log(format, true, args);
+    }
+
+    private void log(String format, boolean error, Object... args) {
+        var fmt = String.format(format, args);
+        var text = String.format("[SigmaUtils::%s] %s%s", name.replace(" ", ""), error ? "§c" : "", fmt);
+
+        if (client.player == null) (error ? System.err : System.out).println(text);
         else client.player.sendMessage(Text.of(text));
     }
 
@@ -78,12 +86,14 @@ public abstract class Module {
         Config.moduleKeybinds.add(keyBind);
     }
 
-    public void enable(MinecraftClient client) {
+    public void enable() {
+        this.enabled = true;
         if (client.player == null || !Config.getEnabled(Notifications.class)) return;
         Notifications.moduleEnable(client, this);
     }
 
-    public void disable(MinecraftClient client) {
+    public void disable() {
+        this.enabled = false;
         if (client.player == null || !Config.getEnabled(Notifications.class)) return;
         Notifications.moduleDisable(client, this);
     }

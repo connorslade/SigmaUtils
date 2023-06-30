@@ -51,7 +51,7 @@ public class CameraDistance extends Module {
     }
 
     @Override
-    public void disable(MinecraftClient client) {
+    public void disable() {
         distanceMod = 0;
     }
 }

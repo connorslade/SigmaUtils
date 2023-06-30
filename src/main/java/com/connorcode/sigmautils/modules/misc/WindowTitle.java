@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.MinecraftClient;
 
 import static com.connorcode.sigmautils.SigmaUtils.VERSION;
 import static com.connorcode.sigmautils.SigmaUtils.client;
@@ -52,14 +51,14 @@ public class WindowTitle extends Module {
     }
 
     @Override
-    public void enable(MinecraftClient client) {
-        super.enable(client);
+    public void enable() {
+        super.enable();
         client.updateWindowTitle();
     }
 
     @Override
-    public void disable(MinecraftClient client) {
-        super.disable(client);
+    public void disable() {
+        super.disable();
         client.updateWindowTitle();
     }
 }
