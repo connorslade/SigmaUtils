@@ -35,8 +35,6 @@ public class EventBus {
                 }
             };
             var handler = new Handler(consumer, annotation.priority());
-            System.out.println(
-                    "Registered handler for " + event.getSimpleName() + " with priority " + annotation.priority());
 
             if (listeners.containsKey(event))
                 listeners.get(event).add(handler);

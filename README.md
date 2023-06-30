@@ -2,7 +2,7 @@
 
 Requires: <kbd>[Minecraft 1.20.1](https://minecraft.fandom.com/wiki/Java_Edition_1.20.1)</kbd> <kbd>[Fabric API](https://modrinth.com/mod/fabric-api/version/0.75.3+1.19.4)</kbd>
 
-SigmaUtils is a utility mod for Minecraft 1.19.4.
+SigmaUtils is a utility mod for Minecraft 1.20.1.
 It is made up of 'modules', which are discrete features that can be toggled and configured.
 By default, SigmaUtils changes nothing about the game, except adding a button to the title screen to open the config
 GUI.

@@ -81,7 +81,5 @@ public class SigmaUtils implements ClientModInitializer {
     }
 }
 
-// TODO: FIx lighting on titles module
-// TODO: Fix random background on singal plauer scrreen, also maybe allowy picking a static image
 // TODO: Item translate module, mode for shields in offhands
 // TODO: camera no clip - disable culling
