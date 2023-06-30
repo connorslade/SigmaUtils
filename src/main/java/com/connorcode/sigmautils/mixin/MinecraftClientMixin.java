@@ -5,7 +5,6 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event._interface.ScreenOpenEvent;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.misc.Tick;
-import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules._interface.SignClickThrough;
 import com.connorcode.sigmautils.modules.misc.NoPause;
 import com.connorcode.sigmautils.modules.misc.WindowTitle;
@@ -81,7 +80,6 @@ public abstract class MinecraftClientMixin {
     void onGameTick(CallbackInfo ci) {
         var event = new Tick.GameTickEvent();
         SigmaUtils.eventBus.post(event);
-        SigmaUtils.modules.values().forEach(Module::tick);
         if (event.isCancelled()) ci.cancel();
     }
 

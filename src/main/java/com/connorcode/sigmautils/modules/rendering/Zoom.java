@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -57,9 +58,8 @@ public class Zoom extends Module {
         event.cancel();
     }
 
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
         tick++;
         if (tick <= 0) {
             tick = 0;

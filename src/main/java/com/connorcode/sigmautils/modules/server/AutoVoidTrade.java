@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -51,10 +52,8 @@ public class AutoVoidTrade extends Module {
                 Category.Server);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
         if (!enabled || waiting < 0 || client.player == null || client.world == null) return;
         if (waiting != 0) {
             waiting--;

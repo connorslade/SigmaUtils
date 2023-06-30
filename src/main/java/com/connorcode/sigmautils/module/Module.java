@@ -4,7 +4,6 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
-import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.modules.meta.Notifications;
@@ -77,13 +76,6 @@ public abstract class Module {
         Config.moduleSettings.get(this.getClass()).add(0, new DummySetting(this.getClass(), "Enable", 20));
         Config.moduleSettings.get(this.getClass()).add(1, keyBind);
         Config.moduleKeybinds.add(keyBind);
-    }
-
-    /**
-     * @deprecated Use {@link Tick.RenderTickCallback} instead.
-     */
-    @Deprecated()
-    public void tick() {
     }
 
     public void enable(MinecraftClient client) {

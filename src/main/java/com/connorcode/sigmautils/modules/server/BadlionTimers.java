@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.network.UnknownPacketEvent;
 import com.connorcode.sigmautils.misc.util.Util;
@@ -61,10 +62,8 @@ public class BadlionTimers extends HudModule {
         }
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
         long now = System.currentTimeMillis();
         if (lastTick + 50 > now) return;
         lastTick = now;

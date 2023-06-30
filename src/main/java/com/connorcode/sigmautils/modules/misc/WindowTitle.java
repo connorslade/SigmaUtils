@@ -2,6 +2,8 @@ package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -43,10 +45,8 @@ public class WindowTitle extends Module {
         return lastTitle;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
         if (System.currentTimeMillis() + refreshPeriod.intValue() >= lastRefresh) return;
         client.updateWindowTitle();
     }

@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
+import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
@@ -39,8 +40,8 @@ public class CameraDistance extends Module {
         event.cancel();
     }
 
-    @Override
-    public void tick() {
+    @EventHandler
+    public void onTick(Tick.GameTickEvent event) {
         if (enabled && scrollZoom.value() && client.options.getPerspective() == Perspective.FIRST_PERSON)
             distanceMod = 0;
     }
