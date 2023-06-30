@@ -79,3 +79,5 @@ public class SigmaUtils implements ClientModInitializer {
 
 // TODO: Item translate module, mode for shields in offhands
 // TODO: camera no clip - disable culling
+// TODO: Show like an actual sign in the AutoSign module config
+// TODO: Entiry selector custom type
