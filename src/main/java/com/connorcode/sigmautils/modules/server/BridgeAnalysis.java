@@ -10,7 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.chunk.PalettedContainer;
 
 import java.util.Arrays;
@@ -70,6 +70,7 @@ public class BridgeAnalysis extends Module {
 //                    download();
 //                    return 1;
 //                }))));
+//        Executors.newFixedThreadPool()
     }
 
     @EventHandler
@@ -97,12 +98,10 @@ public class BridgeAnalysis extends Module {
         var blocks = new HashSet<>();
         var chunks = client.world.getChunkManager().chunks.chunks;
 
-        int valid = 0;
         for (var i = 0; i < chunks.length(); i++) {
             var chunk = chunks.get(i);
             if (chunk == null) continue;
             var sections = chunk.getSectionArray();
-            ++valid;
 
             for (var section : sections) {
                 var blockStates = section.getBlockStateContainer();
@@ -110,15 +109,15 @@ public class BridgeAnalysis extends Module {
             }
         }
 
-        info("Valid Chunks: %d", valid);
         info("Downloaded %d blocks", blocks.size());
     }
 
-    BlockPos computePosition(int index, int edgeBits) {
-        int x = index & (1 << edgeBits) - 1;
-        int z = index >>> edgeBits & (1 << edgeBits) - 1;
-        int y = index >>> edgeBits * 2 & (1 << edgeBits) - 1;
-        return new BlockPos(x, y, z);
+    Vec3i computePosition(int index, int edgeBits) {
+        int mask = (1 << edgeBits) - 1;
+        int x = index & mask;
+        int z = index >>> edgeBits & mask;
+        int y = index >>> edgeBits >>> edgeBits & mask;
+        return new Vec3i(x, y, z);
     }
 
     HashSet<BlockData> dumpSubChunk(PalettedContainer<BlockState> blockStates) {
@@ -151,7 +150,7 @@ public class BridgeAnalysis extends Module {
         int z;
         int id;
 
-        public BlockData(BlockPos pos, Block block) {
+        public BlockData(Vec3i pos, Block block) {
             this.x = pos.getX();
             this.y = pos.getY();
             this.z = pos.getZ();
