@@ -27,7 +27,7 @@ public class PlayerHistory extends Module {
     private static final boolean wasEnabled = false;
 
     public PlayerHistory() {
-        super("player_history", "Player History", "Logs every player you see on servers. Kinda cool. [EXPERIMENTAL]",
+        super("player_history", "Player History", "Logs every player you see on servers. Kinda cool.",
                 Category.Server);
     }
 
