@@ -23,7 +23,7 @@ public class EntityRenderDispatcherMixin {
             ci.cancel();
     }
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", shift = At.Shift.BEFORE), cancellable = true)
     <E extends Entity> void onRender(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         var event =
                 new EntityRender.EntityRenderEvent<>(entity, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);

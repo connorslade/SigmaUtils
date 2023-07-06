@@ -53,12 +53,12 @@ public class BridgeAnalysis extends Module {
             Blocks.RED_WOOL,
             Blocks.YELLOW_WOOL
     };
+    boolean validServer;
 
     public BridgeAnalysis() {
         super("bridge_analysis", "Bridge Analysis",
                 "Downloads the wool bridges from the world after a game of hypixel bedwars.", Category.Server);
     }
-    boolean validServer;
 
     @Override
     public void init() {

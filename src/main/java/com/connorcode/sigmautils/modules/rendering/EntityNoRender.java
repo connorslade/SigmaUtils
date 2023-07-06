@@ -24,6 +24,7 @@ public class EntityNoRender extends Module {
 
     @EventHandler
     <E extends Entity> void onEntityRender(EntityRender.EntityRenderEvent<E> event) {
+        if (!enabled) return;
         var entityType = event.getEntity().getType();
         var inList = entities.value().contains(entityType);
         if (filterType.value() == Util.FilterType.Whitelist == inList)

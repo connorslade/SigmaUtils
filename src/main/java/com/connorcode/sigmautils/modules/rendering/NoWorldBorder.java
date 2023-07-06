@@ -8,3 +8,5 @@ public class NoWorldBorder extends Module {
         super("no_world_border", "No World Border", "Disables rendering the world border", Category.Rendering);
     }
 }
+
+// TODO: Some way to enable if the border shrinks
