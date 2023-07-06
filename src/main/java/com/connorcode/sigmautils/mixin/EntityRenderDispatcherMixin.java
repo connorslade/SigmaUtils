@@ -1,6 +1,8 @@
 package com.connorcode.sigmautils.mixin;
 
+import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.render.EntityRender;
 import com.connorcode.sigmautils.modules.rendering.DisableShadows;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -19,5 +21,13 @@ public class EntityRenderDispatcherMixin {
                                        float opacity, float tickDelta, WorldView world, float radius, CallbackInfo ci) {
         if (Config.getEnabled(DisableShadows.class) && DisableShadows.isDisabled(entity))
             ci.cancel();
+    }
+
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    <E extends Entity> void onRender(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+        var event =
+                new EntityRender.EntityRenderEvent<>(entity, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+        SigmaUtils.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
     }
 }

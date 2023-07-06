@@ -30,7 +30,9 @@ public class Util {
     // == Reflection ==
     public static Object loadNewClass(String classPath) {
         try {
-            return SigmaUtils.class.getClassLoader().loadClass(classPath).getDeclaredConstructor().newInstance();
+            var constructor = SigmaUtils.class.getClassLoader().loadClass(classPath).getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException |
                  NoSuchMethodException e) {
             e.printStackTrace();

@@ -61,6 +61,7 @@
     "rendering.Deadmau5Ears",
     "rendering.DisableShadows",
     "rendering.EntityHighlight",
+    "rendering.EntityNoRender",
     "rendering.FlippedEntities",
     "rendering.FullBright",
     "rendering.NoArmor",

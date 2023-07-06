@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class EventBus {
+    boolean finalized;
     HashMap<Class<? extends Event>, List<Handler>> listeners = new HashMap<>();
 
     public EventBus() {}
@@ -38,13 +39,17 @@ public class EventBus {
 
             if (listeners.containsKey(event))
                 listeners.get(event).add(handler);
-            else listeners.put(event, new ArrayList<>(List.of(handler)));
+            else {
+                listeners.put(event, new ArrayList<>(List.of(handler)));
+                if (finalized) listeners.get(event).add(handler);
+            }
         }
     }
 
     public void _finalize() {
         for (var i : listeners.values())
             i.sort((a, b) -> b.priority.compareTo(a.priority));
+        finalized = true;
     }
 
     public <T extends Event> void post(T event) {

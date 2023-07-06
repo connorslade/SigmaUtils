@@ -58,7 +58,11 @@ public abstract class SimpleList<T> implements DynamicListSetting.ResourceManage
 
     @Override
     public List<T> getAllResources() {
-        return registry.stream().toList();
+        return registry.stream().filter(this::filter).toList();
+    }
+
+    protected boolean filter(T resource) {
+        return true;
     }
 
     @Override
