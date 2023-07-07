@@ -40,7 +40,8 @@ public class FlippedEntities extends Module {
         if (!(filterType.value() == Util.FilterType.Whitelist == inList)) return;
 
         var matrices = event.getMatrices();
-        if (entity instanceof ItemFrameEntity || entity instanceof ItemEntity) matrices.translate(0.0F, 0.5F, 0.0F);
+        if (entity instanceof ItemFrameEntity) matrices.translate(0.0F, 0.5F, 0.0F);
+        else if (entity instanceof ItemEntity) matrices.translate(0.0F, 0.5F, 0.0F);
         else matrices.translate(0.0F, entity.getHeight() + 0.1F, 0.0F);
 
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0F));

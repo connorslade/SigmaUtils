@@ -23,7 +23,7 @@ public class EntityNoRender extends Module {
     }
 
     @EventHandler
-    <E extends Entity> void onEntityRender(EntityRender.EntityRenderEvent<E> event) {
+    <E extends Entity> void onEntityRender(EntityRender.EntityPreRenderEvent<E> event) {
         if (!enabled) return;
         var entityType = event.getEntity().getType();
         var inList = entities.value().contains(entityType);

@@ -1,12 +1,43 @@
 package com.connorcode.sigmautils.event.render;
 
-import com.connorcode.sigmautils.event.Cancellable;
+import com.connorcode.sigmautils.event.CancellableI;
+import com.connorcode.sigmautils.event.Event;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 
 public class EntityRender {
-    public static class EntityRenderEvent<E extends Entity> extends Cancellable {
+    public static class EntityPreRenderEvent<E extends Entity> extends EntityRenderEventI<E> implements CancellableI {
+        boolean cancelled = false;
+
+        public EntityPreRenderEvent(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+            super(entity, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        @Override
+        public void setCancelled(boolean cancelled) {
+            this.cancelled = cancelled;
+        }
+    }
+
+    public static class EntityRenderEvent<E extends Entity> extends EntityRenderEventI<E> {
+        public EntityRenderEvent(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+            super(entity, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+        }
+    }
+
+    public static class EntityPostRenderEvent<E extends Entity> extends EntityRenderEventI<E> {
+        public EntityPostRenderEvent(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+            super(entity, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+        }
+    }
+
+    public static abstract class EntityRenderEventI<E extends Entity> implements Event {
         E entity;
         double x, y, z;
         double yaw;
@@ -15,7 +46,7 @@ public class EntityRender {
         VertexConsumerProvider vertexConsumers;
         int light;
 
-        public EntityRenderEvent(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        public EntityRenderEventI(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
             this.entity = entity;
             this.x = x;
             this.y = y;
