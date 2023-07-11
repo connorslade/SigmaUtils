@@ -22,6 +22,7 @@ public abstract class Module {
     public final String id;
     public final String name;
     public final String description;
+    public final String documentation;
     public final Category category;
     public boolean enabled;
 
@@ -30,6 +31,7 @@ public abstract class Module {
         this.name = name;
         this.description = description;
         this.category = category.assertValid();
+        this.documentation = null;
     }
 
     protected Module(String description, Category category) {
@@ -38,6 +40,7 @@ public abstract class Module {
         this.name = Util.titleString(name);
         this.description = description;
         this.category = category.assertValid();
+        this.documentation = null;
     }
 
     protected Module() {
@@ -50,6 +53,7 @@ public abstract class Module {
         this.description = info.description();
         this.category =
                 info.category() == Category.Unset ? Category.guessCategory(_class).assertValid() : info.category();
+        this.documentation = info.documentation().equals("") ? null : info.documentation();
     }
 
     protected void info(String format, Object... args) {

@@ -11,7 +11,9 @@ public @interface ModuleInfo {
 
     String id() default "";
 
+    Category category() default Category.Unset;
+
     String description();
 
-    Category category() default Category.Unset;
+    String documentation() default "";
 }

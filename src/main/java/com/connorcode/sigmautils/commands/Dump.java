@@ -96,7 +96,10 @@ public class Dump implements Command {
     String getModuleDocs(Module module) {
         var builder = new StringBuilder();
         builder.append("# ").append(module.getClass().getSimpleName()).append("\n\n");
-        builder.append(module.description).append("\n\n");
+        builder.append(module.description)
+                .append("\n")
+                .append(module.documentation == null ? "" : module.documentation)
+                .append("\n\n");
 
         var categories = new HashMap<String, List<Setting<?>>>();
         var settings = 0;
