@@ -12,8 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
 public class EntityNoRender extends Module {
-    static EnumSetting<Util.FilterType> filterType = Util.filterSetting(EntityNoRender.class).build();
-    static DynamicListSetting<EntityType<?>> entities =
+    EnumSetting<Util.FilterType> filterType = Util.filterSetting(EntityNoRender.class).build();
+    DynamicListSetting<EntityType<?>> entities =
             new DynamicListSetting<>(EntityNoRender.class, "Entities", EntityList::new).description(
                             "Entities to disable rendering for. Whitelisting an entities will make it not render.")
                     .build();
@@ -31,5 +31,3 @@ public class EntityNoRender extends Module {
             event.cancel();
     }
 }
-
-// TODO: test if enentiy modules work on non lving eneities
