@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.SelectorSetting;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.registry.Registries;
@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Plays a click sound when a module is en/disabled.")
 public class ToggleSound extends Module {
     private static final SelectorSetting sound =
             new SelectorSetting(ToggleSound.class, "Sound", () -> Registries.SOUND_EVENT.stream()
@@ -31,10 +32,6 @@ public class ToggleSound extends Module {
             new NumberSetting(ToggleSound.class, "disablePitch", 0f, 2f).value(0.7)
                     .description("The pitch of the sound to play when a module is disabled")
                     .build();
-
-    public ToggleSound() {
-        super("toggle_sound", "Toggle Sound", "Plays a click sound when a module is en/disabled.", Category.Meta);
-    }
 
     public static void play(boolean enable) {
         if (!Config.getEnabled(ToggleSound.class)) return;

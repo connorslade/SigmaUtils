@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.modules.hud;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.registry.RegistryKey;
@@ -17,6 +17,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static net.minecraft.world.World.NETHER;
 import static net.minecraft.world.World.OVERWORLD;
 
+@ModuleInfo(description = "Adds a display on your screen showing your current location")
 public class CoordinatesHud extends HudModule {
     private static final NumberSetting precision =
             new NumberSetting(CoordinatesHud.class, "Precision", 0, 5).description(
@@ -33,8 +34,7 @@ public class CoordinatesHud extends HudModule {
                     .build();
 
     public CoordinatesHud() {
-        super("coordinates_hud", "Coordinates Hud", "Adds a display on your screen showing your current location",
-                Category.Hud);
+        super();
         this.defaultTextColor = TextStyle.Color.Yellow;
         this.defaultOrder = 4;
     }

@@ -1,11 +1,12 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.nbt.NbtCompound;
 
+@ModuleInfo(description = "Random interface tweaks.")
 public class UiTweaks extends Module {
     public static boolean muted = false;
     public static BoolSetting audioMuteButton = new BoolSetting(UiTweaks.class, "Audio Mute Button")
@@ -25,11 +26,6 @@ public class UiTweaks extends Module {
             .description("Makes the inventory player model render at full speed")
             .value(true)
             .build();
-
-    public UiTweaks() {
-        super("ui_tweaks", "UI Tweaks", "Random interface tweaks.",
-                Category.Interface);
-    }
 
     public static boolean isMuted() {
         return Config.getEnabled(UiTweaks.class) && audioMuteButton.value() && muted;

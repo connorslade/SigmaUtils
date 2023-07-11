@@ -1,11 +1,7 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 
-public class NoBossBarValue extends Module {
-    public NoBossBarValue() {
-        super("no_boss_bar_value", "No Boss Bar Value", "Removes the boss bar, leaving only the text",
-                Category.Interface);
-    }
-}
+@ModuleInfo(description = "Closes the game when you press ESC on the title screen")
+public class NoBossBarValue extends Module {}

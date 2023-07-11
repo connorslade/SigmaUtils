@@ -1,13 +1,14 @@
 package com.connorcode.sigmautils.modules.rendering;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Allows you to change the seed of the texture rotation hash function")
 public class TextureRotations extends Module {
     static EnumSetting<Mode> mode =
             new EnumSetting<>(TextureRotations.class, "Mode", Mode.class).value(Mode.Consistent)
@@ -21,11 +22,6 @@ public class TextureRotations extends Module {
     BoolSetting autoRefresh = new BoolSetting(TextureRotations.class, "Auto Refresh").value(true)
             .description("Automatically rerender world when module is enabled / disabled.")
             .build();
-
-    public TextureRotations() {
-        super("texture_rotations", "Texture Rotations",
-                "Allows you to change the seed of the texture rotation hash function", Category.Rendering);
-    }
 
     public static long hash(int x, int y, int z) {
         return switch (mode.value()) {

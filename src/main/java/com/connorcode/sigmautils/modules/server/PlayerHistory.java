@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,15 +21,11 @@ import java.util.UUID;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Logs every player you see on servers. Kinda cool.")
 public class PlayerHistory extends Module {
     private static final File playerFile = new File(client.runDirectory, "config/SigmaUtils/players.nbt");
     private static final HashMap<String, HashMap<UUID, SeenPlayer>> seenPlayers = new HashMap<>();
     private static final boolean wasEnabled = false;
-
-    public PlayerHistory() {
-        super("player_history", "Player History", "Logs every player you see on servers. Kinda cool.",
-                Category.Server);
-    }
 
     @Override
     public void init() {

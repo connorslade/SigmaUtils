@@ -1,12 +1,12 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.Interact;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.item.ItemUsageContext;
@@ -27,8 +27,8 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Automatically writes text on signs you place. If you are looking at a sign, it will edit that sign.")
 public class AutoSign extends Module {
-    // TODO: Option to decide if front/back is defined by the sign or by your current position
     EnumSetting<Mode> mode = new EnumSetting<>(AutoSign.class, "Mode", Mode.class)
             .description("If the mode is complete, each side will be written to the sign, even if its empty. " +
                     "If its lazy, only sids with text will be written.")
@@ -43,13 +43,6 @@ public class AutoSign extends Module {
                     .build();
     SignTextSetting signText = new SignTextSetting();
     HashMap<BlockPos, UpdateTask> tasks = new HashMap<>();
-
-    public AutoSign() {
-        super("auto_sign", "Auto Sign",
-                "Automatically writes text on signs you place. " +
-                        "If you are looking at a sign, it will edit that sign.",
-                Category.Misc);
-    }
 
     @EventHandler
     void onInteractBlock(Interact.InteractBlockEvent event) {

@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Downloads the wool bridges from the world after a game of hypixel bedwars.")
 public class BridgeAnalysis extends Module {
     final StringSetting serverRegex =
             new StringSetting(BridgeAnalysis.class, "Server Regex").description(
@@ -54,11 +55,6 @@ public class BridgeAnalysis extends Module {
             Blocks.YELLOW_WOOL
     };
     boolean validServer;
-
-    public BridgeAnalysis() {
-        super("bridge_analysis", "Bridge Analysis",
-                "Downloads the wool bridges from the world after a game of hypixel bedwars.", Category.Server);
-    }
 
     @Override
     public void init() {

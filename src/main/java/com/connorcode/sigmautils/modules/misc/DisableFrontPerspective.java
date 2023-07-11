@@ -1,19 +1,15 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.option.Perspective;
 
+@ModuleInfo(description = "Removes the front perspective from perspective switching")
 public class DisableFrontPerspective extends Module {
     private static final BoolSetting allowFrontPerspective = perspectiveSetting("front", false);
     private static final BoolSetting allowBackPerspective = perspectiveSetting("back", true);
     private static final BoolSetting allowNormalPerspective = perspectiveSetting("normal", true);
-
-    public DisableFrontPerspective() {
-        super("disable_front_perspective", "No Front Perspective",
-                "Removes the front perspective from perspective switching", Category.Misc);
-    }
 
     private static BoolSetting perspectiveSetting(String perspective, boolean _default) {
         return new BoolSetting(DisableFrontPerspective.class, String.format("Allow %s perspective", perspective)).value(

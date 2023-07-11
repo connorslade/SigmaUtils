@@ -1,11 +1,10 @@
 package com.connorcode.sigmautils.modules.chat;
 
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 
-public class NoChatNormalization extends Module {
-    public NoChatNormalization() {
-        super("no_chat_normalization", "No Chat Normalization", "Bypasses the chat message normalization.",
-                Category.Chat);
-    }
-}
+@ModuleInfo(description = "Bypasses the chat message normalization.")
+public class NoChatNormalization extends Module {}
+
+// TODO: Remove this
+// It does nothing sobb

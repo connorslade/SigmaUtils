@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.PacketList;
@@ -7,7 +8,6 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.packet.Packet;
@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 // Warning: When updating versions the packets may change and this won't be automatically updated, causing unexpected behaviour (gasp)
+@ModuleInfo(description = "Cancels the specified packets.")
 public class PacketCanceler extends Module {
     DynamicListSetting<Class<? extends Packet<?>>> clientPackets =
             new DynamicListSetting<>(PacketCanceler.class, "Client Packets",
@@ -26,10 +27,6 @@ public class PacketCanceler extends Module {
     BoolSetting debug = new BoolSetting(PacketCanceler.class, "Debug")
             .description("Prints debug messages when a packet is canceled.")
             .build();
-
-    public PacketCanceler() {
-        super("packet_canceler", "Packet Canceler", "Cancels the specified packets.", Category.Misc);
-    }
 
     static DynamicListSetting.ResourceManager<Class<? extends Packet<?>>> getClientPacketManager(DynamicListSetting<Class<? extends Packet<?>>> setting) {
         return new PacketList(setting, NetworkSide.CLIENTBOUND);

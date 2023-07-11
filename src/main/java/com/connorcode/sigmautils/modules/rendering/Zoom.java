@@ -1,13 +1,13 @@
 package com.connorcode.sigmautils.modules.rendering;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Zoom (Fov multiplier)")
 public class Zoom extends Module {
     public static final BoolSetting scrollZoom = new BoolSetting(Zoom.class, "Scroll Zoom")
             .description("Makes the scroll wheal modify the zoom. (when in zoom mode)").build();
@@ -36,11 +37,6 @@ public class Zoom extends Module {
 //    private final BoolSetting toggle = new BoolSetting(Zoom.class, "Toggle").value(true)
 //            .description("Makes this module toggle on and off rather than when the keybinding is held down.")
 //            .build();
-
-
-    public Zoom() {
-        super("zoom", "Zoom", "Zoom (Fov multiplier)", Category.Rendering);
-    }
 
     public static double getFov(double fov, float tickDelta) {
         boolean enabled = Config.getEnabled(Zoom.class);

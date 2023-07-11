@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Lets you switch to your weapon or wool with a keybind. Future plans to let you select different item types.")
 public class ItemShortcuts extends Module {
     final Item[] swords = new Item[]{
             Items.NETHERITE_SWORD,
@@ -52,12 +53,6 @@ public class ItemShortcuts extends Module {
                     .showTitle(true)
                     .category("Shortcuts")
                     .build();
-
-    public ItemShortcuts() {
-        super("item_shortcuts", "Item Shortcuts",
-                "Lets you switch to your weapon or wool with a keybind. Future plans to let you select different item types.",
-                Category.Server);
-    }
 
     @EventHandler
     public void onTick(Tick.GameTickEvent event) {

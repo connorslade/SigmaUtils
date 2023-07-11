@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules.hud;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -12,9 +12,10 @@ import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Shows all the status effects you have the HUD")
 public class EffectHud extends HudModule {
     public EffectHud() {
-        super("effect_hud", "Effect Hud", "Shows all the status effects you have the HUD", Category.Hud);
+        super();
         this.defaultTextColor = TextStyle.Color.Aqua;
         this.defaultOrder = 5;
     }

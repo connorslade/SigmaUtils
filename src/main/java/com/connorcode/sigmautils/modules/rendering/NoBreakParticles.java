@@ -1,11 +1,7 @@
 package com.connorcode.sigmautils.modules.rendering;
 
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 
-public class NoBreakParticles extends Module {
-    public NoBreakParticles() {
-        super("no_break_particles", "No Break Particles", "Disables rendering block break particles",
-                Category.Rendering);
-    }
-}
+@ModuleInfo(description = "Disables rendering block break particles")
+public class NoBreakParticles extends Module {}

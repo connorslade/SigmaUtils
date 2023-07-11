@@ -1,12 +1,12 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.list.ModuleList;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@ModuleInfo(description = "Shows all enabled modules in the hud")
 public class ModuleHud extends HudModule {
     static EnumSetting<Util.FilterType> filterType = Util.filterSetting(ModuleHud.class)
             .description("Weather the module selector whitelists or blacklists modules.")
@@ -27,7 +28,7 @@ public class ModuleHud extends HudModule {
                     .build();
 
     public ModuleHud() {
-        super("module_hud", "Module Hud", "Shows all enabled modules in the hud", Category.Hud);
+        super();
         this.defaultOrder = 10;
         this.defaultTextColor = TextStyle.Color.White;
     }

@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.modules.hud;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.mixin.InGameHudAccessor;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
@@ -17,6 +17,7 @@ import java.util.*;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "The basic text hud that can be placed in the corners of the window")
 public class Hud extends Module {
     public static List<HudModule> hudModules = new ArrayList<>();
     public static EnumSetting<RealLocation> location =
@@ -28,10 +29,6 @@ public class Hud extends Module {
             .build();
     static BoolSetting background = new BoolSetting(Hud.class, "Background").description(
             "Weather to render a background behind all hud elements.").build();
-
-    public Hud() {
-        super("hud", "Hud", "The basic text hud that can be placed in the corners of the window", Category.Hud);
-    }
 
     public static HashMap<RealLocation, List<String>> makeHudText() {
         HashMap<RealLocation, List<String>> lines = new HashMap<>();

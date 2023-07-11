@@ -1,11 +1,7 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 
-public class PortalInventory extends Module {
-    public PortalInventory() {
-        super("portal_inventory", "Portal Inventory", "Allows you to open your inventory when you are in a portal",
-                Category.Interface);
-    }
-}
+@ModuleInfo(description = "Allows you to open your inventory when you are in a portal")
+public class PortalInventory extends Module {}

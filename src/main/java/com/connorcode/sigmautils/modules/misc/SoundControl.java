@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -26,14 +26,10 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.config.settings.list.SimpleList.selector;
 
-
+@ModuleInfo(description = "Lets you control the volume of every sound event.")
 public class SoundControl extends Module {
     static DynamicListSetting<SoundSettings> soundEvents =
             new DynamicListSetting<>(SoundControl.class, "Sound Events", SoundEventManager::new).build();
-
-    public SoundControl() {
-        super("sound_control", "Sound Control", "Lets you control the volume of every sound event.", Category.Misc);
-    }
 
     public static float getVolumeAdjuster(Identifier id) {
         return soundEvents.value().stream()

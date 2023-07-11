@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.rendering;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
@@ -8,7 +9,6 @@ import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.misc.util.WorldRenderUtils;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.misc.util.EntityUtils.entityPos;
 
+@ModuleInfo(description = "Adds in-game titles to different *things*")
 public class Titles extends Module {
     public static final BoolSetting tamableOwner =
             new BoolSetting(Titles.class, "Tamable Owner")
@@ -73,10 +74,6 @@ public class Titles extends Module {
             new BoolSetting(Titles.class, "Arrow Infinity").category("Titles")
                     .description("Shows if an arrow is infinite. (Not able to be picked up)")
                     .build();
-
-    public Titles() {
-        super("titles", "Titles", "Adds in-game titles to different *things*", Category.Rendering);
-    }
 
     @EventHandler
     void onPostWorldRender(WorldRender.PostWorldRenderEvent event) {

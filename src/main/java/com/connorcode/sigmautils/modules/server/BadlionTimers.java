@@ -1,12 +1,12 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.network.UnknownPacketEvent;
 import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
@@ -18,6 +18,7 @@ import net.minecraft.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+@ModuleInfo(description = "Shows badlion timers in the HUD")
 public class BadlionTimers extends HudModule {
     private static final Identifier BADLION_TIMER = new Identifier("badlion", "timers");
     private static final EnumSetting<Util.TimeFormat> timeFormat =
@@ -29,7 +30,7 @@ public class BadlionTimers extends HudModule {
     private static long lastTick = 0;
 
     public BadlionTimers() {
-        super("badlion_timers", "Badlion Timers", "Shows badlion timers in the HUD", Category.Server);
+        super();
         this.defaultOrder = 9;
     }
 
@@ -56,7 +57,7 @@ public class BadlionTimers extends HudModule {
     }
 
     @EventHandler
-    void onPacketReceive(PacketReceiveEvent packet) {
+    void onPacketReceive_GameJoinS2CPacket(PacketReceiveEvent packet) {
         synchronized (timers) {
             if (packet.get() instanceof GameJoinS2CPacket) timers.clear();
         }

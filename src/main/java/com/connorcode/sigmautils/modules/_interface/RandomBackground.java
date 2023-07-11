@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.SigmaUtils;
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.util.Identifier;
 
@@ -13,18 +13,13 @@ import java.util.Random;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Uses random textures for the background tessellation")
 public class RandomBackground extends Module {
     static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtils.class.getClassLoader().getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines()
             .toList();
     static int assetIndex = -1;
     static int screenHash = -1;
-
-
-    public RandomBackground() {
-        super("random_background", "Random Background", "Uses random textures for the background tessellation",
-                Category.Interface);
-    }
 
     public static Identifier getTexture() {
         int currentScreenHash = Objects.requireNonNull(Objects.requireNonNull(client).currentScreen).hashCode();

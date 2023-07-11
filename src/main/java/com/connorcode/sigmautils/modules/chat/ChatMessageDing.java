@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.chat;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvents;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Plays a sound when you receive a chat message")
 public class ChatMessageDing extends Module {
     private static final BoolSetting alertSystemMessages =
             new BoolSetting(ChatMessageDing.class, "System Messages").value(true)
@@ -22,10 +23,6 @@ public class ChatMessageDing extends Module {
             .build();
 
     // TODO: Self messages
-
-    public ChatMessageDing() {
-        super("chat_message_ding", "Chat Message Ding", "Plays a sound when you receive a chat message", Category.Chat);
-    }
 
     private void playDing() {
         client

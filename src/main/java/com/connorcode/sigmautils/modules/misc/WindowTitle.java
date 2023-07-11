@@ -1,15 +1,16 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 
 import static com.connorcode.sigmautils.SigmaUtils.VERSION;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Changes the window title")
 public class WindowTitle extends Module {
     private static final NumberSetting refreshPeriod =
             new NumberSetting(WindowTitle.class, "Refresh Period", 1, 20).value(20)
@@ -20,10 +21,6 @@ public class WindowTitle extends Module {
             .build();
     private static long lastRefresh = 0;
     private static String lastTitle = "";
-
-    public WindowTitle() {
-        super("window_title", "Window Title", "Changes the window title", Category.Misc);
-    }
 
     public static String getTitle() {
         if (lastRefresh + refreshPeriod.intValue() >= System.currentTimeMillis()) return lastTitle;

@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.rendering;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.SimpleList;
@@ -7,7 +8,6 @@ import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -31,6 +31,7 @@ import java.util.Optional;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Outlines entities through blocks")
 public class EntityHighlight extends Module {
     public static BoolSetting disableF1 = new BoolSetting(EntityHighlight.class, "Disable on F1").value(true)
             .description("Turns off when in F1 mode")
@@ -40,10 +41,6 @@ public class EntityHighlight extends Module {
                     GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
             }).description("Edit which entities are highlighted and what color.").build();
-
-    public EntityHighlight() {
-        super("entity_highlight", "Entity Highlight", "Outlines entities through blocks", Category.Rendering);
-    }
 
     public static boolean isGlowing(Entity entity) {
         return entities.value().stream().anyMatch(glowingEntity -> glowingEntity.type.equals(entity.getType()));

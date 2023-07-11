@@ -1,9 +1,10 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 
+@ModuleInfo(description = "Disables playing all global sounds. (Wither Spawn, End Portal Open, Dragon Death)")
 public class NoGlobalSounds extends Module {
     public static BoolSetting disableWither = new BoolSetting(NoGlobalSounds.class, "Disable Wither").value(true)
             .description("Disables the global wither spawn sound")
@@ -15,11 +16,6 @@ public class NoGlobalSounds extends Module {
             new BoolSetting(NoGlobalSounds.class, "Disable Dragon Death").value(true)
                     .description("Disables the global dragon death sound")
                     .build();
-
-    public NoGlobalSounds() {
-        super("no_global_sounds", "No Global Sounds",
-                "Disables playing all global sounds. (Wither Spawn, End Portal Open, Dragon Death)", Category.Misc);
-    }
 
     public static boolean disabled(int eventId) {
         return switch (eventId) {

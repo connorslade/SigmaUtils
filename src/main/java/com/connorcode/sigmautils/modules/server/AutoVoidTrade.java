@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
@@ -7,7 +8,6 @@ import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.util.InventoryUtils;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Automatically performs void trading.")
 public class AutoVoidTrade extends Module {
     private final NumberSetting tradeIndex =
             new NumberSetting(AutoVoidTrade.class, "Trade Index", 1, 10).value(1)
@@ -53,11 +54,6 @@ public class AutoVoidTrade extends Module {
     VillagerEntity villager;
     boolean setOffer;
     int tradeIn = -1;
-
-    public AutoVoidTrade() {
-        super("auto_void_trade", "Auto Void Trade", "Automatically perform void trading",
-                Category.Server);
-    }
 
     @EventHandler
     private void onWorldClose(GameLifecycle.WorldCloseEvent event) {

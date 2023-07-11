@@ -1,23 +1,20 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.mixin.CustomPayloadC2SPacketAccessor;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 
+@ModuleInfo(description = "Lets you change the brand reported to servers")
 public class BrandChanger extends Module {
     static StringSetting brand = new StringSetting(BrandChanger.class, "brand")
             .value("vanilla")
             .build();
-
-    public BrandChanger() {
-        super("brand_changer", "Brand Changer", "Lets you change the brand reported to servers", Category.Misc);
-    }
 
     @EventHandler
     void onPacketSend(PacketSendEvent packet) {

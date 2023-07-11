@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.SigmaUtils;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,6 +14,7 @@ import net.minecraft.text.Text;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Shows a message in the (C)hat, (A)ction bar or (T)oast for various events.")
 public class Notifications extends Module {
     private static final EnumSetting<Display> display =
             new EnumSetting<>(Notifications.class, "Display", Display.class).description(
@@ -28,11 +29,6 @@ public class Notifications extends Module {
             new BoolSetting(Notifications.class, "Startup").description("Show a notification when Sigma Utils starts.")
                     .value(false)
                     .build();
-
-    public Notifications() {
-        super("notifications", "Notifications",
-                "Shows a message in the (C)hat, (A)ction bar or (T)oast for various events.", Category.Meta);
-    }
 
     public static void moduleEnable(MinecraftClient client, Module module) {
         if (client.player == null || !Notifications.module.value()) return;

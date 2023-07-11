@@ -1,12 +1,12 @@
 package com.connorcode.sigmautils.modules.server;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Automatically mute the game when you finish a game of bedwars on hypixel")
 public class VictoryMute extends Module {
     public static final NumberSetting reduction =
             new NumberSetting(VictoryMute.class, "Reduction", 0, 1).description(
@@ -29,12 +30,6 @@ public class VictoryMute extends Module {
             new StringSetting(VictoryMute.class, "Victory Regex").description("Regex to match victory messages")
                     .value(".*(VICTORY|GAME OVER)!")
                     .build();
-
-    public VictoryMute() {
-        super("victory_mute", "Victory Mute",
-                "Automatically mute the game when you finish a game of bedwars on hypixel",
-                Category.Server);
-    }
 
     @Override
     public void init() {

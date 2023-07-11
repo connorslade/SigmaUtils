@@ -1,13 +1,13 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -15,6 +15,7 @@ import net.minecraft.client.option.Perspective;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Sets how far away the 3rd person camera is")
 public class CameraDistance extends Module {
     public static double distanceMod;
     public static NumberSetting distance =
@@ -22,10 +23,6 @@ public class CameraDistance extends Module {
                     .build();
     public static BoolSetting scrollZoom = new BoolSetting(CameraDistance.class, "Scroll Zoom").description(
             "Makes the scroll wheal modify the distance when in F1 mode.").build();
-
-    public CameraDistance() {
-        super("camera_distance", "CameraDistance", "Sets how far away the 3rd person camera is", Category.Misc);
-    }
 
     public static double getDistance() {
         return distance.value() + Math.signum(distanceMod) * Math.pow(Math.abs(distanceMod), 1.2);

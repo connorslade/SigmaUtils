@@ -1,11 +1,11 @@
 package com.connorcode.sigmautils.modules.hud;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.HudModule;
 import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Shows how long your client has been open for this session")
 public class TimePlayedHud extends HudModule {
     private static final long openTimestamp = System.currentTimeMillis();
     private static final EnumSetting<TimeSince> timeSince =
@@ -29,8 +30,7 @@ public class TimePlayedHud extends HudModule {
     private static long serverJoinTimestamp = System.currentTimeMillis();
 
     public TimePlayedHud() {
-        super("time_played_hud", "Time Played Hud", "Shows how long your client has been open for this session",
-                Category.Hud);
+        super();
         this.defaultTextColor = TextStyle.Color.Blue;
         this.defaultOrder = 8;
     }

@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.MessageScreen;
@@ -11,12 +11,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.text.Text;
 
+@ModuleInfo(description = "Requires you to confirm your server disconnects.")
 public class ConfirmDisconnect extends Module {
-    public ConfirmDisconnect() {
-        super("confirm_disconnect", "Confirm Disconnect", "Requires you to confirm your server disconnects.",
-                Category.Interface);
-    }
-
     public static class ConfirmDisconnectScreen extends Screen {
         public ConfirmDisconnectScreen() {
             super(Text.of("Disconnect?"));

@@ -14,6 +14,10 @@ public abstract class HudModule extends Module {
     protected EnumSetting<TextStyle.Color> textColor;
     protected TextStyle.Color defaultTextColor = TextStyle.Color.Green;
 
+    protected HudModule() {
+        super();
+    }
+
     protected HudModule(String id, String name, String description, Category category) {
         super(id, name, description, category);
     }

@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.meta;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,11 +11,8 @@ import net.minecraft.util.Util;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Opens the folder of this minecraft instance.")
 public class OpenFolder extends Module {
-    public OpenFolder() {
-        super("open_folder", "Open Folder", "Opens the folder of this minecraft instance.", Category.Meta);
-    }
-
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
         ScreenAccessor sa = (ScreenAccessor) screen;
         com.connorcode.sigmautils.misc.util.Util.addChild(screen, new Components.MultiClickButton(x, y, 150, 20,

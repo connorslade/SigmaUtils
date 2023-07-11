@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,14 +11,11 @@ import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
+@ModuleInfo(description = "Sets the scale of gui elements on this screen. [EXPERIMENTAL]")
 public class Scale extends Module {
     public static NumberSetting scale = new NumberSetting(Scale.class, "Scale", 0, 1).description("Scale multiplier")
             .value(1)
             .build();
-
-    public Scale() {
-        super("scale", "Scale", "Sets the scale of gui elements on this screen. [EXPERIMENTAL]", Category.Meta);
-    }
 
     public static float getScale() {
         return Config.getEnabled(Scale.class) ? (float) scale.value() : 1f;
@@ -32,3 +29,5 @@ public class Scale extends Module {
                 130 - padding);
     }
 }
+
+// TODO: Remove?

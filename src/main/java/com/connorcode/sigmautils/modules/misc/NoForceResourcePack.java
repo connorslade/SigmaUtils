@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.misc;
 
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
-import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket;
 import net.minecraft.text.ClickEvent;
@@ -15,14 +15,10 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+@ModuleInfo(description = "Stops servers from requiring you to have an resource pack installed.")
 public class NoForceResourcePack extends Module {
-    public NoForceResourcePack() {
-        super("no_force_resourcepack", "No Force ResourcePack",
-                "Stops servers from requiring you to have an resource pack installed.", Category.Misc);
-    }
-
     @EventHandler
-    void onPacketReceive(PacketReceiveEvent packet) {
+    void onPacketReceive_ResourcePackSendS2CPacket(PacketReceiveEvent packet) {
         if (!(packet.get() instanceof ResourcePackSendS2CPacket resourcePacket) || !enabled) return;
         MutableText text = Text.empty()
                 .append(Text.literal(String.format("This server has a %s resource pack.\n",
