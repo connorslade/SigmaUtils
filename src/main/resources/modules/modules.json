@@ -75,6 +75,7 @@
     "rendering.TextureRotations",
     "rendering.Titles",
     "rendering.Zoom",
+    "server.AutoTradeCycle",
     "server.AutoVoidTrade",
     "server.BadlionTimers",
     "server.BridgeAnalysis",

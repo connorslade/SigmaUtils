@@ -7,11 +7,30 @@ public enum Category {
     Hud("hud"),
     Chat("chat"),
     Meta("meta"),
-    Server("server");
+    Server("server"),
+    Unset("unset");
 
     public final String id;
 
     Category(String id) {
         this.id = id;
+    }
+
+    static Category guessCategory(Class<?> _class) {
+        var path = _class.getPackage().getName().split("\\.");
+        var name = path[path.length - 1];
+        return switch (name) {
+            case "modules" -> Misc;
+            case "hud" -> Hud;
+            case "chat" -> Chat;
+            case "meta" -> Meta;
+            case "server" -> Server;
+            default -> Unset;
+        };
+    }
+
+    Category assertValid() {
+        if (this == Unset) throw new RuntimeException("Category is unset");
+        return this;
     }
 }

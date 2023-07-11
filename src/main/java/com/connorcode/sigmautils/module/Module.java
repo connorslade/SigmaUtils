@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.module;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.ModuleConfigGui;
+import com.connorcode.sigmautils.config.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DummySetting;
 import com.connorcode.sigmautils.config.settings.KeyBindSetting;
 import com.connorcode.sigmautils.misc.Components;
@@ -28,7 +29,7 @@ public abstract class Module {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.category = category.assertValid();
     }
 
     protected Module(String description, Category category) {
@@ -36,7 +37,19 @@ public abstract class Module {
         this.id = Util.toSnakeCase(name);
         this.name = Util.titleString(name);
         this.description = description;
-        this.category = category;
+        this.category = category.assertValid();
+    }
+
+    protected Module() {
+        var _class = getClass();
+        if (!_class.isAnnotationPresent(ModuleInfo.class))
+            throw new RuntimeException(String.format("Class %s is missing ModuleInfo annotation", _class.getName()));
+        var info = _class.getAnnotation(ModuleInfo.class);
+        this.id = info.id().equals("") ? Util.toSnakeCase(_class.getSimpleName()) : info.id();
+        this.name = info.name().equals("") ? Util.titleString(_class.getSimpleName()) : info.name();
+        this.description = info.description();
+        this.category =
+                info.category() == Category.Unset ? Category.guessCategory(_class).assertValid() : info.category();
     }
 
     protected void info(String format, Object... args) {
