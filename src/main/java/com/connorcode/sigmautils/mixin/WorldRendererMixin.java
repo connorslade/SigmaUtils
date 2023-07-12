@@ -2,10 +2,10 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.render.WorldBorderRender;
 import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import com.connorcode.sigmautils.modules.rendering.EntityHighlight;
-import com.connorcode.sigmautils.modules.rendering.NoWorldBorder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -54,8 +54,9 @@ public class WorldRendererMixin {
 
     @Inject(method = "renderWorldBorder", at = @At("HEAD"), cancellable = true)
     void onRenderWorldBorder(Camera camera, CallbackInfo ci) {
-        if (Config.getEnabled(NoWorldBorder.class))
-            ci.cancel();
+        var event = new WorldBorderRender(camera);
+        SigmaUtils.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
