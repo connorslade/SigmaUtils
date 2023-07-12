@@ -12,12 +12,20 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.village.VillagerData;
+import net.minecraft.village.VillagerProfession;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
@@ -41,6 +49,7 @@ public class AutoTradeCycle extends Module {
 
     @Nullable
     VillagerEntity villager;
+    boolean running = true;
 
     @Override
     public void enable() {
@@ -60,10 +69,11 @@ public class AutoTradeCycle extends Module {
     @EventHandler
     void onWorldClose(GameLifecycle.WorldCloseEvent event) {
         villager = null;
+        running = true;
     }
 
     @EventHandler
-    void onPacketReceive(PacketReceiveEvent event) {
+    void onPacketReceive_EntityTrackerUpdateS2CPacket(PacketReceiveEvent event) {
         if (!enabled || !(event.get() instanceof EntityTrackerUpdateS2CPacket trackerUpdate) || villager == null ||
                 trackerUpdate.id() != villager.getId()) return;
 
@@ -71,9 +81,38 @@ public class AutoTradeCycle extends Module {
         if (trackedValues.isEmpty()) return;
         for (var trackedValue : trackedValues) {
             if (trackedValue.id() != 18 || !(trackedValue.value() instanceof VillagerData villagerData)) continue;
-            if (villager.getVillagerData().getProfession() != villagerData.getProfession())
+            if (villager.getVillagerData().getProfession() != villagerData.getProfession()) {
                 info("Profession changed from %s to %s", villager.getVillagerData().getProfession(),
                         villagerData.getProfession());
+                if (villagerData.getProfession() == VillagerProfession.NONE) {
+                    // professionRemove
+                    // TODO: Replace block
+                } else {
+                    var network = Objects.requireNonNull(client.getNetworkHandler());
+                    network.sendPacket(PlayerInteractEntityC2SPacket.interact(villager, false, Hand.MAIN_HAND));
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    void onPacketReceive_SetTradeOffers(PacketReceiveEvent packet) {
+        if (!enabled || client.player == null ||
+                !(packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket)) return;
+
+        var settingEnchantment = Registries.ENCHANTMENT.getId(this.enchantment.value());
+        for (var i : setTradeOffersS2CPacket.getOffers()) {
+            if (i.getSellItem().getItem() != Items.ENCHANTED_BOOK) continue;
+            ;
+            var data = EnchantedBookItem.getEnchantmentNbt(i.getSellItem());
+            for (int j = 0; j < data.size(); j++) {
+                var enchantment = new Identifier(data.getCompound(j).getString("id"));
+                var enchantmentLev = data.getCompound(j).getInt("lvl");
+                info("Enchantment: %s, Level: %s", enchantment, enchantmentLev); // TODO: Break block
+                if (enchantment != settingEnchantment || enchantmentLev < enchantmentLevel.intValue()) continue;
+                info("FOUND ENCHANTMENT");
+                this.disable();
+            }
         }
     }
 
