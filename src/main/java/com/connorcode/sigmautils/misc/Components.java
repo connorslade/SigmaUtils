@@ -135,7 +135,7 @@ public class Components {
         private final TooltipSupplier tooltipSupplier;
         public int click = 0;
 
-        public MultiClickButton(int x, int y, int width, int height, Text message, com.connorcode.sigmautils.misc.Components.MultiClickButton.PressAction onPress, TooltipSupplier tooltipSupplier) {
+        public MultiClickButton(int x, int y, int width, int height, Text message, MultiClickButton.PressAction onPress, TooltipSupplier tooltipSupplier) {
             super(x, y, width, height, message, null, DEFAULT_NARRATION_SUPPLIER);
             this.tooltipSupplier = tooltipSupplier;
             this.onPress = onPress;

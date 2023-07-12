@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 
 public class NumberSetting extends Setting<NumberSetting> {
-    private final double min;
-    private final double max;
+    private double min;
+    private double max;
     private boolean enforceBounds;
     private double value;
     // Number of decimal places to display
@@ -79,6 +79,16 @@ public class NumberSetting extends Setting<NumberSetting> {
 
     public NumberSetting value(double value) {
         this.value = value;
+        return this;
+    }
+
+    public NumberSetting min(double min) {
+        this.min = min;
+        return this;
+    }
+
+    public NumberSetting max(double max) {
+        this.max = max;
         return this;
     }
 
