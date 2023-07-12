@@ -35,7 +35,8 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade. [EXPERIMENTAL]")
+@ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade." +
+        "To use put a few lecterns in your offhand and an axe in your main hand. Enable the module and place the lectern.")
 public class AutoTradeCycle extends Module {
     DynamicSelectorSetting<Enchantment> enchantment =
             new DynamicSelectorSetting<>(AutoTradeCycle.class, "Enchantment", EnchantmentList::new)
