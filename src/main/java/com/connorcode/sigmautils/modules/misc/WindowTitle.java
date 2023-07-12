@@ -1,11 +1,11 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 import static com.connorcode.sigmautils.SigmaUtils.VERSION;
 import static com.connorcode.sigmautils.SigmaUtils.client;

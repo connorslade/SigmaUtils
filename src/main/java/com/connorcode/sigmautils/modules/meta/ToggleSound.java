@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.SelectorSetting;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;

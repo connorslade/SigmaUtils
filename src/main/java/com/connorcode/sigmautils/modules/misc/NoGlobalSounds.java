@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 @ModuleInfo(description = "Disables playing all global sounds. (Wither Spawn, End Portal Open, Dragon Death)")
 public class NoGlobalSounds extends Module {

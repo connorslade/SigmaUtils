@@ -1,6 +1,5 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.PacketList;
@@ -9,6 +8,7 @@ import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;

@@ -1,11 +1,11 @@
 package com.connorcode.sigmautils.modules.server;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicSelectorSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.list.SimpleSelector;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.Registries;
 import org.jetbrains.annotations.Nullable;

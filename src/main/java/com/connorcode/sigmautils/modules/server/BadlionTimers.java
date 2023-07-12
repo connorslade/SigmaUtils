@@ -1,6 +1,5 @@
 package com.connorcode.sigmautils.modules.server;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.Tick;
@@ -8,6 +7,7 @@ import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.network.UnknownPacketEvent;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.HudModule;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;

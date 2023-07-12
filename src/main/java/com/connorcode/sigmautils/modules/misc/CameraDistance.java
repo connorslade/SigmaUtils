@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.modules.misc;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
@@ -9,6 +8,7 @@ import com.connorcode.sigmautils.event._interface.MouseScrollEvent;
 import com.connorcode.sigmautils.event.misc.Tick;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.Perspective;

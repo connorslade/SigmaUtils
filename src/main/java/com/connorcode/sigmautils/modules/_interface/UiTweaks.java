@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.config.Config;
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.nbt.NbtCompound;
 
 @ModuleInfo(description = "Random interface tweaks.")

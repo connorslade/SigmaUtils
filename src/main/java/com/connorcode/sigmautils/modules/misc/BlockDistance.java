@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 @ModuleInfo(description = "Displays the distance to the block you are looking at")
 public class BlockDistance extends Module {

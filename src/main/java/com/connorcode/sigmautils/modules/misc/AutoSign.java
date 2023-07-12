@@ -1,6 +1,5 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
@@ -8,6 +7,7 @@ import com.connorcode.sigmautils.event._interface.Interact;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.SignItem;

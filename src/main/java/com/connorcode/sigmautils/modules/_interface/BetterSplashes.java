@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules._interface;
 
 import com.connorcode.sigmautils.SigmaUtils;
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

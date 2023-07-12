@@ -1,7 +1,6 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.SigmaUtils;
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.list.ModuleList;
@@ -9,6 +8,7 @@ import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 @ModuleInfo(description = "Lets you see the world while it is being loaded in. You can even exit the loading screen with esc.")
 public class SeeThruLoading extends Module {

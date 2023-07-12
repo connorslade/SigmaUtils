@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.hud;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
 import com.connorcode.sigmautils.module.HudModule;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 @ModuleInfo(description = "Shows the current FPS in the HUD")
 public class FpsHud extends HudModule {

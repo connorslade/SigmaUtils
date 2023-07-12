@@ -1,7 +1,5 @@
 package com.connorcode.sigmautils.module;
 
-import com.connorcode.sigmautils.module.Category;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

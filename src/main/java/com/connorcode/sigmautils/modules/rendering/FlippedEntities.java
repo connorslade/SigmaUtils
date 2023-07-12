@@ -1,6 +1,5 @@
 package com.connorcode.sigmautils.modules.rendering;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.list.EntityList;
@@ -8,6 +7,7 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.render.EntityRender;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;

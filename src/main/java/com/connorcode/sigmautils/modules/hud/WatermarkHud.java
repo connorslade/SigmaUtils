@@ -1,9 +1,9 @@
 package com.connorcode.sigmautils.modules.hud;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.HudModule;
+import com.connorcode.sigmautils.module.ModuleInfo;
 
 @ModuleInfo(description = "Adds a \"Sigma Utils\" watermark to the Hud")
 public class WatermarkHud extends HudModule {

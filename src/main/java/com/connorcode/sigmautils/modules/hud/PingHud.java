@@ -1,8 +1,8 @@
 package com.connorcode.sigmautils.modules.hud;
 
-import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.module.HudModule;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.network.PlayerListEntry;
 
 import java.util.Objects;
