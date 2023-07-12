@@ -3,6 +3,8 @@ package com.connorcode.sigmautils.modules.rendering;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.list.SimpleList;
+import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.render.EntityRender;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
@@ -58,6 +60,13 @@ public class EntityHighlight extends Module {
     private static int getColor(int index) {
         var color = TextStyle.Color.values()[index].asHexColor();
         return TextRenderer.tweakTransparency(color);
+    }
+
+    @EventHandler
+    void onEntityHighlightEvent(EntityRender.EntityHighlightEvent event) {
+        if (!isGlowing(event.getEntity()) || (disableF1.value() && client.options.hudHidden)) return;
+        getGlowingColor(event.getEntity()).ifPresent(event::setColor);
+        event.setHasOutline(true);
     }
 
     static class GlowingEntity {

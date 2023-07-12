@@ -37,6 +37,38 @@ public class EntityRender {
         }
     }
 
+    public static class EntityHighlightEvent implements Event {
+        boolean hasOutline;
+        Entity entity;
+        int color;
+
+        public EntityHighlightEvent(Entity entity, boolean hasOutline, int color) {
+            this.entity = entity;
+            this.hasOutline = hasOutline;
+            this.color = color;
+        }
+
+        public Entity getEntity() {
+            return entity;
+        }
+
+        public boolean hasOutline() {
+            return hasOutline;
+        }
+
+        public int getColor() {
+            return color;
+        }
+
+        public void setColor(int color) {
+            this.color = color;
+        }
+
+        public void setHasOutline(boolean hasOutline) {
+            this.hasOutline = hasOutline;
+        }
+    }
+
     public static abstract class EntityRenderEventI<E extends Entity> implements Event {
         E entity;
         double x, y, z;

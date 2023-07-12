@@ -2,10 +2,11 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
+import com.connorcode.sigmautils.event.render.EntityRender;
 import com.connorcode.sigmautils.event.render.WorldBorderRender;
 import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
-import com.connorcode.sigmautils.modules.rendering.EntityHighlight;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -31,7 +32,8 @@ import static net.minecraft.sound.SoundEvents.*;
 
 
 @Mixin(WorldRenderer.class)
-public class WorldRendererMixin {
+public abstract class WorldRendererMixin {
+    int color;
     @Shadow
     @Nullable
     private ClientWorld world;
@@ -73,11 +75,17 @@ public class WorldRendererMixin {
         if (event.isCancelled()) ci.cancel();
     }
 
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;hasOutline(Lnet/minecraft/entity/Entity;)Z"))
+    boolean onHasOutline(MinecraftClient instance, Entity entity) {
+        var event =
+                new EntityRender.EntityHighlightEvent(entity, instance.hasOutline(entity), entity.getTeamColorValue());
+        SigmaUtils.eventBus.post(event);
+        this.color = event.getColor();
+        return event.hasOutline();
+    }
+
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getTeamColorValue()I"))
     int onGetTeamColorValue(Entity instance) {
-        var base = instance.getTeamColorValue();
-        if (!Config.getEnabled(EntityHighlight.class))
-            return base;
-        return EntityHighlight.getGlowingColor(instance).orElse(base);
+        return this.color;
     }
 }
