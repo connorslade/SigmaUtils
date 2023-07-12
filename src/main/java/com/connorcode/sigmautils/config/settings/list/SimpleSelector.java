@@ -66,6 +66,7 @@ public abstract class SimpleSelector<T> implements DynamicSelectorSetting.Resour
 
     @Override
     public NbtElement serialize(T resources) {
+        if (resources == null) return null;
         return NbtString.of(Objects.requireNonNull(registry.getId(resources)).toString());
     }
 
