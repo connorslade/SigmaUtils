@@ -12,7 +12,7 @@ import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Shows all the status effects you have the HUD")
+@ModuleInfo(description = "Shows all the status effects you have in the HUD")
 public class EffectHud extends HudModule {
     public EffectHud() {
         super();

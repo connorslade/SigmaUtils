@@ -7,7 +7,7 @@ import com.connorcode.sigmautils.module.HudModule;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@ModuleInfo(description = "Shows your local time")
+@ModuleInfo(description = "Shows your local time", id = "time_hud")
 public class LocalTimeHud extends HudModule {
     public LocalTimeHud() {
         super();

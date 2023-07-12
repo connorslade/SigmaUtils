@@ -12,7 +12,7 @@ import net.minecraft.registry.Registries;
 
 import java.util.Objects;
 
-@ModuleInfo(description = "Lets you particles from rendering.")
+@ModuleInfo(description = "Lets you disable particles from rendering.")
 public class ParticleControl extends Module {
     static EnumSetting<Util.FilterType> filterType =
             Util.filterSetting(ParticleControl.class)

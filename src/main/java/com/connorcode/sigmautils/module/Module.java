@@ -36,8 +36,8 @@ public abstract class Module {
 
     protected Module(String description, Category category) {
         var name = getClass().getSimpleName();
-        this.id = Util.toSnakeCase(name);
         this.name = Util.titleString(name);
+        this.id = Util.toSnakeCase(this.name);
         this.description = description;
         this.category = category.assertValid();
         this.documentation = null;
@@ -48,7 +48,7 @@ public abstract class Module {
         if (!_class.isAnnotationPresent(ModuleInfo.class))
             throw new RuntimeException(String.format("Class %s is missing ModuleInfo annotation", _class.getName()));
         var info = _class.getAnnotation(ModuleInfo.class);
-        this.id = info.id().equals("") ? Util.toSnakeCase(_class.getSimpleName()) : info.id();
+        this.id = info.id().equals("") ? Util.toSnakeCase(Util.titleString(_class.getSimpleName())) : info.id();
         this.name = info.name().equals("") ? Util.titleString(_class.getSimpleName()) : info.name();
         this.description = info.description();
         this.category =

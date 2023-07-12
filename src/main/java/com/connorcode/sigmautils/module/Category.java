@@ -20,12 +20,26 @@ public enum Category {
         var path = _class.getPackage().getName().split("\\.");
         var name = path[path.length - 1];
         return switch (name) {
-            case "modules" -> Misc;
+            case "_interface" -> Interface;
+            case "rendering" -> Rendering;
+            case "misc" -> Misc;
             case "hud" -> Hud;
             case "chat" -> Chat;
             case "meta" -> Meta;
             case "server" -> Server;
             default -> Unset;
+        };
+    }
+
+    public static Category[] realValues() {
+        return new Category[]{
+                Interface,
+                Rendering,
+                Misc,
+                Hud,
+                Chat,
+                Meta,
+                Server
         };
     }
 

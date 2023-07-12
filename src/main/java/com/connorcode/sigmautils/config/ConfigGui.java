@@ -42,8 +42,8 @@ public class ConfigGui extends Screen {
         int padding = getPadding();
 
         // Draw Module toggles
-        for (int x = 0; x < Category.values().length; x++) {
-            Category category = Category.values()[x];
+        for (int x = 0; x < Category.realValues().length; x++) {
+            Category category = Category.realValues()[x];
             List<Module> categoryModules = SigmaUtils.modules.values().stream()
                     .filter(m -> m.category == category)
                     .sorted(Comparator.comparing(m -> m.name))
@@ -73,8 +73,9 @@ public class ConfigGui extends Screen {
         int padding = getPadding();
         this.renderBackground(drawContext);
 
-        for (int x = 0; x < Category.values().length; x++)
-            drawContext.drawCenteredTextWithShadow(textRenderer, Text.of("§f§n§l" + Category.values()[x].toString()),
+        for (int x = 0; x < Category.realValues().length; x++)
+            drawContext.drawCenteredTextWithShadow(textRenderer,
+                    Text.of("§f§n§l" + Category.realValues()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
 
         super.render(drawContext, mouseX, mouseY, delta);

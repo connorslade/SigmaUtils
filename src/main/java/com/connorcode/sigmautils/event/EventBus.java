@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class EventBus {
+    final HashMap<Class<? extends Event>, List<Handler>> listeners = new HashMap<>();
     boolean finalized;
-    HashMap<Class<? extends Event>, List<Handler>> listeners = new HashMap<>();
 
     public EventBus() {}
 
@@ -37,24 +37,30 @@ public class EventBus {
             };
             var handler = new Handler(consumer, annotation.priority());
 
-            if (listeners.containsKey(event))
-                listeners.get(event).add(handler);
-            else {
-                listeners.put(event, new ArrayList<>(List.of(handler)));
-                if (finalized) listeners.get(event).add(handler);
+            synchronized (listeners) {
+                if (listeners.containsKey(event))
+                    listeners.get(event).add(handler);
+                else {
+                    listeners.put(event, new ArrayList<>(List.of(handler)));
+                    if (finalized) listeners.get(event).add(handler);
+                }
             }
         }
     }
 
     public void _finalize() {
-        for (var i : listeners.values())
-            i.sort((a, b) -> b.priority.compareTo(a.priority));
+        synchronized (listeners) {
+            for (var i : listeners.values())
+                i.sort((a, b) -> b.priority.compareTo(a.priority));
+        }
         finalized = true;
     }
 
     public <T extends Event> void post(T event) {
-        var listeners = this.listeners.get(event.getClass());
-        if (listeners != null) listeners.forEach(handler -> handler.handler.accept(event));
+        synchronized (listeners) {
+            var listeners = this.listeners.get(event.getClass());
+            if (listeners != null) listeners.forEach(handler -> handler.handler.accept(event));
+        }
     }
 
     static class Handler {
