@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
-import com.connorcode.sigmautils.config.ModuleInfo;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.module.Module;

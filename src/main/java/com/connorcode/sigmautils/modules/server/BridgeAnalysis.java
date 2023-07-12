@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules.server;
 
-import com.connorcode.sigmautils.config.ModuleInfo;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.StringSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;

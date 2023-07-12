@@ -1,7 +1,7 @@
 package com.connorcode.sigmautils.modules.meta;
 
 import com.connorcode.sigmautils.SigmaUtils;
-import com.connorcode.sigmautils.config.ModuleInfo;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;

@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules.misc;
 
-import com.connorcode.sigmautils.config.ModuleInfo;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;

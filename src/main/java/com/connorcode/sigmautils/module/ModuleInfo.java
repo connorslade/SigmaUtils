@@ -1,4 +1,4 @@
-package com.connorcode.sigmautils.config;
+package com.connorcode.sigmautils.module;
 
 import com.connorcode.sigmautils.module.Category;
 

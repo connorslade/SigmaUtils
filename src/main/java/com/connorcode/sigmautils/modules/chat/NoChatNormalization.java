@@ -1,6 +1,6 @@
 package com.connorcode.sigmautils.modules.chat;
 
-import com.connorcode.sigmautils.config.ModuleInfo;
+import com.connorcode.sigmautils.module.ModuleInfo;
 import com.connorcode.sigmautils.module.Module;
 
 @ModuleInfo(description = "Bypasses the chat message normalization.")
