@@ -6,7 +6,8 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.nbt.NbtCompound;
 
-@ModuleInfo(description = "Random interface tweaks.")
+@ModuleInfo(description = "Random interface tweaks.",
+        documentation = "Currently has four tweaks: 'Audio Mute Button', 'Valid Session', 'No Realms', and 'Fast Doll'. Audio Mute Button puts a Mute button for the games audio next to the Music & Sounds button in Options. Valid Session put a bit of text on the top right corner of the Multiplayer Server selector that says if your current session is valid or not. No Realms removes the Realms button from the title screen (because who uses Realms). And Fast Doll renders the little inventory player model at full speed, making it look less choppy.")
 public class UiTweaks extends Module {
     public static boolean muted = false;
     public static BoolSetting audioMuteButton = new BoolSetting(UiTweaks.class, "Audio Mute Button")

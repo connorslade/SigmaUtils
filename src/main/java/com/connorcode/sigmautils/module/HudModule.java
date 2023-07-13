@@ -18,10 +18,6 @@ public abstract class HudModule extends Module {
         super();
     }
 
-    protected HudModule(String id, String name, String description, Category category) {
-        super(id, name, description, category);
-    }
-
     public String line() {
         return "";
     }

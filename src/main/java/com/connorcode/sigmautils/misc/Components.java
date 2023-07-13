@@ -40,7 +40,8 @@ public class Components {
             else module.disable();
             sa.invokeClearAndInit();
         }, ((button, matrices, mouseX, mouseY) -> matrices.drawOrderedTooltip(sa.getTextRenderer(), sa.getTextRenderer()
-                .wrapLines(Text.of(module.description), 200), mouseX, mouseY))));
+                        .wrapLines(Text.of(module.description + (module.inDevelopment ? " [EXPERIMENTAL]" : "")), 200), mouseX,
+                mouseY))));
     }
 
     public static void sliderConfig(Screen screen, int x, int y, Module module, NumberSetting setting) {

@@ -7,7 +7,8 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
-@ModuleInfo(description = "Randomly cycles through splash texts")
+@ModuleInfo(description = "Randomly cycles through splash texts at a set interval.",
+        documentation = "Good if using BetterSplashes and you want to see all the splashes.")
 public class SplashRefresh extends Module {
     public static NumberSetting refreshTime = new NumberSetting(SplashRefresh.class, "Refresh Time", 0, 10).precision(2)
             .description("The time in seconds between each refresh of the splash screen.")

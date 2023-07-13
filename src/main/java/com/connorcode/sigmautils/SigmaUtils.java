@@ -80,3 +80,5 @@ public class SigmaUtils implements ClientModInitializer {
 // TODO: Item translate module, mode for shields in offhands
 // TODO: camera no clip - disable culling
 // TODO: Entiry selector custom type
+
+// TODO Document Hid, Meta, and Misc packages

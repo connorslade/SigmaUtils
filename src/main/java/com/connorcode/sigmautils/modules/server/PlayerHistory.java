@@ -21,11 +21,11 @@ import java.util.UUID;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
-@ModuleInfo(description = "Logs every player you see on servers. Kinda cool.")
+@ModuleInfo(description = "Logs every player you see on servers. Kinda cool.",
+        documentation = "Currently there is no way to view the player history, other than using NBT Explorer on the SigmaUtils/players.nbt file. In the future I may add an option for it to change the name color or of players you've seen before, which might be cool on big servers.")
 public class PlayerHistory extends Module {
     private static final File playerFile = new File(client.runDirectory, "config/SigmaUtils/players.nbt");
     private static final HashMap<String, HashMap<UUID, SeenPlayer>> seenPlayers = new HashMap<>();
-    private static final boolean wasEnabled = false;
 
     @Override
     public void init() {

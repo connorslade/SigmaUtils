@@ -23,24 +23,8 @@ public abstract class Module {
     public final String description;
     public final String documentation;
     public final Category category;
+    public final boolean inDevelopment;
     public boolean enabled;
-
-    protected Module(String id, String name, String description, Category category) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.category = category.assertValid();
-        this.documentation = null;
-    }
-
-    protected Module(String description, Category category) {
-        var name = getClass().getSimpleName();
-        this.name = Util.titleString(name);
-        this.id = Util.toSnakeCase(this.name);
-        this.description = description;
-        this.category = category.assertValid();
-        this.documentation = null;
-    }
 
     protected Module() {
         var _class = getClass();
@@ -53,6 +37,7 @@ public abstract class Module {
         this.category =
                 info.category() == Category.Unset ? Category.guessCategory(_class).assertValid() : info.category();
         this.documentation = info.documentation().equals("") ? null : info.documentation();
+        this.inDevelopment = info.inDevelopment();
     }
 
     protected void info(String format, Object... args) {

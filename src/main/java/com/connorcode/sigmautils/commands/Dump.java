@@ -99,6 +99,8 @@ public class Dump implements Command {
     String getModuleDocs(Module module) {
         var builder = new StringBuilder();
         builder.append("# ").append(module.getClass().getSimpleName()).append("\n\n");
+        if (module.inDevelopment)
+            builder.append("**This module is in development** and will not be accessible in SigmaUtils releases.\n\n");
         builder.append(module.description)
                 .append("\n")
                 .append(module.documentation == null ? "" : module.documentation)

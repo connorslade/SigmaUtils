@@ -15,7 +15,8 @@ import java.util.Optional;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Lets you switch to your weapon or wool with a keybind. Future plans to let you select different item types.")
+@ModuleInfo(description = "Lets you switch to your weapon or wool with a keybind. Future plans to let you select different item types.",
+        documentation = "Useful for binging to a mouse button for quick access to your weapon or wool.")
 public class ItemShortcuts extends Module {
     final Item[] swords = new Item[]{
             Items.NETHERITE_SWORD,

@@ -11,7 +11,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.text.Text;
 
-@ModuleInfo(description = "Requires you to confirm your server disconnects.")
+@ModuleInfo(description = "Requires you to confirm your server disconnects.",
+        documentation = "Not really sure what the point of this is, but I made it and I use it.")
 public class ConfirmDisconnect extends Module {
     public static class ConfirmDisconnectScreen extends Screen {
         public ConfirmDisconnectScreen() {

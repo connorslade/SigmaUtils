@@ -13,7 +13,8 @@ import java.util.Random;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Uses random textures for the background tessellation")
+@ModuleInfo(description = "Uses random textures for the background tessellation",
+        documentation = "It will change every time you open a new screen.")
 public class RandomBackground extends Module {
     static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
             SigmaUtils.class.getClassLoader().getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines()

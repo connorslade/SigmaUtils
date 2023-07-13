@@ -39,7 +39,8 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 @ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade. " +
-        "To use put a few workstations in your offhand and the tool to break it in your main hand. Enable the module and place the workstation.")
+        "To use put a few workstations in your offhand and the tool to break it in your main hand. Enable the module and place the workstation.",
+        documentation = "See it in action [here](https://cdn.discordapp.com/attachments/837875259092500493/1128781591708180510/java_MFuVkeZ5mi.mp4)")
 public class AutoTradeCycle extends Module {
     NumberSetting villagerDistance =
             new NumberSetting(AutoVoidTrade.class, "Villager Distance", 0, 15).value(10)

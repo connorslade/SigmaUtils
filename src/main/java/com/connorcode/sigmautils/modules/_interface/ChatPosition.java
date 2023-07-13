@@ -7,7 +7,8 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
-@ModuleInfo(description = "Lets you move the chat panel up")
+@ModuleInfo(description = "Lets you move the chat panel up",
+        documentation = "Useful if you have some HUD elements on the bottom left of the screen.")
 public class ChatPosition extends Module {
     public static NumberSetting yPosition = new NumberSetting(ChatPosition.class, "Y Position", 0, 10).precision(0)
             .description("The number of lines to offset the chat display by")

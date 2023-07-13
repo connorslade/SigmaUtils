@@ -18,7 +18,8 @@ import net.minecraft.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-@ModuleInfo(description = "Shows badlion timers in the HUD")
+@ModuleInfo(description = "Shows badlion timers in the HUD",
+        documentation = "The Badlion client has a feature where a server can define countdown timers that will be displayed on the HUD ([image](https://user-images.githubusercontent.com/50306817/215306367-3b2b640c-898e-401b-8ee2-c97e7879e4c8.png)). This module intercepts the timer packets and renders the timers in the SigmaUtils HUD.")
 public class BadlionTimers extends HudModule {
     private static final Identifier BADLION_TIMER = new Identifier("badlion", "timers");
     private static final EnumSetting<Util.TimeFormat> timeFormat =

@@ -12,7 +12,8 @@ import net.minecraft.sound.SoundEvents;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Plays a sound when you receive a chat message")
+@ModuleInfo(description = "Plays a sound when you receive a chat message",
+        documentation = "Ding!")
 public class ChatMessageDing extends Module {
     private static final BoolSetting alertSystemMessages =
             new BoolSetting(ChatMessageDing.class, "System Messages").value(true)

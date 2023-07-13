@@ -14,4 +14,6 @@ public @interface ModuleInfo {
     String description();
 
     String documentation() default "";
+
+    boolean inDevelopment() default false;
 }

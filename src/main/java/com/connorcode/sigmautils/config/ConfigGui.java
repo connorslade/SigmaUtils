@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -41,10 +42,11 @@ public class ConfigGui extends Screen {
                     .sorted(Comparator.comparing(m -> m.name))
                     .toList();
 
-            for (int y = 0; y < categoryModules.size(); y++) {
-                Module module = categoryModules.get(y);
+            int y = 0;
+            for (var module : categoryModules) {
+                if (module.inDevelopment && !FabricLoader.getInstance().isDevelopmentEnvironment()) continue;
                 int renderX = padding + x * (150 + padding);
-                int renderY = textRenderer.fontHeight + padding * 2 + y * (20 + padding);
+                int renderY = textRenderer.fontHeight + padding * 2 + y++ * (20 + padding);
                 module.drawInterface(client, this, renderX, renderY);
             }
         }

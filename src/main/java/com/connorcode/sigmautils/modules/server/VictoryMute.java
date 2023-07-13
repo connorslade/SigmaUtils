@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
-@ModuleInfo(description = "Automatically mute the game when you finish a game of bedwars on hypixel")
+@ModuleInfo(description = "Automatically mute the game when you finish a game of bedwars on hypixel",
+        documentation = "Kinda a weird module, I know. I made it because when a game of Bedwars on Hypixel it plays a lot of sounds and it gets annoying after a while. You can probably also use this module for other game modes by expanding the Regex.")
 public class VictoryMute extends Module {
     public static final NumberSetting reduction =
             new NumberSetting(VictoryMute.class, "Reduction", 0, 1).description(

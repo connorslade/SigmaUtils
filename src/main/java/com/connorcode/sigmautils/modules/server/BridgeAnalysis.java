@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Downloads the wool bridges from the world after a game of hypixel bedwars.")
+@ModuleInfo(description = "Downloads the wool bridges from the world after a game of hypixel bedwars.", inDevelopment = true)
 public class BridgeAnalysis extends Module {
     final StringSetting serverRegex =
             new StringSetting(BridgeAnalysis.class, "Server Regex").description(
