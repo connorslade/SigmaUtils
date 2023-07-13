@@ -62,4 +62,9 @@ public class ModuleList implements DynamicListSetting.ResourceManager<Class<? ex
     Module getModule(String id) {
         return SigmaUtils.modules.values().stream().filter(m -> m.id.equals(id)).findFirst().orElse(null);
     }
+
+    @Override
+    public String type() {
+        return "Module";
+    }
 }

@@ -14,4 +14,9 @@ public class EntityList extends SimpleList<EntityType<?>> {
     public String getDisplay(EntityType<?> value) {
         return value.getName().getString();
     }
+
+    @Override
+    public String type() {
+        return "Entity";
+    }
 }

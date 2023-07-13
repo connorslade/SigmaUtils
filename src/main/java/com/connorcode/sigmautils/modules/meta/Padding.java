@@ -19,6 +19,11 @@ public class Padding extends Module {
                     .value(2)
                     .build();
 
+    public static int getPadding() {
+        if (!Config.getEnabled(Padding.class)) return 2;
+        return Padding.padding.intValue();
+    }
+
     Text getSliderTitle() {
         return Text.of(String.format("Padding: %d", padding.intValue()));
     }
@@ -46,10 +51,5 @@ public class Padding extends Module {
                         if (enabled) sa.invokeClearAndInit();
                     }
                 });
-    }
-
-    public static int getPadding() {
-        if (!Config.getEnabled(Padding.class)) return 2;
-        return Padding.padding.intValue();
     }
 }

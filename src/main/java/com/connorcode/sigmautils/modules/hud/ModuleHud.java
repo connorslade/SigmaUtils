@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.list.ModuleList;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
@@ -57,9 +58,13 @@ public class ModuleHud extends HudModule {
     }
 
     enum Sort {
+        @DocumentedEnum("Don't sort the module list")
         None,
+        @DocumentedEnum("Sort the module list by name length")
         SmallToLarge,
+        @DocumentedEnum("Sort the module list by name length")
         LargeToSmall,
+        @DocumentedEnum("Sort the module list by alphabetical order")
         Alphabetical
     }
 }

@@ -4,8 +4,8 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.*;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
-import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Category;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -16,7 +16,10 @@ import net.minecraft.text.Text;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import static com.connorcode.sigmautils.SigmaUtils.directory;
@@ -126,14 +129,22 @@ public class Dump implements Command {
 
                 if (j instanceof EnumSetting<?> es) {
                     builder.append("> #### Options\n>\n");
-                    var docs = j instanceof Util.DocumentedEnum doc ? Arrays.stream(doc.getDocs())
-                            .iterator() : Collections.emptyIterator();
-                    for (var k : es.getEnum().getEnumConstants())
+                    for (var k : es.getEnum().getEnumConstants()) {
+                        String docs = "";
+                        try {
+                            var annotation = k.getClass()
+                                    .getField(k.name())
+                                    .getAnnotation(DocumentedEnum.class);
+                            if (annotation != null) docs = annotation.value();
+                        } catch (NoSuchFieldException ignored) {
+                            System.out.println("No docs for " + k.name());
+                        }
                         builder.append("> - ")
                                 .append(k.name())
-                                .append(docs.hasNext() ? " - " : "")
-                                .append(docs.hasNext() ? docs.next() : "")
+                                .append(docs.isEmpty() ? "" : " - ")
+                                .append(docs)
                                 .append("\n");
+                    }
                 }
             }
         }
@@ -148,11 +159,15 @@ public class Dump implements Command {
             return "Double";
         }
         if (setting instanceof BoolSetting) return "Boolean";
-        if (setting instanceof EnumSetting<?> es) return String.format("Enum\\<%s\\>", es.getEnum().getSimpleName());
         if (setting instanceof DummySetting) return "Dummy";
         if (setting instanceof KeyBindSetting) return "Keybinding";
         if (setting instanceof StringSetting) return "String";
-        if (setting instanceof DynamicListSetting<?>) return "List";
+        if (setting instanceof EnumSetting<?> es)
+            return String.format("Enum\\<%s\\>", es.getEnum().getSimpleName());
+        if (setting instanceof DynamicListSetting<?> dls)
+            return String.format("List\\<%s\\>", dls.getManager().type());
+        if (setting instanceof DynamicSelectorSetting<?> dss)
+            return String.format("Selector\\<%s\\>", dss.getManager().type());
         return "Unknown";
     }
 }

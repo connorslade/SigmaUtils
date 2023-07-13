@@ -4,6 +4,7 @@ import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.AsyncRunner;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.Drawable;
@@ -174,8 +175,10 @@ public class Util {
                 .description("Whether to blacklist or whitelist entities.");
     }
 
-    public enum TimeFormat implements DocumentedEnum {
+    public enum TimeFormat {
+        @DocumentedEnum("Hours, minutes, seconds (HH:mm:ss)")
         HMS,
+        @DocumentedEnum("Best time format (e.g. 1 minute, 2 days)")
         BestFit;
 
         public String format(long ms) {
@@ -184,30 +187,12 @@ public class Util {
                 case BestFit -> Util.bestTime(ms);
             };
         }
-
-        @Override
-        public String[] getDocs() {
-            return new String[]{
-                    "Hours, minutes, seconds (HH:mm:ss)",
-                    "Best time format (e.g. 1 minute, 2 days)"
-            };
-        }
     }
 
-    public enum FilterType implements DocumentedEnum {
+    public enum FilterType {
+        @DocumentedEnum("Only elements in the list will be targeted.")
         Blacklist,
-        Whitelist;
-
-        @Override
-        public String[] getDocs() {
-            return new String[]{
-                    "Only elements in the list will be targeted.",
-                    "All elements except those in the list will be targeted."
-            };
-        }
-    }
-
-    public interface DocumentedEnum {
-        String[] getDocs();
+        @DocumentedEnum("All elements except those in the list will be targeted.")
+        Whitelist
     }
 }

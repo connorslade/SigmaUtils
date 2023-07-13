@@ -38,6 +38,10 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
         return this;
     }
 
+    public ResourceManager<K> getManager() {
+        return this.manager;
+    }
+
     public List<K> value() {
         return this.resources;
     }
@@ -120,6 +124,12 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
         // Load the active resources from NBT
         List<T> deserialize(NbtElement nbt);
+
+        // Type of resource to show in documentation
+        default String type() {
+            return "";
+        }
+
     }
 
     public static class ResourceAddScreen<K> extends Components.ScrollableScreen {

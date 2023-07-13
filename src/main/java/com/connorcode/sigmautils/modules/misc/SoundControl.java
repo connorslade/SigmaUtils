@@ -113,6 +113,11 @@ public class SoundControl extends Module {
         public int width() {
             return 400;
         }
+
+        @Override
+        public String type() {
+            return "SoundEvent";
+        }
     }
 
     static class SoundSettings {

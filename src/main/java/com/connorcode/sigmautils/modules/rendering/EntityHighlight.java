@@ -172,5 +172,10 @@ public class EntityHighlight extends Module {
             var list = resourceList.stream().map(n -> new GlowingEntity((NbtCompound) n)).toList();
             return new ArrayList<>(list);
         }
+
+        @Override
+        public String type() {
+            return "Entity";
+        }
     }
 }

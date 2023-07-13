@@ -8,6 +8,7 @@ import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.misc.util.WorldRenderUtils;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.entity.Entity;
@@ -138,8 +139,11 @@ public class Titles extends Module {
     }
 
     public enum TimeFormat {
+        @DocumentedEnum("Ex: 182s")
         Seconds,
+        @DocumentedEnum("Ex: 2 Hours")
         BestFit,
+        @DocumentedEnum("Ex: 3640")
         Ticks;
 
         public String format(int ticks) {

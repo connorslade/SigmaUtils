@@ -10,6 +10,7 @@ import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.render.EntityRender;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.enchantment.Enchantment;
@@ -37,9 +38,22 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-@ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade." +
+@ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade. " +
         "To use put a few workstations in your offhand and the tool to break it in your main hand. Enable the module and place the workstation.")
 public class AutoTradeCycle extends Module {
+    NumberSetting villagerDistance =
+            new NumberSetting(AutoVoidTrade.class, "Villager Distance", 0, 15).value(10)
+                    .description("The distance from the player that the villager must be to be selected")
+                    .precision(0)
+                    .build();
+    EnumSetting<TradeType> tradeType =
+            new EnumSetting<>(AutoTradeCycle.class, "Trade Type", TradeType.class)
+                    .description("The type of trade to look for.")
+                    .value(TradeType.EnchantedBook)
+                    .build();
+    BoolSetting verbose = new BoolSetting(AutoTradeCycle.class, "Verbose")
+            .description("Print extra information to chat.")
+            .build();
     DynamicSelectorSetting<Enchantment> enchantment =
             new DynamicSelectorSetting<>(AutoTradeCycle.class, "Enchantment", EnchantmentList::new)
                     .description("The enchantments that will stop the cycling.")
@@ -61,19 +75,6 @@ public class AutoTradeCycle extends Module {
             .precision(0)
             .category("Item")
             .description("The min amount of the item required.")
-            .build();
-    NumberSetting villagerDistance =
-            new NumberSetting(AutoVoidTrade.class, "Villager Distance", 0, 15).value(10)
-                    .description("The distance from the player that the villager must be to be selected")
-                    .precision(0)
-                    .build();
-    EnumSetting<TradeType> tradeType =
-            new EnumSetting<>(AutoTradeCycle.class, "Trade Type", TradeType.class)
-                    .description("The type of trade to look for.")
-                    .value(TradeType.EnchantedBook)
-                    .build();
-    BoolSetting verbose = new BoolSetting(AutoTradeCycle.class, "Verbose")
-            .description("Print extra information to chat.")
             .build();
     @Nullable
     VillagerEntity villager;
@@ -180,7 +181,9 @@ public class AutoTradeCycle extends Module {
     }
 
     enum TradeType {
+        @DocumentedEnum("Looks for a specific enchantment on an enchanted book.")
         EnchantedBook,
+        @DocumentedEnum("Looks for a specific item type.")
         Item
     }
 
@@ -194,6 +197,11 @@ public class AutoTradeCycle extends Module {
         public String getDisplay(Item resource) {
             if (resource == null) return "None";
             return resource.getName().getString();
+        }
+
+        @Override
+        public String type() {
+            return "Item";
         }
     }
 
@@ -221,6 +229,11 @@ public class AutoTradeCycle extends Module {
                     .max(resource.getMaxLevel())
                     .value(resource.getMaxLevel());
             if (client.currentScreen != null) ((ScreenAccessor) client.currentScreen).invokeClearAndInit();
+        }
+
+        @Override
+        public String type() {
+            return "Enchantment";
         }
     }
 }

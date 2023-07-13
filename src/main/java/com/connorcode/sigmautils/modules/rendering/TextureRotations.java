@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.modules.rendering;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 
@@ -47,7 +48,9 @@ public class TextureRotations extends Module {
     }
 
     enum Mode {
+        @DocumentedEnum("Uses the same rotation for every block")
         Consistent,
+        @DocumentedEnum("Uses a custom seed to generate a random rotation for each block. Default: 42317861")
         Seeded
     }
 }

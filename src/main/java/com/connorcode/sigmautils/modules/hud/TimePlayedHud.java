@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.misc.TextStyle;
 import com.connorcode.sigmautils.misc.util.Util;
+import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
@@ -54,9 +55,13 @@ public class TimePlayedHud extends HudModule {
     }
 
     public enum TimeSince {
+        @DocumentedEnum("The time since the client was opened")
         GameStart,
+        @DocumentedEnum("The time since the current server was joined")
         ServerJoin,
+        @DocumentedEnum("The time since the current world was loaded")
         WorldLoad,
+        @DocumentedEnum("The time since the current world was created (Uses world time)")
         WorldCreate
     }
 }

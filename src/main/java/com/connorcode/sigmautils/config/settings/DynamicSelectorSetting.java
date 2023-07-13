@@ -37,6 +37,10 @@ public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>
         this.manager.onChange(value);
     }
 
+    public ResourceManager<K> getManager() {
+        return this.manager;
+    }
+
     @Override
     protected DynamicSelectorSetting<K> getThis() {
         return this;
@@ -115,6 +119,10 @@ public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>
         @Nullable T deserialize(NbtElement nbt);
 
         default void onChange(@Nullable T resource) {}
+
+        default String type() {
+            return "";
+        }
     }
 
     static class ResourceSelectScreen<K> extends Components.ScrollableScreen {

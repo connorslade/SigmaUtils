@@ -75,4 +75,9 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
             this.packets = NetworkUtils.getPackets(side);
         return packets;
     }
+
+    @Override
+    public String type() {
+        return "Packet";
+    }
 }
