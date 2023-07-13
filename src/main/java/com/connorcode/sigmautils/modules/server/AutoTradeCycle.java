@@ -2,6 +2,7 @@ package com.connorcode.sigmautils.modules.server;
 
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.DynamicSelectorSetting;
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.list.SimpleSelector;
 import com.connorcode.sigmautils.event.EventHandler;
@@ -14,6 +15,7 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -36,27 +38,43 @@ import java.util.Objects;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
 @ModuleInfo(description = "Automatically cycles a villager's trades until you get the desired trade." +
-        "To use put a few lecterns in your offhand and an axe in your main hand. Enable the module and place the lectern.")
+        "To use put a few workstations in your offhand and the tool to break it in your main hand. Enable the module and place the workstation.")
 public class AutoTradeCycle extends Module {
     DynamicSelectorSetting<Enchantment> enchantment =
             new DynamicSelectorSetting<>(AutoTradeCycle.class, "Enchantment", EnchantmentList::new)
                     .description("The enchantments that will stop the cycling.")
+                    .category("Enchantment")
                     .build();
     NumberSetting enchantmentLevel =
             new NumberSetting(AutoTradeCycle.class, "Enchantment Level", 1, 1)
                     .value(1)
                     .precision(0)
-                    .description("The level of the enchantment that will stop the cycling.")
+                    .category("Enchantment")
+                    .description("The min level of the enchantment required.")
                     .build();
+    DynamicSelectorSetting<Item> item = new DynamicSelectorSetting<>(AutoTradeCycle.class, "Item", ItemList::new)
+            .description("The items that will stop the cycling.")
+            .category("Item")
+            .build();
+    NumberSetting itemAmount = new NumberSetting(AutoTradeCycle.class, "Item Amount", 1, 16)
+            .value(1)
+            .precision(0)
+            .category("Item")
+            .description("The min amount of the item required.")
+            .build();
     NumberSetting villagerDistance =
             new NumberSetting(AutoVoidTrade.class, "Villager Distance", 0, 15).value(10)
                     .description("The distance from the player that the villager must be to be selected")
                     .precision(0)
                     .build();
+    EnumSetting<TradeType> tradeType =
+            new EnumSetting<>(AutoTradeCycle.class, "Trade Type", TradeType.class)
+                    .description("The type of trade to look for.")
+                    .value(TradeType.EnchantedBook)
+                    .build();
     BoolSetting verbose = new BoolSetting(AutoTradeCycle.class, "Verbose")
             .description("Print extra information to chat.")
             .build();
-
     @Nullable
     VillagerEntity villager;
 
@@ -110,18 +128,30 @@ public class AutoTradeCycle extends Module {
         if (!enabled || client.player == null ||
                 !(packet.get() instanceof SetTradeOffersS2CPacket setTradeOffersS2CPacket)) return;
 
-        var settingEnchantment = Registries.ENCHANTMENT.getId(this.enchantment.value());
         for (var i : setTradeOffersS2CPacket.getOffers()) {
-            if (i.getSellItem().getItem() != Items.ENCHANTED_BOOK) continue;
-            var data = EnchantedBookItem.getEnchantmentNbt(i.getSellItem());
-            for (int j = 0; j < data.size(); j++) {
-                var enchantment = new Identifier(data.getCompound(j).getString("id"));
-                var enchantmentLev = data.getCompound(j).getInt("lvl");
-                if (verbose.value()) info("%s %s", enchantment, enchantmentLev);
-                if (!enchantment.equals(settingEnchantment) || enchantmentLev < enchantmentLevel.intValue()) continue;
-                info("FOUND ENCHANTMENT");
-                this.disable();
-                return;
+            switch (this.tradeType.value()) {
+                case Item -> {
+                    if (i.getSellItem().getItem() != this.item.value() ||
+                            i.getSellItem().getCount() < this.itemAmount.intValue()) continue;
+                    info("FOUND ITEM");
+                    this.disable();
+                    return;
+                }
+                case EnchantedBook -> {
+                    if (i.getSellItem().getItem() != Items.ENCHANTED_BOOK) continue;
+                    var data = EnchantedBookItem.getEnchantmentNbt(i.getSellItem());
+                    var settingEnchantment = Registries.ENCHANTMENT.getId(this.enchantment.value());
+                    for (int j = 0; j < data.size(); j++) {
+                        var enchantment = new Identifier(data.getCompound(j).getString("id"));
+                        var enchantmentLev = data.getCompound(j).getInt("lvl");
+                        if (verbose.value()) info("%s %s", enchantment, enchantmentLev);
+                        if (!enchantment.equals(settingEnchantment) || enchantmentLev < enchantmentLevel.intValue())
+                            continue;
+                        info("FOUND ENCHANTMENT");
+                        this.disable();
+                        return;
+                    }
+                }
             }
         }
 
@@ -147,6 +177,24 @@ public class AutoTradeCycle extends Module {
     void fail(String format, Object... args) {
         error(format, args);
         this.disable();
+    }
+
+    enum TradeType {
+        EnchantedBook,
+        Item
+    }
+
+    static class ItemList extends SimpleSelector<Item> {
+
+        public ItemList(DynamicSelectorSetting<Item> setting) {
+            super(setting, Registries.ITEM);
+        }
+
+        @Override
+        public String getDisplay(Item resource) {
+            if (resource == null) return "None";
+            return resource.getName().getString();
+        }
     }
 
     class EnchantmentList extends SimpleSelector<Enchantment> {
