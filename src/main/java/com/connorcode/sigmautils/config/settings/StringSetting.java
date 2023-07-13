@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import java.util.Optional;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 
 public class StringSetting extends Setting<StringSetting> {

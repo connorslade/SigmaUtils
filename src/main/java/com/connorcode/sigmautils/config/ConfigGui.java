@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.config;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.Module;
-import com.connorcode.sigmautils.modules.meta.Padding;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -17,6 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
+
 public class ConfigGui extends Screen {
     Screen _super;
 
@@ -27,15 +28,6 @@ public class ConfigGui extends Screen {
     public ConfigGui(Screen screen) {
         this();
         this._super = screen;
-    }
-
-    public static int getPadding() {
-        try {
-            if (!Config.getEnabled(Padding.class)) return 2;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Padding.padding.intValue();
     }
 
     protected void init() {

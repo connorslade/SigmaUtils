@@ -12,7 +12,7 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Shows a message in the (C)hat, (A)ction bar or (T)oast for various events.")
 public class Notifications extends Module {

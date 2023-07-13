@@ -7,7 +7,7 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Forces the weather of the client rendering. (C)lear, (R)ain, (T)hunder")
 public class ForceWeather extends Module {

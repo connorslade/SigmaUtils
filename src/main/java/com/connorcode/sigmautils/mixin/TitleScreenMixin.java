@@ -42,7 +42,8 @@ public class TitleScreenMixin extends Screen {
         var y = screen.getHeight() / 4 + 48 + 24;
         if (UiTweaks.noRealms()) y += 24 * 2 - 20;
         Util.addChild(this,
-                ButtonWidget.builder(Text.of("Σ"), button -> Objects.requireNonNull(client).setScreen(new ConfigGui()))
+                ButtonWidget.builder(Text.of("Σ"),
+                                button -> Objects.requireNonNull(client).setScreen(new ConfigGui(this)))
                         .position(screen.getWidth() / 2 - 100 - 24, y)
                         .size(20, 20)
                         .tooltip(Tooltip.of(Text.of("Sigma Utils")))

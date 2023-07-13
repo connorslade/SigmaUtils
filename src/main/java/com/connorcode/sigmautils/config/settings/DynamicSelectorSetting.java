@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>> {
     ResourceManager<K> manager;

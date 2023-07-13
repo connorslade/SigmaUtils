@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.meta;
 
+import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
@@ -10,8 +11,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 
 @ModuleInfo(description = "Sets the padding of Sigma Utils gui elements")
 public class Padding extends Module {
@@ -47,5 +46,10 @@ public class Padding extends Module {
                         if (enabled) sa.invokeClearAndInit();
                     }
                 });
+    }
+
+    public static int getPadding() {
+        if (!Config.getEnabled(Padding.class)) return 2;
+        return Padding.padding.intValue();
     }
 }

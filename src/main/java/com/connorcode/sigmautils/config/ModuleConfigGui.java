@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 public class ModuleConfigGui extends Screen {
     private final Module module;

@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
 import static com.connorcode.sigmautils.config.settings.list.SimpleList.selector;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Lets you control the volume of every sound event.")
 public class SoundControl extends Module {

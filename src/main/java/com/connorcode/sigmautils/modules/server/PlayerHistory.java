@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Logs every player you see on servers. Kinda cool.")
 public class PlayerHistory extends Module {

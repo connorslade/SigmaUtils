@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 public abstract class SimpleSelector<T> implements DynamicSelectorSetting.ResourceManager<T> {
     protected Registry<T> registry;

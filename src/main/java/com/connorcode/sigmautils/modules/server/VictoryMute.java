@@ -15,7 +15,7 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import java.util.regex.Pattern;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static com.connorcode.sigmautils.config.ConfigGui.getPadding;
+import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Automatically mute the game when you finish a game of bedwars on hypixel")
 public class VictoryMute extends Module {
