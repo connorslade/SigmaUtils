@@ -48,6 +48,7 @@
     "PerspectiveMixin",
     "ProfileKeysMixin",
     "ProgressScreenMixin",
+    "RecipeBookWidgetMixin",
     "RenderTickCounterAccessor",
     "ScreenAccessor",
     "ScreenMixin",

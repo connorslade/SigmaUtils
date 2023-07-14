@@ -10,6 +10,8 @@ import net.minecraft.nbt.NbtCompound;
         documentation = "Currently has four tweaks: 'Audio Mute Button', 'Valid Session', 'No Realms', and 'Fast Doll'. Audio Mute Button puts a Mute button for the games audio next to the Music & Sounds button in Options. Valid Session put a bit of text on the top right corner of the Multiplayer Server selector that says if your current session is valid or not. No Realms removes the Realms button from the title screen (because who uses Realms). And Fast Doll renders the little inventory player model at full speed, making it look less choppy.")
 public class UiTweaks extends Module {
     public static boolean muted = false;
+    public static String craftingBookSearch = "";
+
     public static BoolSetting audioMuteButton = new BoolSetting(UiTweaks.class, "Audio Mute Button")
             .description("Adds a button to pause menu to mute / unmute all audio")
             .value(true)
@@ -25,6 +27,11 @@ public class UiTweaks extends Module {
 
     static BoolSetting fastDoll = new BoolSetting(UiTweaks.class, "Fast Doll")
             .description("Makes the inventory player model render at full speed")
+            .value(true)
+            .build();
+
+    static BoolSetting persistentCraftingBookSearch = new BoolSetting(UiTweaks.class, "Persistent Crafting Book Search")
+            .description("Makes the search bar in the crafting book persistent")
             .value(true)
             .build();
 
@@ -44,16 +51,22 @@ public class UiTweaks extends Module {
         return Config.getEnabled(UiTweaks.class) && fastDoll.value();
     }
 
+    public static boolean persistentCraftingBookSearch() {
+        return Config.getEnabled(UiTweaks.class) && persistentCraftingBookSearch.value();
+    }
+
     @Override
     public void loadConfig(NbtCompound config) {
         super.loadConfig(config);
         muted = config.getBoolean("muted");
+        craftingBookSearch = config.getString("craftingBookSearch");
     }
 
     @Override
     public NbtCompound saveConfig() {
         var nbt = super.saveConfig();
         nbt.putBoolean("muted", muted);
+        nbt.putString("craftingBookSearch", craftingBookSearch);
         return nbt;
     }
 }

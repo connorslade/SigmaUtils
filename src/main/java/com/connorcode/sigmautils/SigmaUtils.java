@@ -75,6 +75,11 @@ public class SigmaUtils implements ClientModInitializer {
         Config.load();
         Notifications.onStartup();
     }
+
+    @EventHandler
+    void onClientStop(GameLifecycle.ClientStoppingEvent event) throws IOException {
+        Config.save();
+    }
 }
 
 // TODO: Item translate module, mode for shields in offhands
