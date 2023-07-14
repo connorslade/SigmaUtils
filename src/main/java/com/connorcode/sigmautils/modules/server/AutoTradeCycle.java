@@ -43,7 +43,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
         documentation = "See it in action [here](https://cdn.discordapp.com/attachments/837875259092500493/1128781591708180510/java_MFuVkeZ5mi.mp4)")
 public class AutoTradeCycle extends Module {
     NumberSetting villagerDistance =
-            new NumberSetting(AutoVoidTrade.class, "Villager Distance", 0, 15).value(10)
+            new NumberSetting(AutoTradeCycle.class, "Villager Distance", 0, 15).value(10)
                     .description("The distance from the player that the villager must be to be selected")
                     .precision(0)
                     .build();
