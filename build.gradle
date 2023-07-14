@@ -8,10 +8,6 @@ group = project.maven_group
 
 repositories {
     maven {
-        name = "CottonMC"
-        url = "https://server.bbkr.space/artifactory/libs-release"
-    }
-    maven {
         name = "ModMenu"
         url "https://maven.terraformersmc.com"
     }
