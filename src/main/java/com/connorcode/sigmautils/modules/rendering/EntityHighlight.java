@@ -64,7 +64,7 @@ public class EntityHighlight extends Module {
 
     @EventHandler
     void onEntityHighlightEvent(EntityRender.EntityHighlightEvent event) {
-        if (!isGlowing(event.getEntity()) || (disableF1.value() && client.options.hudHidden)) return;
+        if (!enabled || !isGlowing(event.getEntity()) || (disableF1.value() && client.options.hudHidden)) return;
         getGlowingColor(event.getEntity()).ifPresent(event::setColor);
         event.setHasOutline(true);
     }

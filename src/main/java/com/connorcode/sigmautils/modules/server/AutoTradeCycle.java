@@ -13,7 +13,10 @@ import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.SoulSpeedEnchantment;
+import net.minecraft.enchantment.SwiftSneakEnchantment;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
@@ -24,6 +27,7 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -54,6 +58,9 @@ public class AutoTradeCycle extends Module {
                     .build();
     BoolSetting verbose = new BoolSetting(AutoTradeCycle.class, "Verbose")
             .description("Print extra information to chat.")
+            .build();
+    BoolSetting alertSound = new BoolSetting(AutoTradeCycle.class, "Alert Sound")
+            .description("Play a sound when the trade is found.")
             .build();
     DynamicSelectorSetting<Enchantment> enchantment =
             new DynamicSelectorSetting<>(AutoTradeCycle.class, "Enchantment", EnchantmentList::new)
@@ -136,7 +143,7 @@ public class AutoTradeCycle extends Module {
                     if (i.getSellItem().getItem() != this.item.value() ||
                             i.getSellItem().getCount() < this.itemAmount.intValue()) continue;
                     info("FOUND ITEM");
-                    this.disable();
+                    onFind();
                     return;
                 }
                 case EnchantedBook -> {
@@ -150,7 +157,7 @@ public class AutoTradeCycle extends Module {
                         if (!enchantment.equals(settingEnchantment) || enchantmentLev < enchantmentLevel.intValue())
                             continue;
                         info("FOUND ENCHANTMENT");
-                        this.disable();
+                        onFind();
                         return;
                     }
                 }
@@ -159,6 +166,7 @@ public class AutoTradeCycle extends Module {
 
         if (!(client.crosshairTarget instanceof BlockHitResult blockHitResult)) fail("No block targeted, disabling.");
         else breakBlock(blockHitResult.getBlockPos());
+        packet.cancel();
     }
 
     @EventHandler(priority = EventHandler.Priority.LOW)
@@ -166,6 +174,12 @@ public class AutoTradeCycle extends Module {
         if (!enabled || event.getEntity() != villager) return;
         event.setHasOutline(true);
         event.setColor(0xFFFF00);
+    }
+
+    void onFind() {
+        this.disable();
+        if (this.alertSound.value())
+            client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_BELL_RESONATE, 1f));
     }
 
     void breakBlock(BlockPos block) {
@@ -210,6 +224,11 @@ public class AutoTradeCycle extends Module {
 
         public EnchantmentList(DynamicSelectorSetting<Enchantment> setting) {
             super(setting, Registries.ENCHANTMENT);
+        }
+
+        @Override
+        protected boolean filter(Enchantment resource) {
+            return !(resource instanceof SwiftSneakEnchantment) && !(resource instanceof SoulSpeedEnchantment);
         }
 
         @Override
