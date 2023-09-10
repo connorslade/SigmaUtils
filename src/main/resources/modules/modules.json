@@ -57,6 +57,7 @@
     "misc.SoundControl",
     "misc.TickSpeed",
     "misc.WindowTitle",
+    "misc.InediblePlantables",
     "rendering.AllowShowBarrier",
     "rendering.Deadmau5Ears",
     "rendering.DisableShadows",
