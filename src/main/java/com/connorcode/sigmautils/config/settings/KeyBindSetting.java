@@ -131,7 +131,7 @@ public class KeyBindSetting extends Setting<KeyBindSetting> {
                 GLFW_KEY_RIGHT_ALT,
                 GLFW_KEY_LEFT_SUPER,
                 GLFW_KEY_RIGHT_SUPER,
-                };
+        };
 
         if (!this.editing) return false;
         if (Arrays.stream(ignored).anyMatch(d -> d == key)) return true;
