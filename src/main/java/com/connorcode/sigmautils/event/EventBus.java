@@ -65,9 +65,9 @@ public class EventBus {
 
     static class Handler {
         Consumer<Object> handler;
-        EventHandler.Priority priority;
+        Priority priority;
 
-        public Handler(Consumer<Object> handler, EventHandler.Priority priority) {
+        public Handler(Consumer<Object> handler, Priority priority) {
             this.handler = handler;
             this.priority = priority;
         }

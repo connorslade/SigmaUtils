@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.config.settings.list.SimpleSelector;
 import com.connorcode.sigmautils.event.EventHandler;
+import com.connorcode.sigmautils.event.Priority;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.render.EntityRender;
@@ -169,7 +170,7 @@ public class AutoTradeCycle extends Module {
         packet.cancel();
     }
 
-    @EventHandler(priority = EventHandler.Priority.LOW)
+    @EventHandler(priority = Priority.LOW)
     void onHighlightEvent(EntityRender.EntityHighlightEvent event) {
         if (!enabled || event.getEntity() != villager) return;
         event.setHasOutline(true);
