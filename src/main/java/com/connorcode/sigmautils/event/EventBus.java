@@ -31,8 +31,11 @@ public class EventBus {
             Consumer<Object> consumer = (arg) -> {
                 try {
                     i.invoke(_class, arg);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    var error = e.getTargetException();
+                    throw new RuntimeException(String.format("Error in event handler %s", i.getName()), error);
                 }
             };
             var handler = new Handler(consumer, annotation.priority());

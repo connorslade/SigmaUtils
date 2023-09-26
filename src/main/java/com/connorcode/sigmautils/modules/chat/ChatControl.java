@@ -5,11 +5,18 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.screen.DisconnectedScreen;
+import net.minecraft.client.gui.screen.MessageScreen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,14 +53,16 @@ public class ChatControl extends Module {
     void handleMessage(UUID sender, String message) {
         var rawCommand = getCommand(message);
         if (rawCommand.isEmpty()) return;
-        var command = rawCommand.get();
-        var rawArgs = command.split(">", 2)[1].trim();
+        var commandPArts = rawCommand.get();
+        var parts = commandPArts.split(" ", 2);
+        var command = parts[0].trim();
+        var rawArgs = parts.length > 1 ? parts[1].trim() : "";
         var args = new CommandArgs(sender, rawArgs);
-        debug("Received command: %s", command);
+        debug("Received command: `%s`", command);
 
-        if (command.equals("kick") && kickCommand.value()) command(this::kickCommand, "kick", args);
-        else if (command.equals("ping") && pingCommand.value()) command(this::pingCommand, "ping", args);
-        else if (command.equals("say") && sayCommand.value()) command(this::sayCommand, "say", args);
+        if (command.equals("kick") && kickCommand.value()) command(Commands::kickCommand, "kick", args);
+        else if (command.equals("ping") && pingCommand.value()) command(Commands::pingCommand, "ping", args);
+        else if (command.equals("say") && sayCommand.value()) command(Commands::sayCommand, "say", args);
         else if (client.player != null) {
             debug("Unknown command: %s", command);
             client.player.networkHandler.sendChatMessage(String.format("Unknown command: %s", command));
@@ -86,33 +95,46 @@ public class ChatControl extends Module {
         info(format, args);
     }
 
-    void pingCommand(CommandArgs args) {
-        if (client.player == null) return;
-        var net = client.player.networkHandler;
-        if (args.args.isEmpty()) net.sendChatMessage("Pong!");
-        else net.sendChatMessage(String.format("Pong! {%s}", args.args));
-    }
-
-    void kickCommand(CommandArgs args) {
-        if (client.player == null) return;
-        var net = client.player.networkHandler;
-        if (args.args.isEmpty())
-            net.onDisconnected(Text.of(String.format("Kicked by %s through SigmaUtils::ChatControl.", args.senderName())));
-        else
-            net.onDisconnected(Text.of(String.format("Kicked by %s through SigmaUtils::ChatControl.\n%s", args.senderName(), args.args)));
-    }
-
-    // ==  COMMANDS ==
-
-    void sayCommand(CommandArgs args) {
-        if (client.player == null) return;
-        var net = client.player.networkHandler;
-        if (args.args.startsWith("/")) net.sendCommand(args.args);
-        else net.sendChatMessage(args.args);
-    }
-
     interface Command {
         void run(CommandArgs args);
+    }
+
+    static class Commands {
+        static void pingCommand(CommandArgs args) {
+            if (client.player == null) return;
+            var net = client.player.networkHandler;
+            if (args.args.isEmpty()) net.sendChatMessage("Pong!");
+            else net.sendChatMessage(String.format("Pong! {%s}", args.args));
+        }
+
+        static void kickCommand(CommandArgs args) {
+            if (client.player == null || client.world == null) return;
+            Objects.requireNonNull(client.getNetworkHandler()).sendChatMessage("Bye!");
+            var title = String.format("Kicked by %s through SigmaUtils::ChatControl", args.senderName());
+
+            boolean singlePlayer = client.isInSingleplayer();
+            boolean realms = client.isConnectedToRealms();
+
+            RenderSystem.recordRenderCall(() -> {
+                client.world.disconnect();
+                if (singlePlayer)
+                    client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
+                else client.disconnect();
+
+                var titleScreen = new TitleScreen();
+                var closeScreen = singlePlayer ?
+                        titleScreen : realms ?
+                        new RealmsMainScreen(titleScreen) : new MultiplayerScreen(titleScreen);
+                client.setScreen(new DisconnectedScreen(closeScreen, Text.of(title), Text.of(args.args)));
+            });
+        }
+
+        static void sayCommand(CommandArgs args) {
+            if (client.player == null) return;
+            var net = client.player.networkHandler;
+            if (args.args.startsWith("/")) net.sendCommand(args.args.substring(1));
+            else net.sendChatMessage(args.args);
+        }
     }
 
     record CommandArgs(@Nullable UUID sender, String args) {
