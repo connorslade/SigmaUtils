@@ -5,6 +5,7 @@ import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.event.EventBus;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
+import com.connorcode.sigmautils.misc.Player;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.modules.meta.Notifications;
@@ -40,6 +41,7 @@ public class SigmaUtils implements ClientModInitializer {
     public void onInitializeClient() {
         logger.info("Starting Sigma Utils v" + VERSION);
         eventBus.register(this);
+        eventBus.register(Player.player);
 
         // Load modules
         JsonObject moduleJsonObject = JsonHelper.deserialize(Util.loadResourceString("modules/modules.json"));

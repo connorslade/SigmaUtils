@@ -11,6 +11,7 @@
     "Run",
     "Save",
     "Task",
-    "Toggle"
+    "Toggle",
+    "PlayerCommand"
   ]
 }

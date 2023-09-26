@@ -34,7 +34,7 @@ public class EventBus {
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {
-                    var error = e.getTargetException();
+                    var error = e.getCause();
                     throw new RuntimeException(String.format("Error in event handler %s", i.getName()), error);
                 }
             };
