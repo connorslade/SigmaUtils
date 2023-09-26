@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -94,6 +95,7 @@ public class Player {
     }
 
     public static class AttackAction extends InteractAction {
+        Direction lastDirection = Direction.UP;
         BlockPos lastBlock;
 
         public AttackAction(InteractTime time) {
@@ -113,20 +115,20 @@ public class Player {
             }
 
             if (client.crosshairTarget instanceof BlockHitResult hit) {
-//                System.out.printf("CrosshairTarget: %s; LastBlock: %s\n", hit.getBlockPos(), lastBlock == null ? null : lastBlock.getBlockPos());
-                if (lastBlock == null || !lastBlock.equals(hit.getBlockPos())) {
-                    client.interactionManager.attackBlock(hit.getBlockPos(), hit.getSide());
+                if (lastBlock == null) {
+                    net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide()));
+                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
+                } else if (!lastBlock.equals(hit.getBlockPos())) {
+//                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock, lastDirection, sequence));
+                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
+                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
                 }
-//                if (lastBlock == null) {
-//                    net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide()));
-//                } else if (!lastBlock.getBlockPos().equals(hit.getBlockPos())) {
-//                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock.getBlockPos(), lastBlock.getSide(), sequence));
-//                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
-//                }
                 lastBlock = hit.getBlockPos();
+                lastDirection = hit.getSide();
             } else if (lastBlock != null) {
-//                net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock.getBlockPos(), lastBlock.getSide()));
+                net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock, lastDirection));
                 lastBlock = null;
+                lastDirection = Direction.UP;
             }
         }
     }
