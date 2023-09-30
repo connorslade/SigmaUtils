@@ -171,12 +171,6 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             }
         }
 
-        @Override
-        public void tick() {
-            // TODO: TEST IF THIS NEEDS TO BE REPLACED
-//            this.searchField.tick();
-        }
-
         private boolean search(K resource, String search) {
             var finalSearch = search.toLowerCase(Locale.ROOT);
             return Arrays.stream(renderer.getSearch(resource)).anyMatch(s -> s.contains(finalSearch));
