@@ -1,10 +1,10 @@
 package com.connorcode.sigmautils.event.network;
 
-import com.connorcode.sigmautils.event.Event;
+import com.connorcode.sigmautils.event.Cancellable;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class UnknownPacketEvent implements Event {
+public class UnknownPacketEvent extends Cancellable {
     public Identifier identifier;
     PacketByteBuf buf;
 
