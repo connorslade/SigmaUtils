@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+
 @ModuleInfo(description = "Downloads the wool bridges from the world after a game of hypixel bedwars.", inDevelopment = true)
 public class BridgeAnalysis extends Module {
     final StringSetting serverRegex =
@@ -80,7 +81,7 @@ public class BridgeAnalysis extends Module {
 
     @EventHandler
     void onPacketReceive_GameJoinS2CPacket(PacketReceiveEvent packet) {
-        if (!(packet.get() instanceof GameJoinS2CPacket)) return;
+        if (!enabled || !(packet.get() instanceof GameJoinS2CPacket)) return;
         var serverInfo = client.getCurrentServerEntry();
         if (serverInfo == null) return;
         var regex = Pattern.compile(serverRegex.value());

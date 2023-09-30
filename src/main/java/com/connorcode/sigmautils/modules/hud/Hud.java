@@ -60,7 +60,7 @@ public class Hud extends Module {
     }
 
     public static void renderHud(DrawContext ctx) {
-        if (client.options.debugEnabled && hideF3.value()) return;
+        if (client.getDebugHud().shouldShowDebugHud() && hideF3.value()) return;
         InGameHudAccessor hudAccessor = (InGameHudAccessor) client.inGameHud;
         int padding = getPadding();
 

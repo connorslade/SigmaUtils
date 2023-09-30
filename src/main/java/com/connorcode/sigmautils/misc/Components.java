@@ -110,8 +110,8 @@ public class Components {
         protected abstract double maxScroll();
 
         @Override
-        public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-            scroll -= amount * (entryHeight + padding);
+        public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+            scroll -= verticalAmount * (entryHeight + padding);
             refreshScrollConstrains();
             this.clearAndInit();
             return true;

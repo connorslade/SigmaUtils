@@ -26,6 +26,7 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.config.settings.list.SimpleList.selector;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
+
 @ModuleInfo(description = "Lets you control the volume of every sound event.")
 public class SoundControl extends Module {
     static DynamicListSetting<SoundSettings> soundEvents =

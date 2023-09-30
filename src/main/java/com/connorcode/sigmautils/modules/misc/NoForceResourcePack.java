@@ -4,7 +4,7 @@ import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
-import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket;
+import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
@@ -29,9 +29,9 @@ public class NoForceResourcePack extends Module {
                         .styled(style -> style.withClickEvent(
                                         new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                                 String.format("/util resourcepack server install \"%s\" \"%s\"",
-                                                        resourcePacket.getURL()
+                                                        resourcePacket.getUrl()
                                                                 .replaceAll("\"", "\\\""),
-                                                        resourcePacket.getSHA1()
+                                                        resourcePacket.getHash()
                                                                 .replaceAll("\"", "\\\""))))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Text.of("Click to install resource pack.")))))
@@ -39,7 +39,7 @@ public class NoForceResourcePack extends Module {
                 .append(Text.literal("[OPEN LINK]")
                         .formatted(Formatting.BOLD, Formatting.BLUE)
                         .styled(style -> style.withClickEvent(new ClickEvent(
-                                        ClickEvent.Action.OPEN_URL, resourcePacket.getURL()))
+                                        ClickEvent.Action.OPEN_URL, resourcePacket.getUrl()))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Text.of("Click to download resource pack.")))));
 

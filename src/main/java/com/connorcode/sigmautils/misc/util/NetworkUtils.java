@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.packet.Packet;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class NetworkUtils {
         Arrays.stream(NetworkState.values())
                 .map(state -> state.packetHandlers.get(side))
                 .filter(Objects::nonNull)
-                .forEach(handler -> packets.putAll(handler.packetIds));
+                .forEach(handler -> packets.putAll(handler.backingHandler.packetIds));
         return packets;
     }
 
@@ -43,6 +44,7 @@ public class NetworkUtils {
         return getPacketName(packet.getName());
     }
 
+    @Nullable
     public static String getPacketName(String bytecodeName) {
         var intermediary = mappingResolver.unmapClassName("intermediary", bytecodeName);
         if (packetNames.isEmpty())
@@ -61,18 +63,17 @@ public class NetworkUtils {
         authStatus = AuthStatus.Waiting;
         lastAuthStatusCheck = System.currentTimeMillis();
 
+        // TODO: Verify that this works
         new Thread(() -> {
             var session = client.getSession();
-            var profile = session.getProfile();
             var token = session.getAccessToken();
             var id = UUID.randomUUID().toString();
 
             // Thank you https://github.com/axieum/authme
             var sessionService = (YggdrasilMinecraftSessionService) client.getSessionService();
             try {
-                sessionService.joinServer(profile, token, id);
-                authStatus = sessionService.hasJoinedServer(profile, id, null)
-                        .isComplete() ? AuthStatus.Online : AuthStatus.Offline;
+                sessionService.joinServer(client.getSession().getUuidOrNull(), token, id);
+                authStatus = sessionService.hasJoinedServer(session.getUsername(), id, null) != null ? AuthStatus.Online : AuthStatus.Offline;
             } catch (AuthenticationException e) {
                 authStatus = AuthStatus.Invalid;
             }

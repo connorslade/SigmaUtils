@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,8 +23,8 @@ public class ClientConnectionMixin {
     }
 
     @Inject(method = "sendImmediately", at = @At("HEAD"), cancellable = true)
-    void onPacketSend(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
-        var event = new PacketSendEvent(packet);
+    void onPacketSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
+        var event = new PacketSendEvent(packet, flush);
         SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }

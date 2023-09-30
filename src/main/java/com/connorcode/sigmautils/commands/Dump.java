@@ -67,6 +67,7 @@ public class Dump implements Command {
                         .append(i.getSimpleName())
                         .append("\n");
             Files.write(dumps.toPath().resolve("packets.txt"), out.toString().getBytes());
+            context.getSource().sendFeedback(Text.of("Dumped packets to " + dumps.toPath().resolve("packets.txt")));
             return 0;
         }
 
@@ -91,6 +92,7 @@ public class Dump implements Command {
 
                 Files.write(file.toPath(), text.toString().getBytes());
             }
+            context.getSource().sendFeedback(Text.of("Dumped docs to " + docs.toPath()));
         }
 
         return 0;

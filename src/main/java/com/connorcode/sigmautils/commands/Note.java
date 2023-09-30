@@ -143,7 +143,7 @@ public class Note implements Command {
 
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            renderBackground(drawContext);
+            renderBackground(drawContext, mouseX, mouseY, delta);
 
             var lines = textRenderer.wrapLines(StringVisitable.plain(note.text), noteWidth);
             var startX = width / 2f - noteWidth / 2f;

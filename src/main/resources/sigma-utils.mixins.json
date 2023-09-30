@@ -21,7 +21,7 @@
     "ClientWorldAccessor",
     "ClientWorldMixin",
     "ClientWorldPropertiesMixin",
-    "CustomPayloadC2SPacketAccessor",
+    "CustomPayloadS2CPacketMixin",
     "Deadmau5FeatureRendererMixin",
     "DeathScreenMixin",
     "DownloadingTerrainScreenMixin",
@@ -62,7 +62,6 @@
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
     "YggdrasilUserApiServiceMixin",
-    "YggdrasilUserAuthenticationAccessor",
     "modmenu.DescriptionListWidgetMixin"
   ],
   "injectors": {
