@@ -9,8 +9,6 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DownloadingTerrainScreen.class)
@@ -25,16 +23,15 @@ public class DownloadingTerrainScreenMixin extends Screen {
         cir.setReturnValue(Config.getEnabled(SeeThruLoading.class));
     }
 
-    // For see_through_loading
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DownloadingTerrainScreen;renderBackgroundTexture(Lnet/minecraft/client/gui/DrawContext;)V"))
-    void onRenderBackground(DownloadingTerrainScreen instance, DrawContext drawContext) {
-        if (!Config.getEnabled(SeeThruLoading.class))
-            this.renderBackgroundTexture(drawContext);
-    }
-
-    @Inject(method = "render", at = @At("HEAD"))
-    void onRender(DrawContext drawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    // TODO: See if this works
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if (Config.getEnabled(SeeThruLoading.class))
-            drawContext.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+            context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+        else this.renderBackground(context, mouseX, mouseY, delta);
+
+        for (var i : this.drawables) {
+            i.render(context, mouseX, mouseY, delta);
+        }
     }
 }

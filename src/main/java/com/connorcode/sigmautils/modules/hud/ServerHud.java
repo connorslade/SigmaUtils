@@ -34,9 +34,10 @@ public class ServerHud extends HudModule {
     public String line() {
         ServerInfo serverEntry = client.getCurrentServerEntry();
 
+        // TODO: Test that client.getCurrentServerEntry().version gets the brand (it almost certainly doesn't)
         return String.format("§r%sServer: §f%s%s", this.getTextColor(),
                 serverEntry == null ? "Integrated Server" : serverEntry.address,
-                (serverType.value() && client.player != null) ? String.format(" %s[%s]", serverTypeStyle.value().code(),
-                        client.player.getServerBrand()) : "");
+                (serverType.value() && client.player != null && client.getCurrentServerEntry() != null) ?
+                        String.format(" %s[%s]", serverTypeStyle.value().code(), client.getCurrentServerEntry().version) : "");
     }
 }

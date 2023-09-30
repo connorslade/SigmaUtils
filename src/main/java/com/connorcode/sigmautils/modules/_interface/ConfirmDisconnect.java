@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules._interface;
 
+import com.connorcode.sigmautils.misc.util.ClientUtils;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.gui.DrawContext;
@@ -25,7 +26,7 @@ public class ConfirmDisconnect extends Module {
                 assert this.client != null;
                 assert this.client.world != null;
                 boolean singlePlayer = client.isInSingleplayer();
-                boolean realms = client.isConnectedToRealms();
+                boolean realms = ClientUtils.isConnectedToRealms();
 
                 client.world.disconnect();
                 if (singlePlayer)

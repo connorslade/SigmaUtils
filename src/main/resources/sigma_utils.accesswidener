@@ -4,7 +4,9 @@ accessWidener   v1  named
 accessible class net/minecraft/client/render/MapRenderer$MapTexture
 accessible method net/minecraft/client/font/TextRenderer tweakTransparency (I)I
 accessible field net/minecraft/network/NetworkState packetHandlers Ljava/util/Map;
-accessible field net/minecraft/network/NetworkState$PacketHandler packetIds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
+accessible class net/minecraft/network/NetworkState$InternalPacketHandler
+accessible field net/minecraft/network/NetworkState$PacketHandler backingHandler Lnet/minecraft/network/NetworkState$InternalPacketHandler;
+accessible field net/minecraft/network/NetworkState$InternalPacketHandler packetIds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible method net/minecraft/entity/Entity getFlag (I)Z
 accessible method net/minecraft/client/gui/screen/option/OptionsScreen createButton (Lnet/minecraft/text/Text;Ljava/util/function/Supplier;)Lnet/minecraft/client/gui/widget/ButtonWidget;
 accessible field net/minecraft/client/world/ClientChunkManager chunks Lnet/minecraft/client/world/ClientChunkManager$ClientChunkMap;
@@ -14,3 +16,4 @@ accessible field net/minecraft/world/chunk/PalettedContainer data Lnet/minecraft
 accessible field net/minecraft/world/chunk/PalettedContainer paletteProvider Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;
 accessible field net/minecraft/world/chunk/PalettedContainer$Data storage Lnet/minecraft/util/collection/PaletteStorage;
 accessible field net/minecraft/world/chunk/PalettedContainer$PaletteProvider edgeBits I
+accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;

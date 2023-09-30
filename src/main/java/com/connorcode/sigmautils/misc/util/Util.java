@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.misc.AsyncRunner;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.PlayerListEntry;
@@ -152,15 +151,22 @@ public class Util {
 
             @Override
             public void start(UUID uuid) {
-                var name = client.getSessionService()
-                        .fillProfileProperties(new GameProfile(uuid, null), false)
-                        .getName();
+                var profile = client.getSessionService().fetchProfile(uuid, false);
+                if (profile == null) {
+                    synchronized (invalidUuids) {
+                        invalidUuids.add(uuid);
+                    }
+                    return;
+                }
+
+                var name = profile.profile().getName();
                 if (name == null) {
                     synchronized (invalidUuids) {
                         invalidUuids.add(uuid);
                     }
                     return;
                 }
+
                 synchronized (uuidCache) {
                     uuidCache.put(uuid, name);
                 }

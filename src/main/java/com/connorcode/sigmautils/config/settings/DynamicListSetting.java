@@ -173,7 +173,8 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
         @Override
         public void tick() {
-            this.searchField.tick();
+            // TODO: TEST IF THIS NEEDS TO BE REPLACED
+//            this.searchField.tick();
         }
 
         private boolean search(K resource, String search) {
@@ -188,7 +189,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            renderBackground(drawContext);
+            renderBackground(drawContext, mouseX, mouseY, delta);
             super.render(drawContext, mouseX, mouseY, delta);
             this.searchField.render(drawContext, mouseX, mouseY, delta);
         }
@@ -267,7 +268,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            renderBackground(drawContext);
+            renderBackground(drawContext, mouseX, mouseY, delta);
             super.render(drawContext, mouseX, mouseY, delta);
         }
 

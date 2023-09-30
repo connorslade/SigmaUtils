@@ -38,7 +38,9 @@ public class BadlionTimers extends HudModule {
     @EventHandler
     void onUnknownPacket(UnknownPacketEvent unknownPacket) {
         if (!enabled || !unknownPacket.getIdentifier().equals(BADLION_TIMER)) return;
-        Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
+        // TODO: Fix this
+//        Pair<Action, JsonObject> packet = decodePacket(unknownPacket.get().getData());
+        Pair<Action, JsonObject> packet = new Pair<>(Action.REMOVE_ALL_TIMERS, new JsonObject());
 
         synchronized (timers) {
             switch (packet.getLeft()) {

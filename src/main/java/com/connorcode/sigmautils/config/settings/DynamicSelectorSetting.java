@@ -19,6 +19,7 @@ import java.util.*;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
+
 public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>> {
     ResourceManager<K> manager;
     K value;
@@ -166,7 +167,8 @@ public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>
 
         @Override
         public void tick() {
-            this.searchField.tick();
+            // TODO: SEE IF THIS NEEDS TO BE REPLACED
+//            this.searchField.tick();
         }
 
         private boolean search(K resource, String search) {
@@ -181,7 +183,7 @@ public class DynamicSelectorSetting<K> extends Setting<DynamicSelectorSetting<K>
 
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            renderBackground(drawContext);
+            renderBackground(drawContext, mouseX, mouseY, delta);
             super.render(drawContext, mouseX, mouseY, delta);
             this.searchField.render(drawContext, mouseX, mouseY, delta);
         }

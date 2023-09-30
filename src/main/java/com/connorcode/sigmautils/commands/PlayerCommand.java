@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 
+
 public class PlayerCommand implements Command {
     @Override
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {

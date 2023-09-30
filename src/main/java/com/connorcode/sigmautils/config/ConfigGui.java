@@ -65,7 +65,7 @@ public class ConfigGui extends Screen {
 
     public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
         int padding = getPadding();
-        this.renderBackground(drawContext);
+        this.renderBackground(drawContext, mouseX, mouseY, delta);
 
         for (int x = 0; x < Category.realValues().length; x++)
             drawContext.drawCenteredTextWithShadow(textRenderer,

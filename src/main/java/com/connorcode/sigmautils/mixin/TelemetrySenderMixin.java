@@ -2,8 +2,8 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules.misc.NoTelemetry;
-import net.minecraft.client.util.telemetry.TelemetryManager;
-import net.minecraft.client.util.telemetry.TelemetrySender;
+import net.minecraft.client.session.telemetry.TelemetryManager;
+import net.minecraft.client.session.telemetry.TelemetrySender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

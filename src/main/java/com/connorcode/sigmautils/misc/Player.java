@@ -95,7 +95,6 @@ public class Player {
     }
 
     public static class AttackAction extends InteractAction {
-        Direction lastDirection = Direction.UP;
         BlockPos lastBlock;
 
         public AttackAction(InteractTime time) {
@@ -115,20 +114,14 @@ public class Player {
             }
 
             if (client.crosshairTarget instanceof BlockHitResult hit) {
-                if (lastBlock == null) {
-                    net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide()));
-                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
-                } else if (!lastBlock.equals(hit.getBlockPos())) {
-//                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock, lastDirection, sequence));
-                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
+                if (lastBlock == null || !lastBlock.equals(hit.getBlockPos())) {
+                    sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide()));
                     sequenced(sequence -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, hit.getBlockPos(), hit.getSide(), sequence));
                 }
                 lastBlock = hit.getBlockPos();
-                lastDirection = hit.getSide();
             } else if (lastBlock != null) {
-                net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock, lastDirection));
+                net.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, lastBlock, Direction.UP));
                 lastBlock = null;
-                lastDirection = Direction.UP;
             }
         }
     }

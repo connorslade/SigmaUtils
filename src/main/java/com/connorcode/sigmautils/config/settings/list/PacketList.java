@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.config.settings.list;
 
+
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;

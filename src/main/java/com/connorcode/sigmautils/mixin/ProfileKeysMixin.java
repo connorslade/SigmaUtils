@@ -2,7 +2,7 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules.chat.NoChatSignatures;
-import net.minecraft.client.util.ProfileKeysImpl;
+import net.minecraft.client.session.ProfileKeysImpl;
 import net.minecraft.network.encryption.Signer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

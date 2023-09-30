@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.rendering;
 
+
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;

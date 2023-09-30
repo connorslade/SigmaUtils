@@ -3,6 +3,7 @@ package com.connorcode.sigmautils.modules.chat;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
+import com.connorcode.sigmautils.misc.util.ClientUtils;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
+
 
 @ModuleInfo(description = "Allows other players to control your client over game chat.", inDevelopment = true)
 public class ChatControl extends Module {
@@ -113,7 +115,7 @@ public class ChatControl extends Module {
             var title = String.format("Kicked by %s through SigmaUtils::ChatControl", args.senderName());
 
             boolean singlePlayer = client.isInSingleplayer();
-            boolean realms = client.isConnectedToRealms();
+            boolean realms = ClientUtils.isConnectedToRealms();
 
             RenderSystem.recordRenderCall(() -> {
                 client.world.disconnect();

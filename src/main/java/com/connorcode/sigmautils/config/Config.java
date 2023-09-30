@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.*;
 
+
 public class Config {
     public static final File configFile = new File(directory.toFile(), "config.nbt");
     static final KeyBinding configKeybinding = KeyBindingHelper.registerKeyBinding(

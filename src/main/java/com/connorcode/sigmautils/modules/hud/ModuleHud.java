@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.hud;
 
+
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;

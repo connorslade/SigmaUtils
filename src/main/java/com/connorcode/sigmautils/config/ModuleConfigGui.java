@@ -85,7 +85,7 @@ public class ModuleConfigGui extends Screen {
         Setting.RenderData renderData = new Setting.RenderData(this, drawContext, mouseX, mouseY, delta);
         int padding = getPadding();
 
-        this.renderBackground(drawContext);
+        this.renderBackground(drawContext, mouseX, mouseY, delta);
         super.render(drawContext, mouseX, mouseY, delta);
 
         int x = -75 + 20 + padding;

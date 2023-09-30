@@ -6,9 +6,7 @@ import com.connorcode.sigmautils.event.network.PacketSendEvent;
 import com.connorcode.sigmautils.mixin.CustomPayloadC2SPacketAccessor;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
-import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
+import net.minecraft.network.packet.c2s.common.CustomPayloadC2SPacket;
 
 @ModuleInfo(description = "Lets you change the brand reported to servers")
 public class BrandChanger extends Module {
@@ -20,6 +18,7 @@ public class BrandChanger extends Module {
     void onPacketSend(PacketSendEvent packet) {
         if (!(packet.get() instanceof CustomPayloadC2SPacket) || !enabled) return;
         CustomPayloadC2SPacketAccessor payloadPacket = (CustomPayloadC2SPacketAccessor) packet.get();
-        payloadPacket.setData(new PacketByteBuf(Unpooled.buffer()).writeString(brand.value()));
+        // TODO: Fix this
+//        payloadPacket.setData(new PacketByteBuf(Unpooled.buffer()).writeString(brand.value()));
     }
 }
