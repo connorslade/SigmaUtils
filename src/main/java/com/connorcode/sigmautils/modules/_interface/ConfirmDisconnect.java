@@ -53,7 +53,7 @@ public class ConfirmDisconnect extends Module {
             drawContext.drawText(client.textRenderer, text.asOrderedText(),
                     this.width / 2 - textRenderer.getWidth(text) / 2,
                     this.height / 4 - 20 - textRenderer.fontHeight / 2, 16777215, false);
-            super.render(drawContext, mouseX, mouseY, delta);
+            for (var i : this.drawables) i.render(drawContext, mouseX, mouseY, delta);
         }
     }
 }

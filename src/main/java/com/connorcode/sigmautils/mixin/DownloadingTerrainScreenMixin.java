@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DownloadingTerrainScreen.class)
@@ -17,21 +18,19 @@ public class DownloadingTerrainScreenMixin extends Screen {
         super(title);
     }
 
-    // For see_through_loading
     @Inject(method = "shouldCloseOnEsc", at = @At("HEAD"), cancellable = true)
     void ohShouldCloseOnEsc(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(Config.getEnabled(SeeThruLoading.class));
     }
 
-    // TODO: See if this works
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (Config.getEnabled(SeeThruLoading.class))
-            context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-        else this.renderBackground(context, mouseX, mouseY, delta);
-
-        for (var i : this.drawables) {
-            i.render(context, mouseX, mouseY, delta);
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
+    public void render(Screen instance, DrawContext context, int mouseX, int mouseY, float delta) {
+        if (!Config.getEnabled(SeeThruLoading.class)) {
+            this.render(context, mouseX, mouseY, delta);
+            return;
         }
+
+        context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+        for (var i : this.drawables) i.render(context, mouseX, mouseY, delta);
     }
 }

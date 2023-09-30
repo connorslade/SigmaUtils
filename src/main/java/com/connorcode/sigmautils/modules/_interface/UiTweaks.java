@@ -30,6 +30,10 @@ public class UiTweaks extends Module {
             .value(true)
             .build();
 
+    static BoolSetting unMaskedDoll = new BoolSetting(UiTweaks.class, "Unmasked Doll")
+            .description("Makes the inventory player model render without masking it into the little box. This is the behavior before 1.20.2.")
+            .build();
+
     static BoolSetting persistentCraftingBookSearch = new BoolSetting(UiTweaks.class, "Persistent Crafting Book Search")
             .description("Makes the search bar in the crafting book persistent")
             .value(true)
@@ -49,6 +53,10 @@ public class UiTweaks extends Module {
 
     public static boolean fastDoll() {
         return Config.getEnabled(UiTweaks.class) && fastDoll.value();
+    }
+
+    public static boolean unMaskedDoll() {
+        return Config.getEnabled(UiTweaks.class) && unMaskedDoll.value();
     }
 
     public static boolean persistentCraftingBookSearch() {

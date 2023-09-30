@@ -18,6 +18,7 @@ import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -98,18 +99,18 @@ public abstract class InGameHudMixin {
         matrices.pop();
     }
 
+    @Unique
     int getHotbarPos() {
         return Config.getEnabled(HotbarPosition.class) ? HotbarPosition.yPosition.intValue() : 0;
     }
 
     // Modified from https://github.com/yurisuika/Raise
-    // TODO: FIX
-//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V"), index = 2)
-//    private int modifyHotbar(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 1), index = 6)
+    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
+    private int modifyHotbar(int value) {
+        return value - getHotbarPos();
+    }
+
+//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V", ordinal = 1), index = 2)
 //    private int modifySelectorHeight(int value) {
 //        return value + 2;
 //    }
@@ -124,10 +125,15 @@ public abstract class InGameHudMixin {
         return value - getHotbarPos();
     }
 
-//    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V"), index = 2)
-//    private int modifyExperienceBar(int value) {
-//        return value - getHotbarPos();
-//    }
+    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
+    private int modifyExperienceBarBackground(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIIIIIII)V"), index = 6)
+    private int modifyExperienceBar(int value) {
+        return value - getHotbarPos();
+    }
 
     @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"), index = 3)
     private int modifyXpText(int value) {

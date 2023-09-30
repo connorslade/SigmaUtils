@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.packet.Packet;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class NetworkUtils {
         return getPacketName(packet.getName());
     }
 
+    @Nullable
     public static String getPacketName(String bytecodeName) {
         var intermediary = mappingResolver.unmapClassName("intermediary", bytecodeName);
         if (packetNames.isEmpty())

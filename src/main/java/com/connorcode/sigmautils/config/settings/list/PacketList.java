@@ -12,6 +12,7 @@ import net.minecraft.network.packet.Packet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PacketList implements DynamicListSetting.ResourceManager<Class<? extends Packet<?>>> {
     DynamicListSetting<Class<? extends Packet<?>>> setting;
@@ -35,7 +36,7 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
 
     @Override
     public String getDisplay(Class<? extends Packet<?>> resource) {
-        return NetworkUtils.getPacketName(resource);
+        return Optional.ofNullable(NetworkUtils.getPacketName(resource)).orElse(resource.getName());
     }
 
     @Override
