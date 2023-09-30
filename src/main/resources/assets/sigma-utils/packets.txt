@@ -1,4 +1,6 @@
 # Generated with `/util dump packets` (only works in dev builds)
+net.minecraft.class_8590 AcknowledgeChunksC2SPacket
+net.minecraft.class_8591 AcknowledgeReconfigurationC2SPacket
 net.minecraft.class_2859 AdvancementTabC2SPacket
 net.minecraft.class_2779 AdvancementUpdateS2CPacket
 net.minecraft.class_2620 BlockBreakingProgressS2CPacket
@@ -18,16 +20,19 @@ net.minecraft.class_2672 ChunkDataS2CPacket
 net.minecraft.class_2637 ChunkDeltaUpdateS2CPacket
 net.minecraft.class_4273 ChunkLoadDistanceS2CPacket
 net.minecraft.class_4282 ChunkRenderDistanceCenterS2CPacket
+net.minecraft.class_8738 ChunkSentS2CPacket
 net.minecraft.class_5888 ClearTitleS2CPacket
 net.minecraft.class_2813 ClickSlotC2SPacket
 net.minecraft.class_2848 ClientCommandC2SPacket
-net.minecraft.class_2803 ClientSettingsC2SPacket
+net.minecraft.class_2803 ClientOptionsC2SPacket
 net.minecraft.class_2799 ClientStatusC2SPacket
 net.minecraft.class_2815 CloseHandledScreenC2SPacket
 net.minecraft.class_2645 CloseScreenS2CPacket
 net.minecraft.class_7472 CommandExecutionC2SPacket
 net.minecraft.class_2639 CommandSuggestionsS2CPacket
 net.minecraft.class_2641 CommandTreeS2CPacket
+net.minecraft.class_6373 CommonPingS2CPacket
+net.minecraft.class_6374 CommonPongC2SPacket
 net.minecraft.class_2656 CooldownUpdateS2CPacket
 net.minecraft.class_2695 CraftFailedResponseS2CPacket
 net.minecraft.class_2840 CraftRequestC2SPacket
@@ -38,8 +43,11 @@ net.minecraft.class_8043 DamageTiltS2CPacket
 net.minecraft.class_5892 DeathMessageS2CPacket
 net.minecraft.class_2632 DifficultyS2CPacket
 net.minecraft.class_2661 DisconnectS2CPacket
+net.minecraft.class_8734 DynamicRegistriesS2CPacket
 net.minecraft.class_5890 EndCombatS2CPacket
 net.minecraft.class_5891 EnterCombatS2CPacket
+net.minecraft.class_8593 EnterConfigurationC2SPacket
+net.minecraft.class_8588 EnterReconfigurationS2CPacket
 net.minecraft.class_2716 EntitiesDestroyS2CPacket
 net.minecraft.class_2616 EntityAnimationS2CPacket
 net.minecraft.class_2740 EntityAttachS2CPacket
@@ -92,8 +100,7 @@ net.minecraft.class_3895 OpenWrittenBookS2CPacket
 net.minecraft.class_5894 OverlayMessageS2CPacket
 net.minecraft.class_2675 ParticleS2CPacket
 net.minecraft.class_2838 PickFromInventoryC2SPacket
-net.minecraft.class_6373 PlayPingS2CPacket
-net.minecraft.class_6374 PlayPongC2SPacket
+net.minecraft.class_2923 PingResultS2CPacket
 net.minecraft.class_2765 PlaySoundFromEntityS2CPacket
 net.minecraft.class_2767 PlaySoundS2CPacket
 net.minecraft.class_2696 PlayerAbilitiesS2CPacket
@@ -110,15 +117,15 @@ net.minecraft.class_7828 PlayerRemoveS2CPacket
 net.minecraft.class_2724 PlayerRespawnS2CPacket
 net.minecraft.class_7861 PlayerSessionC2SPacket
 net.minecraft.class_2759 PlayerSpawnPositionS2CPacket
-net.minecraft.class_2613 PlayerSpawnS2CPacket
 net.minecraft.class_2828$class_2829 PositionAndOnGround
 net.minecraft.class_7827 ProfilelessChatMessageS2CPacket
 net.minecraft.class_2795 QueryBlockNbtC2SPacket
 net.minecraft.class_2822 QueryEntityNbtC2SPacket
 net.minecraft.class_2935 QueryPingC2SPacket
-net.minecraft.class_2923 QueryPongS2CPacket
 net.minecraft.class_2937 QueryRequestC2SPacket
 net.minecraft.class_2924 QueryResponseS2CPacket
+net.minecraft.class_8736 ReadyC2SPacket
+net.minecraft.class_8733 ReadyS2CPacket
 net.minecraft.class_2853 RecipeBookDataC2SPacket
 net.minecraft.class_5427 RecipeCategoryOptionsC2SPacket
 net.minecraft.class_2718 RemoveEntityStatusEffectS2CPacket
@@ -142,6 +149,7 @@ net.minecraft.class_3943 SetTradeOffersS2CPacket
 net.minecraft.class_2693 SignEditorOpenS2CPacket
 net.minecraft.class_6682 SimulationDistanceS2CPacket
 net.minecraft.class_2884 SpectatorTeleportC2SPacket
+net.minecraft.class_8739 StartChunkSendS2CPacket
 net.minecraft.class_2617 StatisticsS2CPacket
 net.minecraft.class_2770 StopSoundS2CPacket
 net.minecraft.class_5903 SubtitleS2CPacket
