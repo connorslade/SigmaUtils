@@ -49,8 +49,10 @@ public class Player {
 
     @EventHandler
     private void onPacketSend_PacketSendEvent(PacketSendEvent event) {
-        if (event.get() instanceof PlayerActionC2SPacket packet)
-            Objects.requireNonNull(client.player).sendMessage(Text.of(String.format("Action: %s [%d]", packet.getAction(), packet.getSequence())), false);
+        if (event.get() instanceof PlayerActionC2SPacket packet && debug)
+            Objects.requireNonNull(client.player)
+                    .sendMessage(Text.of(String.format("Action: %s [%d]", packet.getAction(), packet.getSequence())),
+                                 false);
     }
 
     public void addAction(Action action) {

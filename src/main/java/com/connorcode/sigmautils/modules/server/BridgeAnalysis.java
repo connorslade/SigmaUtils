@@ -81,7 +81,7 @@ public class BridgeAnalysis extends Module {
 
     @EventHandler
     void onPacketReceive_GameJoinS2CPacket(PacketReceiveEvent packet) {
-        if (!(packet.get() instanceof GameJoinS2CPacket)) return;
+        if (!enabled || !(packet.get() instanceof GameJoinS2CPacket)) return;
         var serverInfo = client.getCurrentServerEntry();
         if (serverInfo == null) return;
         var regex = Pattern.compile(serverRegex.value());

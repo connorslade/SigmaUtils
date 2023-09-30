@@ -1,19 +1,21 @@
 package com.connorcode.sigmautils.event.network;
 
-import com.connorcode.sigmautils.event.Cancellable;
-import net.minecraft.network.packet.CustomPayload;
+import com.connorcode.sigmautils.event.Event;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class UnknownPacketEvent extends Cancellable {
+public class UnknownPacketEvent implements Event {
     public Identifier identifier;
+    PacketByteBuf buf;
 
-    public UnknownPacketEvent(CustomPayload payload) {
-        this.identifier = payload.id();
+    public UnknownPacketEvent(PacketByteBuf buf, Identifier identifier) {
+        this.buf = buf;
+        this.identifier = identifier;
     }
 
-//    public CustomPayloadS2CPacket get() {
-//        return packet;
-//    }
+    public PacketByteBuf get() {
+        return buf;
+    }
 
     public Identifier getIdentifier() {
         return identifier;

@@ -32,8 +32,15 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         if (!UiTweaks.unMaskedDoll()) instance.enableScissor(x1, y1, x2, y2);
     }
 
+    @Redirect(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIIIFFFLnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;disableScissor()V"))
+    private static void onDisableScissor(DrawContext instance) {
+        if (!UiTweaks.unMaskedDoll()) instance.disableScissor();
+    }
+
     @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void onDrawEntity(DrawContext context, float x, float y, int size, Vector3f vector3f, Quaternionf quaternionf, Quaternionf quaternionf2, LivingEntity entity, CallbackInfo ci, EntityRenderDispatcher entityRenderDispatcher) {
+    private static void onDrawEntity(DrawContext context, float x, float y, int size, Vector3f vector3f,
+                                     Quaternionf quaternionf, Quaternionf quaternionf2, LivingEntity entity,
+                                     CallbackInfo ci, EntityRenderDispatcher entityRenderDispatcher) {
         if (!UiTweaks.fastDoll()) return;
         var ca = ((MinecraftClientAccessor) SigmaUtils.client);
         var tickDelta = SigmaUtils.client.isPaused() ? ca.getPausedTickDelta() : ca.getRenderTickCounter().tickDelta;
