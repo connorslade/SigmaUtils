@@ -105,22 +105,33 @@ public class BridgeAnalysis extends Module {
         assert client.world != null;
 
         var blocks = new HashSet<BlockData>();
-        var chunks = client.world.getChunkManager().chunks.chunks;
+        var chunkManager = client.world.getChunkManager();
+        var chunks = chunkManager.chunks.chunks;
 
-        for (var i = 0; i < chunks.length(); i++) {
-            var chunk = chunks.get(i);
-            if (chunk == null) continue;
-            var sections = chunk.getSectionArray();
+        var radius = chunkManager.chunks.radius + 1;
+        var centerChunkX = chunkManager.chunks.centerChunkX;
+        var centerChunkZ = chunkManager.chunks.centerChunkZ;
 
-            for (int y = 0; y < sections.length; y++) {
-                var realY = chunk.sectionIndexToCoord(y);
-                var section = sections[y];
-                if (section == null) continue;
-                var blockStates = section.getBlockStateContainer();
-                dumpHorizontalChunkSlice(blockStates, blocks, realY);
+        var complete = 0;
+        for (int x = centerChunkX - radius; x < centerChunkX + radius; x++) {
+            for (int z = centerChunkZ - radius; z < centerChunkZ + radius; z++) {
+                if (!chunkManager.chunks.isInRadius(x, z)) continue;
+
+                var index = chunkManager.chunks.getIndex(x, z);
+                var chunk = chunks.get(index);
+                if (chunk == null) continue;
+
+                var sections = chunk.getSectionArray();
+                for (int y = 0; y < sections.length; y++) {
+                    var realY = chunk.sectionIndexToCoord(y);
+                    var section = sections[y];
+                    if (section == null) continue;
+                    var blockStates = section.getBlockStateContainer();
+                    dumpHorizontalChunkSlice(blockStates, blocks, x, realY, z);
+                }
+
+                info("Chunk %d/%d (%.2f%%)", ++complete, chunks.length(), (float) complete / chunks.length() * 100);
             }
-
-            info("Chunk %d/%d (%.2f%%)", i, chunks.length(), (float) i / chunks.length() * 100);
         }
 
         info("Downloaded %d blocks", blocks.size());
@@ -149,11 +160,11 @@ public class BridgeAnalysis extends Module {
         int mask = (1 << edgeBits) - 1;
         int x = index & mask;
         int z = index >>> edgeBits & mask;
-        int y = index >>> edgeBits >>> edgeBits & mask;
+        int y = index >>> edgeBits * 2 & mask;
         return new Vec3i(x, y, z);
     }
 
-    void dumpHorizontalChunkSlice(PalettedContainer<BlockState> blockStates, HashSet<BlockData> blocks, int y) {
+    void dumpHorizontalChunkSlice(PalettedContainer<BlockState> blockStates, HashSet<BlockData> blocks, int x, int y, int z) {
         var edgeBits = blockStates.paletteProvider.edgeBits;
 
         blockStates.data.storage.forEach((value -> {
@@ -162,9 +173,9 @@ public class BridgeAnalysis extends Module {
             var rawWool = Arrays.stream(wool).filter(e -> e == block).findFirst();
             if (rawWool.isEmpty()) return;
 
-            var pos = computePosition(value, edgeBits);
-            pos = pos.add(0, y, 0);
-            blocks.add(new BlockData(pos, block));
+            var chunkPos = computePosition(value, edgeBits);
+            var pos = new Vec3i(x, y, z).multiply(16).add(0, 0, 8);
+            blocks.add(new BlockData(pos.add(chunkPos), block));
         }));
     }
 

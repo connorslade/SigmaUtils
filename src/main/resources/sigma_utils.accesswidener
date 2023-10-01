@@ -17,3 +17,11 @@ accessible field net/minecraft/world/chunk/PalettedContainer paletteProvider Lne
 accessible field net/minecraft/world/chunk/PalettedContainer$Data storage Lnet/minecraft/util/collection/PaletteStorage;
 accessible field net/minecraft/world/chunk/PalettedContainer$PaletteProvider edgeBits I
 accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
+
+## BridgeAnalisys ##
+accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap diameter I
+accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap radius I
+accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap centerChunkX I
+accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap centerChunkZ I
+accessible method net/minecraft/client/world/ClientChunkManager$ClientChunkMap isInRadius (II)Z
+accessible method net/minecraft/client/world/ClientChunkManager$ClientChunkMap getIndex (II)I
