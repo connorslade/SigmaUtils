@@ -7,7 +7,13 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.nbt.NbtCompound;
 
 @ModuleInfo(description = "Random interface tweaks.",
-        documentation = "Currently has four tweaks: 'Audio Mute Button', 'Valid Session', 'No Realms', and 'Fast Doll'. Audio Mute Button puts a Mute button for the games audio next to the Music & Sounds button in Options. Valid Session put a bit of text on the top right corner of the Multiplayer Server selector that says if your current session is valid or not. No Realms removes the Realms button from the title screen (because who uses Realms). And Fast Doll renders the little inventory player model at full speed, making it look less choppy.")
+        documentation = "Currently has six tweaks: 'Audio Mute Button', 'Valid Session', 'No Realms', 'Fast Doll', 'Unmasked Doll', and 'Persistent Crafting Book Search'." +
+                        "Audio Mute Button puts a Mute button for the games audio next to the Music & Sounds button in Options." +
+                        "Valid Session put a bit of text on the top right corner of the Multiplayer Server selector that says if your current session is valid or not." +
+                        "No Realms removes the Realms button from the title screen (because who uses Realms)." +
+                        "And Fast Doll renders the little inventory player model at full speed, making it look less choppy." +
+                        "Unmasked Doll makes the inventory player model render without masking it into the little box, this is the behavior from before 1.20.2." +
+                        "Persistent Crafting Book Search makes the search bar in the crafting book persistent, so you don't have to keep typing in your search every time you open the book.")
 public class UiTweaks extends Module {
     public static boolean muted = false;
     public static String craftingBookSearch = "";

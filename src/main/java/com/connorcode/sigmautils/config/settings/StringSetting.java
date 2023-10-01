@@ -98,6 +98,7 @@ public class StringSetting extends Setting<StringSetting> {
 
         TextFieldWidget textField = new TextFieldWidget(client.textRenderer, x,
                 y + (showName ? client.textRenderer.fontHeight + padding * 2 : 0), width, 20, Text.empty());
+        textField.setMaxLength(Integer.MAX_VALUE);
         textField.setChangedListener(value -> {
             Optional<String> text = callback.callback(value);
             text.ifPresent(s -> StringSetting.this.value = s);
