@@ -28,8 +28,8 @@ public class Components {
         //        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addChild(screen, new MultiClickButton(x, y, width, 20,
-                Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
-                        mini ? "" : String.format(" %s", module.name))), button -> {
+                                                   Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
+                                                                         mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
                 if (Config.moduleSettings.get(module.getClass()).size() <= 1)
                     return;
@@ -214,8 +214,8 @@ public class Components {
         }
 
         @Override
-        public void renderButton(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            super.renderButton(drawContext, mouseX, mouseY, delta);
+        public void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            super.renderWidget(drawContext, mouseX, mouseY, delta);
             if (this.isSelected())
                 this.renderTooltip(drawContext, mouseX, mouseY);
         }

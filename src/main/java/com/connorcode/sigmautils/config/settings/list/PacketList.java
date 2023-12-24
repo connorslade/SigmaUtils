@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+;
+
 public class PacketList implements DynamicListSetting.ResourceManager<Class<? extends Packet<?>>> {
     DynamicListSetting<Class<? extends Packet<?>>> setting;
     Object2IntOpenHashMap<Class<? extends Packet<?>>> packets = null;

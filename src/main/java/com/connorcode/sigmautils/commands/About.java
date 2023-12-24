@@ -16,11 +16,11 @@ import static com.connorcode.sigmautils.SigmaUtils.client;
 public class About implements Command {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("about")
-                        .executes(context -> {
-                            var gameVersion = client.getGameVersion();
-                            var fabricVersion = FabricLoader.getInstance()
-                                    .getModContainer("fabricloader")
+                                    .then(ClientCommandManager.literal("about")
+                                                  .executes(context -> {
+                                                      var gameVersion = client.getGameVersion();
+                                                      var fabricVersion = FabricLoader.getInstance()
+                                                              .getModContainer("fabricloader")
                                     .orElseThrow()
                                     .getMetadata()
                                     .getVersion()

@@ -32,10 +32,10 @@ public class Dump implements Command {
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
         dispatcher.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("dump")
-                        .then(ClientCommandManager.argument("resource", string())
-                                .suggests(((context, builder) -> suggestMatching(new String[]{
-                                        "packets",
+                                    .then(ClientCommandManager.literal("dump")
+                                                  .then(ClientCommandManager.argument("resource", string())
+                                                                .suggests(((context, builder) -> suggestMatching(new String[]{
+                                                                        "packets",
                                         "docs"
                                 }, builder)))
                                 .executes(ctx -> {

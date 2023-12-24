@@ -41,7 +41,7 @@ public class EntityHighlight extends Module {
             .build();
     public static DynamicListSetting<GlowingEntity> entities =
             new DynamicListSetting<>(EntityHighlight.class, "Glowing Entities",
-                    GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
+                                     GlowingEntitySelectorManager::new).value(new GlowingEntity[]{
                     new GlowingEntity(EntityType.PLAYER, -1)
             }).description("Edit which entities are highlighted and what color.").build();
 

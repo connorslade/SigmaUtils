@@ -48,7 +48,7 @@ public class CoordinatesHud extends HudModule {
     @Override
     public String line() {
         ClientPlayerEntity player = Objects.requireNonNull(client.player);
-        RegistryKey<World> registryKey = player.getWorld().getRegistryKey();
+        RegistryKey<World> registryKey = player.method_48926().getRegistryKey();
 
         Vec3d otherPos = null;
         if (registryKey == OVERWORLD) otherPos = player.getPos()
