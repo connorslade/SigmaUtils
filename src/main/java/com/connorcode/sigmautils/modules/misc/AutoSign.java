@@ -27,9 +27,6 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-;
-
-
 @ModuleInfo(description = "Automatically writes text on signs you place. If you are looking at a sign, it will edit that sign.")
 public class AutoSign extends Module {
     EnumSetting<Mode> mode = new EnumSetting<>(AutoSign.class, "Mode", Mode.class)

@@ -28,9 +28,6 @@ import java.util.ArrayList;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.misc.util.EntityUtils.entityPos;
 
-;
-
-
 @ModuleInfo(description = "Adds in-game titles to different *things*")
 public class Titles extends Module {
     public static final BoolSetting tamableOwner =
