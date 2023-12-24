@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -197,8 +198,10 @@ public class Components {
         PressAction onPress;
         TooltipSupplier tooltipSupplier;
 
-        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress, TooltipSupplier tooltipSupplier) {
-            super(x, y, width, height, message, checked);
+        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, TextRenderer renderer, PressAction onPress, TooltipSupplier tooltipSupplier) {
+            super(x, y, message, renderer, checked, Callback.EMPTY);
+            this.width = width;
+            this.height = height;
             this.onPress = onPress;
             this.tooltipSupplier = tooltipSupplier;
         }

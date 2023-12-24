@@ -17,6 +17,8 @@ accessible field net/minecraft/world/chunk/PalettedContainer paletteProvider Lne
 accessible field net/minecraft/world/chunk/PalettedContainer$Data storage Lnet/minecraft/util/collection/PaletteStorage;
 accessible field net/minecraft/world/chunk/PalettedContainer$PaletteProvider edgeBits I
 accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
+extendable method net/minecraft/client/gui/widget/ClickableWidget render (Lnet/minecraft/client/gui/DrawContext;IIF)V
+accessible method net/minecraft/client/gui/widget/CheckboxWidget <init> (IILnet/minecraft/text/Text;Lnet/minecraft/client/font/TextRenderer;ZLnet/minecraft/client/gui/widget/CheckboxWidget$Callback;)V
 
 ## BridgeAnalisys ##
 accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap diameter I

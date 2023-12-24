@@ -22,16 +22,16 @@ public class NoForceResourcePack extends Module {
         if (!(packet.get() instanceof ResourcePackSendS2CPacket resourcePacket) || !enabled) return;
         MutableText text = Text.empty()
                 .append(Text.literal(String.format("This server has a %s resource pack.\n",
-                                resourcePacket.isRequired() ? "required" : "optional"))
+                                                   resourcePacket.required() ? "required" : "optional"))
                         .formatted(Formatting.BOLD))
                 .append(Text.literal("[DOWNLOAD]")
                         .formatted(Formatting.BOLD, Formatting.LIGHT_PURPLE)
                         .styled(style -> style.withClickEvent(
                                         new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                                 String.format("/util resourcepack server install \"%s\" \"%s\"",
-                                                        resourcePacket.getUrl()
+                                                              resourcePacket.url()
                                                                 .replaceAll("\"", "\\\""),
-                                                        resourcePacket.getHash()
+                                                              resourcePacket.hash()
                                                                 .replaceAll("\"", "\\\""))))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Text.of("Click to install resource pack.")))))
@@ -39,7 +39,7 @@ public class NoForceResourcePack extends Module {
                 .append(Text.literal("[OPEN LINK]")
                         .formatted(Formatting.BOLD, Formatting.BLUE)
                         .styled(style -> style.withClickEvent(new ClickEvent(
-                                        ClickEvent.Action.OPEN_URL, resourcePacket.getUrl()))
+                                        ClickEvent.Action.OPEN_URL, resourcePacket.url()))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Text.of("Click to download resource pack.")))));
 

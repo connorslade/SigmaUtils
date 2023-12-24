@@ -150,7 +150,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
                     new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, this.searchField,
                             Text.empty());
             focusOn(this.searchField);
-            searchField.method_46421(width / 2 - searchField.getWidth() / 2);
+            searchField.setX(width / 2 - searchField.getWidth() / 2);
             var y = padding * 6 + 30 - (int) this.scroll;
             var x = 20 + padding + startX();
 

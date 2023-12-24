@@ -125,8 +125,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         @Override
         protected void init() {
             this.selectorWidget =
-                    new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32,
-                            this.height - 32, textRenderer.fontHeight + 8);
+                new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32, textRenderer.fontHeight + 8);
             this.addSelectableChild(selectorWidget);
             Util.addChild(this, ButtonWidget.builder(Text.of("Done"),
                             button -> Objects.requireNonNull(this.client).setScreen(this.parent))
@@ -148,18 +147,18 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         }
 
         class SelectorWidget extends EntryListWidget<SelectorWidget.SelectorEntry> {
-            public SelectorWidget(MinecraftClient client, OptionGetter optionGetter, int width, int height, int top, int bottom, int itemHeight) {
-                super(client, width, height, top, bottom, itemHeight);
+            public SelectorWidget(MinecraftClient client, OptionGetter optionGetter, int width, int height, int top, int itemHeight) {
+                super(client, width, height, top, itemHeight);
                 optionGetter.getOptions()
-                        .stream()
-                        .map(SelectorEntry::new)
-                        .forEach(this::addEntry);
+                    .stream()
+                    .map(SelectorEntry::new)
+                    .forEach(this::addEntry);
                 if (SelectorSetting.this.value != null)
                     super.setSelected(new SelectorEntry(SelectorSetting.this.value));
             }
 
             @Override
-            public void appendNarrations(NarrationMessageBuilder builder) {
+            protected void appendClickableNarrations(NarrationMessageBuilder builder) {
 
             }
 

@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -23,7 +24,7 @@ public class ResourcePack implements Command {
 
     int serverPackInstall(CommandContext<FabricClientCommandSource> context, boolean isHash) {
         String urlRaw = getString(context, "url");
-        String hash = isHash ? getString(context, "hash") : "";
+        String hash = isHash ? getString(context, "hash") : null;
         URL url;
         try {
             url = new URL(urlRaw);
@@ -34,7 +35,7 @@ public class ResourcePack implements Command {
             return 0;
         }
 
-        Objects.requireNonNull(client.getServerResourcePackProvider()).download(url, hash, true);
+        client.getServerResourcePackProvider().addResourcePack(UUID.randomUUID(), url, hash);
         return 0;
     }
 

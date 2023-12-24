@@ -59,7 +59,7 @@ public class Config {
 
     public static void load() throws IOException {
         if (!configFile.exists()) return;
-        NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile)).getCompound("modules");
+        NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile.toPath())).getCompound("modules");
         if (nbt == null) return;
         for (Module i : SigmaUtils.modules.values()) {
             i.loadConfig(nbt.getCompound(i.id));
@@ -79,6 +79,6 @@ public class Config {
         configFile.getParentFile().mkdirs();
         nbt.put("modules", modules);
 
-        NbtIo.write(nbt, configFile);
+        NbtIo.write(nbt, configFile.toPath());
     }
 }
