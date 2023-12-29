@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.NbtTagSizeTracker;
 import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
@@ -75,7 +75,7 @@ public class PlayerHistory extends Module {
 
     void loadPlayers() throws IOException {
         if (!playerFile.exists()) return;
-        var nbt = NbtIo.readCompressed(playerFile.toPath(), NbtSizeTracker.ofUnlimitedBytes());
+        var nbt = NbtIo.readCompressed(playerFile.toPath(), NbtTagSizeTracker.ofUnlimitedBytes());
         synchronized (seenPlayers) {
             for (var server : nbt.getKeys()) {
                 var players = new HashMap<UUID, SeenPlayer>();
