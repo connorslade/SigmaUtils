@@ -29,12 +29,9 @@ public abstract class ProgressScreenMixin extends Screen {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
     void onRenderBackground(Screen instance, DrawContext context, int mouseX, int mouseY, float delta) {
-        if (!Config.getEnabled(SeeThruLoading.class)) {
-            this.render(context, mouseX, mouseY, delta);
-            return;
-        }
+        if (!Config.getEnabled(SeeThruLoading.class)) this.renderBackground(context, mouseX, mouseY, delta);
+        else context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
 
-        context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         for (var i : this.drawables) i.render(context, mouseX, mouseY, delta);
     }
 }

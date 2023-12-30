@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = DescriptionListWidget.class)
 public class DescriptionListWidgetMixin {
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", shift = At.Shift.AFTER))
+    @Inject(method = "renderList", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", shift = At.Shift.AFTER))
     private void render(DrawContext DrawContext, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         var id = Config.getEnabled(RandomBackground.class) ?
                 RandomBackground.getTexture() : Screen.OPTIONS_BACKGROUND_TEXTURE;

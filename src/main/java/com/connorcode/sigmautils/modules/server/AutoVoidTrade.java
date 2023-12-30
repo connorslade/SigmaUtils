@@ -27,7 +27,6 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-
 @ModuleInfo(description = "Automatically performs void trading.",
         documentation = "Void trading is a method of Villager trading where you open the trade GUI, unload the Villager, then trade. Doing this will allow you to trade infinitely as the trade will never lock. To learn more, you can check out [Super Easy Void Trader | No Broken Bedrock | Tutorial](https://www.youtube.com/watch?v=82oPq0LkmYU) on YouTube.")
 public class AutoVoidTrade extends Module {

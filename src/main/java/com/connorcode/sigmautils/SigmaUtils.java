@@ -28,7 +28,7 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
-    public static final String VERSION = "0.1.6-alpha";
+    public static final String VERSION = "0.1.8-alpha";
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger logger = LogUtils.getLogger();
 
@@ -87,5 +87,7 @@ public class SigmaUtils implements ClientModInitializer {
 // TODO: Item translate module, mode for shields in offhands
 // TODO: camera no clip - disable culling
 // TODO: Entiry selector custom type
+// TODO: Allow viewing / specifing resource pack uuids
+// TODO: Hide icons with no relms
 
 // TODO Document Hid, Meta, and Misc packages

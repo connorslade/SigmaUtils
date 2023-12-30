@@ -9,6 +9,6 @@ public class WorldUtils {
         var end = entity.getCameraPosVec(tickDelta).add(entity.getRotationVec(tickDelta).multiply(maxDistance));
         return entity.getWorld().raycast(
                 new RaycastContext(entity.getCameraPosVec(tickDelta), end, RaycastContext.ShapeType.OUTLINE,
-                        RaycastContext.FluidHandling.NONE, entity));
+                                   RaycastContext.FluidHandling.NONE, entity));
     }
 }

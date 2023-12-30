@@ -52,29 +52,18 @@ public class SelectorSetting extends Setting<SelectorSetting> {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             String moduleId = SigmaUtils.modules.get(this.module).id;
             dispatcher.register(ClientCommandManager.literal("util")
-                    .then(ClientCommandManager.literal("config")
-                            .then(ClientCommandManager.literal(moduleId)
-                                    .then(ClientCommandManager.literal(this.id)
-                                            .executes(context -> {
-                                                context.getSource()
-                                                        .sendFeedback(
-                                                                Text.of(String.format("%s::%s: %s", moduleId, this.id,
-                                                                        this.value)));
-                                                return 1;
-                                            })
-                                            .then(ClientCommandManager.argument("value", greedyString())
-                                                    .suggests((context, builder) -> {
-                                                        for (String option : this.optionGetter.getOptions())
-                                                            builder.suggest(option);
-                                                        return builder.buildFuture();
-                                                    })
-                                                    .executes(context -> {
-                                                        this.value = context.getArgument("value", String.class);
-                                                        context.getSource()
-                                                                .sendFeedback(Text.of(String.format("Set %s::%s to %s",
-                                                                        moduleId, this.id, this.value)));
-                                                        return 1;
-                                                    }))))));
+                                    .then(ClientCommandManager.literal("config").then(ClientCommandManager.literal(moduleId).then(ClientCommandManager.literal(this.id).executes(context -> {
+                                        context.getSource().sendFeedback(Text.of(String.format("%s::%s: %s", moduleId, this.id, this.value)));
+                                        return 1;
+                                    }).then(ClientCommandManager.argument("value", greedyString()).suggests((context, builder) -> {
+                                        for (String option : this.optionGetter.getOptions())
+                                            builder.suggest(option);
+                                        return builder.buildFuture();
+                                    }).executes(context -> {
+                                        this.value = context.getArgument("value", String.class);
+                                        context.getSource().sendFeedback(Text.of(String.format("Set %s::%s to %s", moduleId, this.id, this.value)));
+                                        return 1;
+                                    }))))));
         }));
 
         return super.build();
@@ -94,12 +83,11 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
     @Override
     public int initRender(Screen screen, int x, int y, int width) {
-        Util.addChild(screen, ButtonWidget.builder(Text.of(String.format("%s: %s", this.name, this.value)),
-                        button -> client.setScreen(new SelectorScreen(screen)))
-                .position(x, y)
-                .width(width)
-                .tooltip(Util.nullMap(getDescription(), Tooltip::of))
-                .build());
+        Util.addChild(screen, ButtonWidget.builder(Text.of(String.format("%s: %s", this.name, this.value)), button -> client.setScreen(new SelectorScreen(screen)))
+            .position(x, y)
+            .width(width)
+            .tooltip(Util.nullMap(getDescription(), Tooltip::of))
+            .build());
 
         return 20;
     }
@@ -124,42 +112,34 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
         @Override
         protected void init() {
-            this.selectorWidget =
-                    new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height, 32,
-                            this.height - 32, textRenderer.fontHeight + 8);
+            this.selectorWidget = new SelectorWidget(this.client, SelectorSetting.this.optionGetter, this.width, this.height - 27 - 32 - 7, 32, textRenderer.fontHeight + 8);
             this.addSelectableChild(selectorWidget);
-            Util.addChild(this, ButtonWidget.builder(Text.of("Done"),
-                            button -> Objects.requireNonNull(this.client).setScreen(this.parent))
-                    .position(this.width / 2 - 100, this.height - 27)
-                    .width(200)
-                    .build());
+            Util.addChild(this, ButtonWidget.builder(Text.of("Done"), button -> Objects.requireNonNull(this.client).setScreen(this.parent))
+                .position(this.width / 2 - 100, this.height - 27)
+                .width(200)
+                .build());
         }
 
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            this.selectorWidget.render(drawContext, mouseX, mouseY, delta);
             super.render(drawContext, mouseX, mouseY, delta);
+            this.selectorWidget.render(drawContext, mouseX, mouseY, delta);
         }
 
         @Override
         public void close() {
-            Objects.requireNonNull(client)
-                    .setScreen(parent);
+            Objects.requireNonNull(client).setScreen(parent);
         }
 
         class SelectorWidget extends EntryListWidget<SelectorWidget.SelectorEntry> {
-            public SelectorWidget(MinecraftClient client, OptionGetter optionGetter, int width, int height, int top, int bottom, int itemHeight) {
-                super(client, width, height, top, bottom, itemHeight);
-                optionGetter.getOptions()
-                        .stream()
-                        .map(SelectorEntry::new)
-                        .forEach(this::addEntry);
-                if (SelectorSetting.this.value != null)
-                    super.setSelected(new SelectorEntry(SelectorSetting.this.value));
+            public SelectorWidget(MinecraftClient client, OptionGetter optionGetter, int width, int height, int top, int itemHeight) {
+                super(client, width, height, top, itemHeight);
+                optionGetter.getOptions().stream().map(SelectorEntry::new).forEach(this::addEntry);
+                if (SelectorSetting.this.value != null) super.setSelected(new SelectorEntry(SelectorSetting.this.value));
             }
 
             @Override
-            public void appendNarrations(NarrationMessageBuilder builder) {
+            protected void appendClickableNarrations(NarrationMessageBuilder builder) {
 
             }
 
@@ -184,8 +164,7 @@ public class SelectorSetting extends Setting<SelectorSetting> {
 
                 @Override
                 public void render(DrawContext drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-                    drawContext.drawText(SelectorWidget.this.client.textRenderer, this.value,
-                            (int) (width / 2f - client.textRenderer.getWidth(this.value) / 2f), y + 1, 16777215, true);
+                    drawContext.drawText(SelectorWidget.this.client.textRenderer, this.value, (int) (width / 2f - client.textRenderer.getWidth(this.value) / 2f), y + 1, 16777215, true);
                 }
 
                 @Override

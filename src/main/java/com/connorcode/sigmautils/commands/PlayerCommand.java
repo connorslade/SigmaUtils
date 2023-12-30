@@ -13,10 +13,10 @@ public class PlayerCommand implements Command {
     @Override
     public void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(ClientCommandManager.literal("util")
-                .then(ClientCommandManager.literal("player")
-                        .then(ClientCommandManager.literal("attack")
-                                .then(ClientCommandManager.literal("continuous").executes((arg) -> {
-                                    Player.player.addAction(new Player.AttackAction(Player.InteractTime.continuous()));
+                                    .then(ClientCommandManager.literal("player")
+                                                  .then(ClientCommandManager.literal("attack")
+                                                                .then(ClientCommandManager.literal("continuous").executes((arg) -> {
+                                                                    Player.player.addAction(new Player.AttackAction(Player.InteractTime.continuous()));
                                     return 0;
                                 })).then(ClientCommandManager.literal("once").executes((arg) -> {
                                     Player.player.addAction(new Player.AttackAction(Player.InteractTime.once()));

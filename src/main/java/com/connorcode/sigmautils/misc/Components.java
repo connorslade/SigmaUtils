@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -28,8 +29,8 @@ public class Components {
         //        boolean hasConfig = Config.moduleSettings.getOrDefault(module.getClass(), List.of()).size() > 1;
         ScreenAccessor sa = (ScreenAccessor) screen;
         Util.addChild(screen, new MultiClickButton(x, y, width, 20,
-                Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
-                        mini ? "" : String.format(" %s", module.name))), button -> {
+                                                   Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
+                                                                         mini ? "" : String.format(" %s", module.name))), button -> {
             if (button.click == 1) {
                 if (Config.moduleSettings.get(module.getClass()).size() <= 1)
                     return;
@@ -197,8 +198,10 @@ public class Components {
         PressAction onPress;
         TooltipSupplier tooltipSupplier;
 
-        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, PressAction onPress, TooltipSupplier tooltipSupplier) {
-            super(x, y, width, height, message, checked);
+        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, TextRenderer renderer, PressAction onPress, TooltipSupplier tooltipSupplier) {
+            super(x, y, message, renderer, checked, Callback.EMPTY);
+            this.width = width;
+            this.height = height;
             this.onPress = onPress;
             this.tooltipSupplier = tooltipSupplier;
         }
@@ -214,8 +217,8 @@ public class Components {
         }
 
         @Override
-        public void renderButton(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            super.renderButton(drawContext, mouseX, mouseY, delta);
+        public void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+            super.renderWidget(drawContext, mouseX, mouseY, delta);
             if (this.isSelected())
                 this.renderTooltip(drawContext, mouseX, mouseY);
         }

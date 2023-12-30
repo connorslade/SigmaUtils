@@ -27,12 +27,11 @@ import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-
 @ModuleInfo(description = "Automatically writes text on signs you place. If you are looking at a sign, it will edit that sign.")
 public class AutoSign extends Module {
     EnumSetting<Mode> mode = new EnumSetting<>(AutoSign.class, "Mode", Mode.class)
             .description("If the mode is complete, each side will be written to the sign, even if its empty. " +
-                    "If its lazy, only sids with text will be written.")
+                         "If its lazy, only sids with text will be written.")
             .value(Mode.Lazy)
             .build();
     EnumSetting<FrontDefinition> frontDefinition =

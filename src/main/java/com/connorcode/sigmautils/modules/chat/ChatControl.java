@@ -23,7 +23,6 @@ import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
-
 @ModuleInfo(description = "Allows other players to control your client over game chat.", inDevelopment = true)
 public class ChatControl extends Module {
     BoolSetting requireSignature = new BoolSetting(ChatControl.class, "Require Signature").description("Whether to require the message to be signed to execute it.").build();
