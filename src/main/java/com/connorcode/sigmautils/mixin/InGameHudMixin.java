@@ -13,6 +13,9 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.scoreboard.ScoreboardEntry;
+import net.minecraft.scoreboard.number.NumberFormat;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Final;
@@ -75,18 +78,17 @@ public abstract class InGameHudMixin {
     }
 
 
-    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"))
-    int onDraw(DrawContext instance, TextRenderer textRenderer, String text, int x, int y, int color, boolean shadow) {
-        if (Config.getEnabled(NoScoreboardValue.class))
-            return 0;
-        return instance.drawText(textRenderer, text, x, y, color, shadow);
-    }
-
-    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Integer;toString(I)Ljava/lang/String;"))
-    String onToString(int buf) {
-        if (Config.getEnabled(NoScoreboardValue.class))
-            return "";
-        return Integer.toString(buf);
+    //    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"))
+//    int onDraw(DrawContext instance, TextRenderer textRenderer, String text, int x, int y, int color, boolean shadow) {
+//        if (Config.getEnabled(NoScoreboardValue.class))
+//            return 0;
+//        return instance.drawText(textRenderer, text, x, y, color, shadow);
+//    }
+//
+    @Redirect(method = "method_55439(Lnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/number/NumberFormat;Lnet/minecraft/scoreboard/ScoreboardEntry;)Lnet/minecraft/client/gui/hud/InGameHud$SidebarEntry;", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardEntry;formatted(Lnet/minecraft/scoreboard/number/NumberFormat;)Lnet/minecraft/text/MutableText;"))
+    MutableText onToString(ScoreboardEntry instance, NumberFormat format) {
+        if (Config.getEnabled(NoScoreboardValue.class)) return Text.empty();
+        return instance.formatted(format);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/gui/DrawContext;III)V"))
