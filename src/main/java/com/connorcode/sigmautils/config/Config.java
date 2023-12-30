@@ -59,8 +59,16 @@ public class Config {
 
     public static void load() throws IOException {
         if (!configFile.exists()) return;
-        NbtCompound nbt = Objects.requireNonNull(NbtIo.read(configFile.toPath())).getCompound("modules");
-        if (nbt == null) return;
+        var nbt = Objects.requireNonNull(NbtIo.read(configFile.toPath()));
+        var version = nbt.getString("version");
+        if (!version.equals("SigmaUtils " + VERSION)) {
+            logger.warn("Config version mismatch, backing up config");
+            var version_num = version.split(" ")[1].replace(" ", "-");
+            NbtIo.write(nbt, new File(directory.toFile(), String.format("config_backup_%s.nbt", version_num)).toPath());
+        }
+
+        var modules = nbt.getCompound("modules");
+        if (modules == null) return;
         for (Module i : SigmaUtils.modules.values()) {
             i.loadConfig(nbt.getCompound(i.id));
             if (i.enabled) i.enable();
