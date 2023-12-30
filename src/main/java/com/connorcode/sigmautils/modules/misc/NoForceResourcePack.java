@@ -26,13 +26,9 @@ public class NoForceResourcePack extends Module {
                         .formatted(Formatting.BOLD))
                 .append(Text.literal("[DOWNLOAD]")
                         .formatted(Formatting.BOLD, Formatting.LIGHT_PURPLE)
-                        .styled(style -> style.withClickEvent(
-                                        new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                                                String.format("/util resourcepack server install \"%s\" \"%s\"",
-                                                              resourcePacket.url()
-                                                                .replaceAll("\"", "\\\""),
-                                                              resourcePacket.hash()
-                                                                .replaceAll("\"", "\\\""))))
+                        .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                                                             String.format("/util resourcepack server install \"%s\" \"%s\"", resourcePacket.url().replaceAll("\"", "\\\""),
+                                                                                           resourcePacket.id().toString())))
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Text.of("Click to install resource pack.")))))
                 .append(" ")

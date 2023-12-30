@@ -22,20 +22,25 @@ public class ResourcePack implements Command {
         return 0;
     }
 
-    int serverPackInstall(CommandContext<FabricClientCommandSource> context, boolean isHash) {
+    static int serverPackInstall(CommandContext<FabricClientCommandSource> context) {
         String urlRaw = getString(context, "url");
-        String hash = isHash ? getString(context, "hash") : null;
+        UUID uuid = null;
+
+        try {
+            uuid = UUID.fromString(getString(context, "uuid"));
+        } catch (IllegalArgumentException ignored) {}
+
         URL url;
         try {
             url = new URL(urlRaw);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            context.getSource()
-                    .sendError(Text.of(String.format("Invalid url! (%s)", e.getMessage())));
+            context.getSource().sendError(Text.of(String.format("Invalid url! (%s)", e.getMessage())));
             return 0;
         }
 
-        client.getServerResourcePackProvider().addResourcePack(UUID.randomUUID(), url, hash);
+        var packs = client.getServerResourcePackProvider();
+        packs.addResourcePack(uuid == null ? UUID.randomUUID() : uuid, url, null);
         return 0;
     }
 
@@ -45,10 +50,9 @@ public class ResourcePack implements Command {
                 .then(ClientCommandManager.literal("resourcepack")
                         .then(ClientCommandManager.literal("server")
                                 .then(ClientCommandManager.literal("install")
-                                        .then(ClientCommandManager.argument("url", string())
-                                                .executes(ctx -> serverPackInstall(ctx, false))
-                                                .then(ClientCommandManager.argument("hash", string())
-                                                        .executes(ctx -> serverPackInstall(ctx, true)))))
+                                          .then(ClientCommandManager.argument("url", string())
+                                                    .executes(ResourcePack::serverPackInstall)
+                                                    .then(ClientCommandManager.argument("uuid", string()).executes(ResourcePack::serverPackInstall))))
                                 .then(ClientCommandManager.literal("remove")
                                         .executes(ResourcePack::serverPackUninstall)))));
     }
