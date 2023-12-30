@@ -1,8 +1,8 @@
 # SigmaUtils ![build](https://github.com/Basicprogrammer10/SigmaUtils/actions/workflows/build.yml/badge.svg) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/Basicprogrammer10/SigmaUtils?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/Basicprogrammer10/SigmaUtils/total)
 
-Requires: <kbd>[Minecraft 1.20.2](https://minecraft.fandom.com/wiki/Java_Edition_1.20.2)</kbd> <kbd>[Fabric API](https://modrinth.com/mod/fabric-api/version/0.89.2+1.20.2)</kbd>
+Requires: <kbd>[Minecraft 1.20.3](https://minecraft.wiki/w/Java_Edition_1.20.3)</kbd> <kbd>[Fabric API](https://modrinth.com/mod/fabric-api/version/0.91.1+1.20.3)</kbd>
 
-SigmaUtils is a utility mod for Minecraft 1.20.2.
+SigmaUtils is a utility mod for Minecraft 1.20.3.
 It is made up of 'modules', which are discrete features that can be toggled and configured.
 By default, SigmaUtils changes nothing about the game, except adding a button to the title screen to open the config
 GUI.
