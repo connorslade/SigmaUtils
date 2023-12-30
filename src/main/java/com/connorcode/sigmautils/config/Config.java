@@ -68,9 +68,8 @@ public class Config {
         }
 
         var modules = nbt.getCompound("modules");
-        if (modules == null) return;
         for (Module i : SigmaUtils.modules.values()) {
-            i.loadConfig(nbt.getCompound(i.id));
+            i.loadConfig(modules.getCompound(i.id));
             if (i.enabled) i.enable();
         }
     }
