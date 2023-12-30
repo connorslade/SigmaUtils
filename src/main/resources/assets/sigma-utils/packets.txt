@@ -132,13 +132,15 @@ net.minecraft.class_2718 RemoveEntityStatusEffectS2CPacket
 net.minecraft.class_7617 RemoveMessageS2CPacket
 net.minecraft.class_2855 RenameItemC2SPacket
 net.minecraft.class_2805 RequestCommandCompletionsC2SPacket
+net.minecraft.class_9053 ResourcePackRemoveS2CPacket
 net.minecraft.class_2720 ResourcePackSendS2CPacket
 net.minecraft.class_2856 ResourcePackStatusC2SPacket
 net.minecraft.class_2684$class_2687 Rotate
 net.minecraft.class_2684$class_2686 RotateAndMoveRelative
 net.minecraft.class_2736 ScoreboardDisplayS2CPacket
 net.minecraft.class_2751 ScoreboardObjectiveUpdateS2CPacket
-net.minecraft.class_2757 ScoreboardPlayerUpdateS2CPacket
+net.minecraft.class_9006 ScoreboardScoreResetS2CPacket
+net.minecraft.class_2757 ScoreboardScoreUpdateS2CPacket
 net.minecraft.class_2651 ScreenHandlerPropertyUpdateS2CPacket
 net.minecraft.class_2653 ScreenHandlerSlotUpdateS2CPacket
 net.minecraft.class_2729 SelectAdvancementTabS2CPacket
@@ -148,6 +150,7 @@ net.minecraft.class_2734 SetCameraEntityS2CPacket
 net.minecraft.class_3943 SetTradeOffersS2CPacket
 net.minecraft.class_2693 SignEditorOpenS2CPacket
 net.minecraft.class_6682 SimulationDistanceS2CPacket
+net.minecraft.class_8875 SlotChangedStateC2SPacket
 net.minecraft.class_2884 SpectatorTeleportC2SPacket
 net.minecraft.class_8739 StartChunkSendS2CPacket
 net.minecraft.class_2617 StatisticsS2CPacket
@@ -157,6 +160,7 @@ net.minecraft.class_2788 SynchronizeRecipesS2CPacket
 net.minecraft.class_2790 SynchronizeTagsS2CPacket
 net.minecraft.class_5900 TeamS2CPacket
 net.minecraft.class_2793 TeleportConfirmC2SPacket
+net.minecraft.class_8914 TickStepS2CPacket
 net.minecraft.class_5905 TitleFadeS2CPacket
 net.minecraft.class_5904 TitleS2CPacket
 net.minecraft.class_2666 UnloadChunkS2CPacket
@@ -172,6 +176,7 @@ net.minecraft.class_2868 UpdateSelectedSlotC2SPacket
 net.minecraft.class_2735 UpdateSelectedSlotS2CPacket
 net.minecraft.class_2877 UpdateSignC2SPacket
 net.minecraft.class_2875 UpdateStructureBlockC2SPacket
+net.minecraft.class_8913 UpdateTickRateS2CPacket
 net.minecraft.class_2833 VehicleMoveC2SPacket
 net.minecraft.class_2692 VehicleMoveS2CPacket
 net.minecraft.class_5895 WorldBorderCenterChangedS2CPacket
