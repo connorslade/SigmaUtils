@@ -24,6 +24,7 @@
     "CustomPayloadS2CPacketMixin",
     "Deadmau5FeatureRendererMixin",
     "DeathScreenMixin",
+    "DebugRendererMixin",
     "DownloadingTerrainScreenMixin",
     "EntityMixin",
     "EntityRenderDispatcherMixin",

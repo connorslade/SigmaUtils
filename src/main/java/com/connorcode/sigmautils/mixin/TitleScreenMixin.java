@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screen.SplashTextRenderer;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -79,5 +80,10 @@ public class TitleScreenMixin extends Screen {
     void onInit(TitleScreen instance, int y, int spacingY) {
         if (UiTweaks.noRealms()) y += spacingY * 2 - 20;
         ((TitleScreenAccessor) instance).invokeInitWidgetsNormal(y, spacingY);
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/realms/gui/screen/RealmsNotificationsScreen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
+    void onRenderRealmsNotifs(RealmsNotificationsScreen instance, DrawContext context, int mouseX, int mouseY, float delta) {
+        if (!UiTweaks.noRealms()) instance.render(context, mouseX, mouseY, delta);
     }
 }

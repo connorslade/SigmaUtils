@@ -60,6 +60,7 @@
     "misc.WindowTitle",
     "misc.InediblePlantables",
     "rendering.AllowShowBarrier",
+    "rendering.DebugRenderers",
     "rendering.Deadmau5Ears",
     "rendering.DisableShadows",
     "rendering.EntityHighlight",
