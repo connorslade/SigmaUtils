@@ -77,15 +77,24 @@ public class DebugRendererMixin {
     void render(MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
         if (!Config.getEnabled(DebugRenderers.class)) return;
 
-        var debug = List.of(new Pair<>(pathfindingDebugRenderer, DebugRenderers.pathfinding), new Pair<>(waterDebugRenderer, DebugRenderers.water),
-                            new Pair<>(heightmapDebugRenderer, DebugRenderers.heightMap), new Pair<>(collisionDebugRenderer, DebugRenderers.collision),
-                            new Pair<>(supportingBlockDebugRenderer, DebugRenderers.supportingBlock), new Pair<>(neighborUpdateDebugRenderer, DebugRenderers.neighborUpdate),
-                            new Pair<>(structureDebugRenderer, DebugRenderers.structure), new Pair<>(skyLightDebugRenderer, DebugRenderers.skyLight),
-                            new Pair<>(worldGenAttemptDebugRenderer, DebugRenderers.worldGenAttempt), new Pair<>(blockOutlineDebugRenderer, DebugRenderers.blockOutline),
-                            new Pair<>(villageDebugRenderer, DebugRenderers.village), new Pair<>(villageSectionsDebugRenderer, DebugRenderers.villageSections),
-                            new Pair<>(beeDebugRenderer, DebugRenderers.bee), new Pair<>(raidCenterDebugRenderer, DebugRenderers.raidCenter),
-                            new Pair<>(goalSelectorDebugRenderer, DebugRenderers.goalSelector), new Pair<>(gameTestDebugRenderer, DebugRenderers.gameTest),
-                            new Pair<>(gameEventDebugRenderer, DebugRenderers.gameEvent), new Pair<>(lightDebugRenderer, DebugRenderers.light));
+        var debug = List.of(new Pair<>(pathfindingDebugRenderer, DebugRenderers.pathfinding),
+                            new Pair<>(waterDebugRenderer, DebugRenderers.water),
+                            new Pair<>(heightmapDebugRenderer, DebugRenderers.heightMap),
+                            new Pair<>(collisionDebugRenderer, DebugRenderers.collision),
+                            new Pair<>(supportingBlockDebugRenderer, DebugRenderers.supportingBlock),
+                            new Pair<>(neighborUpdateDebugRenderer, DebugRenderers.neighborUpdate),
+                            new Pair<>(structureDebugRenderer, DebugRenderers.structure),
+                            new Pair<>(skyLightDebugRenderer, DebugRenderers.skyLight),
+                            new Pair<>(worldGenAttemptDebugRenderer, DebugRenderers.worldGenAttempt),
+                            new Pair<>(blockOutlineDebugRenderer, DebugRenderers.blockOutline),
+                            new Pair<>(villageDebugRenderer, DebugRenderers.village),
+                            new Pair<>(villageSectionsDebugRenderer, DebugRenderers.villageSections),
+                            new Pair<>(beeDebugRenderer, DebugRenderers.bee),
+                            new Pair<>(raidCenterDebugRenderer, DebugRenderers.raidCenter),
+                            new Pair<>(goalSelectorDebugRenderer, DebugRenderers.goalSelector),
+                            new Pair<>(gameTestDebugRenderer, DebugRenderers.gameTest),
+                            new Pair<>(gameEventDebugRenderer, DebugRenderers.gameEvent),
+                            new Pair<>(lightDebugRenderer, DebugRenderers.light));
 
         for (var renderer : debug) {
             if (renderer.getRight().value()) renderer.getLeft().render(matrices, vertexConsumers, cameraX, cameraY, cameraZ);
