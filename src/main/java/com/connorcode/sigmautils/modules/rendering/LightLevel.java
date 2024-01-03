@@ -1,5 +1,6 @@
 package com.connorcode.sigmautils.modules.rendering;
 
+import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.event.EventHandler;
 import com.connorcode.sigmautils.event.render.WorldRender;
@@ -13,18 +14,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.LightType;
+
+import java.util.Optional;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.misc.util.WorldRenderUtils.getMatrices;
 
 @ModuleInfo(description = "Shows the light level the top of blocks")
 public class LightLevel extends Module {
+    EnumSetting<LightSource> source = new EnumSetting<LightSource>(LightLevel.class, "Light Source", LightSource.class).value(LightSource.All).build();
+    EnumSetting<Coloring> coloring = new EnumSetting<Coloring>(LightLevel.class, "Coloring", Coloring.class).value(Coloring.Hue).build();
     NumberSetting scale = new NumberSetting(LightLevel.class, "Scale", 0.5, 5).value(2).build();
-    NumberSetting rangeH = new NumberSetting(LightLevel.class, "Horizontal Range", 0, 10).value(5).precision(0).build();
+    NumberSetting rangeH = new NumberSetting(LightLevel.class, "Horizontal Range", 5, 25).value(5).precision(0).build();
     NumberSetting rangeV = new NumberSetting(LightLevel.class, "Vertical Range", 0, 10).value(5).precision(0).build();
-
-    // TODO: Add diffrent coloring modes
-    // TOOD: Expand Ranges
 
     @EventHandler
     void onRender(WorldRender.PostWorldRenderEvent event) {
@@ -46,12 +49,14 @@ public class LightLevel extends Module {
                     var thisPos = blockPos.add(x, y, z);
                     if (isTransparent(thisPos.down()) || !isTransparent(thisPos)) continue;
 
-                    var light = client.world.getLightLevel(thisPos);
+                    var light = lightLevel(thisPos);
+                    var color = getColor(light);
+                    if (color.isEmpty()) continue;
+
                     var width = client.textRenderer.getWidth(Integer.toString(light));
-                    var color = MathHelper.hsvToRgb(MathHelper.clamp(light / 15f, 0, 1), 1, 1);
                     var text = Integer.toString(light);
                     var matrix = getFloorMatrices(pos.add(x, y, z));
-                    client.textRenderer.draw(text, width / -2f, 0f, color, false, matrix.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0, 255, false);
+                    client.textRenderer.draw(text, width / -2f, 0f, color.get(), false, matrix.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0, 255, false);
                 }
             }
         }
@@ -74,5 +79,31 @@ public class LightLevel extends Module {
         matrix.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((int) (client.gameRenderer.getCamera().getYaw() / 90) * 90));
         matrix.scale(-0.025f * _scale, -0.025f * _scale, 1);
         return matrix;
+    }
+
+    int lightLevel(BlockPos pos) {
+        var world = client.world;
+        assert world != null;
+        return switch (source.value()) {
+            case Block -> world.getLightLevel(LightType.BLOCK, pos);
+            case Sky -> world.getLightLevel(LightType.SKY, pos);
+            case All -> Math.max(world.getLightLevel(LightType.BLOCK, pos), world.getLightLevel(LightType.SKY, pos) - world.getAmbientDarkness());
+        };
+    }
+
+    Optional<Integer> getColor(int light) {
+        var lightf = MathHelper.clamp(light / 15f, 0, 1);
+        return switch (coloring.value()) {
+            case Hue -> Optional.of(MathHelper.hsvToRgb(lightf, 1, 1));
+            case HostileSpawn -> Optional.ofNullable(light == 1 ? 0xff0000 : null);
+        };
+    }
+
+    enum Coloring {
+        Hue, HostileSpawn
+    }
+
+    enum LightSource {
+        Block, Sky, All
     }
 }
