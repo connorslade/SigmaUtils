@@ -59,6 +59,7 @@
     "misc.SoundControl",
     "misc.TickSpeed",
     "misc.WindowTitle",
+    "rendering.MapBorder",
     "rendering.AllowShowBarrier",
     "rendering.Deadmau5Ears",
     "rendering.DebugRenderers",
