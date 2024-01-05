@@ -31,7 +31,7 @@ public class LightLevel extends Module {
     NumberSetting rangeH = new NumberSetting(LightLevel.class, "Horizontal Range", 5, 25).value(5).precision(0).build();
     NumberSetting rangeV = new NumberSetting(LightLevel.class, "Vertical Range", 0, 10).value(5).precision(0).build();
 
-    BlockPos centerPos;
+    BlockPos centerPos = null;
     HashSet<BlockPos> positions = new HashSet<>();
 
     @EventHandler
@@ -75,7 +75,7 @@ public class LightLevel extends Module {
     void updatePositions() {
         assert client.player != null;
         var currentPos = client.player.getBlockPos();
-        if (centerPos.equals(currentPos)) return;
+        if (centerPos != null && centerPos.equals(currentPos)) return;
         centerPos = currentPos;
         positions.clear();
 
