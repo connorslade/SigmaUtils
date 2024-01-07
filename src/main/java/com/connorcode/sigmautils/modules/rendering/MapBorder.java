@@ -47,15 +47,20 @@ public class MapBorder extends Module {
             layer.vertex(matrices, boxX, y, boxZ).color(d).next();
         }
 
-        // Add connecting lines
-        layer.vertex(matrices, boxX, minY, boxZ).color(c).next();
-        layer.vertex(matrices, boxX, maxY, boxZ).color(d).next();
+        layer.vertex(matrices, boxX, maxY, boxZ).color(c).next();
+        layer.vertex(matrices, boxX - 128, minY, boxZ).color(c).next();
         layer.vertex(matrices, boxX - 128, minY, boxZ).color(c).next();
         layer.vertex(matrices, boxX - 128, maxY, boxZ).color(d).next();
-        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX - 128, maxY, boxZ - 128).color(d).next();
+
+        layer.vertex(matrices, boxX - 128, maxY, boxZ).color(c).next();
+        layer.vertex(matrices, boxX, minY, boxZ - 128).color(c).next();
         layer.vertex(matrices, boxX, minY, boxZ - 128).color(c).next();
         layer.vertex(matrices, boxX, maxY, boxZ - 128).color(d).next();
+
+        layer.vertex(matrices, boxX, maxY, boxZ - 128).color(c).next();
+        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c).next();
+        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c).next();
+        layer.vertex(matrices, boxX - 128, maxY, boxZ - 128).color(d).next();
 
         immediate.draw();
     }
