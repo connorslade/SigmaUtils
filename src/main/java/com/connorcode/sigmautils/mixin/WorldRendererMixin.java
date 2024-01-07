@@ -7,6 +7,7 @@ import com.connorcode.sigmautils.event.render.WorldBorderRender;
 import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -38,10 +39,13 @@ public abstract class WorldRendererMixin {
     @Nullable
     private ClientWorld world;
 
+    @Shadow
+    @Nullable
+    private VertexBuffer lightSkyBuffer;
+
     @Inject(method = "processGlobalEvent", at = @At("HEAD"))
     void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
-        if (!Config.getEnabled(NoGlobalSounds.class))
-            return;
+        if (!Config.getEnabled(NoGlobalSounds.class)) return;
         SoundEvent sound = switch (eventId) {
             case 1023 -> ENTITY_WITHER_SPAWN;
             case 1038 -> BLOCK_END_PORTAL_SPAWN;
@@ -63,14 +67,14 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        var event = new WorldRender.PreWorldRenderEvent(tickDelta, matrices);
+        var event = new WorldRender.PreWorldRenderEvent(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
         SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "render", at = @At("RETURN"), cancellable = true)
     void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        var event = new WorldRender.PostWorldRenderEvent(tickDelta, matrices);
+        var event = new WorldRender.PostWorldRenderEvent(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
         SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }

@@ -115,10 +115,8 @@ public class Titles extends Module {
                     var lines = new ArrayList<Text>();
                     var name = e.getCustomName();
                     if (name != null) lines.add(name);
-                    lines.add(Text.of(textColor.value().code() + "Owner: " +
-                            Util.uuidToName(owner).orElse(owner.toString())));
-                    WorldRenderUtils.renderLines(lines,
-                            entityPos(e, event.tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
+                    lines.add(Text.of(textColor.value().code() + "Owner: " + Util.uuidToName(owner).orElse(owner.toString())));
+                    WorldRenderUtils.renderLines(lines, entityPos(e, event.getTickDelta()).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
                 }
             }
         }
@@ -128,14 +126,12 @@ public class Titles extends Module {
             if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
             if (itemStackCount.value()) text += " ×" + i.count;
 
-            WorldRenderUtils.renderText(Text.of(text),
-                    entityPos(i.lastPos, i.pos, event.tickDelta).add(0, yOffset.value(), 0), scale.value(), false);
+            WorldRenderUtils.renderText(Text.of(text), entityPos(i.lastPos, i.pos, event.getTickDelta()).add(0, yOffset.value(), 0), scale.value(), false);
         }
     }
 
     void renderText(Text text, Entity pos, WorldRender.WorldRenderEvent event, double offset) {
-        WorldRenderUtils.renderText(text, entityPos(pos, event.tickDelta).add(0, offset + yOffset.value(), 0),
-                scale.value(), false);
+        WorldRenderUtils.renderText(text, entityPos(pos, event.getTickDelta()).add(0, offset + yOffset.value(), 0), scale.value(), false);
     }
 
     public enum TimeFormat {
