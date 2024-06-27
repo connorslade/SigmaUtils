@@ -16,12 +16,9 @@ import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.SoulSpeedEnchantment;
-import net.minecraft.enchantment.SwiftSneakEnchantment;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -148,8 +145,7 @@ public class AutoTradeCycle extends Module {
                     return;
                 }
                 case EnchantedBook -> {
-                    if (i.getSellItem().getItem() != Items.ENCHANTED_BOOK) continue;
-                    var data = EnchantedBookItem.getEnchantmentNbt(i.getSellItem());
+                    if (!(i.getSellItem().getItem() instanceof EnchantedBookItem data)) continue;
                     var settingEnchantment = Registries.ENCHANTMENT.getId(this.enchantment.value());
                     for (int j = 0; j < data.size(); j++) {
                         var enchantment = new Identifier(data.getCompound(j).getString("id"));

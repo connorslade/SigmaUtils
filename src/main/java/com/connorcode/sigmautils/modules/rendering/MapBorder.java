@@ -37,30 +37,30 @@ public class MapBorder extends Module {
         var d = c | 0x80 << 24;
 
         for (var y = minY; y <= maxY; y += step.value()) {
-            layer.vertex(matrices, boxX, y, boxZ).color(c).next();
-            layer.vertex(matrices, boxX - 128, y, boxZ).color(d).next();
-            layer.vertex(matrices, boxX - 128, y, boxZ).color(c).next();
-            layer.vertex(matrices, boxX - 128, y, boxZ - 128).color(d).next();
-            layer.vertex(matrices, boxX - 128, y, boxZ - 128).color(c).next();
-            layer.vertex(matrices, boxX, y, boxZ - 128).color(d).next();
-            layer.vertex(matrices, boxX, y, boxZ - 128).color(c).next();
-            layer.vertex(matrices, boxX, y, boxZ).color(d).next();
+            layer.vertex(matrices, boxX, y, boxZ).color(c);
+            layer.vertex(matrices, boxX - 128, y, boxZ).color(d);
+            layer.vertex(matrices, boxX - 128, y, boxZ).color(c);
+            layer.vertex(matrices, boxX - 128, y, boxZ - 128).color(d);
+            layer.vertex(matrices, boxX - 128, y, boxZ - 128).color(c);
+            layer.vertex(matrices, boxX, y, boxZ - 128).color(d);
+            layer.vertex(matrices, boxX, y, boxZ - 128).color(c);
+            layer.vertex(matrices, boxX, y, boxZ).color(d);
         }
 
-        layer.vertex(matrices, boxX, maxY, boxZ).color(c).next();
-        layer.vertex(matrices, boxX - 128, minY, boxZ).color(c).next();
-        layer.vertex(matrices, boxX - 128, minY, boxZ).color(c).next();
-        layer.vertex(matrices, boxX - 128, maxY, boxZ).color(d).next();
+        layer.vertex(matrices, boxX, maxY, boxZ).color(c);
+        layer.vertex(matrices, boxX - 128, minY, boxZ).color(c);
+        layer.vertex(matrices, boxX - 128, minY, boxZ).color(c);
+        layer.vertex(matrices, boxX - 128, maxY, boxZ).color(d);
 
-        layer.vertex(matrices, boxX - 128, maxY, boxZ).color(c).next();
-        layer.vertex(matrices, boxX, minY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX, minY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX, maxY, boxZ - 128).color(d).next();
+        layer.vertex(matrices, boxX - 128, maxY, boxZ).color(c);
+        layer.vertex(matrices, boxX, minY, boxZ - 128).color(c);
+        layer.vertex(matrices, boxX, minY, boxZ - 128).color(c);
+        layer.vertex(matrices, boxX, maxY, boxZ - 128).color(d);
 
-        layer.vertex(matrices, boxX, maxY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c).next();
-        layer.vertex(matrices, boxX - 128, maxY, boxZ - 128).color(d).next();
+        layer.vertex(matrices, boxX, maxY, boxZ - 128).color(c);
+        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c);
+        layer.vertex(matrices, boxX - 128, minY, boxZ - 128).color(c);
+        layer.vertex(matrices, boxX - 128, maxY, boxZ - 128).color(d);
 
         immediate.draw();
     }
