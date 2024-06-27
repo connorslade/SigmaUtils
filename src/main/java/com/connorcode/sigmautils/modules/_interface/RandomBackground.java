@@ -23,6 +23,7 @@ import java.util.Random;
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static net.minecraft.client.gui.screen.Screen.OPTIONS_BACKGROUND_TEXTURE;
 
+
 @ModuleInfo(description = "Uses random textures for the background tessellation",
         documentation = "It will change every time you open a new screen.")
 public class RandomBackground extends Module {
