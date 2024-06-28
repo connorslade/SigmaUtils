@@ -2,14 +2,18 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.misc.util.WorldUtils;
+import com.connorcode.sigmautils.modules._interface.ChatPosition;
 import com.connorcode.sigmautils.modules._interface.HotbarPosition;
 import com.connorcode.sigmautils.modules._interface.NoScoreboardValue;
+import com.connorcode.sigmautils.modules.hud.Hud;
 import com.connorcode.sigmautils.modules.misc.BlockDistance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.text.MutableText;
@@ -19,9 +23,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
@@ -57,107 +59,91 @@ public abstract class InGameHudMixin {
         client.getProfiler().pop();
     }
 
-    // TODO:fix
-//    @Inject(method = "render", at = @At("TAIL"))
-//    void onRender(DrawContext drawContext, RenderTickCounter renderTickCounter, float tickDelta, CallbackInfo ci) {
-//        if (client.options.hudHidden || !Config.getEnabled(Hud.class))
-//            return;
-//        Hud.renderHud(drawContext);
-//    }
 
-    // TODO: fix this also
-//    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
-//    int onGetWidth(TextRenderer instance, String text) {
-//        if (Config.getEnabled(NoScoreboardValue.class))
-//            return 0;
-//        return instance.getWidth(text);
-//    }
+    @Inject(method = "render", at = @At("TAIL"))
+    void onRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        if (client.options.hudHidden || !Config.getEnabled(Hud.class)) return;
+        Hud.renderHud(context);
+    }
 
 
-    //    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"))
-//    int onDraw(DrawContext instance, TextRenderer textRenderer, String text, int x, int y, int color, boolean shadow) {
-//        if (Config.getEnabled(NoScoreboardValue.class))
-//            return 0;
-//        return instance.drawText(textRenderer, text, x, y, color, shadow);
-//    }
-//
+    @Redirect(method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/scoreboard/ScoreboardObjective;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
+    int onGetWidth(TextRenderer instance, String text) {
+        if (Config.getEnabled(NoScoreboardValue.class)) return 0;
+        return instance.getWidth(text);
+    }
+
+
     @Redirect(method = "method_55439(Lnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/number/NumberFormat;Lnet/minecraft/scoreboard/ScoreboardEntry;)Lnet/minecraft/client/gui/hud/InGameHud$SidebarEntry;", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardEntry;formatted(Lnet/minecraft/scoreboard/number/NumberFormat;)Lnet/minecraft/text/MutableText;"))
     MutableText onToString(ScoreboardEntry instance, NumberFormat format) {
         if (Config.getEnabled(NoScoreboardValue.class)) return Text.empty();
         return instance.formatted(format);
     }
 
-    // TODO: fix this
-//    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/gui/DrawContext;IIIZ)V"))
-//    void onRenderChat(ChatHud instance, DrawContext context, int currentTick, int mouseX, int mouseY, boolean focused) {
-//        MatrixStack matrices = context.getMatrices();
-//        matrices.push();
-//        if (Config.getEnabled(ChatPosition.class))
-//            matrices.translate(0, -ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight, 0);
-//        instance.render(context, currentTick, mouseX, mouseY, focused);
-//        matrices.pop();
-//    }
+    @Redirect(method = "renderChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/gui/DrawContext;IIIZ)V"))
+    void onRenderChat(ChatHud instance, DrawContext context, int currentTick, int mouseX, int mouseY, boolean focused) {
+        MatrixStack matrices = context.getMatrices();
+        matrices.push();
+        if (Config.getEnabled(ChatPosition.class))
+            matrices.translate(0, -ChatPosition.yPosition.intValue() * client.textRenderer.fontHeight, 0);
+        instance.render(context, currentTick, mouseX, mouseY, focused);
+        matrices.pop();
+    }
 
     @Unique
     int getHotbarPos() {
         return Config.getEnabled(HotbarPosition.class) ? HotbarPosition.yPosition.intValue() : 0;
     }
 
-    // todo: fix
-//    // Modified from https://github.com/yurisuika/Raise
-//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
-//    private int modifyHotbar(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-////    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V", ordinal = 1), index = 2)
-////    private int modifySelectorHeight(int value) {
-////        return value + 2;
-////    }
-//
-//    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(Lnet/minecraft/client/gui/DrawContext;IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V"), index = 2)
-//    private int modifyItem(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 1)
-//    private int modifyJumpBar(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
-//    private int modifyExperienceBarBackground(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIIIIIII)V"), index = 6)
-//    private int modifyExperienceBar(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"), index = 3)
-//    private int modifyXpText(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyVariable(method = "renderHeldItemTooltip", at = @At(value = "STORE"), ordinal = 2)
-//    private int modifyHeldItemTooltip(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE"), ordinal = 5)
-//    private int modifyStatusBars(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyVariable(method = "renderMountHealth", at = @At(value = "STORE"), ordinal = 2)
-//    private int modifyMountHealth(int value) {
-//        return value - getHotbarPos();
-//    }
-//
-//    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 1)
-//    private float modifyActionbar(float value) {
-//        return value - getHotbarPos();
-//    }
-//    // End
+    // Modified from https://github.com/yurisuika/Raise
+    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
+    private int modifyHotbar(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(Lnet/minecraft/client/gui/DrawContext;IILnet/minecraft/client/render/RenderTickCounter;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V"), index = 2)
+    private int modifyItem(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 1)
+    private int modifyJumpBar(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
+    private int modifyExperienceBarBackground(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIIIIIII)V"), index = 6)
+    private int modifyExperienceBar(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderExperienceLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"), index = 3)
+    private int modifyXpText(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyVariable(method = "renderHeldItemTooltip", at = @At(value = "STORE"), ordinal = 2)
+    private int modifyHeldItemTooltip(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE"), ordinal = 5)
+    private int modifyStatusBars(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyVariable(method = "renderMountHealth", at = @At(value = "STORE"), ordinal = 2)
+    private int modifyMountHealth(int value) {
+        return value - getHotbarPos();
+    }
+
+    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 1)
+    private float modifyActionbar(float value) {
+        return value - getHotbarPos();
+    }
+    // End
 }

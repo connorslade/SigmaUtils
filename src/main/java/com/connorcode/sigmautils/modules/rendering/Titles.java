@@ -35,7 +35,7 @@ public class Titles extends Module {
                     .description("Shows the owner of a tamable entity")
                     .category("Titles")
                     .build();
-    private static final NumberSetting scale = new NumberSetting(Titles.class, "Scale", 0.5, 5).value(2).build();
+    private static final NumberSetting scale = new NumberSetting(Titles.class, "Scale", 0.5, 5).value(1).build();
     private static final NumberSetting yOffset = new NumberSetting(Titles.class, "Y Offset", 0, 3).value(0.25)
             .description("Number of blocks to offset the text from the entity")
             .build();
@@ -78,6 +78,7 @@ public class Titles extends Module {
 
     @EventHandler
     void onPostWorldRender(WorldRender.PostWorldRenderEvent event) {
+        var tickDelta = event.getRenderTickCounter().getTickDelta(true);
         var itemTitles = new ArrayList<ItemTitleData>();
         assert client.world != null;
 
@@ -116,7 +117,7 @@ public class Titles extends Module {
                     var name = e.getCustomName();
                     if (name != null) lines.add(name);
                     lines.add(Text.of(textColor.value().code() + "Owner: " + Util.uuidToName(owner).orElse(owner.toString())));
-                    WorldRenderUtils.renderLines(lines, entityPos(e, event.getTickDelta()).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
+                    WorldRenderUtils.renderLines(lines, entityPos(e, tickDelta).add(0, 1.5 + yOffset.value(), 0), scale.value(), false);
                 }
             }
         }
@@ -126,12 +127,13 @@ public class Titles extends Module {
             if (itemCountdown.value()) text += timeFormat.value().format(i.toDespawn());
             if (itemStackCount.value()) text += " ×" + i.count;
 
-            WorldRenderUtils.renderText(Text.of(text), entityPos(i.lastPos, i.pos, event.getTickDelta()).add(0, yOffset.value(), 0), scale.value(), false);
+            WorldRenderUtils.renderText(Text.of(text), entityPos(i.lastPos, i.pos, tickDelta).add(0, yOffset.value(), 0), scale.value(), false);
         }
     }
 
     void renderText(Text text, Entity pos, WorldRender.WorldRenderEvent event, double offset) {
-        WorldRenderUtils.renderText(text, entityPos(pos, event.getTickDelta()).add(0, offset + yOffset.value(), 0), scale.value(), false);
+        var tickDelta = event.getRenderTickCounter().getTickDelta(true);
+        WorldRenderUtils.renderText(text, entityPos(pos, tickDelta).add(0, offset + yOffset.value(), 0), scale.value(), false);
     }
 
     public enum TimeFormat {

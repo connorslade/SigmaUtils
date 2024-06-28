@@ -2,10 +2,10 @@
 - fix packet stuff (NetworkUtils)
 - test auto trade cycle
 
-- fix fast doll stuff (InventoryScreenMixin)
-- fix world render mixin (WorldRenderMixin)
+x fix fast doll stuff (InventoryScreenMixin)
+x fix world render mixin (WorldRenderMixin)
 - fix OptionsScreenMixin
-- fix ChatHudMixin
-- fix CameraMixin
-- fix InGameHudMixin
-- fix EntityRendererMixin
+x fix ChatHudMixin
+x fix CameraMixin
+x fix InGameHudMixin
+x fix EntityRendererMixin

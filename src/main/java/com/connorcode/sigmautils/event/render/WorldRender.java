@@ -4,56 +4,43 @@ import com.connorcode.sigmautils.event.Cancellable;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import org.joml.Matrix4f;
 
 public class WorldRender {
     public static class PostWorldRenderEvent extends WorldRenderEvent {
-        public PostWorldRenderEvent(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
-                                    LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix) {
-            super(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
+        public PostWorldRenderEvent(RenderTickCounter renderTickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix) {
+            super(renderTickCounter, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix, projectionMatrix);
         }
     }
 
     public static class PreWorldRenderEvent extends WorldRenderEvent {
-        public PreWorldRenderEvent(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
-                                   LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix) {
-            super(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
+        public PreWorldRenderEvent(RenderTickCounter renderTickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix) {
+            super(renderTickCounter, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix, projectionMatrix);
         }
     }
 
     public static abstract class WorldRenderEvent extends Cancellable {
-        MatrixStack matrices;
-        float tickDelta;
-        long limitTime;
+        RenderTickCounter renderTickCounter;
         boolean renderBlockOutline;
         Camera camera;
         GameRenderer gameRenderer;
         LightmapTextureManager lightmapTextureManager;
         Matrix4f positionMatrix;
+        Matrix4f projectionMatrix;
 
-        public WorldRenderEvent(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
-                                LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix) {
-            this.matrices = matrices;
-            this.tickDelta = tickDelta;
-            this.limitTime = limitTime;
+        public WorldRenderEvent(RenderTickCounter renderTickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix) {
+            this.renderTickCounter = renderTickCounter;
             this.renderBlockOutline = renderBlockOutline;
             this.camera = camera;
             this.gameRenderer = gameRenderer;
             this.lightmapTextureManager = lightmapTextureManager;
             this.positionMatrix = positionMatrix;
+            this.projectionMatrix = projectionMatrix;
         }
 
-        public MatrixStack getMatrices() {
-            return matrices;
-        }
-
-        public float getTickDelta() {
-            return tickDelta;
-        }
-
-        public long getLimitTime() {
-            return limitTime;
+        public RenderTickCounter getRenderTickCounter() {
+            return renderTickCounter;
         }
 
         public boolean isRenderBlockOutline() {
@@ -74,6 +61,10 @@ public class WorldRender {
 
         public Matrix4f getPositionMatrix() {
             return positionMatrix;
+        }
+
+        public Matrix4f getProjectionMatrix() {
+            return projectionMatrix;
         }
     }
 }
