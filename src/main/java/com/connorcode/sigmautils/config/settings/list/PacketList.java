@@ -3,23 +3,24 @@ package com.connorcode.sigmautils.config.settings.list;
 
 import com.connorcode.sigmautils.config.settings.DynamicListSetting;
 import com.connorcode.sigmautils.misc.util.NetworkUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtIntArray;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.PacketType;
+import net.minecraft.network.state.PlayStateFactories;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class PacketList implements DynamicListSetting.ResourceManager<Class<? extends Packet<?>>> {
-    DynamicListSetting<Class<? extends Packet<?>>> setting;
-    Object2IntOpenHashMap<Class<? extends Packet<?>>> packets = null;
+public class PacketList implements DynamicListSetting.ResourceManager<PacketType<? extends Packet<?>>> {
+    DynamicListSetting<PacketType<? extends Packet<?>>> setting;
     NetworkSide side;
 
-    public PacketList(DynamicListSetting<Class<? extends Packet<?>>> setting, NetworkSide side) {
+    public PacketList(DynamicListSetting<PacketType<? extends Packet<?>>> setting, NetworkSide side) {
         this.setting = setting;
         this.side = side;
     }
@@ -30,22 +31,24 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
     }
 
     @Override
-    public List<Class<? extends Packet<?>>> getAllResources() {
-        return getPackets().keySet().stream().toList();
+    public List<PacketType<? extends Packet<?>>> getAllResources() {
+        var out = new ArrayList<PacketType<? extends Packet<?>>>();
+        (side == NetworkSide.SERVERBOUND ? PlayStateFactories.C2S : PlayStateFactories.S2C).forEachPacketType(((type, protocolId) -> out.add(type)));
+        return out;
     }
 
     @Override
-    public String getDisplay(Class<? extends Packet<?>> resource) {
-        return Optional.ofNullable(NetworkUtils.getPacketName(resource)).orElse(resource.getName());
+    public String getDisplay(PacketType<? extends Packet<?>> resource) {
+        return resource.id().toString();
     }
 
     @Override
-    public void render(Class<? extends Packet<?>> resource, Screen data, int x, int y) {
+    public void render(PacketType<? extends Packet<?>> resource, Screen data, int x, int y) {
         SimpleList.render(setting, resource, getDisplay(resource), data, x, y, 0);
     }
 
     @Override
-    public boolean renderSelector(Class<? extends Packet<?>> resource, Screen data, int x, int y) {
+    public boolean renderSelector(PacketType<? extends Packet<?>> resource, Screen data, int x, int y) {
         if (setting.value().contains(resource))
             return false;
         SimpleList.selector(setting, resource, getDisplay(resource), data, x, y, 0);
@@ -53,29 +56,21 @@ public class PacketList implements DynamicListSetting.ResourceManager<Class<? ex
     }
 
     @Override
-    public NbtElement serialize(List<Class<? extends Packet<?>>> resources) {
-        var thisPackets = getPackets();
-        var list = resources.stream().mapToInt(thisPackets::getInt).toArray();
-        return new NbtIntArray(list);
+    public NbtElement serialize(List<PacketType<? extends Packet<?>>> resources) {
+        var out = new NbtList();
+        for (var resource : resources)
+            out.add(NbtString.of(resource.id().getPath()));
+        return out;
     }
 
     @Override
-    public List<Class<? extends Packet<?>>> deserialize(NbtElement nbt) {
-        if (!(nbt instanceof NbtIntArray resourceList))
+    public List<PacketType<? extends Packet<?>>> deserialize(NbtElement nbt) {
+        if (!(nbt instanceof NbtList resourceList))
             return null;
-        var list = resourceList.stream().map(e -> getPacket(e.intValue())).toList();
-        return new ArrayList<>(list);
-    }
-
-    Class<? extends Packet<?>> getPacket(int id) {
-        var thisPackets = getPackets();
-        return thisPackets.keySet().stream().filter(e -> thisPackets.getInt(e) == id).findFirst().orElse(null);
-    }
-
-    Object2IntOpenHashMap<Class<? extends Packet<?>>> getPackets() {
-        if (packets == null)
-            this.packets = NetworkUtils.getPackets(side);
-        return packets;
+        var out = new ArrayList<PacketType<? extends Packet<?>>>();
+        for (var resource : resourceList)
+            out.add(NetworkUtils.getPacket(Identifier.of(resource.asString())));
+        return new ArrayList<>(out);
     }
 
     @Override

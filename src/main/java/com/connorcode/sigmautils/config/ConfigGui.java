@@ -64,15 +64,15 @@ public class ConfigGui extends Screen {
     }
 
     public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        int padding = getPadding();
         this.renderBackground(drawContext, mouseX, mouseY, delta);
+
+        int padding = getPadding();
+        super.render(drawContext, mouseX, mouseY, delta);
 
         for (int x = 0; x < Category.realValues().length; x++)
             drawContext.drawCenteredTextWithShadow(textRenderer,
                     Text.of("§f§n§l" + Category.realValues()[x].toString()),
                     75 + padding + x * (150 + padding), padding, 0);
-
-        super.render(drawContext, mouseX, mouseY, delta);
     }
 
     public void close() {

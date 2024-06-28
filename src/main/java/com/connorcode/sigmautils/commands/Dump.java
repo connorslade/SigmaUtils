@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.commands;
 import com.connorcode.sigmautils.SigmaUtils;
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.config.settings.*;
-import com.connorcode.sigmautils.misc.util.NetworkUtils;
 import com.connorcode.sigmautils.module.Category;
 import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
@@ -53,23 +52,6 @@ public class Dump implements Command {
 
         var dumps = directory.resolve("dump").toFile();
         dumps.mkdirs();
-
-        if (resource.equals("packets")) {
-            StringBuilder out = new StringBuilder("# Generated with `/util dump packets` (only works in dev builds)\n");
-            var mr = FabricLoader.getInstance().getMappingResolver();
-            for (var i : NetworkUtils.getPackets()
-                    .keySet()
-                    .stream()
-                    .sorted(Comparator.comparing(Class::getSimpleName))
-                    .toList())
-                out.append(mr.unmapClassName("intermediary", i.getName()))
-                        .append(" ")
-                        .append(i.getSimpleName())
-                        .append("\n");
-            Files.write(dumps.toPath().resolve("packets.txt"), out.toString().getBytes());
-            context.getSource().sendFeedback(Text.of("Dumped packets to " + dumps.toPath().resolve("packets.txt")));
-            return 0;
-        }
 
         if (resource.equals("docs")) {
             var docs = directory.resolve("dump").resolve("docs").toFile();
