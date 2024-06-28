@@ -1,6 +1,9 @@
 - fix ShowInvisableEntites opacity property
 - fix packet stuff (NetworkUtils)
 - test auto trade cycle
+- fix tick speed
+- Update packet registry
+- fix map border
 
 x fix fast doll stuff (InventoryScreenMixin)
 x fix world render mixin (WorldRenderMixin)

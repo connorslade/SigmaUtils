@@ -23,7 +23,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
@@ -95,55 +98,20 @@ public abstract class InGameHudMixin {
         return Config.getEnabled(HotbarPosition.class) ? HotbarPosition.yPosition.intValue() : 0;
     }
 
-    // Modified from https://github.com/yurisuika/Raise
-    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
-    private int modifyHotbar(int value) {
-        return value - getHotbarPos();
+    @Inject(method = "renderMainHud", at = @At("HEAD"))
+    void onRenderMainHudHead(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        context.getMatrices().push();
+        ;
+        context.getMatrices().translate(0, -getHotbarPos(), 0);
     }
 
-    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(Lnet/minecraft/client/gui/DrawContext;IILnet/minecraft/client/render/RenderTickCounter;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V"), index = 2)
-    private int modifyItem(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyVariable(method = "renderMountJumpBar", at = @At(value = "STORE"), ordinal = 1)
-    private int modifyJumpBar(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
-    private int modifyExperienceBarBackground(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyArg(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIIIIIII)V"), index = 6)
-    private int modifyExperienceBar(int value) {
-        return value - getHotbarPos();
+    @Inject(method = "renderMainHud", at = @At("TAIL"))
+    void onRenderMainHudTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        context.getMatrices().pop();
     }
 
     @ModifyArg(method = "renderExperienceLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I"), index = 3)
-    private int modifyXpText(int value) {
-        return value - getHotbarPos();
+    int onRenderExperienceLevelHead(int y) {
+        return y - getHotbarPos();
     }
-
-    @ModifyVariable(method = "renderHeldItemTooltip", at = @At(value = "STORE"), ordinal = 2)
-    private int modifyHeldItemTooltip(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE"), ordinal = 5)
-    private int modifyStatusBars(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyVariable(method = "renderMountHealth", at = @At(value = "STORE"), ordinal = 2)
-    private int modifyMountHealth(int value) {
-        return value - getHotbarPos();
-    }
-
-    @ModifyArg(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 1)
-    private float modifyActionbar(float value) {
-        return value - getHotbarPos();
-    }
-    // End
 }
