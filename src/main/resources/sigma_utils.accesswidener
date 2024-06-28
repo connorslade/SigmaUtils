@@ -10,8 +10,10 @@ accessible method net/minecraft/client/gui/screen/option/OptionsScreen createBut
 ## Gui Stuff ##
 accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
 extendable method net/minecraft/client/gui/widget/ClickableWidget render (Lnet/minecraft/client/gui/DrawContext;IIF)V
+accessible method net/minecraft/client/gui/screen/Screen clearAndInit ()V
 
 ## Network Stuff ##
+accessible method net/minecraft/client/network/ClientPlayerInteractionManager sendSequencedPacket (Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
 
 ## Map Command ##
 accessible class net/minecraft/client/render/MapRenderer$MapTexture

@@ -5,11 +5,12 @@ import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientCommonNetworkHandler.class)
 public class ClientCommonNetworkHandlerMixin {
     @Inject(method = "onCustomPayload", at = @At("HEAD"))
-    void onCustomPayload(CustomPayloadS2CPacket packet) {
+    void onCustomPayload(CustomPayloadS2CPacket packet, CallbackInfo ci) {
 //        var buf = packet.getPayload();
 //        var event = new UnknownPacketEvent(buf, packet.payload().getId().id());
         System.out.println("CUSTOM PAYLOAD:" + packet.payload().getClass().getSimpleName());

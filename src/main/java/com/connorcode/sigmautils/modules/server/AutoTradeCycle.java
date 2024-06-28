@@ -10,24 +10,25 @@ import com.connorcode.sigmautils.event.Priority;
 import com.connorcode.sigmautils.event.misc.GameLifecycle;
 import com.connorcode.sigmautils.event.network.PacketReceiveEvent;
 import com.connorcode.sigmautils.event.render.EntityRender;
-import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.DocumentedEnum;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -145,14 +146,14 @@ public class AutoTradeCycle extends Module {
                     return;
                 }
                 case EnchantedBook -> {
-                    if (!(i.getSellItem().getItem() instanceof EnchantedBookItem data)) continue;
-                    var settingEnchantment = Registries.ENCHANTMENT.getId(this.enchantment.value());
-                    for (int j = 0; j < data.size(); j++) {
-                        var enchantment = new Identifier(data.getCompound(j).getString("id"));
-                        var enchantmentLev = data.getCompound(j).getInt("lvl");
-                        if (verbose.value()) info("%s %s", enchantment, enchantmentLev);
-                        if (!enchantment.equals(settingEnchantment) || enchantmentLev < enchantmentLevel.intValue())
-                            continue;
+                    if (i.getSellItem().getItem() != Items.ENCHANTED_BOOK) continue;
+                    var enchantments = EnchantmentHelper.getEnchantments(i.getSellItem());
+
+                    for (var enchantment : enchantments.getEnchantments()) {
+                        var level = enchantments.getLevel(enchantment);
+                        if (verbose.value()) info("%s %s", enchantment, level);
+
+                        if (!enchantment.value().equals(this.enchantment.value()) || level < this.enchantmentLevel.intValue()) continue;
                         info("FOUND ENCHANTMENT");
                         onFind();
                         return;
@@ -217,23 +218,24 @@ public class AutoTradeCycle extends Module {
         }
     }
 
+
     class EnchantmentList extends SimpleSelector<Enchantment> {
 
         public EnchantmentList(DynamicSelectorSetting<Enchantment> setting) {
-            super(setting, Registries.ENCHANTMENT);
+            super(setting, (Registry<Enchantment>) Registries.REGISTRIES.get(RegistryKeys.ENCHANTMENT.getRegistry()));
         }
 
         @Override
         protected boolean filter(Enchantment resource) {
-            return !(resource instanceof SwiftSneakEnchantment) && !(resource instanceof SoulSpeedEnchantment);
+            // TODO: fix
+//            return !(resource instanceof SwiftSneakEnchantment) && !(resource instanceof SoulSpeedEnchantment);
+            return false;
         }
 
         @Override
         public String getDisplay(Enchantment resource) {
             if (resource == null) return "None";
-            var val = resource.getName(1).getString();
-            if (val.endsWith(" I")) val = val.substring(0, val.length() - 2);
-            return val;
+            return resource.toString();
         }
 
         @Override
@@ -245,7 +247,7 @@ public class AutoTradeCycle extends Module {
             AutoTradeCycle.this.enchantmentLevel.min(resource.getMinLevel())
                     .max(resource.getMaxLevel())
                     .value(resource.getMaxLevel());
-            if (client.currentScreen != null) ((ScreenAccessor) client.currentScreen).invokeClearAndInit();
+            if (client.currentScreen != null) client.currentScreen.clearAndInit();
         }
 
         @Override

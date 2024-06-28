@@ -1,9 +1,10 @@
 package com.connorcode.sigmautils.modules.hud;
 
 import com.connorcode.sigmautils.misc.TextStyle;
-import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.ModuleInfo;
+
+import static com.connorcode.sigmautils.SigmaUtils.client;
 
 @ModuleInfo(description = "Shows the current FPS in the HUD")
 public class FpsHud extends HudModule {
@@ -14,7 +15,6 @@ public class FpsHud extends HudModule {
     }
 
     public String line() {
-        return String.format("§r%sFps: §f%d", this.getTextColor(),
-                MinecraftClientAccessor.getCurrentFps());
+        return String.format("§r%sFps: §f%d", this.getTextColor(), client.getCurrentFps());
     }
 }

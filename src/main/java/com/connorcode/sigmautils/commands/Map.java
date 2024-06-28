@@ -36,7 +36,7 @@ public class Map implements Command {
 
         File mapFile = getNewFile(mapId);
         try {
-            client.gameRenderer.getMapRenderer().getMapTexture(mapId.id(), mapState).texture.getImage().writeTo(mapFile);
+            client.gameRenderer.getMapRenderer().getMapTexture(mapId, mapState).texture.getImage().writeTo(mapFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

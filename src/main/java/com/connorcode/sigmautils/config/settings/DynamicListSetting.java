@@ -146,10 +146,8 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
 
         @Override
         protected void init() {
-            this.searchField =
-                    new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, this.searchField,
-                            Text.empty());
-            focusOn(this.searchField);
+            this.searchField = new TextFieldWidget(SigmaUtils.client.textRenderer, 0, 10, entryWidth / 2, 20, this.searchField, Text.empty());
+            setFocused(this.searchField);
             searchField.setX(width / 2 - searchField.getWidth() / 2);
             var y = padding * 6 + 30 - (int) this.scroll;
             var x = 20 + padding + startX();
@@ -157,9 +155,7 @@ public class DynamicListSetting<K> extends Setting<DynamicListSetting<K>> {
             var search = searchField.getText();
             var res = renderer.getAllResources();
             count = res.size();
-            for (var i : res
-                    .stream()
-                    .filter(r -> search.isEmpty() || search(r, search))
+            for (var i : res.stream().filter(r -> search.isEmpty() || search(r, search))
                     .toList()) {
                 if (y < -entryHeight - padding) {
                     y += entryHeight + padding;

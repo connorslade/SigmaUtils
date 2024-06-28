@@ -29,16 +29,13 @@
     "EntityMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
-    "EntryListWidgetMixin",
     "GameMenuScreenMixin",
     "GameRendererMixin",
-    "InGameHudAccessor",
     "InGameHudMixin",
     "InventoryScreenMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
     "LogoDrawerMixin",
-    "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "MouseMixin",
     "MultiplayerScreenMixin",
@@ -48,9 +45,7 @@
     "ProfileKeysMixin",
     "ProgressScreenMixin",
     "RecipeBookWidgetMixin",
-    "RenderTickCounterAccessor",
     "ScreenAccessor",
-    "ScreenMixin",
     "SimpleOptionAccessor",
     "SoundSystemMixin",
     "SplashTextResourceSupplierMixin",
@@ -60,8 +55,7 @@
     "WorldMixin",
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
-    "YggdrasilUserApiServiceMixin",
-    "modmenu.DescriptionListWidgetMixin"
+    "YggdrasilUserApiServiceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

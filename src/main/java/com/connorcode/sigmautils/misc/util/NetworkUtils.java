@@ -6,14 +6,11 @@ import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
-import net.minecraft.network.NetworkPhase;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.packet.Packet;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
@@ -26,10 +23,11 @@ public class NetworkUtils {
 
     public static Object2IntOpenHashMap<Class<? extends Packet<?>>> getPackets(NetworkSide side) {
         var packets = new Object2IntOpenHashMap<Class<? extends Packet<?>>>();
-        Arrays.stream(NetworkPhase.values())
-                .map(state -> state.packetHandlers.get(side))
-                .filter(Objects::nonNull)
-                .forEach(handler -> packets.putAll(handler.backingHandler.packetIds));
+        // TODO: Fix
+//        Arrays.stream(NetworkPhase.values())
+//                .map(state -> state.packetHandlers.get(side))
+//                .filter(Objects::nonNull)
+//                .forEach(handler -> packets.putAll(handler.backingHandler.packetIds));
         return packets;
     }
 

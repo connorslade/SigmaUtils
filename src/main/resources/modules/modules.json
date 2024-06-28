@@ -12,7 +12,6 @@
     "_interface.NoChatFade",
     "_interface.NoScoreboardValue",
     "_interface.PortalInventory",
-    "_interface.RandomBackground",
     "_interface.SeeThruLoading",
     "_interface.SignClickThrough",
     "_interface.SplashRefresh",

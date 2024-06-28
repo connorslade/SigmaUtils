@@ -92,8 +92,7 @@ public abstract class MinecraftClientMixin {
         // Handle Item frames
         if (crosshairTarget.getType() == HitResult.Type.ENTITY &&
                 ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
-            BlockPos behindBlockPos = itemFrameEntity.getDecorationBlockPos()
-                    .offset(itemFrameEntity.getHorizontalFacing().getOpposite());
+            BlockPos behindBlockPos = itemFrameEntity.getBlockPos().offset(itemFrameEntity.getHorizontalFacing().getOpposite());
 
             crosshairTarget =
                     new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos,
