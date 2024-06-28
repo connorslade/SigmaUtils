@@ -45,6 +45,7 @@
     "ProfileKeysMixin",
     "ProgressScreenMixin",
     "RecipeBookWidgetMixin",
+    "RenderTickCounter$DynamicMixin",
     "ScreenAccessor",
     "SimpleOptionAccessor",
     "SoundSystemMixin",
