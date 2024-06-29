@@ -6,6 +6,7 @@ import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,9 @@ public class EffectHud extends HudModule {
         Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effectMap = Objects.requireNonNull(client.player).getActiveStatusEffects();
 
         for (var i : effectMap.entrySet()) {
-            out.add(String.format("§r%sEffect: §f%s %d %ds", color, i.getKey().value(), i.getValue().getAmplifier() + 1, i.getValue().getDuration() / 20));
+            var name = Text.translatable(i.getValue().getTranslationKey()).getString();
+            out.add(String.format("§r%sEffect: §f%s %d %ds", color, name, i.getValue().getAmplifier() + 1, i.getValue()
+                    .getDuration() / 20));
         }
 
         return out;

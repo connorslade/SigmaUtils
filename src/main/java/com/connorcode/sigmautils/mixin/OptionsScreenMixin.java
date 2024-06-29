@@ -26,6 +26,7 @@ public class OptionsScreenMixin extends Screen {
 
     @Unique
     void positionButton() {
+        if (soundButton == null) return;
         muteButton.setX(soundButton.getX() + soundButton.getWidth() + 5);
         muteButton.setY(soundButton.getY());
     }
