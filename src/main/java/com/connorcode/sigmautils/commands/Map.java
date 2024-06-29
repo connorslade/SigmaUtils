@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
@@ -41,7 +40,7 @@ public class Map implements Command {
             e.printStackTrace();
         }
 
-        client.player.sendMessage(Text.literal(String.format("Σ] Saved Map #%d", mapId))
+        client.player.sendMessage(Text.literal(String.format("[SigmaUtils::Map] Saved Map #%d", mapId.id()))
                 .formatted(Formatting.UNDERLINE)
                 .styled(style -> style.withClickEvent(
                         new ClickEvent(ClickEvent.Action.OPEN_FILE, mapFile.getAbsolutePath()))));
@@ -54,29 +53,9 @@ public class Map implements Command {
         var mapId = rawMap.get().getLeft();
         MapState mapState = rawMap.get().getRight();
 
-        MutableText out = Text.empty()
-                // Id
-                .append(Text.literal("\nΣ] Id: ")
-                        .formatted(Formatting.BOLD))
-                .append(Text.literal(String.valueOf(mapId))
-                        .formatted(Formatting.RESET))
-
-                // Scale
-                .append(Text.literal("\nΣ] Scale: ")
-                        .formatted(Formatting.BOLD))
-                .append(Text.literal(String.format("1:%d", (int) Math.pow(2, mapState.scale)))
-                        .formatted(Formatting.RESET))
-
-                // Locked
-                .append(Text.literal("\nΣ] Locked: ")
-                        .formatted(Formatting.BOLD))
-                .append(Text.literal(String.valueOf(mapState.locked))
-                        .formatted(Formatting.RESET));
-
-
+        var out = String.format("[SigmaUtils::Map] { ID: %d, Scale: 1:%d, Locked: %b }", mapId.id(), (int) Math.pow(2, mapState.scale), mapState.locked);
         context.getSource()
-                .getPlayer()
-                .sendMessage(out);
+                .getPlayer().sendMessage(Text.of(out));
         return 0;
     }
 

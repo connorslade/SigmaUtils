@@ -49,6 +49,7 @@ public class CameraDistance extends Module {
 
     @Override
     public void disable() {
+        super.disable();
         distanceMod = 0;
     }
 }

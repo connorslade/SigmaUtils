@@ -29,6 +29,7 @@ public class Components {
         Util.addChild(screen, new MultiClickButton(x, y, width, 20,
                                                    Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
                                                                          mini ? "" : String.format(" %s", module.name))), button -> {
+            System.out.println(button.click);
             if (button.click == 1) {
                 if (Config.moduleSettings.get(module.getClass()).size() <= 1)
                     return;
