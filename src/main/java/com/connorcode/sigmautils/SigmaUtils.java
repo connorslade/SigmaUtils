@@ -88,7 +88,5 @@ public class SigmaUtils implements ClientModInitializer {
 // TODO: camera no clip - disable culling
 // TODO: Entiry selector custom type
 // TODO: Allow viewing / specifing resource pack uuids
-
 // TODO Document Hid, Meta, and Misc packages
-// TODO: fix map borders
 // TODO: fix ShowInvisableEntites opacity property
