@@ -23,14 +23,9 @@ public class TickSpeed extends Module {
         return Text.of(String.format("Tick Speed: %d [%d%%]", mspt.intValue(), Math.round((100 - mspt.value()) / .5)));
     }
 
-    void setTickSpeed(long mspt) {
-        // TODO
-    }
-
     void setTickSpeedFromPercent(double percent) {
         mspt.value(50d * (percent * 2d));
         mspt.value(Math.max(mspt.intValue(), 1));
-        if (enabled) setTickSpeed(mspt.intValue());
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
@@ -54,13 +49,5 @@ public class TickSpeed extends Module {
                 setTickSpeedFromPercent(this.value);
             }
         });
-    }
-
-    public void enable(MinecraftClient client) {
-        setTickSpeed(mspt.intValue());
-    }
-
-    public void disable(MinecraftClient client) {
-        setTickSpeed(50);
     }
 }

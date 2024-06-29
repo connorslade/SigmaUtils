@@ -47,6 +47,7 @@
     "RecipeBookWidgetMixin",
     "RenderTickCounter$DynamicMixin",
     "ScreenAccessor",
+    "ScreenMixin",
     "SimpleOptionAccessor",
     "SoundSystemMixin",
     "SplashTextResourceSupplierMixin",
