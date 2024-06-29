@@ -24,8 +24,8 @@ public class CameraDistance extends Module {
     public static BoolSetting scrollZoom = new BoolSetting(CameraDistance.class, "Scroll Zoom").description(
             "Makes the scroll wheal modify the distance when in F1 mode.").build();
 
-    public static double getDistance() {
-        return distance.value() + Math.signum(distanceMod) * Math.pow(Math.abs(distanceMod), 1.2);
+    public static float getDistance() {
+        return (float) (distance.value() + Math.signum(distanceMod) * Math.pow(Math.abs(distanceMod), 1.2));
     }
 
     @EventHandler
@@ -49,6 +49,7 @@ public class CameraDistance extends Module {
 
     @Override
     public void disable() {
+        super.disable();
         distanceMod = 0;
     }
 }

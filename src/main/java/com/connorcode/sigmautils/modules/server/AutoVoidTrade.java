@@ -150,10 +150,7 @@ public class AutoVoidTrade extends Module {
         }
 
         // Verify player has the required items
-        var requiredItems = new ItemStack[]{
-                tradeOffer.getAdjustedFirstBuyItem(),
-                tradeOffer.getSecondBuyItem()
-        };
+        var requiredItems = new ItemStack[]{tradeOffer.getDisplayedFirstBuyItem(), tradeOffer.getDisplayedSecondBuyItem()};
         for (var item : requiredItems) {
             if (item.isEmpty()) continue;
             var itemCount = client.player.getInventory().count(item.getItem());

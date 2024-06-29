@@ -60,7 +60,7 @@ public class VictoryMute extends Module {
             // just ignore the following todo
             // TODO: Let settings convert to different types (callback on builder)
             var regex = Pattern.compile(victoryRegex.value());
-            muted = regex.matcher(title.getTitle().getString()).matches();
+            muted = regex.matcher(title.text().getString()).matches();
         }
 
         if (packet.get() instanceof GameJoinS2CPacket) muted = false;

@@ -6,7 +6,6 @@ import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.util.Util;
 import com.connorcode.sigmautils.mixin.ScreenAccessor;
 import com.connorcode.sigmautils.module.Module;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -15,7 +14,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -31,6 +29,7 @@ public class Components {
         Util.addChild(screen, new MultiClickButton(x, y, width, 20,
                                                    Text.of(String.format("%s█§r%s", module.enabled ? "§a" : "§c",
                                                                          mini ? "" : String.format(" %s", module.name))), button -> {
+            System.out.println(button.click);
             if (button.click == 1) {
                 if (Config.moduleSettings.get(module.getClass()).size() <= 1)
                     return;
@@ -183,52 +182,11 @@ public class Components {
         @Override
         public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
             super.render(drawContext, mouseX, mouseY, delta);
-            if (!this.hovered)
-                return;
+            if (!this.hovered) return;
             Text tooltip = this.tooltip();
-            if (tooltip == null)
-                return;
+            if (tooltip == null) return;
 
-            drawContext.drawOrderedTooltip(client.textRenderer, client.textRenderer.wrapLines(tooltip, 200), mouseX,
-                    mouseY);
-        }
-    }
-
-    public static class EventCheckbox extends CheckboxWidget {
-        PressAction onPress;
-        TooltipSupplier tooltipSupplier;
-
-        public EventCheckbox(int x, int y, int width, int height, Text message, boolean checked, TextRenderer renderer, PressAction onPress, TooltipSupplier tooltipSupplier) {
-            super(x, y, message, renderer, checked, Callback.EMPTY);
-            this.width = width;
-            this.height = height;
-            this.onPress = onPress;
-            this.tooltipSupplier = tooltipSupplier;
-        }
-
-        @Override
-        public void onPress() {
-            super.onPress();
-            this.onPress.onPress(this);
-        }
-
-        public void renderTooltip(DrawContext drawContext, int mouseX, int mouseY) {
-            tooltipSupplier.onTooltip(this, drawContext, mouseX, mouseY);
-        }
-
-        @Override
-        public void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-            super.renderWidget(drawContext, mouseX, mouseY, delta);
-            if (this.isSelected())
-                this.renderTooltip(drawContext, mouseX, mouseY);
-        }
-
-        public interface PressAction {
-            void onPress(EventCheckbox button);
-        }
-
-        public interface TooltipSupplier {
-            void onTooltip(EventCheckbox button, DrawContext drawContext, int mouseX, int mouseY);
+            drawContext.drawOrderedTooltip(client.textRenderer, client.textRenderer.wrapLines(tooltip, 200), mouseX, mouseY);
         }
     }
 }

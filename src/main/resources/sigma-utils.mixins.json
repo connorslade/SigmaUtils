@@ -14,10 +14,10 @@
     "CameraMixin",
     "ChatHudMixin",
     "ChatScreenMixin",
+    "ClientCommonNetworkHandlerMixin",
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
-    "ClientPlayNetworkHandlerMixin",
     "ClientWorldAccessor",
     "ClientWorldMixin",
     "ClientWorldPropertiesMixin",
@@ -29,18 +29,13 @@
     "EntityMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
-    "EntryListWidgetMixin",
     "GameMenuScreenMixin",
     "GameRendererMixin",
-    "InGameHudAccessor",
     "InGameHudMixin",
     "InventoryScreenMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
     "LogoDrawerMixin",
-    "MapRendererAccessor",
-    "MapTextureAccessor",
-    "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "MouseMixin",
     "MultiplayerScreenMixin",
@@ -50,7 +45,7 @@
     "ProfileKeysMixin",
     "ProgressScreenMixin",
     "RecipeBookWidgetMixin",
-    "RenderTickCounterAccessor",
+    "RenderTickCounter$DynamicMixin",
     "ScreenAccessor",
     "ScreenMixin",
     "SimpleOptionAccessor",
@@ -62,10 +57,12 @@
     "WorldMixin",
     "WorldRendererMixin",
     "YggdrasilAuthenticationServiceAccessor",
-    "YggdrasilUserApiServiceMixin",
-    "modmenu.DescriptionListWidgetMixin"
+    "YggdrasilUserApiServiceMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "UnknownCustomPayloadMixin"
+  ]
 }

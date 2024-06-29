@@ -21,8 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(InventoryScreen.class)
-public abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreenHandler>
-        implements RecipeBookProvider {
+public abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreenHandler> implements RecipeBookProvider {
     public InventoryScreenMixin(PlayerScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
     }
@@ -37,13 +36,10 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         if (!UiTweaks.unMaskedDoll()) instance.disableScissor();
     }
 
-    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void onDrawEntity(DrawContext context, float x, float y, int size, Vector3f vector3f,
-                                     Quaternionf quaternionf, Quaternionf quaternionf2, LivingEntity entity,
-                                     CallbackInfo ci, EntityRenderDispatcher entityRenderDispatcher) {
+    @Inject(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private static void onDrawEntity(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, Quaternionf quaternionf2, LivingEntity entity, CallbackInfo ci, EntityRenderDispatcher entityRenderDispatcher) {
         if (!UiTweaks.fastDoll()) return;
-        var ca = ((MinecraftClientAccessor) SigmaUtils.client);
-        var tickDelta = SigmaUtils.client.isPaused() ? ca.getPausedTickDelta() : ca.getRenderTickCounter().tickDelta;
+        var tickDelta = SigmaUtils.client.getRenderTickCounter().getTickDelta(true);
 
         float h = entity.prevBodyYaw;
         float i = entity.prevYaw;
@@ -53,15 +49,14 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         entity.prevYaw = entity.getYaw();
         entity.prevPitch = entity.getPitch();
         entity.prevHeadYaw = entity.headYaw;
-        entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, tickDelta, context.getMatrices(),
-                context.getVertexConsumers(), 0xF000F0);
+        entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, tickDelta, context.getMatrices(), context.getVertexConsumers(), 0xF000F0);
         entity.prevBodyYaw = h;
         entity.prevYaw = i;
         entity.prevPitch = j;
         entity.prevHeadYaw = k;
     }
 
-    @Redirect(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"))
+    @Redirect(method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;runAsFancy(Ljava/lang/Runnable;)V"))
     private static void onRender(Runnable runnable) {
         if (!UiTweaks.fastDoll()) runnable.run();
     }

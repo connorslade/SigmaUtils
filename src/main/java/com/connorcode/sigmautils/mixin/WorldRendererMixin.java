@@ -8,11 +8,7 @@ import com.connorcode.sigmautils.event.render.WorldRender;
 import com.connorcode.sigmautils.modules.misc.NoGlobalSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundCategory;
@@ -26,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Objects;
 
@@ -35,6 +32,7 @@ import static net.minecraft.sound.SoundEvents.*;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
     int color;
+
     @Shadow
     @Nullable
     private ClientWorld world;
@@ -42,6 +40,9 @@ public abstract class WorldRendererMixin {
     @Shadow
     @Nullable
     private VertexBuffer lightSkyBuffer;
+
+    @Shadow
+    private int ticks;
 
     @Inject(method = "processGlobalEvent", at = @At("HEAD"))
     void onProcessGlobalEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
@@ -53,8 +54,7 @@ public abstract class WorldRendererMixin {
             default -> null;
         };
 
-        if (sound == null || NoGlobalSounds.disabled(eventId))
-            return;
+        if (sound == null || NoGlobalSounds.disabled(eventId)) return;
         Objects.requireNonNull(world).playSoundAtBlockCenter(pos, sound, SoundCategory.HOSTILE, 1.0F, 1.0F, false);
     }
 
@@ -66,23 +66,22 @@ public abstract class WorldRendererMixin {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    void onRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        var event = new WorldRender.PreWorldRenderEvent(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
+    void onRender(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        var event = new WorldRender.PreWorldRenderEvent(tickCounter, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix, projectionMatrix);
         SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }
 
-    @Inject(method = "render", at = @At("RETURN"), cancellable = true)
-    void onPostRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        var event = new WorldRender.PostWorldRenderEvent(matrices, tickDelta, limitTime, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix);
+    @Inject(method = "render", at = @At("RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+    void onPostRender(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        var event = new WorldRender.PostWorldRenderEvent(tickCounter, renderBlockOutline, camera, gameRenderer, lightmapTextureManager, positionMatrix, projectionMatrix);
         SigmaUtils.eventBus.post(event);
         if (event.isCancelled()) ci.cancel();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;hasOutline(Lnet/minecraft/entity/Entity;)Z"))
     boolean onHasOutline(MinecraftClient instance, Entity entity) {
-        var event =
-                new EntityRender.EntityHighlightEvent(entity, instance.hasOutline(entity), entity.getTeamColorValue());
+        var event = new EntityRender.EntityHighlightEvent(entity, instance.hasOutline(entity), entity.getTeamColorValue());
         SigmaUtils.eventBus.post(event);
         this.color = event.getColor();
         return event.hasOutline();

@@ -1,26 +1,32 @@
 accessWidener   v1  named
 # for future reference
 # https://fabricmc.net/wiki/tutorial:accesswideners
-accessible class net/minecraft/client/render/MapRenderer$MapTexture
+
+## Misc ##
 accessible method net/minecraft/client/font/TextRenderer tweakTransparency (I)I
-accessible field net/minecraft/network/NetworkState packetHandlers Ljava/util/Map;
-accessible class net/minecraft/network/NetworkState$InternalPacketHandler
-accessible field net/minecraft/network/NetworkState$PacketHandler backingHandler Lnet/minecraft/network/NetworkState$InternalPacketHandler;
-accessible field net/minecraft/network/NetworkState$InternalPacketHandler packetIds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible method net/minecraft/entity/Entity getFlag (I)Z
 accessible method net/minecraft/client/gui/screen/option/OptionsScreen createButton (Lnet/minecraft/text/Text;Ljava/util/function/Supplier;)Lnet/minecraft/client/gui/widget/ButtonWidget;
+
+## Gui Stuff ##
+accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
+extendable method net/minecraft/client/gui/widget/ClickableWidget render (Lnet/minecraft/client/gui/DrawContext;IIF)V
+accessible method net/minecraft/client/gui/screen/Screen clearAndInit ()V
+
+## Network Stuff ##
+accessible method net/minecraft/client/network/ClientPlayerInteractionManager sendSequencedPacket (Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
+
+## Map Command ##
+accessible class net/minecraft/client/render/MapRenderer$MapTexture
+accessible method net/minecraft/client/render/MapRenderer getMapTexture (Lnet/minecraft/component/type/MapIdComponent;Lnet/minecraft/item/map/MapState;)Lnet/minecraft/client/render/MapRenderer$MapTexture;
+accessible field net/minecraft/client/render/MapRenderer$MapTexture texture Lnet/minecraft/client/texture/NativeImageBackedTexture;
+
+## BridgeAnalisys ##
 accessible field net/minecraft/client/world/ClientChunkManager chunks Lnet/minecraft/client/world/ClientChunkManager$ClientChunkMap;
 accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap chunks Ljava/util/concurrent/atomic/AtomicReferenceArray;
-accessible method net/minecraft/client/network/ClientPlayerInteractionManager sendSequencedPacket (Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V
 accessible field net/minecraft/world/chunk/PalettedContainer data Lnet/minecraft/world/chunk/PalettedContainer$Data;
 accessible field net/minecraft/world/chunk/PalettedContainer paletteProvider Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;
 accessible field net/minecraft/world/chunk/PalettedContainer$Data storage Lnet/minecraft/util/collection/PaletteStorage;
 accessible field net/minecraft/world/chunk/PalettedContainer$PaletteProvider edgeBits I
-accessible field net/minecraft/client/gui/screen/Screen drawables Ljava/util/List;
-extendable method net/minecraft/client/gui/widget/ClickableWidget render (Lnet/minecraft/client/gui/DrawContext;IIF)V
-accessible method net/minecraft/client/gui/widget/CheckboxWidget <init> (IILnet/minecraft/text/Text;Lnet/minecraft/client/font/TextRenderer;ZLnet/minecraft/client/gui/widget/CheckboxWidget$Callback;)V
-
-## BridgeAnalisys ##
 accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap diameter I
 accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap radius I
 accessible field net/minecraft/client/world/ClientChunkManager$ClientChunkMap centerChunkX I

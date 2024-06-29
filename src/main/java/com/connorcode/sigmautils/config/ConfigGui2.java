@@ -43,7 +43,7 @@ public class ConfigGui2 extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackgroundTexture(context);
+        renderDarkening(context);
         super.render(context, mouseX, mouseY, delta);
         context.fill(22, 0, width, height, 0x00000017);
     }

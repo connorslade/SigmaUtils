@@ -22,7 +22,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -92,8 +91,7 @@ public abstract class MinecraftClientMixin {
         // Handle Item frames
         if (crosshairTarget.getType() == HitResult.Type.ENTITY &&
                 ((EntityHitResult) crosshairTarget).getEntity() instanceof ItemFrameEntity itemFrameEntity) {
-            BlockPos behindBlockPos = itemFrameEntity.getDecorationBlockPos()
-                    .offset(itemFrameEntity.getHorizontalFacing().getOpposite());
+            BlockPos behindBlockPos = itemFrameEntity.getBlockPos().offset(itemFrameEntity.getHorizontalFacing().getOpposite());
 
             crosshairTarget =
                     new BlockHitResult(crosshairTarget.getPos(), itemFrameEntity.getHorizontalFacing(), behindBlockPos,
@@ -121,13 +119,10 @@ public abstract class MinecraftClientMixin {
     //    }
 
     // For no_pause
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;paused:Z", opcode = Opcodes.GETFIELD))
-    boolean isPaused(MinecraftClient instance) {
-        if (!Config.getEnabled(NoPause.class))
-            return this.paused;
-        return this.isIntegratedServerRunning() && (this.currentScreen != null && this.currentScreen.shouldPause() ||
-                this.overlay != null && this.overlay.pausesGame()) && !Objects.requireNonNull(this.server)
-                .isRemote();
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"))
+    boolean isIntegratedServerRunning(MinecraftClient instance) {
+        if (Config.getEnabled(NoPause.class)) return false;
+        else return instance.isIntegratedServerRunning();
     }
 
     // For window_title

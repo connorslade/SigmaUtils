@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
+
 public class Util {
     static final HashMap<UUID, String> uuidCache = new HashMap<>();
     static final HashSet<UUID> invalidUuids = new HashSet<>();

@@ -5,10 +5,13 @@ import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 
@@ -23,16 +26,11 @@ public class EffectHud extends HudModule {
     public List<String> lines() {
         List<String> out = new ArrayList<>();
         String color = this.getTextColor();
-        Map<StatusEffect, StatusEffectInstance> effectMap = Objects.requireNonNull(client.player)
-                .getActiveStatusEffects();
+        Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effectMap = Objects.requireNonNull(client.player).getActiveStatusEffects();
 
-        for (Map.Entry<StatusEffect, StatusEffectInstance> i : effectMap.entrySet()) {
-            Optional<RegistryKey<StatusEffect>> effectKey = Registries.STATUS_EFFECT.getKey(i.getKey());
-            if (effectKey.isEmpty()) continue;
-
-            out.add(String.format("§r%sEffect: §f%s %d %ds", color, effectKey.get()
-                    .getValue(), i.getValue()
-                    .getAmplifier() + 1, i.getValue()
+        for (var i : effectMap.entrySet()) {
+            var name = Text.translatable(i.getValue().getTranslationKey()).getString();
+            out.add(String.format("§r%sEffect: §f%s %d %ds", color, name, i.getValue().getAmplifier() + 1, i.getValue()
                     .getDuration() / 20));
         }
 

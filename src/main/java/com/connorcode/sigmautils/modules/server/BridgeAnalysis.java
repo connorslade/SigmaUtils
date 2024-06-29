@@ -85,7 +85,7 @@ public class BridgeAnalysis extends Module {
     void onPacketReceive_TitleS2CPacket(PacketReceiveEvent packet) {
         if (!this.enabled || !(packet.get() instanceof TitleS2CPacket title)) return;
         var regex = Pattern.compile(endRegex.value());
-        if (!regex.matcher(title.getTitle().getString()).matches()) return;
+        if (!regex.matcher(title.text().getString()).matches()) return;
         info("Downloading Wool");
         download();
     }

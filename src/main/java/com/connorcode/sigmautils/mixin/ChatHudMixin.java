@@ -6,22 +6,17 @@ import com.connorcode.sigmautils.modules.chat.NoMessageHiding;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.network.message.MessageSignatureData;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
-    @Shadow
-    protected abstract boolean isChatFocused();
-
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;isChatFocused()Z"))
-    boolean isChatFocused(ChatHud instance) {
-        if (Config.getEnabled(NoChatFade.class))
-            return true;
-        return isChatFocused();
+    @ModifyVariable(method = "render", at = @At("HEAD"), argsOnly = true)
+    boolean isFocused(boolean focused) {
+        if (Config.getEnabled(NoChatFade.class)) return true;
+        return focused;
     }
 
     @Inject(method = "removeMessage", at = @At("HEAD"), cancellable = true)

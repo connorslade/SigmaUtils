@@ -21,20 +21,16 @@ import java.util.Objects;
 import java.util.Random;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
-import static net.minecraft.client.gui.screen.Screen.OPTIONS_BACKGROUND_TEXTURE;
 
-@ModuleInfo(description = "Uses random textures for the background tessellation",
-        documentation = "It will change every time you open a new screen.")
+@ModuleInfo(description = "Uses random textures for the background tessellation", documentation = "It will change every time you open a new screen.")
 public class RandomBackground extends Module {
-    static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
-            SigmaUtils.class.getClassLoader().getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines()
-            .toList();
+    static final List<String> validBackgrounds = new BufferedReader(new InputStreamReader(Objects.requireNonNull(SigmaUtils.class.getClassLoader()
+            .getResourceAsStream("assets/sigma-utils/background_blocks.txt")))).lines().toList();
     static EnumSetting<Util.FilterType> filterType = Util.filterSetting(RandomBackground.class)
-            .description("Whether to blacklist or whitelist background textures.")
-            .value(Util.FilterType.Blacklist)
+            .description("Whether to blacklist or whitelist background textures.").value(Util.FilterType.Blacklist)
             .build();
-    static DynamicListSetting<Block> textures =
-            new DynamicListSetting<>(RandomBackground.class, "Textures", BlockList::new).description("Possible background textures.").build();
+    static DynamicListSetting<Block> textures = new DynamicListSetting<>(RandomBackground.class, "Textures", BlockList::new).description("Possible background textures.")
+            .build();
     static String asset;
     static int screenHash = -1;
 
@@ -45,11 +41,12 @@ public class RandomBackground extends Module {
             screenHash = currentScreenHash;
 
             List<String> valid = switch (filterType.value()) {
-                case Whitelist -> textures.value().stream().map(block -> Registries.BLOCK.getId(block).getPath()).toList();
-                case Blacklist -> validBackgrounds.stream().filter(s -> !textures.value().contains(Registries.BLOCK.get(Identifier.tryParse("minecraft:" + s)))).toList();
+                case Whitelist ->
+                        textures.value().stream().map(block -> Registries.BLOCK.getId(block).getPath()).toList();
+                case Blacklist -> validBackgrounds.stream().filter(s -> !textures.value()
+                        .contains(Registries.BLOCK.get(Identifier.tryParse("minecraft:" + s)))).toList();
             };
 
-            if (valid.isEmpty()) return OPTIONS_BACKGROUND_TEXTURE;
             var assetIndex = new Random().nextInt(valid.size());
             asset = valid.get(assetIndex);
         }
@@ -72,7 +69,8 @@ public class RandomBackground extends Module {
         public boolean renderSelector(Block resource, Screen screen, int x, int y) {
             var rawId = Registries.BLOCK.getId(resource).getPath();
             var id = Identifier.tryParse("textures/block/" + rawId + ".png");
-            if (!RandomBackground.validBackgrounds.contains(rawId) || this.setting.value().contains(resource)) return false;
+            if (!RandomBackground.validBackgrounds.contains(rawId) || this.setting.value().contains(resource))
+                return false;
             Util.addDrawable(screen, new Components.DrawableElement() {
                 @Override
                 public void render(DrawContext context, int mouseX, int mouseY, float delta) {

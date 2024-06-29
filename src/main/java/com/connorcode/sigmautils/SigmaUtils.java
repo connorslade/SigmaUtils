@@ -28,7 +28,7 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class SigmaUtils implements ClientModInitializer {
-    public static final String VERSION = "0.1.9-alpha";
+    public static final String VERSION = "0.1.10-alpha";
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger logger = LogUtils.getLogger();
 
@@ -88,5 +88,5 @@ public class SigmaUtils implements ClientModInitializer {
 // TODO: camera no clip - disable culling
 // TODO: Entiry selector custom type
 // TODO: Allow viewing / specifing resource pack uuids
-
 // TODO Document Hid, Meta, and Misc packages
+// TODO: fix ShowInvisableEntites opacity property

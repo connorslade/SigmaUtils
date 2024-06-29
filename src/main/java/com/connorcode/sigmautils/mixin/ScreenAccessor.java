@@ -31,7 +31,4 @@ public interface ScreenAccessor {
 
     @Invoker
     void invokeClearAndInit();
-
-//    @Invoker
-//    void invokeRenderOrderedTooltip(MatrixStack matrices, List<OrderedText> sigma_utils, int mouseX, int mouseY);
 }

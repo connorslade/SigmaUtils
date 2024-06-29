@@ -3,32 +3,59 @@ package com.connorcode.sigmautils.mixin;
 
 import com.connorcode.sigmautils.config.Config;
 import com.connorcode.sigmautils.modules._interface.UiTweaks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.GridWidget;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin extends Screen {
+    @Unique
+    ButtonWidget muteButton;
+
+    @Unique
+    Widget soundButton;
+
+    @Unique
+    void positionButton() {
+        if (soundButton == null) return;
+        muteButton.setX(soundButton.getX() + soundButton.getWidth() + 5);
+        muteButton.setY(soundButton.getY());
+    }
+
     protected OptionsScreenMixin(Text title) {
         super(title);
     }
 
-    @Inject(method = "init", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
-    void onButtonRender(CallbackInfo ci, GridWidget gridWidget, GridWidget.Adder adder) {
-        if (!Config.getEnabled(UiTweaks.class) || !UiTweaks.audioMuteButton.value()) return;
+    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/GridWidget$Adder;add(Lnet/minecraft/client/gui/widget/Widget;)Lnet/minecraft/client/gui/widget/Widget;", ordinal = 1))
+    <T extends Widget> T onAddSoundButton(T widget) {
+        if (!Config.getEnabled(UiTweaks.class) || !UiTweaks.audioMuteButton.value()) return widget;
 
-        var x = this.width / 2 + 160;
-        var y = this.height / 6 + 42;
-        addDrawableChild(ButtonWidget.builder(Text.of(UiTweaks.muted ? "U" : "M"), button -> {
+        soundButton = widget;
+        muteButton = addDrawableChild(ButtonWidget.builder(Text.of(UiTweaks.muted ? "U" : "M"), button -> {
             UiTweaks.muted ^= true;
             button.setMessage(Text.of(UiTweaks.muted ? "U" : "M"));
-        }).position(x, y).size(20, 20).build());
+        }).size(20, 20).build());
+
+        return widget;
+    }
+
+    @Inject(method = "init", at = @At("TAIL"))
+    void onInitTail(CallbackInfo ci) {
+        positionButton();
+    }
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        super.resize(client, width, height);
+        positionButton();
     }
 }

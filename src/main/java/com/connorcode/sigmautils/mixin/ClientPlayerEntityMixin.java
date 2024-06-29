@@ -39,13 +39,13 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
         PrintDeathCords.lastDeath = null;
     }
 
-    @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V"))
+    @Redirect(method = "tickNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V"))
     void onCloseHandledScreen(ClientPlayerEntity instance) {
         if (!Config.getEnabled(PortalInventory.class))
             instance.closeHandledScreen();
     }
 
-    @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
+    @Redirect(method = "tickNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     void onSetScreen(MinecraftClient instance, Screen screen) {
         if (!Config.getEnabled(PortalInventory.class))
             instance.setScreen(screen);

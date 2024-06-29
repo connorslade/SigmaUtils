@@ -3,8 +3,6 @@ package com.connorcode.sigmautils.modules.misc;
 import com.connorcode.sigmautils.config.settings.NumberSetting;
 import com.connorcode.sigmautils.misc.Components;
 import com.connorcode.sigmautils.misc.util.Util;
-import com.connorcode.sigmautils.mixin.MinecraftClientAccessor;
-import com.connorcode.sigmautils.mixin.RenderTickCounterAccessor;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
 import net.minecraft.client.MinecraftClient;
@@ -12,7 +10,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
-import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
 
 @ModuleInfo(description = "Sets the clients tick speed in MSPT")
@@ -26,14 +23,9 @@ public class TickSpeed extends Module {
         return Text.of(String.format("Tick Speed: %d [%d%%]", mspt.intValue(), Math.round((100 - mspt.value()) / .5)));
     }
 
-    void setTickSpeed(long mspt) {
-        ((RenderTickCounterAccessor) ((MinecraftClientAccessor) client).getRenderTickCounter()).tickTime(mspt);
-    }
-
     void setTickSpeedFromPercent(double percent) {
         mspt.value(50d * (percent * 2d));
         mspt.value(Math.max(mspt.intValue(), 1));
-        if (enabled) setTickSpeed(mspt.intValue());
     }
 
     public void drawInterface(MinecraftClient client, Screen screen, int x, int y) {
@@ -57,13 +49,5 @@ public class TickSpeed extends Module {
                 setTickSpeedFromPercent(this.value);
             }
         });
-    }
-
-    public void enable(MinecraftClient client) {
-        setTickSpeed(mspt.intValue());
-    }
-
-    public void disable(MinecraftClient client) {
-        setTickSpeed(50);
     }
 }

@@ -3,7 +3,6 @@ package com.connorcode.sigmautils.modules.hud;
 import com.connorcode.sigmautils.config.settings.BoolSetting;
 import com.connorcode.sigmautils.config.settings.EnumSetting;
 import com.connorcode.sigmautils.misc.Components;
-import com.connorcode.sigmautils.mixin.InGameHudAccessor;
 import com.connorcode.sigmautils.module.HudModule;
 import com.connorcode.sigmautils.module.Module;
 import com.connorcode.sigmautils.module.ModuleInfo;
@@ -16,6 +15,7 @@ import java.util.*;
 
 import static com.connorcode.sigmautils.SigmaUtils.client;
 import static com.connorcode.sigmautils.modules.meta.Padding.getPadding;
+
 
 @ModuleInfo(description = "The basic text hud that can be placed in the corners of the window")
 public class Hud extends Module {
@@ -61,12 +61,11 @@ public class Hud extends Module {
 
     public static void renderHud(DrawContext ctx) {
         if (client.getDebugHud().shouldShowDebugHud() && hideF3.value()) return;
-        InGameHudAccessor hudAccessor = (InGameHudAccessor) client.inGameHud;
         int padding = getPadding();
 
         client.getProfiler().push("SigmaUtils::Hud");
-        getHud(hudAccessor.getScaledHeight(), hudAccessor.getScaledWidth()).forEach(
-                hudStack -> hudStack.render(ctx, padding));
+        var window = client.getWindow();
+        getHud(window.getScaledHeight(), window.getScaledWidth()).forEach(hudStack -> hudStack.render(ctx, padding));
         client.getProfiler().pop();
     }
 
