@@ -90,3 +90,5 @@ public class SigmaUtils implements ClientModInitializer {
 // TODO: Allow viewing / specifing resource pack uuids
 
 // TODO Document Hid, Meta, and Misc packages
+// TODO: fix map borders
+// TODO: fix ShowInvisableEntites opacity property
