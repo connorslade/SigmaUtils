@@ -28,9 +28,9 @@
   ],
   "accessWidener": "sigma_utils.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.22",
+    "fabricloader": ">=0.16.7",
     "fabric": "*",
-    "minecraft": "1.21"
+    "minecraft": "1.21.1"
   },
   "custom": {
     "modmenu": {
